@@ -1,15 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const prefix = ''
-
-import Test from '../src/views/Test.vue'
+import customerRoutes from '@/routes/customers.routes'
 
 const routes = [
-    {
-		path: prefix + '/enterprises',
-		name: 'Test',
-		component: Test,
-	}
+    ...customerRoutes
 ]
 
 const router = createRouter({

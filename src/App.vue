@@ -1,71 +1,3 @@
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-// Reactive property for search term
-const searchTerm = ref('')
-
-// Sample menu items with submenus
-const menuItems = [
-  { 
-    name: 'Dashboard', 
-    link: '#', 
-    icon: 'fas fa-tachometer-alt' 
-  },
-  { 
-    name: 'Profile', 
-    link: '#', 
-    icon: 'fas fa-user' 
-  },
-  { 
-    name: 'Settings', 
-    link: '#', 
-    icon: 'fas fa-cogs',
-    submenu: [
-      { name: 'General', link: '#', icon: 'far fa-circle nav-icon' },
-      { 
-        name: 'Security', 
-        link: '#', 
-        icon: 'far fa-circle nav-icon',
-        submenu: [
-          { name: 'Option 1', link: '#', icon: 'far fa-dot-circle nav-icon' },
-          { name: 'Option 2', link: '#', icon: 'far fa-dot-circle nav-icon' }
-        ]
-      },
-      { name: 'Notifications', link: '#', icon: 'far fa-circle nav-icon' }
-    ]
-  },
-  // Add more menu items here
-]
-
-// Computed property to filter menu items based on search term
-const filteredMenuItems = computed(() => {
-  return menuItems.map(item => {
-    if (item.submenu) {
-      const filteredSubmenu = item.submenu.map(subItem => {
-        if (subItem.submenu) {
-          const filteredSubSubmenu = subItem.submenu.filter(subSubItem => 
-            subSubItem.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
-          return {
-            ...subItem,
-            submenu: filteredSubSubmenu
-          }
-        } else if (subItem.name.toLowerCase().includes(searchTerm.value.toLowerCase())) {
-          return subItem
-        }
-        return null
-      }).filter(subItem => subItem !== null)
-      return {
-        ...item,
-        submenu: filteredSubmenu
-      }
-    } else if (item.name.toLowerCase().includes(searchTerm.value.toLowerCase())) {
-      return item
-    }
-    return null
-  }).filter(item => item !== null)
-})
-</script>
-
 <template>
   <div class="wrapper">
     <!-- Main Header -->
@@ -138,28 +70,28 @@ const filteredMenuItems = computed(() => {
             </li>
             <!-- Filtered Menu Items -->
             <li v-for="item in filteredMenuItems" :key="item.name" class="nav-item" :class="{ 'has-treeview': item.submenu }">
-              <a :href="item.link" class="nav-link">
+              <router-link :to="item.link" class="nav-link">
                 <i :class="item.icon"></i>
                 <p style="margin-left: .3rem;">
                   {{ item.name }}
                   <i v-if="item.submenu" class="right fas fa-angle-left"></i>
                 </p>
-              </a>
+              </router-link>
               <ul v-if="item.submenu" class="nav nav-treeview">
                 <li v-for="subItem in item.submenu" :key="subItem.name" class="nav-item" :class="{ 'has-treeview': subItem.submenu }">
-                  <a :href="subItem.link" class="nav-link">
+                  <router-link :to="subItem.link" class="nav-link">
                     <i :class="subItem.icon"></i>
                     <p>
                       {{ subItem.name }}
                       <i v-if="subItem.submenu" class="right fas fa-angle-left"></i>
                     </p>
-                  </a>
+                  </router-link>
                   <ul v-if="subItem.submenu" class="nav nav-treeview">
                     <li v-for="subSubItem in subItem.submenu" :key="subSubItem.name" class="nav-item">
-                      <a :href="subSubItem.link" class="nav-link">
+                      <router-link :to="subSubItem.link" class="nav-link">
                         <i :class="subSubItem.icon"></i>
                         <p>{{ subSubItem.name }}</p>
-                      </a>
+                      </router-link>
                     </li>
                   </ul>
                 </li>
@@ -193,6 +125,74 @@ const filteredMenuItems = computed(() => {
   </div>
 </template>
 
-<style scoped>
-/* Puedes añadir estilos personalizados aquí si es necesario */
-</style>
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+// Reactive property for search term
+const searchTerm = ref('')
+
+// Sample menu items with submenus
+const menuItems = [
+  { 
+    name: 'Clientes', 
+    link: '/customers', 
+    icon: 'fas fa-user' 
+  },
+  { 
+    name: 'Rifas', 
+    link: '#', 
+    icon: 'fas fa-user' 
+  },
+  { 
+    name: 'Boletas', 
+    link: '#', 
+    icon: 'fas fa-user' 
+  },
+  { 
+    name: 'Vendedores', 
+    link: '#', 
+    icon: 'fas fa-user' 
+  },
+  { 
+    name: 'Reportes', 
+    link: '#', 
+    icon: 'fas fa-cogs',
+    submenu: [
+      { name: 'Ventas por vendedor', link: '#', icon: 'far fa-circle nav-icon' },
+      { name: 'Total recaudado', link: '#', icon: 'far fa-circle nav-icon' },
+      { name: 'Ventas por ciudad', link: '#', icon: 'far fa-circle nav-icon' }
+    ]
+  },
+  // Add more menu items here
+]
+
+// Computed property to filter menu items based on search term
+const filteredMenuItems = computed(() => {
+  return menuItems.map(item => {
+    if (item.submenu) {
+      const filteredSubmenu = item.submenu.map(subItem => {
+        // @ts-ignore
+        if (subItem.submenu) {
+          // @ts-ignore
+          const filteredSubSubmenu = subItem.submenu.filter(subSubItem => 
+            subSubItem.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
+          return {
+            ...subItem,
+            submenu: filteredSubSubmenu
+          }
+        } else if (subItem.name.toLowerCase().includes(searchTerm.value.toLowerCase())) {
+          return subItem
+        }
+        return null
+      }).filter(subItem => subItem !== null)
+      return {
+        ...item,
+        submenu: filteredSubmenu
+      }
+    } else if (item.name.toLowerCase().includes(searchTerm.value.toLowerCase())) {
+      return item
+    }
+    return null
+  }).filter(item => item !== null)
+})
+</script>
