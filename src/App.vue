@@ -140,7 +140,7 @@ const menuItems = [
   },
   { 
     name: 'Rifas', 
-    link: '#', 
+    link: '/raffles', 
     icon: 'fas fa-user' 
   },
   { 

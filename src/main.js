@@ -13,6 +13,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js' // Import the scripts of Boot
 import 'admin-lte/dist/css/adminlte.min.css' // Import the styles of AdminLTE
 import 'admin-lte/dist/js/adminlte.min.js' // Import the scripts of AdminLTE
 
+import './styles/app.css'
+
 const app = createApp(App)
 
 app.use(router)

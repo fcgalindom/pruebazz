@@ -1,0 +1,24 @@
+.main-background {
+    background-color: #111111;
+}
+
+.color-secondary {
+    color: #d1b332;
+}
+
+.main-sidebar {
+    /* background-color: #111111 !important; */
+}
+
+.table-raffles th {
+    /* background-color: #111111 !important;
+    color: #d1b332; */
+}
+
+.nav-link {
+    color: #d1b332;
+}
+
+.content-wrapper {
+    background-color: white !important;
+}

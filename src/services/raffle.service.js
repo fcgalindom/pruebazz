@@ -9,9 +9,9 @@ export class CustomerServices {
         return response.data
     }
 
-    static async createCustomer(customer) {
-        const url = enviroments.baseUrl + 'customers/create/';
-        const response = await axios.post(url, customer)
+    static async createCustomer() {
+        const url = enviroments.baseUrl + 'customer/create/';
+        const response = await axios.post(url, user)
         return response.data;
     }
 

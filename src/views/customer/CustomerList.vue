@@ -5,7 +5,7 @@
             <Modal id="customer-list" label="Registrar" title="Crear Cliente" size="lg">
                 <div class="row">
                     <div class="col-md-6">
-                        <Input v-model="customer.name" label="Nombre"></Input>
+                        <Input v-model="customer.first_name" label="Nombre"></Input>
                     </div>
                     <div class="col-md-6">
                         <Input v-model="customer.last_name" label="Apellido"></Input>
@@ -17,7 +17,7 @@
                         <Input v-model="customer.document" label="Documento"></Input>
                     </div>
                     <div class="col-md-6">
-                        <Input v-model="customer.city_id" label="Ciudad"></Input>
+                        <Input v-model="customer.city" label="Ciudad"></Input>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center my-3">
@@ -26,14 +26,16 @@
             </Modal>
         </div>
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-raffles">
           <thead>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Teléfono</th>
-            <th>Documento</th>
-            <th>Ciudad</th>
-            <th>Acciones</th>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Teléfono</th>
+                <th>Documento</th>
+                <th>Ciudad</th>
+                <th>Acciones</th>
+            </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in customers" :key="index">
@@ -58,20 +60,20 @@ import { CustomerServices } from '@/services/customer.service'
 const customers = ref([])
 
 const customer = ref({
-    id: "",
-    name: "",
+    id: null,
+    first_name: "",
     last_name: "",
     document: "",
     phone: "",
-    city_id: ""
+    city: ""
 })
 
 onMounted(async () => {
-    // customers.value = await CustomerServices.list()
+    customers.value = await CustomerServices.list()
 })
 
 const saveEntity = () => {
-    if (customer.value.id) {
+    if (customer.value.id != null) {
         CustomerServices.updateCustomer(customer.value)
     } else {
         CustomerServices.createCustomer(customer.value)
