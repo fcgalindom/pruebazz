@@ -1,7 +1,4 @@
 <template>
-  <Button data-toggle="modal" :data-target="'#' + id">
-        {{ label }}
-  </Button>
   <div
     class="modal fade"
     :id="id"

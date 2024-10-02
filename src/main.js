@@ -7,6 +7,8 @@ import App from './App.vue'
 import '@fortawesome/fontawesome-free/css/all.min.css' // Import the styles of Font Awesome
 import globalComponents from './components/globalComponents' // Import the global components
 
+import 'jquery'
+
 import 'bootstrap/dist/css/bootstrap.min.css' // Import the styles of Bootstrap
 import 'bootstrap/dist/js/bootstrap.bundle.min.js' // Import the scripts of Bootstrap
 
