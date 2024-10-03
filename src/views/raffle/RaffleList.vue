@@ -2,8 +2,8 @@
     <div>
       <div class="container-fluid pt-3">
           <div class="my-3">
-            <Button id="raffle_modal_button" data-toggle="modal" data-target="#raffle_modal">Registrar</Button>
-              <Modal id="raffle_modal" label="Registrar" title="Crear Rifa" size="xl">
+            <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarFormulario">Registrar</Button>
+              <Modal :id="modal" label="Registrar" title="Crear Rifa" size="xl">
                   <div class="row">
                       <div class="col-md-6 mb-3">
                           <Input v-model="raffle.name" label="Nombre"></Input>
@@ -78,7 +78,7 @@
                   <td>{{i.raffle_date}}</td>
                   <td>{{i.value_ticket}}</td>
                   <td>Bogotá</td>
-                  <td>Delete & <button data-toggle="modal" data-target="#raffle_modal" @click="showData(i.id)">Update</button> </td>
+                  <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button></td>
               </tr>
             </tbody>
           </table>
@@ -92,8 +92,8 @@
   import { RaffleServices } from '@/services/raffle.service'
   
   const raffles = ref([])
-  
   const raffle = ref({})
+  const modal = ref('raffle_modal')
   
   onMounted(async () => {
       raffles.value = await RaffleServices.list()
@@ -120,7 +120,6 @@
 
   const showData = async(id) => {
     raffle.value = await RaffleServices.show(id)
-    console.log(raffle.value);
   }
 
   const limpiarFormulario = () => {
