@@ -2,10 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import customerRoutes from '@/routes/customers.routes'
 import rafflesRoutes from '@/routes/raffle.route'
+import sellerRoutes from '@/routes/sellers.routes'
 
 const routes = [
     ...customerRoutes,
-    ...rafflesRoutes
+    ...rafflesRoutes,
+    ...sellerRoutes,
 ]
 
 const router = createRouter({
