@@ -2,7 +2,8 @@
   <div>
     <div class="container-fluid pt-3">
         <div class="my-3">
-            <Modal id="customer-list" label="Registrar" title="Crear Cliente" size="lg">
+            <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
+            <Modal :id="modal" label="Registrar" title="Crear Cliente" size="lg">
                 <div class="row">
                     <div class="col-md-6">
                         <Input v-model="customer.first_name" label="Nombre"></Input>
@@ -39,12 +40,12 @@
           </thead>
           <tbody>
             <tr v-for="(item, index) in customers" :key="index">
-                <td>Jefferson</td>
-                <td>Linares</td>
-                <td>302024602</td>
-                <td>1231892123</td>
-                <td>Bogotá</td>
-                <td>Delete & Update</td>
+                <td>{{item.first_name}}</td>
+                <td>{{item.last_name}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.document}}</td>
+                <td>{{item.city}}</td>
+                <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
             </tr>
           </tbody>
         </table>
@@ -58,15 +59,9 @@ import { ref, onMounted } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 
 const customers = ref([])
+const modal = ref('customer_list')
 
-const customer = ref({
-    id: null,
-    first_name: "",
-    last_name: "",
-    document: "",
-    phone: "",
-    city: ""
-})
+const customer = ref({})
 
 onMounted(async () => {
     customers.value = await CustomerServices.list()
@@ -74,9 +69,23 @@ onMounted(async () => {
 
 const saveEntity = () => {
     if (customer.value.id != null) {
-        CustomerServices.updateCustomer(customer.value)
+        CustomerServices.updateCustomer(customer.value, customer.value.id)
     } else {
         CustomerServices.createCustomer(customer.value)
+    }
+}
+
+const showData = async(id) => {
+    customer.value = await CustomerServices.show(id)
+}
+
+const limpiarData = () => {
+    customer.value = {
+        first_name: "",
+        last_name: "",
+        document: "",
+        phone: "",
+        city: ""
     }
 }
 
