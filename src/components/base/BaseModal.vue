@@ -11,6 +11,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
           <button
+            id="closeModal"
             type="button"
             class="close"
             data-dismiss="modal"

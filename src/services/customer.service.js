@@ -26,4 +26,10 @@ export class CustomerServices {
         const response = await axios.get(url)
         return response.data
     }
+
+    static async listCities() {
+        const url = `${enviroments.baseUrl}cities/`
+        const response = await axios.get(url)
+        return response.data
+    }
 }
