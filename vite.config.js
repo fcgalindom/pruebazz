@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,6 +12,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      'jquery': resolve(__dirname, 'node_modules/jquery/dist/jquery.js'),
       '@': path.resolve(__dirname, 'src'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@plugins': path.resolve(__dirname, 'src/plugins'),

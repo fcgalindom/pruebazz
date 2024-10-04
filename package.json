@@ -19,9 +19,11 @@
     "popper.js": "^1.16.1",
     "vue": "^3.4.29",
     "vue-multiselect": "^3.1.0",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vue3-select2-component": "^0.1.7"
   },
   "devDependencies": {
+    "@types/jquery": "^3.5.31",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^24.1.0",

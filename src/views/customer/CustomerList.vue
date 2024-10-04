@@ -5,20 +5,22 @@
             <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
             <Modal :id="modal" label="Registrar" title="Crear Cliente" size="lg">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-3">
                         <Input v-model="customer.first_name" label="Nombre"></Input>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-3">
                         <Input v-model="customer.last_name" label="Apellido"></Input>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-3">
                         <Input v-model="customer.phone" label="Teléfono"></Input>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-3">
                         <Input v-model="customer.document" label="Documento"></Input>
                     </div>
-                    <div class="col-md-6">
-                        <Input v-model="customer.city" label="Ciudad"></Input>
+                    <div class="col-md-6 mb-3">
+                        <Label>Ciudad</Label>
+                        <Select2 ref="multiselect" v-model="customer.city" :options="cities" :multiple="false"
+                        :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center my-3">
@@ -44,7 +46,7 @@
                 <td>{{item.last_name}}</td>
                 <td>{{item.phone}}</td>
                 <td>{{item.document}}</td>
-                <td>{{item.city}}</td>
+                <td>{{item.city.name}}</td>
                 <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
             </tr>
           </tbody>
@@ -57,26 +59,39 @@
 
 import { ref, onMounted } from "vue";
 import { CustomerServices } from '@/services/customer.service'
-
 const customers = ref([])
 const modal = ref('customer_list')
 
 const customer = ref({})
+const cities = ref([])
 
 onMounted(async () => {
-    customers.value = await CustomerServices.list()
+    cities.value = await CustomerServices.listCities()
+    listCustomers()
 })
 
+const listCustomers = async () => {
+    customers.value = await CustomerServices.list()
+}
+
 const saveEntity = () => {
+    customer.value.city = customer.value.city.id
+    
     if (customer.value.id != null) {
         CustomerServices.updateCustomer(customer.value, customer.value.id)
     } else {
         CustomerServices.createCustomer(customer.value)
     }
+    listCustomers()
+    document.getElementById('closeModal').click()
 }
 
 const showData = async(id) => {
     customer.value = await CustomerServices.show(id)
+}
+
+const myChangeEvent = (event) => {
+    console.log('event ==> ', customer.value.city);
 }
 
 const limpiarData = () => {
@@ -90,3 +105,5 @@ const limpiarData = () => {
 }
 
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
