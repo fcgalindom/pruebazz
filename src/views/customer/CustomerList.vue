@@ -2,7 +2,22 @@
   <div>
     <div class="container-fluid pt-3">
         <div class="my-3">
-            <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
+
+            <div class="row mb-3">
+                <div class="col-md-3"> <Input v-model="filters.name" label="Nombre" /> </div>
+                <div class="col-md-3"> <Input v-model="filters.phone" label="Teléfono" /> </div>
+                <div class="col-md-3"> <Input v-model="filters.document" label="Documento" /> </div>
+                <div class="col-md-3"> <Input v-model="filters.city" label="Ciudad" /> </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <Button @click="listCustomers">Buscar</Button>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-end mt-3">
+                <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
+            </div>
             <Modal :id="modal" label="Registrar" title="Crear Cliente" size="lg">
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -60,9 +75,16 @@
 import { ref, onMounted } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 const customers = ref([])
-const modal = ref('customer_list')
-
 const customer = ref({})
+
+const filters = ref({
+    name: "",
+    document: "",
+    phone: "",
+    city: ""
+})
+
+const modal = ref('customer_list')
 const cities = ref([])
 
 onMounted(async () => {
@@ -71,7 +93,7 @@ onMounted(async () => {
 })
 
 const listCustomers = async () => {
-    customers.value = await CustomerServices.list()
+    customers.value = await CustomerServices.list(filters.value)
 }
 
 const saveEntity = () => {
