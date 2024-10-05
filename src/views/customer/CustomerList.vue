@@ -2,7 +2,6 @@
   <div>
     <div class="container-fluid pt-3">
         <div class="my-3">
-
             <div class="row mb-3">
                 <div class="col-md-3"> <Input v-model="filters.name" label="Nombre" /> </div>
                 <div class="col-md-3"> <Input v-model="filters.phone" label="Teléfono" /> </div>

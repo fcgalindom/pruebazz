@@ -22,3 +22,12 @@
 .content-wrapper {
     background-color: white !important;
 }
+
+th {
+    background-color: #343a40;
+    color: white;
+}
+
+.text-danger {
+    color: #343a40 !important;
+}

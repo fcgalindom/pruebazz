@@ -136,22 +136,27 @@ const menuItems = [
   { 
     name: 'Clientes', 
     link: '/customers', 
-    icon: 'fas fa-user' 
+    icon: 'fas fa-user-tag' 
   },
   { 
     name: 'Rifas', 
     link: '/raffles', 
-    icon: 'fas fa-user' 
+    icon: 'fas fa-table' 
   },
   { 
     name: 'Boletas', 
-    link: '#', 
-    icon: 'fas fa-user' 
+    link: '/tickets', 
+    icon: 'fas fa-ticket-alt' 
   },
   { 
     name: 'Vendedores', 
     link: '#', 
     icon: 'fas fa-user' 
+  },
+  { 
+    name: 'Promociones', 
+    link: '#', 
+    icon: 'fas fa-tags'
   },
   { 
     name: 'Reportes', 

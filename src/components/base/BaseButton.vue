@@ -18,8 +18,9 @@ const handleClick = (event: MouseEvent) => {
 <style>
 .stf-btn {
   border-radius: 18px !important;
-  min-width: 16.5em !important;
-  background-color: #007E76 !important;
+  min-width: 13.5em !important;
+  background-color: #343a40 !important;
+  /* background-color: #007E76 !important; */
   color: white !important;
   padding-top: 2px !important;
   padding-bottom: 2px !important;
