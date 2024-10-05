@@ -8,7 +8,7 @@ export class RaffleServices {
         const response = await axios.get(url)
         return response.data
     }
-
+    
     static async show(id) {
         const url = `${enviroments.baseUrl}raffle/${id}/`
         const response = await axios.get(url)

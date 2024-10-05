@@ -1,13 +1,20 @@
 import enviroments from '@/enviroments/api.js'
 import axios from 'axios'
 
-export class RaffleServices {
+export class TicketServices {
 
-    static async list() {
+    static async list(filters) {
         const url = `${enviroments.baseUrl}tickets/`
+        const response = await axios.get(url, { params: filters })
+        return response.data
+    }
+
+    static async dependencies() {
+        const url = `${enviroments.baseUrl}tickets/dependencies/`
         const response = await axios.get(url)
         return response.data
     }
+
 
     static async show(id) {
         const url = `${enviroments.baseUrl}raffle/${id}/`
@@ -16,7 +23,7 @@ export class RaffleServices {
     }
 
     static async createCustomer(raffle) {
-        const url = `${enviroments.baseUrl}raffle/create/`
+        const url = `${enviroments.baseUrl}tickets/create/`
         const response = await axios.post(url, raffle)
         return response.data;
     }

@@ -150,7 +150,7 @@ const menuItems = [
   },
   { 
     name: 'Vendedores', 
-    link: '#', 
+    link: '/sellers', 
     icon: 'fas fa-user' 
   },
   { 

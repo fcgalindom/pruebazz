@@ -12,7 +12,6 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      'jquery': resolve(__dirname, 'node_modules/jquery/dist/jquery.js'),
       '@': path.resolve(__dirname, 'src'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@plugins': path.resolve(__dirname, 'src/plugins'),

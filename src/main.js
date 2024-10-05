@@ -13,11 +13,15 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js' // Import the scripts of Boot
 import 'admin-lte/dist/css/adminlte.min.css' // Import the styles of AdminLTE
 import 'admin-lte/dist/js/adminlte.min.js' // Import the scripts of AdminLTE
 
+// import jQuery from 'jquery' // Import jQuery 
+
+
 import './styles/app.css'
 
 const app = createApp(App)
 
 app.use(router)
+// app.use('Select2', Select2)
 app.use(globalComponents)
 app.use(createPinia())
 app.mount('#app')

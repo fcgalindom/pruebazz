@@ -20,16 +20,13 @@
             <Modal :id="modal" label="Registrar" title="Crear Cliente" size="lg">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <Input v-model="customer.first_name" label="Nombre"></Input>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <Input v-model="customer.last_name" label="Apellido"></Input>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <Input v-model="customer.phone" label="Teléfono"></Input>
+                        <Input v-model="customer.name" label="Nombre"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
                         <Input v-model="customer.document" label="Documento"></Input>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <Input v-model="customer.phone" label="Teléfono"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
                         <Label>Ciudad</Label>
@@ -47,7 +44,6 @@
           <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Apellidos</th>
                 <th>Teléfono</th>
                 <th>Documento</th>
                 <th>Ciudad</th>
@@ -56,8 +52,7 @@
           </thead>
           <tbody>
             <tr v-for="(item, index) in customers" :key="index">
-                <td>{{item.first_name}}</td>
-                <td>{{item.last_name}}</td>
+                <td>{{item.name}}</td>
                 <td>{{item.phone}}</td>
                 <td>{{item.document}}</td>
                 <td>{{item.city.name}}</td>
@@ -127,4 +122,4 @@ const limpiarData = () => {
 
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
+<!-- <style src="vue-multiselect/dist/vue-multiselect.css"></style> -->

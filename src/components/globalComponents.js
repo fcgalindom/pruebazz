@@ -3,6 +3,7 @@ import BaseInput from './base/BaseInput.vue'
 import BaseSelect from './base/BaseSelect.vue'
 import BaseError from './base/BaseError.vue'
 import Select2 from 'vue-multiselect'
+// import Select2 from 'vue3-select2-component';
 import Label from './base/Label.vue'
 import Modal from './base/BaseModal.vue'
 
