@@ -2,7 +2,8 @@
     <div>
       <div class="container-fluid pt-3">
           <div class="my-3">
-              <Modal id="customer-list" label="Registrar" title="Crear Vendedor" size="lg">
+              <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
+              <Modal :id="modal" label="Registrar" title="Crear Vendedor" size="lg">
                   <div class="row">
                       <div class="col-md-6">
                           <Input v-model="seller.first_name" label="Nombre"></Input>
@@ -11,10 +12,10 @@
                           <Input v-model="seller.last_name" label="Apellido"></Input>
                       </div>
                       <div class="col-md-6">
-                          <Input v-model="seller.document" label="Documento"></Input>
+                          <Input v-model="seller.document_number" label="Documento"></Input>
                       </div>
                       <div class="col-md-6">
-                            <Input v-model="seller.email" label="Correo"></Input>
+                            <Input v-model="seller.dw" label="Correo"></Input>
                       </div>
                       <div class="col-md-6">
                         <Input v-model="seller.password" label="Contraseña" type="password"></Input>
@@ -34,19 +35,17 @@
                   <th>Apellido</th>
                   <th>Documento</th>
                   <th>Correo</th>
-                  <th>Contraseña</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in customers" :key="index">
-                  <td>Jefferson</td>
-                  <td>Linares</td>
-                  <td>302024602</td>
-                  <td>1231892123</td>
-                  <td>Bogotá</td>
-                  <td>Delete & Update</td>
-              </tr>
-            </tbody>
+            <tr v-for="(item, index) in sellers" :key="index">
+                <td>{{item.first_name}}</td>
+                <td>{{item.last_name}}</td>
+                <td>{{item.document_number}}</td>
+                <td>{{item.user.email}}</td>
+                <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
+            </tr>
+          </tbody>
           </table>
         </div>
       </div>
@@ -55,30 +54,45 @@
   <script setup>
   
   import { ref, onMounted } from "vue";
-  import { CustomerServices } from '@/services/customer.service'
+  import { SellerServices } from "@/services/seller.service";
   
   const sellers = ref([])
-  
-  const seller = ref({
-      id: null,
-      first_name: "",
-      last_name: "",
-      document: "",
-      email: "",
-      password: ""
-  })
+  const modal = ref('seller_list')
+ 
+  const seller = ref( [])
   
   onMounted(async () => {
-      sellers.value = await CustomerServices.list()
+      sellers.value = await SellerServices.list()
+      listSellers()
   })
+
+  const listSellers = async () => {
+    sellers.value = await SellerServices.list()
+  }
   
   const saveEntity = () => {
-      if (customer.value.id != null) {
-          CustomerServices.updateCustomer(customer.value)
+      if (seller.value.id != null) {
+         SellerServices.updateSeller(seller.value)
       } else {
-          CustomerServices.createCustomer(customer.value)
+         SellerServices.createSeller(seller.value)
       }
+      listSellers()
+      document.getElementById('closeModal').click()
+
   }
+  const showData = async(id) => {
+    seller.value = await SellerServices.show(id)
+}
+  const limpiarData = () => {
+    seller.value = {
+        first_name: "",
+        last_name: "",
+        document: "",
+        email: "",
+        password: ""
+    }
+}
+
   
   </script>
   
