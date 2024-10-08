@@ -15,9 +15,9 @@ export class SellerServices {
         return response.data;
     }
 
-    static async updateSeller() {
-        const url = enviroments.baseUrl + 'sellers/update/';
-        const response = await axios.post(url, user)
+    static async updateSeller(user,id) {
+        const url =  `${enviroments.baseUrl}sellers/update/${id}/`;
+        const response = await axios.put(url, user)
         return response.data;
     }
     static async show(id) {
