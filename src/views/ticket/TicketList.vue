@@ -5,7 +5,12 @@
     
                 <div class="row mb-3">
                     <div class="col-md-3">
-                        <Input v-model="filters.number" label="Número" /> </div>
+                        <Input v-model="filters.number" label="Número" /> 
+                    </div>
+                    <div class="col-md-3">
+                        <Label>Rifa</Label>
+                        <Select2 ref="multiselect" v-model="filters.city" :options="[]" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
+                    </div>
                     <div class="col-md-3">
                         <Label>Cliente</Label>
                         <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
@@ -13,10 +18,6 @@
                     <div class="col-md-3">
                         <Label>Vendedor</Label>
                         <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id"  />
-                    </div>
-                    <div class="col-md-3">
-                        <Label>Estado</Label>
-                        <Select2 ref="multiselect" v-model="filters.city" :options="[]" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -101,7 +102,13 @@
                             <td>{{i.customer.name}}</td>
                             <td>{{i.value}}</td>
                             <td>{{i.status}}</td>
-                            <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button></td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-success btn-sm" style="border-radius: 50%;"><i class="fas fa-check"></i></button>
+                                    <button class="btn btn-danger btn-sm" style="border-radius: 50%;"><i class="fas fa-times"></i></button>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
