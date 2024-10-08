@@ -17,7 +17,7 @@
                           <Input v-model="seller.document_number" label="Documento"></Input>
                       </div>
                       <div class="col-md-6">
-                            <Input v-model="seller.dw" label="Correo"></Input>
+                            <Input v-model="seller.email" label="Correo"></Input>
                       </div>
                       <div class="col-md-6">
                         <Input v-model="seller.password" label="Contraseña" type="password"></Input>
@@ -70,12 +70,21 @@
   })
 
   const listSellers = async () => {
-    sellers.value = await SellerServices.list()
+    seller.value = await SellerServices.list()
   }
   
   const saveEntity = () => {
+      const formupdate ={
+
+        first_name: seller.value.first_name,
+        last_name: seller.value.last_name,
+        document_number: seller.value.document_number,
+        email: seller.value.email,
+        password: seller.value.password
+      
+      }
       if (seller.value.id != null) {
-         SellerServices.updateSeller(seller.value)
+         SellerServices.updateSeller(formupdate, seller.value.id)
       } else {
          SellerServices.createSeller(seller.value)
       }
@@ -85,6 +94,7 @@
   }
   const showData = async(id) => {
     seller.value = await SellerServices.show(id)
+    console.log("seller =>",seller.value.user.email)
 }
   const limpiarData = () => {
     seller.value = {
