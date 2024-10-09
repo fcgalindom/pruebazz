@@ -3,7 +3,7 @@
     <adminlte />
   </div>
 
-  
+
   <router-view></router-view>
 
 </template>
@@ -13,6 +13,5 @@ import { ref, computed } from 'vue'
 import Cookies from 'js-cookie';
 import adminlte from './views/adminlte/adminlte.vue';
 const token = Cookies.get('token');
-
 
 </script>
