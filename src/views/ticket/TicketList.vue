@@ -96,7 +96,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(i, index) in tickets" :key="index">
-                            <td>{{i.number}}</td>
+                            <td>#{{i.number}}</td>
                             <td>{{i.raffle.name}}</td>
                             <td>{{i.seller?.first_name}} {{ i.seller?.last_name }}</td>
                             <td>{{i.customer.name}}</td>
@@ -118,8 +118,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { TicketServices } from '@/services/ticket.service'
+import { useRoute } from 'vue-router';
 
 const tickets = ref([])
 const ticket = ref({})
@@ -134,10 +135,16 @@ const dependencies = ref({
 const filters = ref({
     number: "",
     customer: "",
-    seller: ""
+    seller: "",
+})
+const router = useRoute()
+
+const status = computed(() => {
+    const path = router.path
+    return path.split('/').pop()
 })
 
-onMounted(async () => {
+onMounted(async () => {  
     datatable()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
@@ -147,10 +154,17 @@ const datatable = async () => {
     const filtersForm = {
         number: filters.value.number,
         customer: filters.value.customer?.id,
-        seller: filters.value.seller?.id
+        seller: filters.value.seller?.id,
+        status: status.value
     }
+       
     tickets.value = await TicketServices.list(filtersForm)
 }
+
+watch(() => router.path, async () => {
+      await datatable()
+    })
+
 
 const saveEntity = () => {
 

@@ -2,6 +2,23 @@
     <div>
       <div class="container-fluid pt-3">
           <div class="my-3">
+            <div class="row mb-3">
+                    <div class="col-md-3">
+                        <Input v-model="filters.number" label="Número" /> 
+                    </div>
+                    <div class="col-md-3">
+                        <Label>Rifa</Label>
+                        <!-- <Select2 ref="multiselect" v-model="filters.city" :options="[]" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  /> -->
+                    </div>
+                    <div class="col-md-3">
+                        <Label>Cliente</Label>
+                        <!-- <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  /> -->
+                    </div>
+                    <div class="col-md-3">
+                        <Label>Vendedor</Label>
+                        <!-- <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id"  /> -->
+                    </div>
+                </div>
             <div class="d-flex justify-content-end">
               <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
             </div>
@@ -61,6 +78,11 @@
   
   const sellers = ref([])
   const modal = ref('seller_list')
+  const filters = ref({
+    number: "",
+    customer: "",
+    seller: ""
+})
  
   const seller = ref( [])
   

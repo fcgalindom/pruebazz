@@ -149,9 +149,9 @@ const menuItems = [
     icon: 'fas fa-cogs',
     submenu: [
       { name: 'Boletas disponibles', link: '/tickets', icon: 'far fa-circle nav-icon' },
-      { name: 'Boletas con abono', link: '/tickets', icon: 'far fa-circle nav-icon' },
-      { name: 'Boletas reservadas', link: '/tickets', icon: 'far fa-circle nav-icon' },
-      { name: 'Boletas pagadas', link: '/tickets', icon: 'far fa-circle nav-icon' }
+      // { name: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas con abono', link: '/tickets/booked', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas pagadas', link: '/tickets/paid', icon: 'far fa-circle nav-icon' }
     ]
   },
   { 
