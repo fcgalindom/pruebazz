@@ -4,12 +4,19 @@ import customerRoutes from '@/routes/customers.routes'
 import rafflesRoutes from '@/routes/raffle.route'
 import ticketsRoutes from '@/routes/tickets.routes'
 import sellerRoutes from '@/routes/sellers.routes'
+import loginRoutes from './routes/login.routes'
+import Cookies from 'js-cookie';
+
+
 
 const routes = [
+     
+
     ...customerRoutes,
     ...rafflesRoutes,
     ...ticketsRoutes,
     ...sellerRoutes,
+    ...loginRoutes
 ]
 
 const router = createRouter({

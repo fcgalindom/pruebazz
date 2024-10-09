@@ -31,7 +31,7 @@
                     <div class="col-md-6 mb-3">
                         <Label>Ciudad</Label>
                         <Select2 ref="multiselect" v-model="customer.city" :options="cities" :multiple="false"
-                        :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" />
+                        :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center my-3">
