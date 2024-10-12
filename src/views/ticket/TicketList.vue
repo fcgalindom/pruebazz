@@ -29,7 +29,7 @@
                 <Modal :id="modal" label="Registrar" title="Crear Boleta" size="xl">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <Input v-model="ticket.number" label="Número"></Input>
+                            <Input v-model="ticket.number"type="number" label="Número"></Input>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Vendedor</Label>
