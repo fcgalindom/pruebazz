@@ -1,17 +1,17 @@
 .main-award {
-    color: #D2B32F;
+    color: #d2b32f;
     line-height: 1;
     font-size: 6em;
 }
 
 .secondary-award {
-    color: #D2B32F;
-    margin-top: .4em;
+    color: #d2b32f;
+    margin-top: 0.4em;
 }
 
 .btn-buy {
-    background-color: #D2B32F;
-    border: 1px solid #D2B32F;
+    background-color: #d2b32f;
+    border: 1px solid #d2b32f;
     border-radius: 13px;
     color: white;
     padding: 0.5rem 2em;
@@ -19,7 +19,7 @@
 
 .btn-watch {
     background-color: transparent;
-    border: 1px solid #D2B32F;
+    border: 1px solid #d2b32f;
     color: white;
     border-radius: 13px;
     padding: 0.5rem 2em;
@@ -28,15 +28,15 @@
 
 .btn-play {
     color: black;
-    background-color: #D2B32F;
-    padding: .5em;
+    background-color: #d2b32f;
+    padding: 0.5em;
     border-radius: 50%;
     margin-right: 1.2em;
 }
 
 .fa-play:before {
     position: relative;
-    left: .1em;
+    left: 0.1em;
 }
 
 .margin-customer-main {
@@ -65,20 +65,142 @@
     right: 0px;
     background-color: white;
     border: 1px solid white;
-    color: #46C755;
+    color: #46c755;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    padding: 0em .5em 0em .4em;
+    padding: 0em 0.5em 0em 0.4em;
     font-size: 3em;
 }
 
 .div-select-ticket {
-    background-color: #D2B32F;
+    background-color: #d2b32f;
 }
 
-.input-customer {
-    padding: 1.5em;
+.input-customer input {
+    padding: 1.3em;
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
     border: none;
+    font-size: 1.1em;
+    color: #858585;
+}
+
+.input-customer span {
+    background-color: white;
+    border: none;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    color: #858585;
+}
+
+.w-70 {
+    width: 70%;
+}
+
+.fs-random-number {
+    font-size: 2.2em;
+}
+
+.grid-buttons-tickets {
+    background-color: #0b0b0b;
+}
+
+.grid-button {
+    padding: 4px 5px;
+    background-color: #d2b32f;
+    color: white;
+    border: none;
+    border-radius: 9px;
+    transition: background-color 0.5s;
+}
+
+.grid-button:hover {
+    background-color: #0056b3;
+}
+
+.footer-customer {
+    background-color: #0b0b0b;
+    padding-top: 0.8em;
+}
+
+.buttons-social-networks button {
+    background-color: transparent;
+    color: #d2b32f;
+    border: none;
+    font-size: 3.7em;
+    margin-right: 0.5em;
+}
+
+.background-container {
+    height: 100vh;
+    background-image: url("@/assets/customers/background_black_friday.png");
+    background-size: cover;
+}
+
+.carousel-indicators li {
+    background-color: #fff;
+}
+
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* 7 columnas */
+    gap: 10px;
+    /* Espacio entre botones */
+    padding: 20px;
+}
+
+.scroll-container {
+    width: 300px;
+    height: 500px;
+    overflow-y: auto;
+    /* Habilita el scroll vertical */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Estilo para navegadores WebKit (Chrome, Edge, Safari) */
+
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+    /* Ancho del scrollbar */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    /* Fondo del track (canal) */
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    /* Color del thumb (barra de desplazamiento) */
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #0056b3;
+    /* Color al pasar el mouse por encima */
+}
+
+/* Estilo para Firefox */
+
+.scroll-container {
+    scrollbar-color: #007bff #f0f0f0;
+    /* Color de thumb y track */
+    scrollbar-width: thin;
+    /* Ancho fino del scroll */
 }
