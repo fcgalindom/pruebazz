@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Estado de la boleta</Label>
-                            <Select2 ref="multiselect" v-model="ticket.status" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id"  />
+                            <Select2 ref="multiselect" v-model="ticket.status_select" :options="status_select" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id"  />
                         </div>
                     </div>
     
@@ -126,6 +126,7 @@ const tickets = ref([])
 const ticket = ref({})
 const modal = ref('ticket_modal')
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
+const status_select = ref(['Free', 'Paid', 'Booked'])
 const dependencies = ref({
     sellers: [],
     customers: [],

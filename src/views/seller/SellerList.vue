@@ -4,19 +4,10 @@
           <div class="my-3">
             <div class="row mb-3">
                     <div class="col-md-3">
-                        <Input v-model="filters.number" label="Número" /> 
+                        <Input v-model="filters.number" label="Documento" /> 
                     </div>
                     <div class="col-md-3">
-                        <Label>Rifa</Label>
-                        <!-- <Select2 ref="multiselect" v-model="filters.city" :options="[]" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  /> -->
-                    </div>
-                    <div class="col-md-3">
-                        <Label>Cliente</Label>
-                        <!-- <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  /> -->
-                    </div>
-                    <div class="col-md-3">
-                        <Label>Vendedor</Label>
-                        <!-- <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id"  /> -->
+                        <Input v-model="filters.number" label="Nombre" /> 
                     </div>
                 </div>
             <div class="d-flex justify-content-end">
@@ -116,6 +107,7 @@
   }
   const showData = async(id) => {
     seller.value = await SellerServices.show(id)
+    console.log("sellercompleto =>",seller)
     console.log("seller =>",seller.value.user.email)
 }
   const limpiarData = () => {
