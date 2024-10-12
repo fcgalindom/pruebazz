@@ -5,11 +5,25 @@ const ticketsRoutes = [
 		path: '/tickets/free',
 		name: 'FreeTickets',
 		component: TicketList,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
 	},
     {
 		path: '/tickets/booked',
 		name: 'BookedTickets',
 		component: TicketList,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
 	},
 	{
 		path: '/tickets/paid',

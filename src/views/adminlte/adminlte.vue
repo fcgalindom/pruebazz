@@ -146,17 +146,25 @@
   
   // Sample menu items with submenus
   const menuItems = [
-    { 
+
+   
+    // Add more menu items here
+  ]
+  
+
+
+  if ( Cookies.get('type_user') == 'true') {
+    menuItems.push({ 
       name: 'Clientes', 
       link: '/customers', 
       icon: 'fas fa-user-tag' 
-    },
-    { 
+    })
+    menuItems.push({ 
       name: 'Rifas', 
       link: '/raffles', 
       icon: 'fas fa-table' 
-    },
-    { 
+    })
+    menuItems.push({ 
     name: 'Boletas', 
     link: '#', 
     icon: 'fas fa-cogs',
@@ -166,29 +174,46 @@
       { name: 'Boletas con abono', link: '/tickets/booked', icon: 'far fa-circle nav-icon' },
       { name: 'Boletas pagadas', link: '/tickets/paid', icon: 'far fa-circle nav-icon' }
     ]
-    },
-    { 
+    })
+    menuItems.push({ 
       name: 'Vendedores', 
       link: '/sellers', 
       icon: 'fas fa-user' 
-    },
-    { 
+    })
+    menuItems.push({ 
       name: 'Promociones', 
-      link: '#', 
+      link: '/promotions', 
       icon: 'fas fa-tags'
-    },
-    { 
+    })
+    menuItems.push({ 
       name: 'Reportes', 
       link: '#', 
-      icon: 'fas fa-cogs',
+      icon: 'fas fa-chart-bar',
       submenu: [
-        { name: 'Ventas por vendedor', link: '#', icon: 'far fa-circle nav-icon' },
-        { name: 'Total recaudado', link: '#', icon: 'far fa-circle nav-icon' },
-        { name: 'Ventas por ciudad', link: '#', icon: 'far fa-circle nav-icon' }
+        { name: 'Reporte de ventas', link: '/reports/sales', icon: 'far fa-circle nav-icon' },
+        { name: 'Reporte de boletas', link: '/reports/tickets', icon: 'far fa-circle nav-icon' },
+        { name: 'Reporte de vendedores', link: '/reports/sellers', icon: 'far fa-circle nav-icon' }
       ]
-    },
-    // Add more menu items here
-  ]
+    })
+
+  }else{
+    menuItems.push({ 
+      name: 'Clientes', 
+      link: '/customers', 
+      icon: 'fas fa-user-tag' 
+    })
+    menuItems.push({ 
+      name: 'Boletas', 
+    link: '#', 
+    icon: 'fas fa-cogs',
+    submenu: [
+      { name: 'Boletas disponibles', link: '/tickets', icon: 'far fa-circle nav-icon' },
+      // { name: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas con abono', link: '/tickets/booked', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas pagadas', link: '/tickets/paid', icon: 'far fa-circle nav-icon' }
+    ]
+    })
+  }
   
   // Computed property to filter menu items based on search term
   const filteredMenuItems = computed(() => {
