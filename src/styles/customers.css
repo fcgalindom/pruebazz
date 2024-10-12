@@ -107,11 +107,11 @@
 
 .grid-button {
     padding: 4px 5px;
-    background-color: #D2B32F;
+    background-color: #d2b32f;
     color: white;
     border: none;
     border-radius: 9px;
-    transition: background-color .5s;;
+    transition: background-color 0.5s;
 }
 
 .grid-button:hover {
@@ -119,14 +119,88 @@
 }
 
 .footer-customer {
-    background-color: #0B0B0B;
-    padding-top: .8em;
+    background-color: #0b0b0b;
+    padding-top: 0.8em;
 }
 
 .buttons-social-networks button {
     background-color: transparent;
-    color: #D2B32F;
+    color: #d2b32f;
     border: none;
     font-size: 3.7em;
-    margin-right: .5em;
+    margin-right: 0.5em;
+}
+
+.background-container {
+    height: 100vh;
+    background-image: url("@/assets/customers/background_black_friday.png");
+    background-size: cover;
+}
+
+.carousel-indicators li {
+    background-color: #fff;
+}
+
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* 7 columnas */
+    gap: 10px;
+    /* Espacio entre botones */
+    padding: 20px;
+}
+
+.scroll-container {
+    width: 300px;
+    height: 500px;
+    overflow-y: auto;
+    /* Habilita el scroll vertical */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Estilo para navegadores WebKit (Chrome, Edge, Safari) */
+
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+    /* Ancho del scrollbar */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    /* Fondo del track (canal) */
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    /* Color del thumb (barra de desplazamiento) */
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #0056b3;
+    /* Color al pasar el mouse por encima */
+}
+
+/* Estilo para Firefox */
+
+.scroll-container {
+    scrollbar-color: #007bff #f0f0f0;
+    /* Color de thumb y track */
+    scrollbar-width: thin;
+    /* Ancho fino del scroll */
 }

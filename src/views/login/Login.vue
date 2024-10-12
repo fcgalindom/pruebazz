@@ -4,14 +4,14 @@
       <div class="col-md-4">
         <h2 class="text-center mt-5">Login</h2>
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input v-model="user.email" type="email" class="form-control" id="username" placeholder="Enter your email">
+            <label for="email" class="form-label">Correo</label>
+            <input v-model="user.email" type="email" class="form-control" id="username" placeholder="email.dentix@example.com">
           </div>
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input v-model="user.password" type="password" class="form-control" id="password" placeholder="Enter your password">
+            <label for="password" class="form-label">contraseña</label>
+            <input v-model="user.password" type="password" class="form-control" id="password" placeholder="Contraseña">
           </div>
-          <button @click="saveEntity">Login</button>
+          <Button @click="saveEntity">Login</Button>
       </div>
     </div>
   </div>
