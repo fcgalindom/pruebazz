@@ -2,9 +2,9 @@
   <div v-if="token">
     <adminlte />
   </div>
-
-
-  <router-view></router-view>
+  <div v-else>
+    <router-view></router-view>
+  </div>
 
 </template>
 

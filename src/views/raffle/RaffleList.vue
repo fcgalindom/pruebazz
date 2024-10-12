@@ -12,13 +12,13 @@
                           <Input type="date" v-model="raffle.raffle_date" label="Fecha de rifa"></Input>
                       </div>
                       <div class="col-md-6 mb-3">
-                          <Input v-model="raffle.start_number" label="Número mínimo de la boleta" placeholder="0"></Input>
+                          <Input v-model="raffle.start_number" label="Número mínimo de la boleta" type="number" placeholder="0"></Input>
                       </div>
                       <div class="col-md-6 mb-3">
-                          <Input v-model="raffle.final_number" label="Número máximo de la boleta" placeholder="9999"></Input>
+                          <Input v-model="raffle.final_number" label="Número máximo de la boleta" type="number" placeholder="9999"></Input>
                       </div>
                       <div class="col-md-6 mb-3">
-                          <Input v-model="raffle.value_ticket" label="Valor de boleta"></Input>
+                          <Input v-model="raffle.value_ticket" type="number" label="Valor de boleta"></Input>
                       </div>
                       <div class="col-md-6 mb-3">
                         <Label>Descripción</Label>
