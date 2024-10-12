@@ -42,13 +42,13 @@
     
             <!-- Controls -->
             <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
             <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                            </a>
         </div>
         <div class="d-flex flex-column text-center mt-5">
             <span class="poppins-black text-white" style="font-size: 5em;">COMPRAR TICKETS</span>
@@ -62,18 +62,62 @@
         <div class="d-flex justify-content-center">
             <img src="@/assets/customers/loteria_boyaca.png" alt="" style="max-width: 80%;">
         </div>
-        <div class="d-flex justify-content-center w-100">
-          <div class="w-50">
-            <label class="poppins-bold" for="">NÚMEROS AL AZAR</label>
-              <div class="input-group mb-3">
-                  <input type="text" class="form-control input-customer" placeholder="Cantidad de números" aria-label="Cantidad de números" aria-describedby="basic-addon2">
-                  <div class="input-group-append">
-                      <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-xl"></i></span>
-                  </div>
-              </div>
-          </div>
+        <div class="d-flex justify-content-center w-100 mb-3">
+            <div class="w-70 text-center">
+                <label class="poppins-bold fs-random-number" for="">NÚMEROS AL AZAR</label>
+                <div class="input-group mb-3 input-customer">
+                    <input type="text" class="form-control poppins-medium" placeholder="Cantidad de números" aria-label="Cantidad de números" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center w-100 mt-5">
+            <div class="w-70 text-center">
+                <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
+                <div class="input-group mb-3 input-customer">
+                    <input type="text" class="form-control poppins-medium" placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center w-100 mt-5">
+            <div class="w-70 text-center">
+                <label class="poppins-bold fs-random-number" for="">&nbsp;</label>
+                <div class="input-group mb-3 input-customer">
+                    <input type="text" class="form-control poppins-medium text-center" placeholder="Números seleccionados" readonly
+                    aria-label="Números seleccionados" aria-describedby="basic-addon2" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid d-flex justify-content-center mt-3 pb-5">
+            <div class="button-grid w-50 grid-buttons-tickets scroll-container">
+                <button v-for="(button, index) in buttons" :key="index" class="grid-button">
+              {{ button }}
+            </button>
+            </div>
         </div>
     </div>
+
+    <footer class="footer-customer">
+        <div class="d-flex justify-content-center buttons-social-networks">
+            <button><i class="fab fa-facebook"></i></button>
+            <button><i class="fab fa-whatsapp"></i></button>
+            <button><i class="fab fa-tiktok"></i></button>
+            <button><i class="fab fa-instagram"></i></button>
+        </div>
+        <div class="text-center pt-2">
+            <span class="text-white poppins-medium">Rifa auspiciado por:</span>
+        </div>
+        <div style="margin-left: 5%;
+padding-bottom: 2em;">
+            <img src="@/assets/customers/dr_denix_logo.png" alt="" style="width: 15%;">
+        </div>
+    </footer>
+
     <button class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button>
 </template>
   
@@ -88,7 +132,8 @@ export default {
                 { img: 'https://via.placeholder.com/150', title: 'Card 4', text: 'This is card 4 content.' },
                 { img: 'https://via.placeholder.com/150', title: 'Card 5', text: 'This is card 5 content.' },
                 { img: 'https://via.placeholder.com/150', title: 'Card 6', text: 'This is card 6 content.' }
-            ]
+            ],
+            buttons: Array.from({ length: 999 }, (_, i) => `${i + 1}`), // 28 botones
         };
     },
     computed: {
@@ -131,5 +176,57 @@ export default {
 .card-img-top {
     max-height: 200px;
     object-fit: cover;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* 7 columnas */
+    gap: 10px;
+    /* Espacio entre botones */
+    padding: 20px;
+}
+
+.scroll-container {
+    width: 300px;
+    height: 500px;
+    overflow-y: auto;
+    /* Habilita el scroll vertical */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Estilo para navegadores WebKit (Chrome, Edge, Safari) */
+
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+    /* Ancho del scrollbar */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    /* Fondo del track (canal) */
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    /* Color del thumb (barra de desplazamiento) */
+    border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #0056b3;
+    /* Color al pasar el mouse por encima */
+}
+
+/* Estilo para Firefox */
+
+.scroll-container {
+    scrollbar-color: #007bff #f0f0f0;
+    /* Color de thumb y track */
+    scrollbar-width: thin;
+    /* Ancho fino del scroll */
 }
 </style>
