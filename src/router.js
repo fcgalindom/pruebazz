@@ -5,18 +5,18 @@ import rafflesRoutes from '@/routes/raffle.route'
 import ticketsRoutes from '@/routes/tickets.routes'
 import sellerRoutes from '@/routes/sellers.routes'
 import loginRoutes from './routes/login.routes'
+import customerPublicRoutes from './routes/customers.public.routes'
 import Cookies from 'js-cookie';
 
 
 
 const routes = [
-     
-
     ...customerRoutes,
     ...rafflesRoutes,
     ...ticketsRoutes,
     ...sellerRoutes,
-    ...loginRoutes
+    ...loginRoutes,
+    ...customerPublicRoutes
 ]
 
 const router = createRouter({

@@ -1,3 +1,7 @@
+@import './carrousel.multiple.css';
+@import './customers.css';
+@import './fonts/fonts.css';
+
 .main-background {
     background-color: #111111;
 }

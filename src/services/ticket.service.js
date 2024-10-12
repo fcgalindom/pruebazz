@@ -15,7 +15,6 @@ export class TicketServices {
         return response.data
     }
 
-
     static async show(id) {
         const url = `${enviroments.baseUrl}raffle/${id}/`
         const response = await axios.get(url)
@@ -29,8 +28,14 @@ export class TicketServices {
     }
 
     static async updateCustomer(raffle, id) {
-        const url = `${enviroments.baseUrl}raffle/update/${id}/`;
+        const url = `${enviroments.baseUrl}tickets/update/${id}/`;
         const response = await axios.put(url, raffle)
+        return response.data;
+    }
+
+    static async changeState(id, state) {
+        const url = `${enviroments.baseUrl}tickets/changeState/${id}/`;
+        const response = await axios.put(url, {state: state})
         return response.data;
     }
 }

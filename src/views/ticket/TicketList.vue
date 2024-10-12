@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-md-3">
                         <Label>Rifa</Label>
-                        <Select2 ref="multiselect" v-model="filters.city" :options="[]" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
+                        <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
                     </div>
                     <div class="col-md-3">
                         <Label>Cliente</Label>
@@ -101,12 +101,12 @@
                             <td>{{i.seller?.first_name}} {{ i.seller?.last_name }}</td>
                             <td>{{i.customer.name}}</td>
                             <td>{{i.value}}</td>
-                            <td>{{i.status}}</td>
+                            <td>{{i.state}}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-between">
                                     <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-success btn-sm" style="border-radius: 50%;"><i class="fas fa-check"></i></button>
-                                    <button class="btn btn-danger btn-sm" style="border-radius: 50%;"><i class="fas fa-times"></i></button>
+                                    <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'free')"><i class="fas fa-times"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -134,6 +134,7 @@ const dependencies = ref({
 
 const filters = ref({
     number: "",
+    raffle: "",
     customer: "",
     seller: "",
 })
@@ -153,6 +154,7 @@ onMounted(async () => {
 const datatable = async () => {
     const filtersForm = {
         number: filters.value.number,
+        raffle: filters.value.raffle?.id,
         customer: filters.value.customer?.id,
         seller: filters.value.seller?.id,
         status: status.value
@@ -200,6 +202,11 @@ const remove_award = (index) => {
 
 const showData = async (id) => {
     ticket.value = await TicketServices.show(id)
+}
+
+const changeState = async (id, state) => {
+    await TicketServices.changeState(id, state)
+    datatable()
 }
 
 const limpiarFormulario = () => {

@@ -1,4 +1,3 @@
-import RaffleList from '@/views/raffle/RaffleList.vue'
 import Login from '@/views/login/Login.vue'
 
 const loginRoutes = [
