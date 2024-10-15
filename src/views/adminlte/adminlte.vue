@@ -171,8 +171,8 @@
     submenu: [
       { name: 'Boletas disponibles', link: '/tickets', icon: 'far fa-circle nav-icon' },
       // { name: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
-      { name: 'Boletas con abono', link: '/tickets/booked', icon: 'far fa-circle nav-icon' },
-      { name: 'Boletas pagadas', link: '/tickets/paid', icon: 'far fa-circle nav-icon' }
+      { name: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' }
     ]
     })
     menuItems.push({ 
@@ -207,7 +207,7 @@
     link: '#', 
     icon: 'fas fa-cogs',
     submenu: [
-      { name: 'Boletas disponibles', link: '/tickets', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas disponibles', link: '/tickets/free', icon: 'far fa-circle nav-icon' },
       // { name: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
       { name: 'Boletas con abono', link: '/tickets/booked', icon: 'far fa-circle nav-icon' },
       { name: 'Boletas pagadas', link: '/tickets/paid', icon: 'far fa-circle nav-icon' }

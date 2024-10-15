@@ -15,7 +15,6 @@ import 'admin-lte/dist/js/adminlte.min.js' // Import the scripts of AdminLTE
 
 // import jQuery from 'jquery' // Import jQuery 
 
-
 import './styles/app.css'
 
 const app = createApp(App)

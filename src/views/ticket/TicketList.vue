@@ -5,19 +5,19 @@
     
                 <div class="row mb-3">
                     <div class="col-md-3">
-                        <Input v-model="filters.number" label="Número" /> 
+                        <Input v-model="filters.number" label="Número" />
                     </div>
                     <div class="col-md-3">
                         <Label>Rifa</Label>
-                        <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
+                        <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                     </div>
                     <div class="col-md-3">
                         <Label>Cliente</Label>
-                        <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
+                        <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                     </div>
                     <div class="col-md-3">
                         <Label>Vendedor</Label>
-                        <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id"  />
+                        <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -29,23 +29,23 @@
                 <Modal :id="modal" label="Registrar" title="Crear Boleta" size="xl">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <Input v-model="ticket.number"type="number" label="Número"></Input>
+                            <Input v-model="ticket.number" type="number" label="Número"></Input>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Vendedor</Label>
-                            <Select2 ref="multiselect" v-model="ticket.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id"  />
+                            <Select2 ref="multiselect" v-model="ticket.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Cliente (a quien se vende)</Label>
-                            <Select2 ref="multiselect" v-model="ticket.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
+                            <Select2 ref="multiselect" v-model="ticket.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Rifa</Label>
-                            <Select2 ref="multiselect" v-model="ticket.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
+                            <Select2 ref="multiselect" v-model="ticket.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Estado de la boleta</Label>
-                            <Select2 ref="multiselect" v-model="ticket.status" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id"  />
+                            <Select2 ref="multiselect" v-model="ticket.status" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
                         </div>
                     </div>
     
@@ -58,7 +58,7 @@
                         <div class="row" v-for="(i, index) in ticket.payments" :key="index">
                             <div class="col-4">
                                 <Label>Método de pago</Label>
-                                <Select2 ref="multiselect" v-model="i.payment_method" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id"  />
+                                <Select2 ref="multiselect" v-model="i.payment_method" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
                             </div>
                             <div class="col-4">
                                 <Input v-model="i.amount" type="text" label="Valor"></Input>
@@ -101,12 +101,12 @@
                             <td>{{i.seller?.first_name}} {{ i.seller?.last_name }}</td>
                             <td>{{i.customer.name}}</td>
                             <td>{{i.value}}</td>
-                            <td>{{i.state}}</td>
+                            <td>{{i.status}}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-between">
                                     <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-success btn-sm" style="border-radius: 50%;"><i class="fas fa-check"></i></button>
-                                    <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'free')"><i class="fas fa-times"></i></button>
+                                    <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Pagado')"><i class="fas fa-check"></i></button>
+                                    <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -121,6 +121,7 @@
 import { ref, onMounted, computed, watch } from "vue";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from 'vue-router';
+import Swal from 'sweetalert2'
 
 const tickets = ref([])
 const ticket = ref({})
@@ -145,7 +146,7 @@ const status = computed(() => {
     return path.split('/').pop()
 })
 
-onMounted(async () => {  
+onMounted(async () => {
     datatable()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
@@ -159,16 +160,16 @@ const datatable = async () => {
         seller: filters.value.seller?.id,
         status: status.value
     }
-       
+
     tickets.value = await TicketServices.list(filtersForm)
 }
 
 watch(() => router.path, async () => {
-      await datatable()
-    })
+    await datatable()
+})
 
 
-const saveEntity = () => {
+const saveEntity = async () => {
 
     let value = 0
     ticket.value.payments.forEach(element => {
@@ -186,10 +187,17 @@ const saveEntity = () => {
         payments: ticket.value.payments
     }
     if (ticket.value.id) {
-        TicketServices.updateCustomer(form, ticket.value.id)
+        await TicketServices.updateCustomer(form, ticket.value.id)
     } else {
-        TicketServices.createCustomer(form)
+        await TicketServices.createCustomer(form)
     }
+    await datatable()
+    Swal.fire({
+        title: '¡Éxito!',
+        text: 'Datos guardados con Éxito.',
+        icon: 'success',
+        confirmButtonText: 'Continuar'
+    })
 }
 
 const add_award = () => {
@@ -204,8 +212,20 @@ const showData = async (id) => {
     ticket.value = await TicketServices.show(id)
 }
 
-const changeState = async (id, state) => {
-    await TicketServices.changeState(id, state)
+const changeState = (id, status) => {
+    console.log('status', status);
+    const message = status == 'Libre' ? '¿Desea declinar esta boleta?' : '¿Desea marcar esta boleta como totalmente pagada?'
+    Swal.fire({
+        title: message,
+        showDenyButton: true,
+        confirmButtonText: "Aceptar",
+        denyButtonText: `Cancelar`,
+    }).then(async(result) => {
+        if (result.isConfirmed) {
+            await TicketServices.changeState(id, status)
+            Swal.fire("¡Guardado!", "", "success");
+        }
+    });
     datatable()
 }
 
@@ -226,6 +246,4 @@ const limpiarFormulario = () => {
 }
 </script>
   
-<style src="vue-multiselect/dist/vue-multiselect.css">
-
-</style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

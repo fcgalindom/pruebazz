@@ -2,7 +2,7 @@ import TicketList from '@/views/ticket/TicketList.vue'
 import Cookies from 'js-cookie';
 const ticketsRoutes = [
     {
-		path: '/tickets/free',
+		path: '/tickets/Libre',
 		name: 'FreeTickets',
 		component: TicketList,
 		befereEnter: (to, from, next) => {
@@ -14,7 +14,7 @@ const ticketsRoutes = [
 		}
 	},
     {
-		path: '/tickets/booked',
+		path: '/tickets/Reservado',
 		name: 'BookedTickets',
 		component: TicketList,
 		befereEnter: (to, from, next) => {
@@ -26,7 +26,7 @@ const ticketsRoutes = [
 		}
 	},
 	{
-		path: '/tickets/paid',
+		path: '/tickets/Pagado',
 		name: 'PaidTickets',
 		component: TicketList,
 		befereEnter: (to, from, next) => {

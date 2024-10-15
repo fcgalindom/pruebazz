@@ -3,32 +3,26 @@
       <div class="container-fluid pt-3">
           <div class="my-3">
             <div class="row mb-3">
-                    <div class="col-md-3">
-                        <Input v-model="filters.number" label="Número" /> 
+                    <div class="col-md-4">
+                        <Input v-model="filters.name" label="Nombre" /> 
                     </div>
-                    <div class="col-md-3">
-                        <Label>Rifa</Label>
-                        <!-- <Select2 ref="multiselect" v-model="filters.city" :options="[]" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  /> -->
+                    <div class="col-md-4">
+                        <Input v-model="filters.document_number" label="Documento" /> 
                     </div>
-                    <div class="col-md-3">
-                        <Label>Cliente</Label>
-                        <!-- <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  /> -->
+                    <div class="col-md-4">
+                        <Input v-model="filters.email" label="Correo" /> 
                     </div>
-                    <div class="col-md-3">
-                        <Label>Vendedor</Label>
-                        <!-- <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id"  /> -->
-                    </div>
-                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <Button @click="datatable">Buscar</Button>
+            </div>
             <div class="d-flex justify-content-end">
               <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
             </div>
               <Modal :id="modal" label="Registrar" title="Crear Vendedor" size="lg">
                   <div class="row">
                       <div class="col-md-6">
-                          <Input v-model="seller.first_name" label="Nombre"></Input>
-                      </div>
-                      <div class="col-md-6">
-                          <Input v-model="seller.last_name" label="Apellido"></Input>
+                          <Input v-model="seller.name" label="Nombre"></Input>
                       </div>
                       <div class="col-md-6">
                           <Input v-model="seller.document_number" label="Documento"></Input>
@@ -39,7 +33,6 @@
                       <div class="col-md-6">
                         <Input v-model="seller.password" label="Contraseña" type="password"></Input>
                       </div>
-                      
                   </div>
                   <div class="d-flex justify-content-center my-3">
                       <Button @click="saveEntity">Guardar</Button>
@@ -51,7 +44,6 @@
             <thead>
               <tr>
                   <th>Nombre</th>
-                  <th>Apellido</th>
                   <th>Documento</th>
                   <th>Correo</th>
                   <th>Acciones</th>
@@ -59,8 +51,7 @@
             </thead>
             <tbody>
             <tr v-for="(item, index) in sellers" :key="index">
-                <td>{{item.first_name}}</td>
-                <td>{{item.last_name}}</td>
+                <td>{{item.name}}</td>
                 <td>{{item.document_number}}</td>
                 <td>{{item.user.email}}</td>
                 <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
@@ -75,53 +66,50 @@
   
   import { ref, onMounted } from "vue";
   import { SellerServices } from "@/services/seller.service";
+  import Swal from 'sweetalert2'
   
   const sellers = ref([])
   const modal = ref('seller_list')
   const filters = ref({
-    number: "",
-    customer: "",
-    seller: ""
+    name: "",
+    document_number: "",
+    email: ""
 })
  
   const seller = ref( [])
   
   onMounted(async () => {
-      sellers.value = await SellerServices.list()
-      listSellers()
+      await datatable()
   })
 
-  const listSellers = async () => {
-    seller.value = await SellerServices.list()
+  const datatable = async () => {
+    sellers.value = await SellerServices.list(filters.value)
   }
   
-  const saveEntity = () => {
-      const formupdate ={
-
-        first_name: seller.value.first_name,
-        last_name: seller.value.last_name,
+  const saveEntity = async() => {
+      const formupdate = {
+        name: seller.value.name,
         document_number: seller.value.document_number,
         email: seller.value.email,
         password: seller.value.password
       
       }
       if (seller.value.id != null) {
-         SellerServices.updateSeller(formupdate, seller.value.id)
+         await SellerServices.updateSeller(formupdate, seller.value.id)
       } else {
-         SellerServices.createSeller(seller.value)
+        await SellerServices.createSeller(formupdate)
       }
-      listSellers()
+      await datatable()
+      Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
       document.getElementById('closeModal').click()
 
   }
   const showData = async(id) => {
     seller.value = await SellerServices.show(id)
-    console.log("seller =>",seller.value.user.email)
 }
   const limpiarData = () => {
     seller.value = {
-        first_name: "",
-        last_name: "",
+        name: "",
         document: "",
         email: "",
         password: ""

@@ -90,6 +90,7 @@
   
   import { ref, onMounted } from "vue";
   import { RaffleServices } from '@/services/raffle.service'
+  import Swal from 'sweetalert2'
   
   const raffles = ref([])
   const raffle = ref({})
@@ -100,12 +101,15 @@
       limpiarFormulario()
   })
   
-  const saveEntity = () => {
+  const saveEntity = async() => {
       if (raffle.value.id) {
-          RaffleServices.updateCustomer(raffle.value, raffle.value.id)
+        await RaffleServices.updateCustomer(raffle.value, raffle.value.id)
       } else {
-          RaffleServices.createCustomer(raffle.value)
+        await RaffleServices.createCustomer(raffle.value)
       }
+      document.getElementById('closeModal').click() 
+      Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
+      await listCustomers()
   }
 
   const add_award = () => {
