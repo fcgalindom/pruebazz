@@ -38,4 +38,6 @@ export class TicketServices {
         const response = await axios.put(url, {state: state})
         return response.data;
     }
+
+    
 }

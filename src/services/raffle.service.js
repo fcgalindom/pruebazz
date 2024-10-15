@@ -26,4 +26,9 @@ export class RaffleServices {
         const response = await axios.put(url, raffle)
         return response.data;
     }
+    static async listlast() {
+        const url = `${enviroments.baseUrl}raffle/last/`
+        const response = await axios.get(url)
+        return response.data
+    }
 }
