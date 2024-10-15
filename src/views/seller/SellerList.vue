@@ -46,7 +46,8 @@
                   <th>Nombre</th>
                   <th>Documento</th>
                   <th>Correo</th>
-                  <th>Acciones</th>
+                  <th>Editar</th>
+                  <th>Asignar Boletas</th>
               </tr>
             </thead>
             <tbody>
@@ -54,7 +55,14 @@
                 <td>{{item.name}}</td>
                 <td>{{item.document_number}}</td>
                 <td>{{item.user.email}}</td>
-                <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
+                <td class="text-center">
+                  <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button>
+                </td>
+                <td>
+                  <div class="d-flex justify-content-center">
+                    <router-link :to="`sellers-tickets/${item.id}`"> <button class="btn btn-info"> Asignar </button> </router-link>
+                  </div>
+                </td>
             </tr>
           </tbody>
           </table>

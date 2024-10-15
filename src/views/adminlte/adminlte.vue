@@ -39,9 +39,7 @@
             </div>
           </li>
           <li>
-            <button class="nav-link"  @click="logout"   href="#" role="button">
-              <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <button class="nav-link" @click="logout"> <i class="fas fa-sign-out-alt"></i> </button>
           </li>
         </ul>
       </nav>
@@ -124,7 +122,7 @@
       <!-- Main Footer -->
       <footer class="main-footer">
         <div class="float-right d-none d-sm-inline">Anything you want</div>
-        <strong>Copyright &copy; 2024 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Copyright &copy; 2024 <a target="_blank" href="#">Dr Dentix</a>.</strong>
         All rights reserved.
       </footer>
     </div>
