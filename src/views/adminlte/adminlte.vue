@@ -39,9 +39,7 @@
             </div>
           </li>
           <li>
-            <button class="nav-link"  @click="logout"   href="#" role="button">
-              <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <button class="nav-link" @click="logout"> <i class="fas fa-sign-out-alt"></i> </button>
           </li>
         </ul>
       </nav>
@@ -124,7 +122,7 @@
       <!-- Main Footer -->
       <footer class="main-footer">
         <div class="float-right d-none d-sm-inline">Anything you want</div>
-        <strong>Copyright &copy; 2024 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Copyright &copy; 2024 <a target="_blank" href="#">Dr Dentix</a>.</strong>
         All rights reserved.
       </footer>
     </div>
@@ -171,8 +169,8 @@
     submenu: [
       { name: 'Boletas disponibles', link: '/tickets', icon: 'far fa-circle nav-icon' },
       // { name: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
-      { name: 'Boletas con abono', link: '/tickets/booked', icon: 'far fa-circle nav-icon' },
-      { name: 'Boletas pagadas', link: '/tickets/paid', icon: 'far fa-circle nav-icon' }
+      { name: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' }
     ]
     })
     menuItems.push({ 
@@ -207,7 +205,7 @@
     link: '#', 
     icon: 'fas fa-cogs',
     submenu: [
-      { name: 'Boletas disponibles', link: '/tickets', icon: 'far fa-circle nav-icon' },
+      { name: 'Boletas disponibles', link: '/tickets/free', icon: 'far fa-circle nav-icon' },
       // { name: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
       { name: 'Boletas con abono', link: '/tickets/booked', icon: 'far fa-circle nav-icon' },
       { name: 'Boletas pagadas', link: '/tickets/paid', icon: 'far fa-circle nav-icon' }

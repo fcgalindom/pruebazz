@@ -68,6 +68,8 @@
 
 import { ref, onMounted } from "vue";
 import { CustomerServices } from '@/services/customer.service'
+import Swal from 'sweetalert2'
+
 const customers = ref([])
 const customer = ref({})
 
@@ -90,16 +92,22 @@ const listCustomers = async () => {
     customers.value = await CustomerServices.list(filters.value)
 }
 
-const saveEntity = () => {
+const saveEntity = async() => {
     customer.value.city = customer.value.city.id
     
     if (customer.value.id != null) {
-        CustomerServices.updateCustomer(customer.value, customer.value.id)
+        await CustomerServices.updateCustomer(customer.value, customer.value.id)
     } else {
-        CustomerServices.createCustomer(customer.value)
+        await CustomerServices.createCustomer(customer.value)
     }
-    listCustomers()
+    await listCustomers()
     document.getElementById('closeModal').click()
+    Swal.fire({
+    title: '¡Éxito!',
+    text: 'Datos guardados con Éxito.',
+    icon: 'success',
+    confirmButtonText: 'Continuar'
+  })
 }
 
 const showData = async(id) => {

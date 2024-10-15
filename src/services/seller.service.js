@@ -3,9 +3,9 @@ import axios from 'axios'
 
 export class SellerServices {
 
-    static async list() {
+    static async list(filters) {
         const url = enviroments.baseUrl + 'sellers/'
-        const response = await axios.get(url)
+        const response = await axios.get(url, { params: filters })
         return response.data
     }
 

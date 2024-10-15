@@ -33,9 +33,9 @@ export class TicketServices {
         return response.data;
     }
 
-    static async changeState(id, state) {
+    static async changeState(id, status) {
         const url = `${enviroments.baseUrl}tickets/changeState/${id}/`;
-        const response = await axios.put(url, {state: state})
+        const response = await axios.put(url, {status: status})
         return response.data;
     }
 

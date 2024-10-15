@@ -34,7 +34,6 @@
             //sessionStorage.setItem('key', response.data.token);
             console.log("Respuesta del servidor:", response);
             Cookies.set('token', response.token, {
-                
                 vsecure: true,    // Solo se enviará a través de HTTPS
                 sameSite: 'Strict',  // Para prevenir ataques CSRF
                 expires: 1       // Duración de 7 días
