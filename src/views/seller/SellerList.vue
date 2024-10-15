@@ -106,6 +106,11 @@
   }
   const showData = async(id) => {
     seller.value = await SellerServices.show(id)
+<<<<<<< HEAD
+=======
+    console.log("sellercompleto =>",seller)
+    console.log("seller =>",seller.value.user.email)
+>>>>>>> 829d8e355c335a59e6f7a0312c4659820f7deb8e
 }
   const limpiarData = () => {
     seller.value = {

@@ -127,6 +127,7 @@ const tickets = ref([])
 const ticket = ref({})
 const modal = ref('ticket_modal')
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
+const status_select = ref(['Free', 'Paid', 'Booked'])
 const dependencies = ref({
     sellers: [],
     customers: [],
