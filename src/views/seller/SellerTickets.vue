@@ -29,9 +29,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import { SellerTicketsServices } from "@/services/seller_tickets.service";
 import { useRoute } from "vue-router";
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 const range_tickets = ref([])
@@ -42,6 +43,7 @@ const dependencies = ref({
 
 onMounted(async () => {
     limpiarFormulario()
+    getRangeForClients()
     dependencies.value = await SellerTicketsServices.dependencies()
 })
 
@@ -54,7 +56,7 @@ const saveEntity = async () => {
         }
     })
     await SellerTicketsServices.store(form, route.params.id)
-    limpiarFormulario()
+    Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
 }
 
 const addRange = () => {
@@ -62,6 +64,12 @@ const addRange = () => {
         raffles: "",
         start: "",
         end: ""
+    })
+}
+
+const getRangeForClients = () => {
+    SellerTicketsServices.show(route.params.id).then(response => {
+        range_tickets.value = response.data
     })
 }
 
