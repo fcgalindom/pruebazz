@@ -67,10 +67,8 @@ const addRange = () => {
     })
 }
 
-const getRangeForClients = () => {
-    SellerTicketsServices.show(route.params.id).then(response => {
-        range_tickets.value = response.data
-    })
+const getRangeForClients = async() => {
+    range_tickets.value = await SellerTicketsServices.show(route.params.id)
 }
 
 const deleteRange = (index) => {
