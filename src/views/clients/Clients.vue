@@ -1,11 +1,19 @@
 <template>
-    <div class="background-container">
+    <div  class="background-container">
         <div class="w-100 d-flex justify-content-between">
-            <div class="margin-customer-main">
+            <div  class="margin-customer-main">
+                
                 <h3 class="text-white poppins-semibold mb-3">Puedes ganar una</h3>
-                <span class="main-award poppins-black mb-3">CASA AMOBLADA</span>
-                <h1 class="secondary-award poppins-semibold">+2 MOTOCICLETAS NKD MULTICOLOR 0 KILOMETROS</h1>
-                <h3 class="text-white poppins-semibold position-draw_date">SORTEO 21 DE DICIEMBRE</h3>
+                <div v-for="(item, index) in raffle.type_1_awards" :key="index">
+                    <span class="main-award poppins-black mb-3">{{ item.award }}</span>
+                </div>
+
+                <div v-for="(item, index) in raffle.type_2_awards" :key="index">
+                  <h3 class="secondary-award poppins-semibold">{{ item.award }}</h3>
+                </div>
+
+                <h3 class="text-white poppins-semibold position-draw_date">SORTEO EL {{ raffle.raffle_date }}</h3>
+               
                 <div>
                     <button class="btn-buy poppins-regular">Comprar Boletas</button>
                     <button class="btn-watch poppins-regular"> <i class="btn-play fas fa-play fa-sm"></i> <span>Ver Premios</span> </button>
@@ -52,7 +60,7 @@
         </div>
         <div class="d-flex flex-column text-center mt-5">
             <span class="poppins-black text-white" style="font-size: 5em;">COMPRAR TICKETS</span>
-            <span class="poppins-semibold" style="color: rgb(205, 175, 46); font-size: 3.5em;">Valor Unitario: $80.000</span>
+            <span class="poppins-semibold" style="color: rgb(205, 175, 46); font-size: 3.5em;">Valor Unitario: {{ formatNumber(raffle?.value_ticket) }}</span>
         </div>
     </div>
     <div class="div-select-ticket">
@@ -121,36 +129,48 @@ padding-bottom: 2em;">
     <button class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button>
 </template>
   
-<script>
-export default {
-    data() {
-        return {
-            items: [
-                { img: 'https://via.placeholder.com/150', title: 'Card 1', text: 'This is card 1 content.' },
-                { img: 'https://via.placeholder.com/150', title: 'Card 2', text: 'This is card 2 content.' },
-                { img: 'https://via.placeholder.com/150', title: 'Card 3', text: 'This is card 3 content.' },
-                { img: 'https://via.placeholder.com/150', title: 'Card 4', text: 'This is card 4 content.' },
-                { img: 'https://via.placeholder.com/150', title: 'Card 5', text: 'This is card 5 content.' },
-                { img: 'https://via.placeholder.com/150', title: 'Card 6', text: 'This is card 6 content.' }
-            ],
-            buttons: Array.from({ length: 999 }, (_, i) => `${i + 1}`), // 28 botones
-        };
-    },
-    computed: {
-        // Agrupar los elementos de 3 en 3 para mostrarlos en cada slide
-        groupedItems() {
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { RaffleServices } from '@/services/raffle.service';
+
+const raffle = ref([]);
+
+    
+
+const items = ref([
+            { img: 'https://via.placeholder.com/150', title: 'Card 1', text: 'This is card 1 content.' },
+            { img: 'https://via.placeholder.com/150', title: 'Card 2', text: 'This is card 2 content.' },
+            { img: 'https://via.placeholder.com/150', title: 'Card 3', text: 'This is card 3 content.' },
+            { img: 'https://via.placeholder.com/150', title: 'Card 4', text: 'This is card 4 content.' },
+            { img: 'https://via.placeholder.com/150', title: 'Card 5', text: 'This is card 5 content.' },
+            { img: 'https://via.placeholder.com/150', title: 'Card 6', text: 'This is card 6 content.' }
+        ]);
+
+        const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
+
+        const groupedItems = computed(() => {
             const groups = [];
-            for (let i = 0; i < this.items.length; i += 3) {
-                groups.push(this.items.slice(i, i + 3));
+            for (let i = 0; i < items.value.length; i += 3) {
+                groups.push(items.value.slice(i, i + 3));
             }
             return groups;
-        }
-    },
-    mounted() {
-        // Inicializamos el carrusel al montar el componente
-        $('#carouselExample').carousel({
-            interval: 60000 // 60 segundos
         });
-    }
-};
+        const formatNumber = (value) => {
+            return (value !== null && value !== undefined) ? value.toLocaleString('es-ES') : '0';
+        };
+
+
+        const listRaffles = async () => {
+              raffle.value  = await RaffleServices.listlast();
+              console.log(raffle.value);
+        };
+
+
+        onMounted(() => {
+            //$('#carouselExample').carousel({
+             //   interval: 60000 // 60 segundos
+            //});
+            listRaffles()
+        });
+
 </script>
