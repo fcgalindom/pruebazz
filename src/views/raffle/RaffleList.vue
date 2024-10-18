@@ -53,6 +53,10 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-12">
+                         <Label>Archivo</Label>
+                           <input  type="file"  @change="handleFileUpload($event, i.id)" class="form-control"  accept="image/*,video/*">
+                        </div>
                     </div>
                   </div>
 
@@ -95,6 +99,8 @@
   const raffles = ref([])
   const raffle = ref({})
   const modal = ref('raffle_modal')
+  const image = ref(null)
+  const images = ref([])
   
   onMounted(async () => {
       raffles.value = await RaffleServices.list()
@@ -104,8 +110,22 @@
   const saveEntity = async() => {
       if (raffle.value.id) {
         await RaffleServices.updateCustomer(raffle.value, raffle.value.id)
+       
       } else {
-        await RaffleServices.createCustomer(raffle.value)
+        const awardssee = await RaffleServices.createCustomer(raffle.value)
+        console.log("seeimages=>",images.value);
+        console.log("see=>",awardssee.award.awards);
+        let i = 0;
+        for (const award of awardssee.award.awards ) {
+
+          console.log("Award:", award.id);
+
+          await RaffleServices.updateImage( images.value[i] , award.id)
+          i++;
+        }
+        
+        
+
       }
       document.getElementById('closeModal').click() 
       Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
@@ -141,6 +161,19 @@
       }]
     }
   }
+  const handleFileUpload =  async (event, id) => {
+     
+     image.value = event.target.files;
+     images.value.push(image.value);
+     console.log('file', image.value);
+     console.log("see id", id);
+     if(id){
+
+        await  RaffleServices.updateImage( image.value , id)
+     }
+     
+     
+  };
   
   </script>
   

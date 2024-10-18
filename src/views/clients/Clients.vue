@@ -27,17 +27,23 @@
     <div style="background-color: #0B0B0B; padding: 2rem; auto">
         <div id="carouselExample" class="carousel slide" data-ride="carousel">
     
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-                <li v-for="(group, index) in groupedItems" :key="'indicator-' + index" :class="{ active: index === 0 }" :data-target="'#carouselExample'" :data-slide-to="index"></li>
-            </ol>
+            
     
             <div class="carousel-inner">
                 <div v-for="(group, index) in groupedItems" :key="'slide-' + index" :class="['carousel-item', { active: index === 0 }]">
                     <div class="row">
                         <div v-for="(item, i) in group" :key="'card-' + i" class="col-md-4">
                             <div class="card">
-                                <img :src="item.img" class="card-img-top" :alt="`Image of ${item.title}`">
+                                <div v-if="isVideo(item.img)">
+                                   <video class="card-img-top" controls>
+                                      <source :src="imageUrl(item.img)" type="video/mp4">
+                                         Your browser does not support the video tag.
+                                     </video>
+                                </div>
+                                <div v-else>
+                                  <img :src="imageUrl(item.img)" class="card-img-top" :alt="`Image of ${item.title}`">
+                                </div>
+    
                                 <div class="card-body">
                                     <h5 class="card-title">{{ item.title }}</h5>
                                     <p class="card-text">{{ item.text }}</p>
@@ -137,14 +143,8 @@ const raffle = ref([]);
 
     
 
-const items = ref([
-            { img: 'https://via.placeholder.com/150', title: 'Card 1', text: 'This is card 1 content.' },
-            { img: 'https://via.placeholder.com/150', title: 'Card 2', text: 'This is card 2 content.' },
-            { img: 'https://via.placeholder.com/150', title: 'Card 3', text: 'This is card 3 content.' },
-            { img: 'https://via.placeholder.com/150', title: 'Card 4', text: 'This is card 4 content.' },
-            { img: 'https://via.placeholder.com/150', title: 'Card 5', text: 'This is card 5 content.' },
-            { img: 'https://via.placeholder.com/150', title: 'Card 6', text: 'This is card 6 content.' }
-        ]);
+const items = ref([ ]);
+
 
         const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
 
@@ -162,8 +162,16 @@ const items = ref([
 
         const listRaffles = async () => {
               raffle.value  = await RaffleServices.listlast();
-              console.log(raffle.value);
+              raffle.value.images_awards.forEach(element => {
+                   items.value.push(
+                    { img: element.image , title: element.award, text: 'todo lo que quieras podra ser tuyo' })
+              });
         };
+        const imageUrl = (imagePath) => {
+             // Asegúrate de que esta URL concuerde con la configuración de tu servidor Django
+            return `http://localhost:8000${imagePath}`;
+        }
+        
 
 
         onMounted(() => {
@@ -171,6 +179,12 @@ const items = ref([
              //   interval: 60000 // 60 segundos
             //});
             listRaffles()
+            //loadWompiScript();
         });
+    function isVideo(url) {
+      const videoExtensions = ['mp4', 'webm', 'ogg'];
+      const extension = url.split('.').pop();
+      return videoExtensions.includes(extension);
+   }
 
 </script>
