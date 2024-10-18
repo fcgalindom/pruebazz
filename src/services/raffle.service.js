@@ -31,4 +31,12 @@ export class RaffleServices {
         const response = await axios.get(url)
         return response.data
     }
+    static async updateImage(award, id) {
+        const url = `${enviroments.baseUrl}award/updateimage/${id}/`;
+        const headers = {
+            'Content-Type': 'multipart/form-data',
+        };
+        const response = await axios.put(url, award, { headers });
+        return response.data;
+    }
 }
