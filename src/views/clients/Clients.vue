@@ -27,12 +27,8 @@
     <div style="background-color: #0B0B0B; padding: 2rem; auto">
         <div id="carouselExample" class="carousel slide" data-ride="carousel">
     
-            <!-- Indicators -->
-           <!--  <ol class="carousel-indicators">
-                <li v-for="(group, index) in groupedItems" :key="'indicator-' + index" :class="{ active: index === 0 }" :data-target="'#carouselExample'" :data-slide-to="index"></li>
-            </ol>-->
-    
             
+    
             <div class="carousel-inner">
                 <div v-for="(group, index) in groupedItems" :key="'slide-' + index" :class="['carousel-item', { active: index === 0 }]">
                     <div class="row">
@@ -57,7 +53,6 @@
                     </div>
                 </div>
             </div>
-
     
             <!-- Controls -->
             <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
@@ -120,9 +115,6 @@
             </div>
         </div>
     </div>
-    <div>
-      <form id="wompi-form"></form>
-    </div>
 
     <footer class="footer-customer">
         <div class="d-flex justify-content-center buttons-social-networks">
@@ -133,7 +125,6 @@
         </div>
         <div class="text-center pt-2">
             <span class="text-white poppins-medium">Rifa auspiciado por:</span>
-            
         </div>
         <div style="margin-left: 5%;
 padding-bottom: 2em;">
@@ -143,7 +134,7 @@ padding-bottom: 2em;">
 
     <button class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button>
 </template>
-
+  
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { RaffleServices } from '@/services/raffle.service';
@@ -154,13 +145,6 @@ const raffle = ref([]);
 
 const items = ref([ ]);
 
-var cadenaConcatenada =
-  "sk8-438k4-xmxm392-sn2m2490000COPtest_integrity_BtQ1sbyn7JRyHr88L8lL28l7QHzLGs9N";
-//Ejemplo
-const encondedText = new TextEncoder().encode(cadenaConcatenada);
-const hashBuffer = await crypto.subtle.digest("SHA-256", encondedText);
-const hashArray = Array.from(new Uint8Array(hashBuffer));
-const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 
         const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
 
@@ -187,18 +171,7 @@ const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
              // Asegúrate de que esta URL concuerde con la configuración de tu servidor Django
             return `http://localhost:8000${imagePath}`;
         }
-        const  loadWompiScript =() => {
-      const script = document.createElement('script');
-      script.src = "https://checkout.wompi.co/widget.js";
-      script.setAttribute('data-render', 'button');
-      script.setAttribute('data-public-key', 'pub_test_0wT4gv0Uq2fJypM4m6I42njHMCrVx8Mc');
-      script.setAttribute('data-currency', 'COP');
-      script.setAttribute('data-amount-in-cents', '2490000');
-      script.setAttribute('data-reference', '4XMPGKWWPKWQF11');
-      script.setAttribute('data-signature:integrity', '37c8407747e595535433ef8f6a811d853cd943046624a0ec04662b17bbf33bf5');
-
-      document.getElementById('wompi-form').appendChild(script);
-    }
+        
 
 
         onMounted(() => {
@@ -206,7 +179,7 @@ const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
              //   interval: 60000 // 60 segundos
             //});
             listRaffles()
-            loadWompiScript();
+            //loadWompiScript();
         });
     function isVideo(url) {
       const videoExtensions = ['mp4', 'webm', 'ogg'];
