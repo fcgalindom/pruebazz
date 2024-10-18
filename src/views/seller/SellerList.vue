@@ -60,7 +60,7 @@
                 </td>
                 <td>
                   <div class="d-flex justify-content-center">
-                    <router-link :to="`sellers-tickets/${item.id}`"> <button class="btn btn-info"> Asignar </button> </router-link>
+                    <router-link :to="`sellers-tickets/${item.id}/`"> <button class="btn btn-info"> Asignar </button> </router-link>
                   </div>
                 </td>
             </tr>

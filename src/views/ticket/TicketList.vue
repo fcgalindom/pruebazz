@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-md-3">
                         <Label>Vendedor</Label>
-                        <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id" />
+                        <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Vendedor</Label>
-                            <Select2 ref="multiselect" v-model="ticket.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="first_name" track-by="id" />
+                            <Select2 ref="multiselect" v-model="ticket.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Cliente (a quien se vende)</Label>
@@ -98,7 +98,7 @@
                         <tr v-for="(i, index) in tickets" :key="index">
                             <td>#{{i.number}}</td>
                             <td>{{i.raffle.name}}</td>
-                            <td>{{i.seller?.first_name}} {{ i.seller?.last_name }}</td>
+                            <td>{{i.seller?.name}}</td>
                             <td>{{i.customer.name}}</td>
                             <td>{{i.value}}</td>
                             <td>{{i.status}}</td>
@@ -174,7 +174,7 @@ const saveEntity = async () => {
 
     let value = 0
     ticket.value.payments.forEach(element => {
-        value += element.amount
+        value += parseInt(element.amount)
     });
 
     const form = {
@@ -192,6 +192,7 @@ const saveEntity = async () => {
     } else {
         await TicketServices.createCustomer(form)
     }
+    document.getElementById('closeModal').click()
     await datatable()
     Swal.fire({
         title: '¡Éxito!',

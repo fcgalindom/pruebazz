@@ -15,7 +15,7 @@ const sellerRoutes = [
 		}
 	},
 	{
-		path: '/sellers-tickets/:id',
+		path: '/sellers-tickets/:id/',
 		name: 'SellerTickets',
 		component: SellerTickets,
 		beforeEnter: (to, from, next) => {

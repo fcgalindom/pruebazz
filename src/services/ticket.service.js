@@ -16,7 +16,7 @@ export class TicketServices {
     }
 
     static async show(id) {
-        const url = `${enviroments.baseUrl}raffle/${id}/`
+        const url = `${enviroments.baseUrl}tickets/${id}/`
         const response = await axios.get(url)
         return response.data
     }

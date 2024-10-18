@@ -14,4 +14,10 @@ export class SellerTicketsServices {
         const response = await axios.post(url, data)
         return response.data
     }
+
+    static async show(id) {
+        const url = enviroments.baseUrl + `sellers-tickets/show/${id}/`
+        const response = await axios.get(url)
+        return response.data
+    }
 }

@@ -1,10 +1,22 @@
 <template>
 
     <div class="container-fluid pt-3">
-        
-      
-        
         <div class="my-3">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <Label>Rifa</Label>
+                    <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id"  />
+                </div>
+                <div class="col-md-4">
+                    <Input v-model="filters.name" label="Nombre" /> 
+                </div>
+                <div class="col-md-4">
+                    <Input type="date" v-model="filters.expiration_date" label="Fecha de expiración" /> 
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <Button @click="datatable">Buscar</Button>
+            </div>
         <div class="d-flex justify-content-end mt-3">
                 <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
         </div>
@@ -44,8 +56,7 @@
                 <th>Valor nuevo</th>
                 <th>Fecha de Fin</th>
                 <th>Rifa</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
+                <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,9 +67,11 @@
                 <td>{{ promotion.expiration_date }}</td>
                 <td>{{ promotion.raffle.name }}</td>
                 
-                <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(promotion.id)"><i class="fas fa-edit"></i></button></td>
+                <td class="text-center">
+                    <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(promotion.id)"><i class="fas fa-edit"></i></button>
+                    <button @click="deletePromotion(promotion.id)" class="btn text-danger"><i class="fas fa-trash"></i></button>
+                </td>
                     
-                <td><button @click="deletePromotion(promotion.id)" class="btn btn-danger">Eliminar</button></td>
                 </tr>
             </tbody>
             </table>
@@ -70,8 +83,14 @@
 import { ref, onMounted } from 'vue'
 import { PromotionServices } from '@/services/promotion.service'
 import { TicketServices } from '@/services/ticket.service'
+import Swal from 'sweetalert2'
 const promotions = ref([])
 const promotion = ref({})
+const filters = ref({
+    name: "",
+    raffle: "",
+    expiration_date: ""
+})
 
 const modal = ref('promotion_list')
 const dependencies = ref({
@@ -81,7 +100,7 @@ const dependencies = ref({
 })
 
 onMounted(async() => {
-    listPromotions()
+    datatable()
     dependencies.value = await TicketServices.dependencies()
 })
 const showData = async(id) => {
@@ -91,8 +110,14 @@ const showData = async(id) => {
 
 
 
-const listPromotions = async () => {
-    promotions.value = await PromotionServices.list()
+const datatable = async () => {
+    console.log(filters.value);
+    const filtersSend = {
+        name: filters.value.name,
+        raffle_id: filters.value.raffle.id,
+        expiration_date: filters.value.expiration_date
+    }
+    promotions.value = await PromotionServices.list(filtersSend)
 }
 const limpiarData = () => {
     promotion.value = {
@@ -103,7 +128,7 @@ const limpiarData = () => {
         raffle: ""
     }
 }
-const saveEntity = () => {
+const saveEntity = async() => {
 
     const from ={
         name: promotion.value.name,
@@ -114,19 +139,30 @@ const saveEntity = () => {
     }
     
     if (promotion.value.id != null) {
-        PromotionServices.updatePromotion(from, promotion.value.id)
+        await PromotionServices.updatePromotion(from, promotion.value.id)
     } else {
-        PromotionServices.createPromotion(from)
+        await PromotionServices.createPromotion(from)
     }
-    listPromotions()
+    Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
+    await datatable()
     document.getElementById('closeModal').click()
 }
 const deletePromotion = async(id) => {
     const form = {
         state : 0
     }
-    await PromotionServices.deletePromotion(form,id)
-    listPromotions()
+    Swal.fire({
+        title: "¿Está seguro que desea eliminar esta promoción?",
+        showDenyButton: true,
+        confirmButtonText: "Aceptar",
+        denyButtonText: `Cancelar`,
+    }).then(async(result) => {
+        if (result.isConfirmed) {
+            await PromotionServices.deletePromotion(form, id)
+            await datatable()
+            Swal.fire("Eliminado!", "Datos eliminados con éxito", "success");
+        }
+    });
 }
 
 </script>
