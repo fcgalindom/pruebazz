@@ -55,8 +55,15 @@ const saveEntity = async () => {
             end: item.end
         }
     })
-    await SellerTicketsServices.store(form, route.params.id)
-    Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
+    try {
+        await SellerTicketsServices.store(form, route.params.id)   
+        Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
+    } catch (error) {
+        Swal.fire("¡Guardado!", error.error, "error");
+        
+    }
+    console.log(answer);
+    
 }
 
 const addRange = () => {

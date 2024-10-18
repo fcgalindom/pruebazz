@@ -10,9 +10,17 @@ export class SellerTicketsServices {
     }
 
     static async store(data, id) {
-        const url = enviroments.baseUrl + `sellers-tickets/store/${id}/`
-        const response = await axios.post(url, data)
-        return response.data
+        try {
+            const url = enviroments.baseUrl + `sellers-tickets/store/${id}/`
+            const response = await axios.post(url, data)
+            console.log('todo bien', response.data);
+            
+            return response.data   
+        } catch (error) {
+            console.log(error.response.data);
+            
+            throw error.response.data
+        }
     }
 
     static async show(id) {
