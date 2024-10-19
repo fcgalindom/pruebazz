@@ -39,5 +39,9 @@ export class TicketServices {
         return response.data;
     }
 
-    
+    static async getTiketsByRaffle(id) {
+        const url = `${enviroments.baseUrl}tickets/getTicketsByRaffle/${id}/`;
+        const response = await axios.get(url)
+        return response.data;
+    }
 }

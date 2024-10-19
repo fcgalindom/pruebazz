@@ -53,7 +53,7 @@
     
                     <div>
                         <div class="d-flex justify-content-end">
-                            <button class="btn btn-success" @click="add_award()">+</button>
+                            <button class="btn btn-success" @click="add_payment()">+</button>
                         </div>
                         <div class="row" v-for="(i, index) in ticket.payments" :key="index">
                             <div class="col-4">
@@ -69,7 +69,7 @@
                                         <Input v-model="i.expiration_date" type="date" label="Fecha de expiración"></Input>
                                     </div>
                                     <div class="col-2">
-                                        <button class="btn btn-danger mt-4 ml-3" @click="remove_award(index)">X</button>
+                                        <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
                                     </div>
                                 </div>
                             </div>
@@ -202,11 +202,11 @@ const saveEntity = async () => {
     })
 }
 
-const add_award = () => {
+const add_payment = () => {
     ticket.value.payments.push({ award: "", date: "", type_award: "" })
 }
 
-const remove_award = (index) => {
+const remove_payment = (index) => {
     ticket.value.payments.splice(index, 1);
 }
 
@@ -214,8 +214,7 @@ const showData = async (id) => {
     ticket.value = await TicketServices.show(id)
 }
 
-const changeState = (id, status) => {
-    console.log('status', status);
+const changeState = async(id, status) => {
     const message = status == 'Libre' ? '¿Desea declinar esta boleta?' : '¿Desea marcar esta boleta como totalmente pagada?'
     Swal.fire({
         title: message,
@@ -226,9 +225,9 @@ const changeState = (id, status) => {
         if (result.isConfirmed) {
             await TicketServices.changeState(id, status)
             Swal.fire("¡Guardado!", "", "success");
+            await datatable()
         }
     });
-    datatable()
 }
 
 const limpiarFormulario = () => {

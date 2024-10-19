@@ -204,3 +204,7 @@
     scrollbar-width: thin;
     /* Ancho fino del scroll */
 }
+
+.w-80 {
+    width: 80% !important;
+}

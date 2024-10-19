@@ -1,10 +1,11 @@
 import TicketList from '@/views/ticket/TicketList.vue'
+import TicketFree from '@/views/ticket/TicketFree.vue'
 import Cookies from 'js-cookie';
 const ticketsRoutes = [
     {
 		path: '/tickets/Libre',
-		name: 'FreeTickets',
-		component: TicketList,
+		name: 'TicketFree',
+		component: TicketFree,
 		befereEnter: (to, from, next) => {
 			if (Cookies.get('token')) {
 				next()

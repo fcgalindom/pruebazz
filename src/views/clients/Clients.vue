@@ -71,16 +71,16 @@
     </div>
     <div class="div-select-ticket">
         <div class="text-center">
-            <span>Todos los sorteos juegan con las Ãºltimas cuatro cifras de la loterÃ­a de BoyacÃ¡, sin serie</span>
+            <span>Todos los sorteos juegan con las Ãºltimas cuatro cifras de la lotería de Boyacá¡, sin serie</span>
         </div>
         <div class="d-flex justify-content-center">
             <img src="@/assets/customers/loteria_boyaca.png" alt="" style="max-width: 80%;">
         </div>
         <div class="d-flex justify-content-center w-100 mb-3">
             <div class="w-70 text-center">
-                <label class="poppins-bold fs-random-number" for="">NÃšMEROS AL AZAR</label>
+                <label class="poppins-bold fs-random-number" for="">NÚMEROS AL AZAR</label>
                 <div class="input-group mb-3 input-customer">
-                    <input type="text" class="form-control poppins-medium" placeholder="Cantidad de nÃºmeros" aria-label="Cantidad de nÃºmeros" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control poppins-medium" placeholder="Cantidad de Números" aria-label="Cantidad de Números" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                         <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
                     </div>
@@ -89,7 +89,7 @@
         </div>
         <div class="d-flex justify-content-center w-100 mt-5">
             <div class="w-70 text-center">
-                <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÃšMERO</label>
+                <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
                 <div class="input-group mb-3 input-customer">
                     <input type="text" class="form-control poppins-medium" placeholder="Ingrese el nÃºmero a buscar" aria-label="Ingrese el nÃºmero a buscar" aria-describedby="basic-addon2">
                     <div class="input-group-append">
@@ -102,8 +102,8 @@
             <div class="w-70 text-center">
                 <label class="poppins-bold fs-random-number" for="">&nbsp;</label>
                 <div class="input-group mb-3 input-customer">
-                    <input type="text" class="form-control poppins-medium text-center" placeholder="NÃºmeros seleccionados" readonly
-                    aria-label="NÃºmeros seleccionados" aria-describedby="basic-addon2" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    <input type="text" class="form-control poppins-medium text-center" placeholder="Números seleccionados" readonly
+                    aria-label="Números seleccionados" aria-describedby="basic-addon2" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
                 </div>
             </div>
         </div>
