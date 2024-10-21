@@ -4,7 +4,7 @@
         <Modal :id="modal" label="Registrar" title="Crear Boleta" size="xl">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <Input v-model="ticket.number" type="number" label="Número"></Input>
+                    <Input v-model="ticket.number" type="text" label="Número"></Input>
                 </div>
                 <div class="col-md-6 mb-3">
                     <Label>Vendedor</Label>
@@ -70,13 +70,14 @@
         </div>
         <div class="container-fluid d-flex justify-content-between mt-3 pb-5">
             <div class="button-grid w-80 grid-buttons-tickets scroll-container" style="grid-template-columns: repeat(10, 1fr);">
-                <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)">
+                <button :class="{ active: isActive(button) }" :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(button, button)">
+                <!-- <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)"> -->
                   {{ button }}
                 </button>
             </div>
             <div>
-                <Input class="mb-3" label="Números seleccionados"></Input>
-                <Button class="mt-3">Comprar</Button>
+                <Input disabled v-model="ticket.number" class="mb-3" label="Números seleccionados"></Input>
+                <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`">Comprar</Button>
             </div>
         </div>
     </div>
@@ -96,7 +97,8 @@ const filters = ref({
     number: "",
     raffle: ""
 })
-
+const ticketNumbers = ref("")
+const activeButtons = ref(new Set());
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -107,6 +109,10 @@ onMounted(async () => {
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
 })
+
+const isActive = (button) => {
+  return activeButtons.value.has(button);
+}
 
 const search = async () => {
     const filterJson = {
@@ -132,14 +138,56 @@ const search = async () => {
     }
 }
 
-const buyTicket = (index) => {
-    ticket.value.number = index
+const saveEntity = async () => {
+
+    let value = 0
+    ticket.value.payments.forEach(element => {
+        value += parseInt(element.amount)
+    });
+
+    const form = {
+        id: ticket.value.id,
+        number: ticket.value.number,
+        value: value,
+        seller_id: ticket.value.seller?.id,
+        customer_id: ticket.value.customer?.id,
+        raffle_id: ticket.value.raffle?.id,
+        status: ticket.value.status,
+        payments: ticket.value.payments
+    }
+    if (ticket.value.id) {
+        await TicketServices.updateCustomer(form, ticket.value.id)
+    } else {
+        await TicketServices.createCustomer(form)
+    }
+    document.getElementById('closeModal').click()
+    await datatable()
+    Swal.fire({
+        title: '¡Éxito!',
+        text: 'Datos guardados con Éxito.',
+        icon: 'success',
+        confirmButtonText: 'Continuar'
+    })
+}
+
+const buyTicket = (index, button) => {
+    if (activeButtons.value.has(button)) {
+    ticket.value.number = ticket.value.number.filter(num => num !== index)
+    activeButtons.value.delete(button);
+  } else {
+    ticket.value.number.push(index)
+    activeButtons.value.add(button);
+  }
     ticket.value.raffle = filters.value.raffle
 }
 
+// watch(ticket, (newTicket) => {
+//   ticketNumbers.value = newTicket.number.join(", ");
+// }, { deep: true });
+
 const limpiarFormulario = () => {
     ticket.value = {
-        number: "",
+        number: [],
         value: "",
         seller: "",
         customer: "",
@@ -153,3 +201,24 @@ const limpiarFormulario = () => {
     }
 }
 </script>
+
+<style scoped>
+/* Estilos específicos para este componente */
+/* button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+} */
+
+button.active {
+  background-color: #28a745;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+</style>
