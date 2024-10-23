@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "deploy": "gh-pages -d dist -r https://github.com/huberht3402/rafles.git"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
