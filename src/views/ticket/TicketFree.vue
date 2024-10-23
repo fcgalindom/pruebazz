@@ -18,10 +18,10 @@
                     <Label>Rifa</Label>
                     <Select2 ref="multiselect" v-model="ticket.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                 </div>
-                <div class="col-md-6 mb-3">
+                <!-- <div class="col-md-6 mb-3">
                     <Label>Estado de la boleta</Label>
                     <Select2 ref="multiselect" v-model="ticket.status" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
-                </div>
+                </div> -->
             </div>
     
             <hr>
@@ -90,6 +90,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
+import Swal from 'sweetalert2'
 
 const modal = ref('ticket_modal')
 
@@ -164,13 +165,14 @@ const saveEntity = async () => {
         await TicketServices.createCustomer(form)
     }
     document.getElementById('closeModal').click()
-    await datatable()
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',
         icon: 'success',
         confirmButtonText: 'Continuar'
     })
+    await search()
+    limpiarFormulario()
 }
 
 const buyTicket = (index, button) => {
