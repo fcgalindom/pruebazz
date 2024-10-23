@@ -31,14 +31,18 @@
                     <button class="btn btn-success" @click="add_payment()">+</button>
                 </div>
                 <div class="row" v-for="(i, index) in ticket.payments" :key="index">
-                    <div class="col-4">
+                    <div class="col-3">
+                        <Label>Boleta</Label>
+                        <Select2 ref="multiselect" v-model="i.ticket" :options="ticket.number" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
+                    </div>
+                    <div class="col-3">
                         <Label>Método de pago</Label>
                         <Select2 ref="multiselect" v-model="i.payment_method" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <Input v-model="i.amount" type="text" label="Valor"></Input>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="row">
                             <div class="col-10">
                                 <Input v-model="i.expiration_date" type="date" label="Fecha de expiración"></Input>
@@ -97,7 +101,6 @@ const filters = ref({
     number: "",
     raffle: ""
 })
-const ticketNumbers = ref("")
 const activeButtons = ref(new Set());
 const dependencies = ref({
     sellers: [],
@@ -179,6 +182,15 @@ const buyTicket = (index, button) => {
     activeButtons.value.add(button);
   }
     ticket.value.raffle = filters.value.raffle
+}
+
+const add_payment = () => {
+    ticket.value.payments.push({
+        ticket: "",
+        payment_method: "",
+        amount: "",
+        expiration_date: ""
+    })
 }
 
 // watch(ticket, (newTicket) => {
