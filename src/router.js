@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import customerRoutes from '@/routes/customers.routes'
 import rafflesRoutes from '@/routes/raffle.route'
@@ -8,8 +8,6 @@ import loginRoutes from './routes/login.routes'
 import promotionRoutes from './routes/promotion.route'
 import customerPublicRoutes from './routes/customers.public.routes'
 import Cookies from 'js-cookie';
-
-
 
 const routes = [
     ...customerRoutes,
@@ -22,7 +20,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL), // Cambia a createWebHashHistory
   routes,
 })
 
