@@ -26,5 +26,3 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-
-src/enviroments/api.js
