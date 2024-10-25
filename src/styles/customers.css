@@ -41,7 +41,7 @@
 
 .margin-customer-main {
     margin-left: 6rem;
-    margin-top: 7em;
+    margin-top: 6%;
 }
 
 .position-draw_date {
@@ -53,7 +53,6 @@
 .div-image {
     position: relative;
     top: 0;
-    height: 100vh;
     display: flex;
     justify-content: end;
     align-items: end;
@@ -132,7 +131,6 @@
 }
 
 .background-container {
-    height: 100vh;
     background-image: url("@/assets/customers/background_black_friday.png");
     background-size: cover;
 }
@@ -156,14 +154,12 @@
 .button-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    /* 7 columnas */
     gap: 10px;
-    /* Espacio entre botones */
+    width: 50% !important;
     padding: 20px;
 }
 
 .scroll-container {
-    width: 300px;
     height: 500px;
     overflow-y: auto;
     /* Habilita el scroll vertical */
@@ -207,4 +203,53 @@
 
 .w-80 {
     width: 80% !important;
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (max-width: 1400px) { 
+    .button-grid {
+        width: 75% !important;
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media screen and (max-width: 1200px) {
+    .button-grid {
+        width: 100% !important;
+        grid-template-columns: repeat(10, 1fr);
+    }
+
+    .margin-customer-main {
+        margin-left: 0;
+        margin-top: 6%;
+    }
+
+    .position-draw_date {
+        margin-top: 1em;
+        margin-left: 0;
+        margin-bottom: 1.7rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (max-width: 992px) { 
+    /* Add your styles here */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media screen and (max-width: 768px) { 
+    .button-grid {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .main-award {
+        font-size: 4em;
+    }
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) { 
+    /* Add your styles here */
 }

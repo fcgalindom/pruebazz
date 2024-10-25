@@ -33,4 +33,10 @@ export class PromotionServices {
         return response.data
     }
 
+    static async promotionsByRaffle(raffle_id) {
+        const url = `${enviroments.baseUrl}promotions/raffle/${raffle_id}/`
+        const response = await axios.get(url)
+        return response.data
+    }
+
 }
