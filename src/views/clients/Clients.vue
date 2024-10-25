@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="div-image d-none d-xl-inline">
-                <img src="@/assets/customers/persons.png" style="width: 46em; height: 38em;" alt="">
+                <img src="@/assets/customers/persons.png" style="width: 46em; height: 42em;" alt="">
             </div>
         </div>
     </div>
