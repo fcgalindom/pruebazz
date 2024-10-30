@@ -36,12 +36,12 @@
                             <div class="card">
                                 <div v-if="isVideo(item.img)">
                                    <video class="card-img-top" controls>
-                                      <source :src="imageUrl(item.img)" type="video/mp4">
+                                      <source :src="item.img" type="video/mp4">
                                          Your browser does not support the video tag.
                                      </video>
                                 </div>
                                 <div v-else>
-                                  <img :src="imageUrl(item.img)" class="card-img-top" :alt="`Image of ${item.title}`">
+                                  <img :src="item.img" class="card-img-top" :alt="`Image of ${item.title}`">
                                 </div>
     
                                 <div class="card-body">
@@ -71,16 +71,16 @@
     </div>
     <div class="div-select-ticket">
         <div class="text-center">
-            <span>Todos los sorteos juegan con las Ãºltimas cuatro cifras de la lotería de Boyacá¡, sin serie</span>
+            <span>Todos los sorteos juegan con las Ãºltimas cuatro cifras de la loterï¿½a de Boyacï¿½, sin serie</span>
         </div>
         <div class="d-flex justify-content-center">
             <img src="@/assets/customers/loteria_boyaca.png" alt="" style="max-width: 80%;">
         </div>
         <div class="d-flex justify-content-center w-100 mb-3">
             <div class="w-70 text-center">
-                <label class="poppins-bold fs-random-number" for="">NÚMEROS AL AZAR</label>
+                <label class="poppins-bold fs-random-number" for="">Nï¿½MEROS AL AZAR</label>
                 <div class="input-group mb-3 input-customer">
-                    <input type="text" class="form-control poppins-medium" placeholder="Cantidad de Números" aria-label="Cantidad de Números" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control poppins-medium" placeholder="Cantidad de Nï¿½meros" aria-label="Cantidad de Nï¿½meros" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                         <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
                     </div>
@@ -89,7 +89,7 @@
         </div>
         <div class="d-flex justify-content-center w-100 mt-5">
             <div class="w-70 text-center">
-                <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
+                <label class="poppins-bold fs-random-number" for="">BUSQUE SU Nï¿½MERO</label>
                 <div class="input-group mb-3 input-customer">
                     <input type="text" class="form-control poppins-medium" placeholder="Ingrese el nÃºmero a buscar" aria-label="Ingrese el nÃºmero a buscar" aria-describedby="basic-addon2">
                     <div class="input-group-append">
@@ -102,8 +102,8 @@
             <div class="w-70 text-center">
                 <label class="poppins-bold fs-random-number" for="">&nbsp;</label>
                 <div class="input-group mb-3 input-customer">
-                    <input type="text" class="form-control poppins-medium text-center" placeholder="Números seleccionados" readonly
-                    aria-label="Números seleccionados" aria-describedby="basic-addon2" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    <input type="text" class="form-control poppins-medium text-center" placeholder="Nï¿½meros seleccionados" readonly
+                    aria-label="Nï¿½meros seleccionados" aria-describedby="basic-addon2" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
                 </div>
             </div>
         </div>
@@ -167,12 +167,8 @@ const items = ref([ ]);
                     { img: element.image , title: element.award, text: 'todo lo que quieras podra ser tuyo' })
               });
         };
-        const imageUrl = (imagePath) => {
-             // AsegÃºrate de que esta URL concuerde con la configuraciÃ³n de tu servidor Django
-            return `http://localhost:8000${imagePath}`;
-        }
-        
-
+       
+    
 
         onMounted(() => {
             //$('#carouselExample').carousel({

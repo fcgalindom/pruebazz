@@ -11,6 +11,8 @@
     "deploy": "gh-pages -d dist -r https://github.com/huberht3402/rafles.git"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.21.0",
+    "@cloudinary/vue": "^1.12.1",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "admin-lte": "^3.2.0",
     "axios": "^1.7.7",

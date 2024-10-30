@@ -55,7 +55,7 @@
                         </div>
                         <div class="col-12">
                          <Label>Archivo</Label>
-                           <input  type="file"  @change="handleFileUpload($event, i.id)" class="form-control"  accept="image/*,video/*">
+                            <button @click="openWidget(i)">subir archivos</button>
                         </div>
                     </div>
                   </div>
@@ -96,11 +96,13 @@
   import { RaffleServices } from '@/services/raffle.service'
   import Swal from 'sweetalert2'
   
+  
   const raffles = ref([])
   const raffle = ref({})
   const modal = ref('raffle_modal')
   const image = ref(null)
   const images = ref([])
+  const imageUrl = ref('')
   
   onMounted(async () => {
       raffles.value = await RaffleServices.list()
@@ -108,34 +110,42 @@
   })
   
   const saveEntity = async() => {
+      console.log('raffle', raffle.value);  
       if (raffle.value.id) {
-        await RaffleServices.updateCustomer(raffle.value, raffle.value.id)
-       
+        await RaffleServices.updateCustomer(raffle.value, raffle.value.id)       
       } else {
-        const awardssee = await RaffleServices.createCustomer(raffle.value)
-        console.log("seeimages=>",images.value);
-        console.log("see=>",awardssee.award.awards);
-        let i = 0;
-        for (const award of awardssee.award.awards ) {
-
-          console.log("Award:", award.id);
-
-          await RaffleServices.updateImage( images.value[i] , award.id)
-          i++;
-        }
-        
-        
-
+         await RaffleServices.createCustomer(raffle.value)
       }
       document.getElementById('closeModal').click() 
       Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
       await listCustomers()
   }
+  
+  
+  const openWidget = (i) => {
+      const myWidget = window.cloudinary.createUploadWidget(
+        {
+          cloudName: 'dsxpe54pz',
+          uploadPreset: 'demos1',
+        },
+
+        (error, result) => {
+          if (!error && result && result.event === "success") {
+            console.log("Done! Here is the image info: ", result.info);
+            
+            i.image = result.info.url;
+            console.log('image',i.image );
+
+          }
+        }
+      );
+      myWidget.open();
+    };
 
   const add_award = () => {
     console.log('awards', raffle.value);
     
-    raffle.value.awards.push({award: "", date: "", type_award: ""})
+    raffle.value.awards.push({award: "", date: "", type_award: "" , image: ""})
   }
 
   const remove_award = (index) => {   
@@ -161,19 +171,7 @@
       }]
     }
   }
-  const handleFileUpload =  async (event, id) => {
-     
-     image.value = event.target.files;
-     images.value.push(image.value);
-     console.log('file', image.value);
-     console.log("see id", id);
-     if(id){
-
-        await  RaffleServices.updateImage( image.value , id)
-     }
-     
-     
-  };
+ 
   
   </script>
   

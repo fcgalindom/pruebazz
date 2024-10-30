@@ -5,7 +5,6 @@
   <div v-else>
     <router-view></router-view>
   </div>
-   <h1>hola1.o</h1>
 </template>
 
 <script setup lang="ts">
