@@ -28,4 +28,10 @@ export class SellerTicketsServices {
         const response = await axios.get(url)
         return response.data
     }
+
+    static async getTiketsFreeForSeller(raffle, seller) {
+        const url = enviroments.baseUrl + `sellers-tickets/getTiketsFreeForSeller/`
+        const response = await axios.get(url, { params: { raffle, seller } })
+        return response.data
+    }
 }

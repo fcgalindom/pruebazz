@@ -18,10 +18,6 @@
                     <Label>Rifa</Label>
                     <Select2 ref="multiselect" v-model="ticket.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                 </div>
-                <div class="col-md-6 mb-3">
-                    <Label>Estado de la boleta</Label>
-                    <Select2 ref="multiselect" v-model="ticket.status" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
-                </div>
             </div>
     
             <hr>
@@ -31,14 +27,18 @@
                     <button class="btn btn-success" @click="add_payment()">+</button>
                 </div>
                 <div class="row" v-for="(i, index) in ticket.payments" :key="index">
-                    <div class="col-4">
+                    <div class="col-3">
+                        <Label>Boleta</Label>
+                        <Select2 ref="multiselect" v-model="i.ticket" :options="ticket.number" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
+                    </div>
+                    <div class="col-3">
                         <Label>Método de pago</Label>
                         <Select2 ref="multiselect" v-model="i.payment_method" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <Input v-model="i.amount" type="text" label="Valor"></Input>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="row">
                             <div class="col-10">
                                 <Input v-model="i.expiration_date" type="date" label="Fecha de expiración"></Input>
@@ -71,13 +71,13 @@
         <div class="container-fluid d-flex justify-content-between mt-3 pb-5">
             <div class="button-grid w-80 grid-buttons-tickets scroll-container" style="grid-template-columns: repeat(10, 1fr);">
                 <button :class="{ active: isActive(button) }" :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(button, button)">
-                <!-- <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)"> -->
-                  {{ button }}
-                </button>
+                    <!-- <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)"> -->
+                      {{ button }}
+                    </button>
             </div>
             <div>
                 <Input disabled v-model="ticket.number" class="mb-3" label="Números seleccionados"></Input>
-                <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`">Comprar</Button>
+                <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`" @click="getPromotionsByRaffle">Comprar</Button>
             </div>
         </div>
     </div>
@@ -86,6 +86,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
+import { PromotionServices } from '@/services/promotion.service'
+import Swal from 'sweetalert2'
 
 const modal = ref('ticket_modal')
 
@@ -97,8 +99,8 @@ const filters = ref({
     number: "",
     raffle: ""
 })
-const ticketNumbers = ref("")
 const activeButtons = ref(new Set());
+const promotion = ref({})
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -111,7 +113,7 @@ onMounted(async () => {
 })
 
 const isActive = (button) => {
-  return activeButtons.value.has(button);
+    return activeButtons.value.has(button);
 }
 
 const search = async () => {
@@ -120,15 +122,15 @@ const search = async () => {
     }
     const response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
 
-    if(filters.value.number){
+    if (filters.value.number) {
         console.log('response.tickets ==> ', response.tickets);
-        
-        if(response.tickets.some(ticket => ticket.number == filters.value.number)) {
+
+        if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
             buttons.value = [filters.value.number]
-        }else {
+        } else {
             buttons.value = [];
         }
-    }else {
+    } else {
         buttons.value = [];
         for (let index = response.raffle.start_number; index <= response.raffle.final_number; index++) {
             if (!response.tickets.some(ticket => ticket.number == index)) {
@@ -153,7 +155,9 @@ const saveEntity = async () => {
         customer_id: ticket.value.customer?.id,
         raffle_id: ticket.value.raffle?.id,
         status: ticket.value.status,
-        payments: ticket.value.payments
+        payments: ticket.value.payments,
+        promotion_id: ticket.value.promotion_id,
+        value_to_pay: ticket.value.value_to_pay,
     }
     if (ticket.value.id) {
         await TicketServices.updateCustomer(form, ticket.value.id)
@@ -161,24 +165,54 @@ const saveEntity = async () => {
         await TicketServices.createCustomer(form)
     }
     document.getElementById('closeModal').click()
-    await datatable()
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',
         icon: 'success',
         confirmButtonText: 'Continuar'
     })
+    await search()
+    limpiarFormulario()
 }
 
 const buyTicket = (index, button) => {
     if (activeButtons.value.has(button)) {
-    ticket.value.number = ticket.value.number.filter(num => num !== index)
-    activeButtons.value.delete(button);
-  } else {
-    ticket.value.number.push(index)
-    activeButtons.value.add(button);
-  }
+        ticket.value.number = ticket.value.number.filter(num => num !== index)
+        activeButtons.value.delete(button);
+    } else {
+        ticket.value.number.push(index)
+        activeButtons.value.add(button);
+    }
     ticket.value.raffle = filters.value.raffle
+}
+
+const add_payment = () => {
+    ticket.value.payments.push({
+        ticket: "",
+        payment_method: "",
+        amount: "",
+        expiration_date: ""
+    })
+}
+
+const getPromotionsByRaffle = async() => {
+    console.log('filters.value ==> ', filters.value.raffle.id);
+    
+    promotion.value =  await PromotionServices.promotionsByRaffle(filters.value.raffle.id)
+    if(promotion.value[0].number_of_tickets <= ticket.value.number.length){
+        Swal.fire({
+            title: '¡Felicitaciones!',
+            text: `Genial se te aplicará la promoción ${promotion.value[0].name} con un valor de ${promotion.value[0].new_value} por boleta`,
+            icon: 'info',
+            confirmButtonText: 'Continuar'
+        })
+        ticket.value.promotion_id = promotion.value[0].id
+        ticket.value.value_to_pay = promotion.value[0].new_value
+    }else {
+        ticket.value.value_to_pay = filters.value.raffle.value_ticket
+        ticket.value.promotion_id = null
+    }
+
 }
 
 // watch(ticket, (newTicket) => {
@@ -192,6 +226,8 @@ const limpiarFormulario = () => {
         seller: "",
         customer: "",
         raffle: "",
+        promotion_id: null,
+        value_to_pay: "",
         status: "",
         payments: [{
             payment_method: "",
@@ -204,6 +240,7 @@ const limpiarFormulario = () => {
 
 <style scoped>
 /* Estilos específicos para este componente */
+
 /* button {
   background-color: #007bff;
   color: white;
@@ -215,10 +252,10 @@ const limpiarFormulario = () => {
 } */
 
 button.active {
-  background-color: #28a745;
+    background-color: #28a745;
 }
 
 button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 </style>
