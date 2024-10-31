@@ -76,44 +76,14 @@
         <div class="d-flex justify-content-center">
             <img src="@/assets/customers/loteria_boyaca.png" alt="" style="max-width: 80%;">
         </div>
-        <div class="d-flex justify-content-center w-100 mb-3">
-            <div class="w-70 text-center">
-                <label class="poppins-bold fs-random-number" for="">NÚMEROS AL AZAR</label>
-                <div class="input-group mb-3 input-customer">
-                    <input type="text" class="form-control poppins-medium" placeholder="Cantidad de Números" aria-label="Cantidad de Números" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-center w-100 mt-5">
-            <div class="w-70 text-center">
-                <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
-                <div class="input-group mb-3 input-customer">
-                    <input type="text" class="form-control poppins-medium" placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-center w-100 mt-5">
-            <div class="w-70 text-center">
-                <label class="poppins-bold fs-random-number" for="">&nbsp;</label>
-                <div class="input-group mb-3 input-customer">
-                    <input type="text" class="form-control poppins-medium text-center" placeholder="Números seleccionados" readonly
-                    aria-label="Números seleccionados" aria-describedby="basic-addon2" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid d-flex justify-content-center mt-3 pb-5">
+        <TicketFree v-if="domLoaded" typeScreen="client" :raffle="raffle" />
+        <!-- <div class="container-fluid d-flex justify-content-center mt-3 pb-5">
             <div class="button-grid grid-buttons-tickets scroll-container">
                 <button v-for="(button, index) in buttons" :key="index" class="grid-button">
               {{ button }}
             </button>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <footer class="footer-customer">
@@ -138,9 +108,10 @@ padding-bottom: 2em;">
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { RaffleServices } from '@/services/raffle.service';
+import TicketFree from '@views/ticket/TicketFree.vue';
 
-const raffle = ref([]);
-
+const raffle = ref({});
+const domLoaded = ref(false);
     
 
 const items = ref([ ]);
@@ -164,7 +135,7 @@ const items = ref([ ]);
               raffle.value  = await RaffleServices.listlast();
               raffle.value.images_awards.forEach(element => {
                    items.value.push(
-                    { img: element.image , title: element.award, text: 'todo lo que quieras podra ser tuyo' })
+                    { img: element.image , title: element.award, text: 'todo lo que quieras podrá ser tuyo' })
               });
         };
         const imageUrl = (imagePath) => {
@@ -174,11 +145,12 @@ const items = ref([ ]);
         
 
 
-        onMounted(() => {
+        onMounted(async() => {
             //$('#carouselExample').carousel({
              //   interval: 60000 // 60 segundos
             //});
-            listRaffles()
+            await listRaffles()
+            domLoaded.value = true;
             //loadWompiScript();
         });
     function isVideo(url) {

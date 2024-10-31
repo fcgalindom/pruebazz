@@ -35,3 +35,12 @@ th {
 .text-danger {
     color: #343a40 !important;
 }
+
+/* Estilo para los campos de entrada deshabilitados */
+input:disabled {
+    background-color: #FFF !important; /* Color de fondo estándar */
+    color: #6c757d; /* Color de texto estándar */
+    border-color: #ced4da; /* Color de borde estándar */
+    cursor: not-allowed; /* Cambiar el cursor para indicar que está deshabilitado */
+    opacity: 1; /* Asegurarse de que no se vea desvanecido */
+}

@@ -56,7 +56,41 @@
             </div>
         </Modal>
     
-        <div class="row">
+
+        <div v-if="typeScreen == 'client'">
+            <div class="d-flex justify-content-center w-100 mb-3">
+                <div class="w-70 text-center">
+                    <label class="poppins-bold fs-random-number" for="">NÚMEROS AL AZAR</label>
+                    <div class="input-group mb-3 input-customer">
+                        <input type="text" class="form-control poppins-medium" placeholder="Cantidad de Números" aria-label="Cantidad de Números" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center w-100 mt-5">
+                <div class="w-70 text-center">
+                    <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
+                    <div class="input-group mb-3 input-customer">
+                        <input type="text" class="form-control poppins-medium" placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center w-100 mt-5">
+                <div class="w-70 text-center">
+                    <label class="poppins-bold fs-random-number" for="">&nbsp;</label>
+                    <div class="input-group mb-3 input-customer">
+                        <input v-model="ticket.number" type="text" class="form-control poppins-medium text-center" placeholder="Números seleccionados" readonly
+                        aria-label="Números seleccionados" aria-describedby="basic-addon2" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" v-if="typeScreen == 'admin'">
             <div class="col-md-4">
                 <Label>Rifa</Label>
                 <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" />
@@ -65,29 +99,48 @@
                 <Input required="0" label="Número"></Input>
             </div>
         </div>
-        <div class="mt-3 d-flex justify-content-center">
+        <div class="mt-3 d-flex justify-content-center" v-if="typeScreen == 'admin'">
             <Button :disabled="!filters.raffle" @click="search">Buscar</Button>
         </div>
-        <div class="container-fluid d-flex justify-content-between mt-3 pb-5">
-            <div class="button-grid w-80 grid-buttons-tickets scroll-container" style="grid-template-columns: repeat(10, 1fr);">
-                <button :class="{ active: isActive(button) }" :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(button, button)">
+
+        <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
+            <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`" @click="getPromotionsByRaffle">Comprar</Button>
+        </div>
+        <div class="container-fluid d-flex flex-column-reverse flex-md-row mt-3 pb-5" :class="typeScreen == 'admin' ? 'justify-content-between' : 'justify-content-center'">
+            <div class="button-grid w-80 grid-buttons-tickets scroll-container">
+                <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(button, button)">
                     <!-- <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)"> -->
                       {{ button }}
-                    </button>
+                </button>
             </div>
-            <div>
+            <div v-if="typeScreen == 'admin'">
                 <Input disabled v-model="ticket.number" class="mb-3" label="Números seleccionados"></Input>
-                <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`" @click="getPromotionsByRaffle">Comprar</Button>
+                <div class="w-100 d-flex justify-content-center">
+                    <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`" @click="getPromotionsByRaffle">Comprar</Button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, withDefaults, defineProps } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 import Swal from 'sweetalert2'
+
+
+const props = defineProps({
+    typeScreen: {
+        type: String,
+        default: "admin"
+    },
+    raffle: {
+        type: Object,
+        default: {}
+    }
+})
+// const emits = defineEmits(['update:modelValue', 'update:error', 'update:type', 'update:disabled', 'update:placeholder', 'update:id', 'update:label', 'update:required']);
 
 const modal = ref('ticket_modal')
 
@@ -109,6 +162,7 @@ const dependencies = ref({
 
 onMounted(async () => {
     limpiarFormulario()
+    search()
     dependencies.value = await TicketServices.dependencies()
 })
 
@@ -117,9 +171,23 @@ const isActive = (button) => {
 }
 
 const search = async () => {
-    const filterJson = {
-        raffle: filters.value.raffle?.id
+    let filterJson = {}
+    console.log('props.raffle ==> ', props.raffle);
+    
+    if(props.typeScreen == 'client') {
+        filterJson = {
+            raffle: props.raffle?.id
+        }
+    }else {
+        if(!filters.value.raffle) {
+            return
+        }
+        filterJson = {
+            raffle: filters.value.raffle?.id
+        }
     }
+    console.log('filterJson ==> ', filterJson);
+    
     const response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
 
     if (filters.value.number) {
