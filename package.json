@@ -7,9 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "deploy": "gh-pages -d dist -r https://github.com/huberht3402/rafles.git"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.21.0",
+    "@cloudinary/vue": "^1.12.1",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "admin-lte": "^3.2.0",
     "axios": "^1.7.7",
@@ -27,6 +30,7 @@
     "@types/jquery": "^3.5.31",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/test-utils": "^2.4.6",
+    "gh-pages": "^6.2.0",
     "jsdom": "^24.1.0",
     "vite": "^5.3.1",
     "vitest": "^1.6.0"

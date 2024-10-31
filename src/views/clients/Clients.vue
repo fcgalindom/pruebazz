@@ -36,12 +36,12 @@
                             <div class="card">
                                 <div v-if="isVideo(item.img)">
                                    <video class="card-img-top" controls>
-                                      <source :src="imageUrl(item.img)" type="video/mp4">
+                                      <source :src="item.img" type="video/mp4">
                                          Your browser does not support the video tag.
                                      </video>
                                 </div>
                                 <div v-else>
-                                  <img :src="imageUrl(item.img)" class="card-img-top" :alt="`Image of ${item.title}`">
+                                  <img :src="item.img" class="card-img-top" :alt="`Image of ${item.title}`">
                                 </div>
     
                                 <div class="card-body">
@@ -138,12 +138,8 @@ const items = ref([ ]);
                     { img: element.image , title: element.award, text: 'todo lo que quieras podrá ser tuyo' })
               });
         };
-        const imageUrl = (imagePath) => {
-             // Asegúrate de que esta URL concuerde con la configuración de tu servidor Django
-            return `http://localhost:8000${imagePath}`;
-        }
-        
-
+       
+    
 
         onMounted(async() => {
             //$('#carouselExample').carousel({
