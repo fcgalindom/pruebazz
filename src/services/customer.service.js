@@ -32,4 +32,10 @@ export class CustomerServices {
         const response = await axios.get(url)
         return response.data
     }
+    static async getByDocument(document) {
+        const url = `${enviroments.baseUrl}customersDocuments/`
+        const response = await axios.get(url, { params: { document } });
+        return response.data
+    }
+
 }

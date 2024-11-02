@@ -19,7 +19,6 @@
             <Button @click="saveEntity">Guardar</Button>
         </div>
     </Modal>
-    
 </template>
 
 <script setup>
