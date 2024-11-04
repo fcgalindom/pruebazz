@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-center my-3">
-            <Button @click="saveEntity">Guardar</Button>
+            <Button @click="saveEntity" >Guardar</Button>
         </div>
     </Modal>
     
@@ -26,12 +26,13 @@
 import { ref, onMounted } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
+import { defineEmits } from 'vue'
 
 const customer = ref({})
 const cities = ref([])
 const customers = ref([])
 const isDisabled = ref(false)
-
+const emit = defineEmits(['customEvent'])
 
 
 onMounted(async () => {
@@ -95,7 +96,11 @@ const listCustomers = async () => {
 const saveEntity = async () => {
     customer.value.city = customer.value.city.id
 
-    await CustomerServices.createCustomer(customer.value)
+    const customerData =  await CustomerServices.createCustomer(customer.value)
+    console.log('customerData ==> ', customerData)
+    emit('customerData', customerData)
+ 
+    
     document.getElementById('closeModal').click()
     Swal.fire({
         title: '¡Éxito!',
@@ -103,5 +108,6 @@ const saveEntity = async () => {
         icon: 'success',
         confirmButtonText: 'Continuar'
     })
+   
 }
 </script>

@@ -50,11 +50,26 @@
                     </div>
                 </div>
             </div>
-    
-            <div class="d-flex justify-content-center my-3">
-                <Button @click="saveEntity">Guardar</Button>
+            <div v-if="typeScreen == 'client'">
+                <div class="d-flex justify-content-center my-3">
+                      <Button   data-toggle="modal"  :data-target="`#${modalwompi}`" > Guardar</Button>
+                </div>
+
             </div>
+            <div v-if="typeScreen == 'admin'">
+                <div class="d-flex justify-content-center my-3">
+                      <Button @click="saveEntity">Guardar</Button>
+                </div>
+
+            </div>
+    
+            
         </Modal>
+
+        <Modal  :id="modalwompi" label="Pagos" title="Paga Con Wompi" size="xl">
+            <form ref="wompiForm"></form>
+        </Modal>
+
     
 
         <div v-if="typeScreen == 'client'">
@@ -104,8 +119,14 @@
         </div>
 
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
-            <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`" @click="getPromotionsByRaffle">Comprar</Button>
+           <Button class="mt-3" data-toggle="modal" :data-target="`#customer-form`" @click="getPromotionsByRaffle">Comprar</Button> 
+
+           <button   data-toggle="modal"  :data-target="`#${modal}`" > prueba2</button>
+           <!-- <a  class="mt-3 btn-dark"  data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
+                  Crear cliente
+           </a> -->
         </div>
+        
         <div class="container-fluid d-flex flex-column-reverse flex-md-row mt-3 pb-5" :class="typeScreen == 'admin' ? 'justify-content-between' : 'justify-content-center'">
             <div class="button-grid w-80 grid-buttons-tickets scroll-container">
                 <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(button, button)">
@@ -120,6 +141,8 @@
                 </div>
             </div>
         </div>
+        <CustomerForm @customerData="customerEmit"   />
+    
     </div>
 </template>
 
@@ -128,6 +151,8 @@ import { ref, onMounted, withDefaults, defineProps } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 import Swal from 'sweetalert2'
+import CustomerForm from '@views/customer/CustomerForm.vue';
+
 
 
 const props = defineProps({
@@ -143,6 +168,7 @@ const props = defineProps({
 // const emits = defineEmits(['update:modelValue', 'update:error', 'update:type', 'update:disabled', 'update:placeholder', 'update:id', 'update:label', 'update:required']);
 
 const modal = ref('ticket_modal')
+const modalwompi = ref('wompi-modal')
 
 const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
 
@@ -159,15 +185,80 @@ const dependencies = ref({
     customers: [],
     raffles: []
 })
+const wompiForm = ref(null);
+const cifrar = ref("")
 
+const referencia = "c8d3fa5b7e99a21k";
+const monto = "200000";
+const moneda = "COP";
+const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
+const mensaje = `${referencia}${monto}${moneda}${secretoIntegridad}`;
+async function hashSHA256(message) {
+    // Convertir la cadena a un array de bytes
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    
+    // Calcular el hash SHA-256
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    
+    // Convertir el hash a un string hexadecimal
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    cifrar.value = hashHex
+    
+    return hashHex;
+}
+hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 onMounted(async () => {
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
+    const script = document.createElement('script');
+     script.src = 'https://checkout.wompi.co/widget.js';
+     script.setAttribute('data-render', 'button');
+     script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
+     script.setAttribute('data-currency', moneda);
+     script.setAttribute('data-amount-in-cents', monto);
+     script.setAttribute('data-reference', referencia);
+     script.setAttribute(
+       'data-signature:integrity',
+       cifrar.value
+     );
+
+  // Insertar el script en el formulario
+  wompiForm.value.appendChild(script);
+
+  window.addEventListener('message', function(event) {
+  if (event.origin === 'https://checkout.wompi.co') {
+    const data = event.data;
+
+    if (data.event === 'transaction_approved') {
+      // Pago aprobado
+      console.log('Pago aprobado:', data.transaction);
+    } else if (data.event === 'unprocessabletransaction') {
+    
+      console.log('Pago declinado:', data.transaction);
+      saveEntity()
+
+    } else if (data.event === 'transaction_error') {
+      // Error en el pago
+      console.log('Error en el pago:', data.transaction);
+    }
+  }
+});
 })
 
 const isActive = (button) => {
     return activeButtons.value.has(button);
+}
+const prueba = () => {
+    const modalElement = document.getElementById('wompi-modal');
+
+    modal.show(); 
+}
+const customerEmit = async (customerData) => {
+  dependencies.value = await TicketServices.dependencies()
+   ticket.value.customer = customerData.customer
 }
 
 const search = async () => {
@@ -209,7 +300,7 @@ const search = async () => {
 }
 
 const saveEntity = async () => {
-
+    
     let value = 0
     ticket.value.payments.forEach(element => {
         value += parseInt(element.amount)
@@ -225,12 +316,14 @@ const saveEntity = async () => {
         status: ticket.value.status,
         payments: ticket.value.payments,
         promotion_id: ticket.value.promotion_id,
-        value_to_pay: ticket.value.value_to_pay,
+        value_to_pay: "30000",
     }
     if (ticket.value.id) {
         await TicketServices.updateCustomer(form, ticket.value.id)
     } else {
+        
         await TicketServices.createCustomer(form)
+
     }
     document.getElementById('closeModal').click()
     Swal.fire({

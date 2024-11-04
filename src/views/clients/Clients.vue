@@ -84,9 +84,7 @@
             </button>
             </div>
         </div> -->
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
-                  Crear cliente
-         </a>
+        
     </div>
 
     <footer class="footer-customer">
