@@ -88,7 +88,7 @@
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
                     <div class="input-group mb-3 input-customer">
-                        <input type="text" class="form-control poppins-medium" placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar" aria-describedby="basic-addon2">
+                        <input v-model="filters.number" type="number" class="form-control poppins-medium" placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar" aria-describedby="basic-addon2">
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
                         </div>
@@ -121,7 +121,7 @@
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
            <Button class="mt-3" data-toggle="modal" :data-target="`#customer-form`" @click="getPromotionsByRaffle">Comprar</Button> 
 
-           <button id="modalTicket"  data-toggle="modal"  :data-target="`#${modal}`" > prueba2</button>
+           <button id="modalTicket"  data-toggle="modal"  :data-target="`#${modal}`" style="display: none;"> prueba2</button>
            <!-- <a  class="mt-3 btn-dark"  data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
                   Crear cliente
            </a> -->
