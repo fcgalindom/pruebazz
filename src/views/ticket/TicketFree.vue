@@ -121,7 +121,7 @@
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
            <Button class="mt-3" data-toggle="modal" :data-target="`#customer-form`" @click="getPromotionsByRaffle">Comprar</Button> 
 
-           <button   data-toggle="modal"  :data-target="`#${modal}`" > prueba2</button>
+           <button id="modalTicket"  data-toggle="modal"  :data-target="`#${modal}`" > prueba2</button>
            <!-- <a  class="mt-3 btn-dark"  data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
                   Crear cliente
            </a> -->
@@ -259,6 +259,8 @@ const prueba = () => {
 const customerEmit = async (customerData) => {
   dependencies.value = await TicketServices.dependencies()
    ticket.value.customer = customerData.customer
+    document.getElementById('closeModal').click()
+   document.getElementById('modalTicket').click()
 }
 
 const search = async () => {
@@ -316,7 +318,7 @@ const saveEntity = async () => {
         status: ticket.value.status,
         payments: ticket.value.payments,
         promotion_id: ticket.value.promotion_id,
-        value_to_pay: "30000",
+        value_to_pay: ticket.value.value_to_pay,
     }
     if (ticket.value.id) {
         await TicketServices.updateCustomer(form, ticket.value.id)
@@ -357,9 +359,14 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async() => {
-    console.log('filters.value ==> ', filters.value.raffle.id);
+    if(props.typeScreen == 'client') {
+        ticket.value.raffle = props.raffle
+    }
+    else {
+        ticket.value.raffle = filters.value.raffle
+    }
     
-    promotion.value =  await PromotionServices.promotionsByRaffle(filters.value.raffle.id)
+    promotion.value =  await PromotionServices.promotionsByRaffle(ticket.value.raffle?.id)
     if(promotion.value[0].number_of_tickets <= ticket.value.number.length){
         Swal.fire({
             title: '¡Felicitaciones!',
@@ -369,9 +376,13 @@ const getPromotionsByRaffle = async() => {
         })
         ticket.value.promotion_id = promotion.value[0].id
         ticket.value.value_to_pay = promotion.value[0].new_value
-    }else {
-        ticket.value.value_to_pay = filters.value.raffle.value_ticket
-        ticket.value.promotion_id = null
+    } else {
+        if(props.typeScreen == 'client') {
+            ticket.value.value_to_pay = props.raffle.value_ticket
+        } else {
+            ticket.value.value_to_pay = filters.value.raffle.value_ticket
+            ticket.value.promotion_id = null
+        }
     }
 
 }
