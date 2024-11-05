@@ -103,7 +103,7 @@ padding-bottom: 2em;">
         </div>
     </footer>
 
-    <a target="_blank" href="https://wa.me/message/OI3ATU3KA44DP1"><button class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button></a>
+    <button @click="messageBuy" class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button>
 </template>
   
 <script setup>
@@ -153,6 +153,10 @@ const groupedItems = computed(() => {
           const videoExtensions = ['mp4', 'webm', 'ogg'];
           const extension = url.split('.').pop();
           return videoExtensions.includes(extension);
+       }
+
+       const messageBuy = () => {
+          window.open('https://wa.me/573152532377?text=Hola,%20quiero%20comprar%20la%20boleta%20por%20este%20medio.', '_blank');
        }
 
 </script>
