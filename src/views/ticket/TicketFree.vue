@@ -93,22 +93,22 @@
         <div class="row" v-if="typeScreen == 'admin'">
             <div class="col-md-4">
                 <Label>Rifa</Label>
-                <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" />
+                <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" @select="search" />
             </div>
             <div class="col-md-4">
-                <Input required="0" label="Número"></Input>
+                <Input v-model="filters.number" required="0" label="Número"></Input>
             </div>
         </div>
-        <div class="mt-3 d-flex justify-content-center" v-if="typeScreen == 'admin'">
+        <!-- <div class="mt-3 d-flex justify-content-center" v-if="typeScreen == 'admin'">
             <Button :disabled="!filters.raffle" @click="search">Buscar</Button>
-        </div>
+        </div> -->
 
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
             <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`" @click="getPromotionsByRaffle">Comprar</Button>
         </div>
         <div class="container-fluid d-flex flex-column-reverse flex-md-row mt-3 pb-5" :class="typeScreen == 'admin' ? 'justify-content-between' : 'justify-content-center'">
             <div class="button-grid w-80 grid-buttons-tickets scroll-container">
-                <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(button, button)">
+                <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'" v-for="(button, index) in filteredButtons" :key="index" class="grid-button" @click="buyTicket(button, button)">
                     <!-- <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)"> -->
                       {{ button }}
                 </button>
@@ -124,7 +124,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, withDefaults, defineProps } from 'vue';
+import { ref, onMounted, computed, defineProps } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 import Swal from 'sweetalert2'
@@ -304,6 +304,13 @@ const limpiarFormulario = () => {
         }]
     }
 }
+
+const filteredButtons = computed(() => {
+  if (filters.value.number) {
+    return buttons.value.filter(button => button.toString().includes(filters.value.number));
+  }
+  return buttons.value;
+});
 </script>
 
 <style scoped>
