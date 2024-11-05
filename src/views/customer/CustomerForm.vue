@@ -41,12 +41,6 @@ onMounted(async () => {
 })
 
 
-onMounted(async () => {
-    cities.value = await CustomerServices.listCities()
-    chargeForm()
-})
-
-
 const chargeForm = () => {
     customer.value = {
         first_name: "",

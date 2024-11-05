@@ -88,7 +88,7 @@
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
                     <div class="input-group mb-3 input-customer">
-                        <input type="text" class="form-control poppins-medium" placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar" aria-describedby="basic-addon2">
+                        <input v-model="filters.number" type="number" class="form-control poppins-medium" placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar" aria-describedby="basic-addon2">
                         <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
                         </div>
@@ -108,20 +108,20 @@
         <div class="row" v-if="typeScreen == 'admin'">
             <div class="col-md-4">
                 <Label>Rifa</Label>
-                <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" />
+                <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" @select="search" />
             </div>
             <div class="col-md-4">
-                <Input required="0" label="Número"></Input>
+                <Input v-model="filters.number" required="0" label="Número"></Input>
             </div>
         </div>
-        <div class="mt-3 d-flex justify-content-center" v-if="typeScreen == 'admin'">
+        <!-- <div class="mt-3 d-flex justify-content-center" v-if="typeScreen == 'admin'">
             <Button :disabled="!filters.raffle" @click="search">Buscar</Button>
-        </div>
+        </div> -->
 
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
            <Button class="mt-3" data-toggle="modal" :data-target="`#customer-form`" @click="getPromotionsByRaffle">Comprar</Button> 
 
-           <button   data-toggle="modal"  :data-target="`#${modal}`" > prueba2</button>
+           <button id="modalTicket"  data-toggle="modal"  :data-target="`#${modal}`" style="display: none;"> prueba2</button>
            <!-- <a  class="mt-3 btn-dark"  data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
                   Crear cliente
            </a> -->
@@ -129,7 +129,7 @@
         
         <div class="container-fluid d-flex flex-column-reverse flex-md-row mt-3 pb-5" :class="typeScreen == 'admin' ? 'justify-content-between' : 'justify-content-center'">
             <div class="button-grid w-80 grid-buttons-tickets scroll-container">
-                <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(button, button)">
+                <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'" v-for="(button, index) in filteredButtons" :key="index" class="grid-button" @click="buyTicket(button, button)">
                     <!-- <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)"> -->
                       {{ button }}
                 </button>
@@ -147,7 +147,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, withDefaults, defineProps } from 'vue';
+import { ref, onMounted, computed, defineProps } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 import Swal from 'sweetalert2'
@@ -259,6 +259,8 @@ const prueba = () => {
 const customerEmit = async (customerData) => {
   dependencies.value = await TicketServices.dependencies()
    ticket.value.customer = customerData.customer
+    document.getElementById('closeModal').click()
+   document.getElementById('modalTicket').click()
 }
 
 const search = async () => {
@@ -316,7 +318,7 @@ const saveEntity = async () => {
         status: ticket.value.status,
         payments: ticket.value.payments,
         promotion_id: ticket.value.promotion_id,
-        value_to_pay: "30000",
+        value_to_pay: ticket.value.value_to_pay,
     }
     if (ticket.value.id) {
         await TicketServices.updateCustomer(form, ticket.value.id)
@@ -357,9 +359,14 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async() => {
-    console.log('filters.value ==> ', filters.value.raffle.id);
+    if(props.typeScreen == 'client') {
+        ticket.value.raffle = props.raffle
+    }
+    else {
+        ticket.value.raffle = filters.value.raffle
+    }
     
-    promotion.value =  await PromotionServices.promotionsByRaffle(filters.value.raffle.id)
+    promotion.value =  await PromotionServices.promotionsByRaffle(ticket.value.raffle?.id)
     if(promotion.value[0].number_of_tickets <= ticket.value.number.length){
         Swal.fire({
             title: '¡Felicitaciones!',
@@ -369,9 +376,13 @@ const getPromotionsByRaffle = async() => {
         })
         ticket.value.promotion_id = promotion.value[0].id
         ticket.value.value_to_pay = promotion.value[0].new_value
-    }else {
-        ticket.value.value_to_pay = filters.value.raffle.value_ticket
-        ticket.value.promotion_id = null
+    } else {
+        if(props.typeScreen == 'client') {
+            ticket.value.value_to_pay = props.raffle.value_ticket
+        } else {
+            ticket.value.value_to_pay = filters.value.raffle.value_ticket
+            ticket.value.promotion_id = null
+        }
     }
 
 }
@@ -397,6 +408,13 @@ const limpiarFormulario = () => {
         }]
     }
 }
+
+const filteredButtons = computed(() => {
+  if (filters.value.number) {
+    return buttons.value.filter(button => button.toString().includes(filters.value.number));
+  }
+  return buttons.value;
+});
 </script>
 
 <style scoped>

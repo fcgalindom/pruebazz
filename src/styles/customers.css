@@ -107,10 +107,17 @@
 .grid-button {
     padding: 4px 5px;
     background-color: #d2b32f;
+    max-width: 200px;
+    max-height: 50px;
     color: white;
     border: none;
     border-radius: 9px;
     transition: background-color 0.5s;
+}
+
+.grid-button:disabled {
+    opacity: 0.5;
+    background-color: #d2b32f !important;
 }
 
 .grid-button:hover {
@@ -160,7 +167,7 @@
 }
 
 .scroll-container {
-    height: 500px;
+    max-height: 500px;
     overflow-y: auto;
     /* Habilita el scroll vertical */
     border: 1px solid #ddd;
@@ -252,4 +259,14 @@
 /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) { 
     /* Add your styles here */
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
