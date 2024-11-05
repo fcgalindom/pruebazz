@@ -89,10 +89,10 @@
 
     <footer class="footer-customer">
         <div class="d-flex justify-content-center buttons-social-networks">
-            <button><i class="fab fa-facebook"></i></button>
-            <button><i class="fab fa-whatsapp"></i></button>
-            <button><i class="fab fa-tiktok"></i></button>
-            <button><i class="fab fa-instagram"></i></button>
+            <a target="_blank" href="https://www.facebook.com/profile.php?id=61559489645594&mibextid=LQQJ4d"><button><i class="fab fa-facebook"></i></button></a>
+            <a target="_blank" href="https://wa.me/message/OI3ATU3KA44DP1"><button><i class="fab fa-whatsapp"></i></button></a>
+            <a target="_blank" href="https://www.tiktok.com/@rifacasavijesvalle?_t=8r81sPg1AYg&_r=1"><button><i class="fab fa-tiktok"></i></button></a>
+            <a target="_blank" href="https://www.instagram.com/rifacasavijesvalle?igsh=cXFyNDNnYmpiankx"><button><i class="fab fa-instagram"></i></button></a>
         </div>
         <div class="text-center pt-2">
             <span class="text-white poppins-medium">Rifa auspiciado por:</span>
@@ -103,7 +103,7 @@ padding-bottom: 2em;">
         </div>
     </footer>
 
-    <button class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button>
+    <button @click="messageBuy" class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button>
 </template>
   
 <script setup>
@@ -153,6 +153,10 @@ const groupedItems = computed(() => {
           const videoExtensions = ['mp4', 'webm', 'ogg'];
           const extension = url.split('.').pop();
           return videoExtensions.includes(extension);
+       }
+
+       const messageBuy = () => {
+          window.open('https://wa.me/573152532377?text=Hola,%20quiero%20comprar%20la%20boleta%20por%20este%20medio.', '_blank');
        }
 
 </script>

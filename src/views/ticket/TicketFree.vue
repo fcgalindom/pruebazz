@@ -77,8 +77,8 @@
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">NÚMEROS AL AZAR</label>
                     <div class="input-group mb-3 input-customer">
-                        <input type="text" class="form-control poppins-medium" placeholder="Cantidad de Números" aria-label="Cantidad de Números" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
+                        <input v-model="filters.number_random" type="text" class="form-control poppins-medium" placeholder="Cantidad de Números" aria-label="Cantidad de Números" aria-describedby="basic-addon2">
+                        <div class="input-group-append" @click="generateRandomNumbers" style="cursor: pointer;">
                             <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
                         </div>
                     </div>
@@ -387,6 +387,31 @@ const getPromotionsByRaffle = async() => {
 
 }
 
+const generateRandomNumbers = () => {
+    if(filters.value.number_random > 10) {
+        Swal.fire({
+            title: '¡Error!',
+            text: 'No puedes seleccionar más de 10 números',
+            icon: 'error',
+            confirmButtonText: 'Continuar'
+        })
+        return
+    }
+  const activeButtonsArray = buttons.value;
+  const randomNumbers = [];
+  const count = Math.min(filters.value.number_random, activeButtonsArray.length);
+
+  while (randomNumbers.length < count) {
+    const randomIndex = Math.floor(Math.random() * activeButtonsArray.length);
+    const randomNumber = activeButtonsArray[randomIndex];
+    if (!randomNumbers.includes(randomNumber)) {
+        buyTicket(randomNumber, randomNumber)
+      randomNumbers.push(randomNumber);
+    }
+  }
+
+  ticket.value.number = randomNumbers;
+};
 // watch(ticket, (newTicket) => {
 //   ticketNumbers.value = newTicket.number.join(", ");
 // }, { deep: true });
