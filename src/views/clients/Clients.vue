@@ -84,6 +84,7 @@
             </button>
             </div>
         </div> -->
+        
     </div>
 
     <footer class="footer-customer">
@@ -114,20 +115,19 @@ const raffle = ref({});
 const domLoaded = ref(false);
     
 
-const items = ref([ ]);
+const items = ref([]);
 
+const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
 
-        const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
-
-        const groupedItems = computed(() => {
-            const groups = [];
+const groupedItems = computed(() => {
+           const groups = [];
             for (let i = 0; i < items.value.length; i += 3) {
-                groups.push(items.value.slice(i, i + 3));
+              groups.push(items.value.slice(i, i + 3));
             }
             return groups;
         });
         const formatNumber = (value) => {
-            return (value !== null && value !== undefined) ? value.toLocaleString('es-ES') : '0';
+               return (value !== null && value !== undefined) ? value.toLocaleString('es-ES') : '0';
         };
 
 
@@ -149,10 +149,10 @@ const items = ref([ ]);
             domLoaded.value = true;
             //loadWompiScript();
         });
-    function isVideo(url) {
-      const videoExtensions = ['mp4', 'webm', 'ogg'];
-      const extension = url.split('.').pop();
-      return videoExtensions.includes(extension);
-   }
+       function isVideo(url) {
+          const videoExtensions = ['mp4', 'webm', 'ogg'];
+          const extension = url.split('.').pop();
+          return videoExtensions.includes(extension);
+       }
 
 </script>
