@@ -2,6 +2,10 @@
     <div>
       <div class="container-fluid pt-3">
           <div class="my-3">
+            <div class="d-flex justify-content-between">
+                <h3>Rifas</h3>
+            </div>
+            <hr>
             <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarFormulario">Registrar</Button>
               <Modal :id="modal" label="Registrar" title="Crear Rifa" size="xl">
                   <div class="row">
@@ -79,10 +83,10 @@
             <tbody>
               <tr v-for="(i, index) in raffles" :key="index">
                   <td>{{i.name}}</td>
-                  <td>{{i.raffle_date}}</td>
-                  <td>{{i.value_ticket}}</td>
+                  <td>{{ Helper.formatDate(i.raffle_date) }}</td>
+                  <td>{{ Helper.formatNumber(i.value_ticket) }}</td>
                   <td>Bogotá</td>
-                  <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button></td>
+                  <td class="text-center"><button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button></td>
               </tr>
             </tbody>
           </table>
@@ -95,7 +99,8 @@
   import { ref, onMounted } from "vue";
   import { RaffleServices } from '@/services/raffle.service'
   import Swal from 'sweetalert2'
-  
+  // @ts-ignore
+  import Helper from '@/helpers/Helper';
   
   const raffles = ref([])
   const raffle = ref({})

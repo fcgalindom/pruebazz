@@ -2,6 +2,10 @@
     <div>
       <div class="container-fluid pt-3">
           <div class="my-3">
+            <div class="d-flex justify-content-between">
+                <h3>Vendedores</h3>
+            </div>
+            <hr>
             <div class="row mb-3">
                     <div class="col-md-4">
                         <Input v-model="filters.name" label="Nombre" /> 
@@ -47,7 +51,7 @@
                   <th>Documento</th>
                   <th>Correo</th>
                   <th>Editar</th>
-                  <th>Asignar Boletas</th>
+                  <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -56,10 +60,11 @@
                 <td>{{item.document_number}}</td>
                 <td>{{item.user.email}}</td>
                 <td class="text-center">
-                  <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button>
+                  <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button>
                 </td>
                 <td>
                   <div class="d-flex justify-content-center">
+                    <router-link :to="`sellers/${item.id}/`"> <button class="btn btn-info mr-3"> Informe </button> </router-link>
                     <router-link :to="`sellers-tickets/${item.id}/`"> <button class="btn btn-info"> Asignar </button> </router-link>
                   </div>
                 </td>

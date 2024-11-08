@@ -28,12 +28,8 @@
 }
 
 th {
-    background-color: #343a40;
+    background-color: #314b91;
     color: white;
-}
-
-.text-danger {
-    color: #343a40 !important;
 }
 
 /* Estilo para los campos de entrada deshabilitados */
@@ -43,4 +39,8 @@ input:disabled {
     border-color: #ced4da; /* Color de borde estándar */
     cursor: not-allowed; /* Cambiar el cursor para indicar que está deshabilitado */
     opacity: 1; /* Asegurarse de que no se vea desvanecido */
+}
+
+.text-darkslategrey {
+    color: darkslategrey;
 }

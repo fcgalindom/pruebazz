@@ -3,7 +3,8 @@
         <div class="w-100 d-flex justify-content-center justify-content-xl-between">
             <div  class="margin-customer-main">
                 
-                <h3 class="text-white poppins-semibold mb-3">Puedes ganar una</h3>
+                <!-- <h3 class="text-white poppins-semibold mb-3">Puedes ganar una</h3> -->
+                <h3 class="text-white poppins-semibold">SORTEO EL {{ raffle.raffle_date }}</h3>
                 <div v-for="(item, index) in raffle.type_1_awards" :key="index">
                     <span class="main-award poppins-black mb-3">{{ item.award }}</span>
                 </div>
@@ -12,7 +13,7 @@
                   <h3 class="secondary-award poppins-semibold">{{ item.award }}</h3>
                 </div>
 
-                <h3 class="text-white poppins-semibold position-draw_date">SORTEO EL {{ raffle.raffle_date }}</h3>
+                <h3 class="text-white poppins-semibold position-draw_date">SORTEO EL {{ (raffle.raffle_date) }}</h3>
                
                 <div class="mb-4">
                     <button class="btn-buy poppins-regular">Comprar Boletas</button>
@@ -110,6 +111,8 @@ padding-bottom: 2em;">
 import { ref, computed, onMounted } from 'vue';
 import { RaffleServices } from '@/services/raffle.service';
 import TicketFree from '@views/ticket/TicketFree.vue';
+// @ts-ignore
+import Helper from '@/helpers/Helper';
 
 const raffle = ref({});
 const domLoaded = ref(false);

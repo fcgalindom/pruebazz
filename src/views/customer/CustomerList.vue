@@ -2,6 +2,10 @@
   <div>
     <div class="container-fluid pt-3">
         <div class="my-3">
+            <div class="d-flex justify-content-between">
+                <h3>Clientes</h3>
+            </div>
+            <hr>
             <div class="row mb-3">
                 <div class="col-md-3"> <Input v-model="filters.name" label="Nombre" /> </div>
                 <div class="col-md-3"> <Input v-model="filters.phone" label="Teléfono" /> </div>
@@ -54,9 +58,9 @@
             <tr v-for="(item, index) in customers" :key="index">
                 <td>{{item.name}}</td>
                 <td>{{item.phone}}</td>
-                <td>{{item.document}}</td>
+                <td>{{ Helper.thousandSeparator(item.document)}}</td>
                 <td>{{item.city.name}}</td>
-                <td class="text-center"><button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
+                <td class="text-center"><button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
             </tr>
           </tbody>
         </table>
@@ -69,6 +73,8 @@
 import { ref, onMounted } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
+// @ts-ignore
+import Helper from "@/helpers/Helper";
 
 const customers = ref([])
 const customer = ref({})
