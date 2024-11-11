@@ -44,4 +44,9 @@ export class TicketServices {
         const response = await axios.get(url)
         return response.data;
     }
+    static async getTiketsRefferece() {
+        const url = `${enviroments.baseUrl}ticketreferece/`;
+        const response = await axios.get(url)
+        return response.data;
+    }
 }

@@ -92,6 +92,7 @@
                             <th>Valor pagado</th>
                             <th>Estado</th>
                             <th>Acciones</th>
+                            <th>Cerficado</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,23 +110,81 @@
                                     <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                 </div>
                             </td>
+                            <td>  
+                                <div class="row">
+                                     <div class="col-3">
+                                        <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
+                                     </div>
+                                     <div class="col-3">
+                                        <button  data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
+                                     </div>
+                                </div>
+
+
+                               
+                      
+                        
+                                <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
+                                    <TikectFirstPaid :ticketData="i" />
+                                </Modal>
+    
+                                <Modal :id="ticketsmodal" label="Descargar" title="Descarcar Boleta" size="xl">
+                                    <table class="table table-bordered">
+                                     <thead>
+                                       <tr>
+                                        <th>Número</th>
+                                        <th>abono</th>
+                                        <th>metodo de pago</th>
+                                        <th>Descarga</th>
+
+                                       </tr>
+                                      </thead>
+                                    <tbody>
+
+                                       <tr v-for="(f, index) in payments1" :key="index">
+
+                                         <td>{{f.ticket}}</td>
+                                         <td>{{f.amount}}</td>
+                                         <td>{{f.payment_method}}</td>
+                                         <td><TicketPaid :ticketData="i"  :paymentData="f"/> </td>
+                                      
+                                        </tr>
+
+                                    </tbody>
+
+                                   </table>
+                               
+                                    
+                                </Modal>
+                               
+                               
+                                
+                                
+                            </td>
+                            
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+  
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch  , createApp } from "vue";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from 'vue-router';
 import Swal from 'sweetalert2'
+import TicketPaid from "./TicketPaid.vue";
+import TikectFirstPaid from "./TikectFirstPaid.vue";
 
 const tickets = ref([])
 const ticket = ref({})
+const payments1 = ref([])
 const modal = ref('ticket_modal')
+const firstpaymentmodal = ref('firstpayment_modal')
+const ticketsmodal = ref('tickets_modal')
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
 const status_select = ref(['Free', 'Paid', 'Booked'])
 const dependencies = ref({
@@ -133,6 +192,8 @@ const dependencies = ref({
     customers: [],
     raffles: []
 })
+const reciboCanvas = ref(null);
+
 
 const filters = ref({
     number: "",
@@ -140,6 +201,7 @@ const filters = ref({
     customer: "",
     seller: "",
 })
+
 const router = useRoute()
 
 const status = computed(() => {
@@ -163,6 +225,7 @@ const datatable = async () => {
     }
 
     tickets.value = await TicketServices.list(filtersForm)
+    console.log("see",tickets.value)
 }
 
 watch(() => router.path, async () => {
@@ -213,6 +276,9 @@ const remove_payment = (index) => {
 const showData = async (id) => {
     ticket.value = await TicketServices.show(id)
 }
+const paymentdata = async (payments) => {
+    payments1.value = payments
+}
 
 const changeState = async(id, status) => {
     const message = status == 'Libre' ? '¿Desea declinar esta boleta?' : '¿Desea marcar esta boleta como totalmente pagada?'
@@ -244,6 +310,30 @@ const limpiarFormulario = () => {
             expiration_date: ""
         }]
     }
+}
+function showTicketAlert(ticketData) {
+  // Creamos un contenedor en el DOM donde renderizaremos el componente
+  const wrapper = document.createElement('div');
+
+  // Creamos una instancia de Vue con nuestro componente
+  const app = createApp(TikectFirstPaid, { ticketData });
+
+  // Montamos la instancia en el contenedor creado
+  app.mount(wrapper);
+
+  // Mostramos el SweetAlert con el componente montado en `html`
+  Swal.fire({
+  title: 'Descargar Boleta',
+  html: wrapper,
+  focusConfirm: false,
+  showCloseButton: true, // Muestra la "X" para cerrar
+  showConfirmButton: false, // Oculta el botón de confirmación
+  width: '400px', // Ajusta el tamaño si es necesario
+  didDestroy: () => {
+    // Desmonta el componente cuando se cierre el SweetAlert
+    app.unmount();
+  },
+});
 }
 </script>
   

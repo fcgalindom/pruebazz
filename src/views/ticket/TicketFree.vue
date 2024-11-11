@@ -108,7 +108,7 @@
         <div class="row" v-if="typeScreen == 'admin'">
             <div class="col-md-4">
                 <Label>Rifa</Label>
-                <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" @select="search" />
+                <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" @select="search; getPromotionsByRaffle" />
             </div>
             <div class="col-md-4">
                 <Input v-model="filters.number" required="0" label="Número"></Input>
@@ -188,11 +188,11 @@ const dependencies = ref({
 const wompiForm = ref(null);
 const cifrar = ref("")
 
-const referencia = "c8d3fa5b7e99a21k";
+const referencia = ref("");
 const monto = "200000";
 const moneda = "COP";
 const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
-const mensaje = `${referencia}${monto}${moneda}${secretoIntegridad}`;
+
 async function hashSHA256(message) {
     // Convertir la cadena a un array de bytes
     const encoder = new TextEncoder();
@@ -208,18 +208,30 @@ async function hashSHA256(message) {
     
     return hashHex;
 }
-hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
+
+
 onMounted(async () => {
+
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
+    referencia.value = await TicketServices.getTiketsRefferece()
+    const mensaje = `${referencia.value.code}${monto}${moneda}${secretoIntegridad}`;
+    hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
+    console.log('referencia.value ==> ', referencia.value.code);
+
+ 
+    console.log('referencia.value ==> ', referencia.value);
+    
+    console.log('cifrar.value ==> ', cifrar.value);
     const script = document.createElement('script');
      script.src = 'https://checkout.wompi.co/widget.js';
      script.setAttribute('data-render', 'button');
      script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
      script.setAttribute('data-currency', moneda);
      script.setAttribute('data-amount-in-cents', monto);
-     script.setAttribute('data-reference', referencia);
+     script.setAttribute('data-reference',  referencia.value.code);
+     //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
      script.setAttribute(
        'data-signature:integrity',
        cifrar.value
@@ -318,7 +330,7 @@ const saveEntity = async () => {
         status: ticket.value.status,
         payments: ticket.value.payments,
         promotion_id: ticket.value.promotion_id,
-        value_to_pay: ticket.value.value_to_pay,
+        value_to_pay: "30000",
     }
     if (ticket.value.id) {
         await TicketServices.updateCustomer(form, ticket.value.id)
@@ -359,11 +371,13 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async() => {
+    console.log("entro a getPromotionsByRaffle")
     if(props.typeScreen == 'client') {
         ticket.value.raffle = props.raffle
     }
     else {
-        ticket.value.raffle = filters.value.raffle
+        ticket.value.raffle = filters.value.raffle.value_ticket
+        console.log("ticket.value.raffle", filters.value.raffle.value_ticket)
     }
     
     promotion.value =  await PromotionServices.promotionsByRaffle(ticket.value.raffle?.id)

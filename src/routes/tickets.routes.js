@@ -1,5 +1,7 @@
 import TicketList from '@/views/ticket/TicketList.vue'
 import TicketFree from '@/views/ticket/TicketFree.vue'
+import TikectFirstPaid from '@/views/ticket/TikectFirstPaid.vue';
+
 import Cookies from 'js-cookie';
 const ticketsRoutes = [
     {
@@ -30,6 +32,18 @@ const ticketsRoutes = [
 		path: '/tickets/Pagado',
 		name: 'PaidTickets',
 		component: TicketList,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
+	},
+	{
+		path: '/tickets/Abono',
+		name: 'PaidTicketsimage',
+		component: TikectFirstPaid,
 		befereEnter: (to, from, next) => {
 			if (Cookies.get('token')) {
 				next()
