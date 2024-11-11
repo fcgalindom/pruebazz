@@ -2,6 +2,10 @@
 
     <div class="container-fluid pt-3">
         <div class="my-3">
+            <div class="d-flex justify-content-between">
+                <h3>Promociones</h3>
+            </div>
+            <hr>
             <div class="row mb-3">
                 <div class="col-md-4">
                     <Label>Rifa</Label>
@@ -21,16 +25,17 @@
                 <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
         </div>
      
-        <Modal :id="modal" label="Registrar" title="Crear Cliente" size="lg">
+        <Modal :id="modal" label="Registrar" title="Gestión Promociones" size="lg">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <Input v-model="promotion.name" label="Nombre"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <Input v-model="promotion.number_of_tickets" type="number" label="Numero de ticketes"></Input>
+                        <Input v-model="promotion.number_of_tickets" type="number" label="Número de tickets"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
                         <Input v-model="promotion.new_value" type="number" label="Nuevo Valor"></Input>
+                        <Input v-model="promotion.new_value" type="number" label="Nuevo Valor" @keyup="promotion.new_value = Helper.formatNumber(promotion.new_value)"></Input>
 
                     </div>
                     <div class="col-md-6 mb-3">
@@ -63,13 +68,13 @@
                 <tr v-for="promotion in promotions" :key="promotion.id">
                 <td>{{ promotion.name }}</td>
                 <td>{{ promotion.number_of_tickets }}</td>
-                <td>{{ promotion.new_value }}</td>
-                <td>{{ promotion.expiration_date }}</td>
+                <td>{{ Helper.formatNumber(promotion.new_value) }}</td>
+                <td>{{ Helper.formatDate(promotion.expiration_date) }}</td>
                 <td>{{ promotion.raffle.name }}</td>
                 
                 <td class="text-center">
-                    <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(promotion.id)"><i class="fas fa-edit"></i></button>
-                    <button @click="deletePromotion(promotion.id)" class="btn text-danger"><i class="fas fa-trash"></i></button>
+                    <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(promotion.id)"><i class="fas fa-edit"></i></button>
+                    <button @click="deletePromotion(promotion.id)" class="btn text-darkslategrey"><i class="fas fa-trash"></i></button>
                 </td>
                     
                 </tr>
@@ -84,6 +89,9 @@ import { ref, onMounted } from 'vue'
 import { PromotionServices } from '@/services/promotion.service'
 import { TicketServices } from '@/services/ticket.service'
 import Swal from 'sweetalert2'
+// @ts-ignore
+import Helper from '@/helpers/Helper';
+
 const promotions = ref([])
 const promotion = ref({})
 const filters = ref({

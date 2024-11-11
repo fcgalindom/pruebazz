@@ -2,22 +2,35 @@
     <div>
         <div class="container-fluid pt-3">
             <div class="my-3">
-    
-                <div class="row mb-3">
-                    <div class="col-md-3">
-                        <Input v-model="filters.number" label="Número" />
+                <div class="d-flex justify-content-between">
+                    <h3>Boletas Reservadas</h3>
+                    <div class="d-flex flex-column">
+                        <Button class="btn-sm mb-3">{{ tickets.length }} Boletas</Button>
+                        <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value) }}</Button>
                     </div>
-                    <div class="col-md-3">
-                        <Label>Rifa</Label>
+                </div>
+                <hr>
+                <div class="row mb-3">
+                    <div class="col-md-3 mb-3">
+                        <Input required="0" v-model="filters.number" label="Número" />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <Label required="0">Rifa</Label>
                         <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                     </div>
-                    <div class="col-md-3">
-                        <Label>Cliente</Label>
+                    <div class="col-md-3 mb-3">
+                        <Label required="0">Cliente</Label>
                         <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
                     </div>
-                    <div class="col-md-3">
-                        <Label>Vendedor</Label>
+                    <div class="col-md-3 mb-3">
+                        <Label required="0">Vendedor</Label>
                         <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                    </div>
+                    <div class="col-3">
+                        <Input required="0" v-model="filters.init_date" type="date" label="Fecha inicial"/>
+                    </div>
+                    <div class="col-3">
+                        <Input required="0" v-model="filters.final_date" type="date" label="Fecha final"/>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -101,11 +114,11 @@
                             <td>{{i.raffle.name}}</td>
                             <td>{{i.seller?.name}}</td>
                             <td>{{i.customer.name}}</td>
-                            <td>{{i.value}}</td>
+                            <td>{{ Helper.formatNumber(i.value) }}</td>
                             <td>{{i.status}}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn text-danger" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Pagado')"><i class="fas fa-check"></i></button>
                                     <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                 </div>
@@ -178,8 +191,11 @@ import { useRoute } from 'vue-router';
 import Swal from 'sweetalert2'
 import TicketPaid from "./TicketPaid.vue";
 import TikectFirstPaid from "./TikectFirstPaid.vue";
+// @ts-ignore
+import Helper from '@/helpers/Helper';
 
 const tickets = ref([])
+const full_value = ref(0)
 const ticket = ref({})
 const payments1 = ref([])
 const modal = ref('ticket_modal')
@@ -200,6 +216,8 @@ const filters = ref({
     raffle: "",
     customer: "",
     seller: "",
+    init_date: "",
+    final_date: ""
 })
 
 const router = useRoute()
@@ -221,11 +239,16 @@ const datatable = async () => {
         raffle: filters.value.raffle?.id,
         customer: filters.value.customer?.id,
         seller: filters.value.seller?.id,
+        init_date: filters.value.init_date,
+        final_date: filters.value.final_date,
         status: status.value
     }
 
     tickets.value = await TicketServices.list(filtersForm)
-    console.log("see",tickets.value)
+    full_value.value = 0
+    tickets.value.forEach(element => {
+        full_value.value += parseInt(element.value)
+    });
 }
 
 watch(() => router.path, async () => {
@@ -279,6 +302,7 @@ const showData = async (id) => {
 const paymentdata = async (payments) => {
     payments1.value = payments
 }
+
 
 const changeState = async(id, status) => {
     const message = status == 'Libre' ? '¿Desea declinar esta boleta?' : '¿Desea marcar esta boleta como totalmente pagada?'
