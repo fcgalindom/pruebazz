@@ -34,8 +34,9 @@
                         <Input v-model="promotion.number_of_tickets" type="number" label="Número de tickets"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <Input v-model="promotion.new_value" type="number" label="Nuevo Valor"></Input>
-                        <Input v-model="promotion.new_value" type="number" label="Nuevo Valor" @keyup="promotion.new_value = Helper.formatNumber(promotion.new_value)"></Input>
+                        <!-- <Input v-model="promotion.new_value" type="number" label="Nuevo Valor"></Input> -->
+                        <Label>Nuevo Valor</Label>
+                        <input class="form-control ileven-input font-light" v-model="promotion.new_value" type="text" label="Nuevo Valor" @keyup="promotion.new_value = Helper.thousandSeparator(promotion.new_value)"></input>
 
                     </div>
                     <div class="col-md-6 mb-3">

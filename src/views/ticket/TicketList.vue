@@ -100,10 +100,13 @@
                         <tr>
                             <th>Número</th>
                             <th>Rifa</th>
-                            <th>Vendedor</th>
                             <th>Cliente</th>
-                            <th>Valor pagado</th>
-                            <th>Estado</th>
+                            <th>Documento</th>
+                            <th>Teléfono</th>
+                            <th>Ciudad</th>
+                            <th>Vendedor</th>
+                            <th>Abonado</th>
+                            <th>Saldo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -111,10 +114,13 @@
                         <tr v-for="(i, index) in tickets" :key="index">
                             <td>#{{i.number}}</td>
                             <td>{{i.raffle.name}}</td>
-                            <td>{{i.seller?.name}}</td>
                             <td>{{i.customer.name}}</td>
+                            <td>{{ Helper.thousandSeparator(i.customer.document) }}</td>
+                            <td>{{ i.customer.phone }}</td>
+                            <td>{{ i.customer.city.name }}</td>
+                            <td>{{i.seller?.name}}</td>
                             <td>{{ Helper.formatNumber(i.value) }}</td>
-                            <td>{{i.status}}</td>
+                            <td>{{ Helper.formatNumber(i.value_to_pay) }}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-between">
                                     <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button>

@@ -7,7 +7,7 @@
             </div>
             <hr>
             <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarFormulario">Registrar</Button>
-              <Modal :id="modal" label="Registrar" title="Crear Rifa" size="xl">
+            <Modal :id="modal" label="Registrar" title="Crear Rifa" size="xl">
                   <div class="row">
                       <div class="col-md-6 mb-3">
                           <Input v-model="raffle.name" label="Nombre"></Input>
@@ -19,10 +19,11 @@
                           <Input v-model="raffle.start_number" label="Número mínimo de la boleta" type="number" placeholder="0"></Input>
                       </div>
                       <div class="col-md-6 mb-3">
-                          <Input v-model="raffle.final_number" label="Número máximo de la boleta" type="number" placeholder="9999"></Input>
+                          <Input v-model="raffle.final_number" label="Número máximo de la boleta" type="number" placeholder="9.999"></Input>
                       </div>
                       <div class="col-md-6 mb-3">
-                          <Input v-model="raffle.value_ticket" type="number" label="Valor de boleta"></Input>
+                          <Label>Valor de boleta</Label>
+                          <input class="form-control ileven-input font-light" v-model="raffle.value_ticket" label="Valor de boleta" @keyup="raffle.value_ticket = Helper.thousandSeparator(raffle.value_ticket)"></input>
                       </div>
                       <div class="col-md-6 mb-3">
                         <Label>Descripción</Label>
@@ -67,7 +68,7 @@
                   <div class="d-flex justify-content-center my-3">
                       <Button @click="saveEntity">Guardar</Button>
                   </div>
-              </Modal>
+            </Modal>
           </div>
         <div class="table-responsive">
           <table class="table table-bordered">
@@ -123,7 +124,7 @@
       }
       document.getElementById('closeModal').click() 
       Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
-      await listCustomers()
+      raffles.value = await RaffleServices.list()
   }
   
   
@@ -159,7 +160,10 @@
 
   const showData = async(id) => {
     raffle.value = await RaffleServices.show(id)
+    
+    raffle.value.value_ticket = Helper.thousandSeparator(raffle.value.value_ticket)
   }
+
 
   const limpiarFormulario = () => {
     raffle.value = {
