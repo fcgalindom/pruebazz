@@ -50,21 +50,18 @@
                   <th>Nombre</th>
                   <th>Documento</th>
                   <th>Correo</th>
-                  <th>Editar</th>
                   <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
             <tr v-for="(item, index) in sellers" :key="index">
                 <td>{{item.name}}</td>
-                <td>{{item.document_number}}</td>
+                <td>{{ Helper.thousandSeparator(item.document_number) }}</td>
                 <td>{{item.user.email}}</td>
-                <td class="text-center">
-                  <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button>
-                </td>
                 <td>
                   <div class="d-flex justify-content-center">
-                    <router-link :to="`sellers/${item.id}/`"> <button class="btn btn-info mr-3"> Informe </button> </router-link>
+                    <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button>
+                    <router-link :to="`sellers-tracking/${item.id}/`"> <button class="btn btn-info mr-3"> Informe </button> </router-link>
                     <router-link :to="`sellers-tickets/${item.id}/`"> <button class="btn btn-info"> Asignar </button> </router-link>
                   </div>
                 </td>
@@ -80,6 +77,7 @@
   import { ref, onMounted } from "vue";
   import { SellerServices } from "@/services/seller.service";
   import Swal from 'sweetalert2'
+  import Helper from '@/helpers/Helper';
   
   const sellers = ref([])
   const modal = ref('seller_list')

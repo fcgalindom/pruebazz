@@ -1,4 +1,4 @@
-class Helper {
+export default class Helper {
     static formatNumber = (value) => {
         return new Intl.NumberFormat('es-CO', {
           style: 'currency',
@@ -7,10 +7,12 @@ class Helper {
     }
 
     static thousandSeparator = (value) => {
-      return new Intl.NumberFormat('es-CO', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(value);
+      if (!value) return '';
+      value = String(value).replace(/\./g, '');
+      console.log('value', value);
+      
+
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     };
 
     static formatDate(dateString) {
@@ -25,4 +27,3 @@ class Helper {
     
 }
 
-export default Helper;

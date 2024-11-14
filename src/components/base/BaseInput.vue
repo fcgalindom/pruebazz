@@ -2,7 +2,7 @@
   <label :for="id"> {{ label }} <span v-if="required == '1'" class="text-danger">(*)</span> </label>
   <input :disabled="disabled" :type="type" :id="id" maxlength="255" v-on:keyup="clearError" autocomplete="off"
     class="form-control ileven-input font-light" :class="[error.length === 0 ? ' ileven-input ' : ' ileven-input-error ']"
-    :value="modelValue" :placeholder="placeholder" @input="updateValue" @blur="$emit('blur')" ref="input" />
+    :value="modelValue" :placeholder="placeholder" @input="updateValue" @blur="$emit('blur')" ref="input" v-on="$attrs" />
   <template v-if="error.length">
     <Error class="d-block mt-1" v-for="(item, index) in error" :key="index">{{ item }}</Error>
   </template>
@@ -51,4 +51,6 @@ const clearError = () => {
 const focus = () => {
   input.value?.focus()
 }
+
+
 </script>
