@@ -12,54 +12,58 @@
                 <hr>
                 <div class="row mb-3">
                     <div class="col-md-3 mb-3">
-                        <Input required="0" v-model="filters.number" label="Número" />
+                        <Label required="0">Número</Label>
+                        <Input required="0" v-model="filters.number" />
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Rifa</Label>
-                        <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                        <Select v-model="filters.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Cliente</Label>
-                        <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                        <Select v-model="filters.customer" :options="dependencies.customers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Vendedor</Label>
-                        <Select2 ref="multiselect" v-model="filters.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                        <Select v-model="filters.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-3">
-                        <Input required="0" v-model="filters.init_date" type="date" label="Fecha inicial"/>
+                        <Label required="0">Fecha inicial</Label>
+                        <DatePicker v-model="filters.init_date" showIcon fluid  dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
                     </div>
                     <div class="col-3">
-                        <Input required="0" v-model="filters.final_date" type="date" label="Fecha final"/>
+                        <Label required="0">Fecha final</Label>
+                        <DatePicker v-model="filters.final_date" showIcon fluid  dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
                     <Button @click="datatable">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarFormulario">Registrar</Button>
+                    <Button @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
-                <Modal :id="modal" label="Registrar" title="Crear Boleta" size="xl">
+                <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <Input v-model="ticket.number" type="number" label="Número"></Input>
+                            <Label>Número</Label>
+                            <Input v-model="ticket.number" type="number"></Input>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Vendedor</Label>
-                            <Select2 ref="multiselect" v-model="ticket.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                            <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Cliente (a quien se vende)</Label>
-                            <Select2 ref="multiselect" v-model="ticket.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                            <Select v-model="ticket.customer" :options="dependencies.customers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Rifa</Label>
-                            <Select2 ref="multiselect" v-model="ticket.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                            <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <!-- <div class="col-md-6 mb-3">
                             <Label>Estado de la boleta</Label>
-                            <Select2 ref="multiselect" v-model="ticket.status" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
-                        </div>
+                            <Select v-model="ticket.status" :options="payment_methods" filter class="w-100"></Select>
+                        </div> -->
                     </div>
     
                     <hr>
@@ -71,15 +75,17 @@
                         <div class="row" v-for="(i, index) in ticket.payments" :key="index">
                             <div class="col-4">
                                 <Label>Método de pago</Label>
-                                <Select2 ref="multiselect" v-model="i.payment_method" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
+                                <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
                             </div>
                             <div class="col-4">
-                                <Input v-model="i.amount" type="text" label="Valor"></Input>
+                                <Label>Valor</Label>
+                                <InputNumber mode="currency" currency="USD" locale="en-US" fluid v-model="i.amount" type="text"></InputNumber>
                             </div>
                             <div class="col-4">
                                 <div class="row">
                                     <div class="col-10">
-                                        <Input v-model="i.expiration_date" type="date" label="Fecha de expiración"></Input>
+                                        <Label>Fecha de expiración</Label>
+                                        <DatePicker v-model="i.expiration_date" showIcon fluid :showOnFocus="false" @date-select="i.expiration_date = Helper.formatDateForm($event)" />
                                     </div>
                                     <div class="col-2">
                                         <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
@@ -92,7 +98,7 @@
                     <div class="d-flex justify-content-center my-3">
                         <Button @click="saveEntity">Guardar</Button>
                     </div>
-                </Modal>
+                </Dialog>
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -123,7 +129,7 @@
                             <td>{{ Helper.formatNumber(i.value_to_pay) }}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(i.id)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Pagado')"><i class="fas fa-check"></i></button>
                                     <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                 </div>
@@ -150,6 +156,7 @@ const ticket = ref({})
 const modal = ref('ticket_modal')
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
 const status_select = ref(['Free', 'Paid', 'Booked'])
+const visible = ref(false)
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -178,17 +185,7 @@ onMounted(async () => {
 })
 
 const datatable = async () => {
-    const filtersForm = {
-        number: filters.value.number,
-        raffle: filters.value.raffle?.id,
-        customer: filters.value.customer?.id,
-        seller: filters.value.seller?.id,
-        init_date: filters.value.init_date,
-        final_date: filters.value.final_date,
-        status: status.value
-    }
-
-    tickets.value = await TicketServices.list(filtersForm)
+    tickets.value = await TicketServices.list(filters.value)
     full_value.value = 0
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
@@ -206,21 +203,13 @@ const saveEntity = async () => {
     ticket.value.payments.forEach(element => {
         value += parseInt(element.amount)
     });
+    if(!value) value = 0
 
-    const form = {
-        id: ticket.value.id,
-        number: ticket.value.number,
-        value: value,
-        seller_id: ticket.value.seller?.id,
-        customer_id: ticket.value.customer?.id,
-        raffle_id: ticket.value.raffle?.id,
-        status: ticket.value.status,
-        payments: ticket.value.payments
-    }
+    ticket.value.value = value
     if (ticket.value.id) {
-        await TicketServices.updateCustomer(form, ticket.value.id)
+        await TicketServices.updateCustomer(ticket.value, ticket.value.id)
     } else {
-        await TicketServices.createCustomer(form)
+        await TicketServices.createCustomer(ticket.value)
     }
     document.getElementById('closeModal').click()
     await datatable()
@@ -242,6 +231,15 @@ const remove_payment = (index) => {
 
 const showData = async (id) => {
     ticket.value = await TicketServices.show(id)
+    if(!ticket.value.payments){
+        ticket.value.payments = [
+        {
+            payment_method: "",
+            amount: "",
+            expiration_date: ""
+        }
+        ]
+    }
 }
 
 

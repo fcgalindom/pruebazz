@@ -27,7 +27,7 @@
     background-color: white !important;
 }
 
-th {
+.table-responsive th {
     background-color: #314b91;
     color: white;
 }
@@ -44,3 +44,64 @@ input:disabled {
 .text-darkslategrey {
     color: darkslategrey;
 }
+
+input {
+    width: 100%;
+}
+
+.p-datepicker-panel {
+    z-index: 9999 !important;
+}
+/* .personali {
+    background-color: white !important;
+} */
+/* 
+.p-inputtext {
+    background-color: white !important;
+    color: black !important;
+    border-color: #ced4da !important;
+}
+
+.p-select-list-container {
+    background-color: white !important;
+    border-color: white !important;
+}
+
+.p-select-option {
+    color: black !important;
+}
+
+.p-select {
+    background-color: white !important;
+}
+
+.p-select-option:hover {
+    background-color: #d1b332 !important;
+}
+
+.p-datepicker-panel {
+    z-index: 9999 !important;
+}
+
+.p-datepicker-input {
+    border-color: #ced4da !important;
+}
+
+.p-select-overlay {
+    z-index: 9999 !important;
+}
+
+.p-select-label {
+    color: black !important;    
+    padding: 0 !important;
+}
+
+.p-button {
+    border-radius: 18px !important;
+    min-width: 13.5em !important;
+    background-color: #314b91 !important;
+    color: white !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    border: none;
+} */

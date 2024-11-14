@@ -7,10 +7,22 @@
             </div>
             <hr>
             <div class="row mb-3">
-                <div class="col-md-3"> <Input v-model="filters.name" label="Nombre" /> </div>
-                <div class="col-md-3"> <Input v-model="filters.phone" label="Teléfono" /> </div>
-                <div class="col-md-3"> <Input v-model="filters.document" label="Documento" /> </div>
-                <div class="col-md-3"> <Input v-model="filters.city" label="Ciudad" /> </div>
+                <div class="col-md-3"> 
+                    <Label required="0">Nombre</Label>
+                    <Input v-model="filters.name" /> 
+                </div>
+                <div class="col-md-3"> 
+                    <Label required="0">Teléfono</Label>
+                    <Input v-model="filters.phone" /> 
+                </div>
+                <div class="col-md-3"> 
+                    <Label required="0">Documento</Label>
+                    <Input v-model="filters.document" /> 
+                </div>
+                <div class="col-md-3"> 
+                    <Label required="0">Ciudad</Label>
+                    <Select v-model="filters.city" optionValue="id" optionLabel="name" class="w-100" :options="cities" filter />
+                </div>
             </div>
             <div class="d-flex justify-content-center">
                 <Button @click="listCustomers">Buscar</Button>
@@ -19,29 +31,31 @@
             <hr>
 
             <div class="d-flex justify-content-end mt-3">
-                <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
+                <Button @click="limpiarData; visible = true">Registrar</Button>
             </div>
-            <Modal :id="modal" label="Registrar" title="Crear Cliente" size="lg">
+            <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
                 <div class="row">
                     <div class="col-md-6 mb-3">
+                        <Label>Nombre</Label>
                         <Input v-model="customer.name" label="Nombre"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
+                        <Label>Documento</Label>
                         <Input v-model="customer.document" label="Documento"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
+                        <Label>Teléfono</Label>
                         <Input v-model="customer.phone" label="Teléfono"></Input>
                     </div>
                     <div class="col-md-6 mb-3">
                         <Label>Ciudad</Label>
-                        <Select2 ref="multiselect" v-model="customer.city" :options="cities" :multiple="false"
-                        :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" />
+                        <Select v-model="customer.city" optionValue="id" optionLabel="name" class="w-100" :options="cities" filter />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center my-3">
                     <Button @click="saveEntity">Guardar</Button>
                 </div>
-            </Modal>
+            </Dialog>
         </div>
       <div class="table-responsive">
         <table class="table table-bordered table-raffles">
@@ -60,7 +74,7 @@
                 <td>{{item.phone}}</td>
                 <td>{{ Helper.thousandSeparator(item.document)}}</td>
                 <td>{{item.city.name}}</td>
-                <td class="text-center"><button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button></td>
+                <td class="text-center"><button class="btn text-darkslategrey" @click="showData(item.id); visible = true"><i class="fas fa-edit"></i></button></td>
             </tr>
           </tbody>
         </table>
@@ -78,6 +92,7 @@ import Helper from "@/helpers/Helper";
 
 const customers = ref([])
 const customer = ref({})
+const visible = ref(false)
 
 const filters = ref({
     name: "",
@@ -99,8 +114,6 @@ const listCustomers = async () => {
 }
 
 const saveEntity = async() => {
-    customer.value.city = customer.value.city.id
-    
     if (customer.value.id != null) {
         await CustomerServices.updateCustomer(customer.value, customer.value.id)
     } else {
@@ -118,10 +131,6 @@ const saveEntity = async() => {
 
 const showData = async(id) => {
     customer.value = await CustomerServices.show(id)
-}
-
-const myChangeEvent = (event) => {
-    console.log('event ==> ', customer.value.city);
 }
 
 const limpiarData = () => {
