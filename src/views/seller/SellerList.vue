@@ -32,10 +32,10 @@
                           <Input v-model="seller.document_number" label="Documento"></Input>
                       </div>
                       <div class="col-md-6">
-                            <Input v-model="seller.email" label="Correo"></Input>
+                            <Input v-model="seller.user.email" label="Correo"></Input>
                       </div>
                       <div class="col-md-6">
-                        <Input v-model="seller.password" label="Contraseña" type="password"></Input>
+                          <Input v-model="seller.user.password"  label="Contraseña" type="password"></Input>
                       </div>
                   </div>
                   <div class="d-flex justify-content-center my-3">
@@ -89,7 +89,12 @@
     email: ""
 })
  
-  const seller = ref( [])
+  const seller = ref({ name: "",
+        document: "",
+        user : {
+            email: "",
+            password: ""
+        }})
   
   onMounted(async () => {
       await datatable()
@@ -103,8 +108,8 @@
       const formupdate = {
         name: seller.value.name,
         document_number: seller.value.document_number,
-        email: seller.value.email,
-        password: seller.value.password
+        email: seller.value.user.email,
+        password: seller.value.user.password
       
       }
       if (seller.value.id != null) {
@@ -118,16 +123,21 @@
 
   }
   const showData = async(id) => {
+
     seller.value = await SellerServices.show(id)
+    seller.value.user.password = ""
+
   }
   const limpiarData = () => {
     seller.value = {
         name: "",
         document: "",
-        email: "",
-        password: ""
+        user : {
+            email: "",
+            password: ""
+        }
     }
-}
+  }
 
   
   </script>

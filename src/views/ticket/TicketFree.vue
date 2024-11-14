@@ -208,6 +208,30 @@ async function hashSHA256(message) {
     
     return hashHex;
 }
+function generarYValidarCodigo(longitud = 16 ) {
+    // Definir el conjunto de caracteres que se utilizarán
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'; // Letras, dígitos, guiones y guiones bajos
+    const patron = /^[a-zA-Z0-9_-]{1,16}$/; // Expresión regular para validar el formato del código
+
+    while (true) {
+        // Generar un código aleatorio
+        let codigoAleatorio = '';
+        for (let i = 0; i < longitud; i++) {
+            codigoAleatorio += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+        }
+        
+        // Validar el código
+        if (patron.test(codigoAleatorio)) {
+            referencia.value = codigoAleatorio;
+            return   codigoAleatorio;
+        }
+    }
+}
+generarYValidarCodigo(16);
+
+const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
+
+hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 
 onMounted(async () => {
@@ -215,10 +239,9 @@ onMounted(async () => {
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
-    referencia.value = await TicketServices.getTiketsRefferece()
-    const mensaje = `${referencia.value.code}${monto}${moneda}${secretoIntegridad}`;
-    hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
-    console.log('referencia.value ==> ', referencia.value.code);
+    //referencia.value = await TicketServices.getTiketsRefferece()
+   
+   
 
  
     console.log('referencia.value ==> ', referencia.value);
@@ -230,7 +253,7 @@ onMounted(async () => {
      script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
      script.setAttribute('data-currency', moneda);
      script.setAttribute('data-amount-in-cents', monto);
-     script.setAttribute('data-reference',  referencia.value.code);
+     script.setAttribute('data-reference',  referencia.value);
      //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
      script.setAttribute(
        'data-signature:integrity',
@@ -263,11 +286,7 @@ onMounted(async () => {
 const isActive = (button) => {
     return activeButtons.value.has(button);
 }
-const prueba = () => {
-    const modalElement = document.getElementById('wompi-modal');
 
-    modal.show(); 
-}
 const customerEmit = async (customerData) => {
   dependencies.value = await TicketServices.dependencies()
    ticket.value.customer = customerData.customer
