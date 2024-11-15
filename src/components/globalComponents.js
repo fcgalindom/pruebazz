@@ -9,9 +9,9 @@ import Modal from './base/BaseModal.vue'
 
 export default {
   install(app) {
-    app.component('Button', BaseButton)
-    app.component('Input', BaseInput)
-    app.component('Select', BaseSelect)
+    // app.component('Button', BaseButton)
+    // app.component('Input', BaseInput)
+    // app.component('Select', BaseSelect)
     app.component('Error', BaseError)
     app.component('Label', Label)
     app.component('Modal', Modal)

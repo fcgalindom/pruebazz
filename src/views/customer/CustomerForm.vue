@@ -2,7 +2,8 @@
     <Modal id="customer-form" label="Registrar" title="Crear Cliente" size="lg">
         <div class="row">
             <div class="col-md-6 mb-3">
-                <Input v-model="customer.document" type="number"   @blur="listCustomers" label="Documento"></Input>
+                <Label>Documento</Label>
+                <Input class="form-control" v-model="customer.document" type="number"   @blur="listCustomers" ></Input>
             </div>
             <div class="col-md-6 mb-3">
                 <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
@@ -12,7 +13,7 @@
             </div>
             <div class="col-md-6 mb-3">
                 <Label>Ciudad</Label>
-                <Select2 ref="multiselect" v-model="customer.city" :disabled="isDisabled" :options="cities" :multiple="false" :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" />
+                <Select class="form-control" filter optionValue="id" optionLabel="name" ref="multiselect" v-model="customer.city" :disabled="isDisabled" :options="cities" :multiple="false" :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" />
             </div>
         </div>
         <div class="d-flex justify-content-center my-3">

@@ -16,13 +16,17 @@ export default class Helper {
     };
 
     static formatDate(dateString) {
-      const date = new Date(dateString);
+      const date = new Date(dateString + 'T00:00:00');
       return new Intl.DateTimeFormat('es-ES', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
         year: 'numeric'
       }).format(date);
+    }
+
+    static formatDateForm(date) {
+        return date.toISOString().split('T')[0]
     }
     
 }

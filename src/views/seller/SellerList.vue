@@ -8,12 +8,15 @@
             <hr>
             <div class="row mb-3">
                     <div class="col-md-4">
+                        <Label required="0">Nombre</Label>
                         <Input v-model="filters.name" label="Nombre" /> 
                     </div>
                     <div class="col-md-4">
+                        <Label required="0">Documento</Label>
                         <Input v-model="filters.document_number" label="Documento" /> 
                     </div>
                     <div class="col-md-4">
+                        <Label required="0">Correo</Label>
                         <Input v-model="filters.email" label="Correo" /> 
                     </div>
             </div>
@@ -21,27 +24,31 @@
               <Button @click="datatable">Buscar</Button>
             </div>
             <div class="d-flex justify-content-end">
-              <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarData">Registrar</Button>
+              <Button @click="limpiarData; visible = true">Registrar</Button>
             </div>
-              <Modal :id="modal" label="Registrar" title="Crear Vendedor" size="lg">
+              <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
                   <div class="row">
                       <div class="col-md-6">
+                          <Label>Nombre</Label>
                           <Input v-model="seller.name" label="Nombre"></Input>
                       </div>
                       <div class="col-md-6">
+                          <Label>Documento</Label>
                           <Input v-model="seller.document_number" label="Documento"></Input>
                       </div>
                       <div class="col-md-6">
-                            <Input v-model="seller.user.email" label="Correo"></Input>
+                          <Label>Correo</Label>
+                            <Input v-model="seller.email" label="Correo"></Input>
                       </div>
                       <div class="col-md-6">
-                          <Input v-model="seller.user.password"  label="Contraseña" type="password"></Input>
+                          <Label>Contraseña</Label>
+                        <Input v-model="seller.password" label="Contraseña" type="password"></Input>
                       </div>
                   </div>
                   <div class="d-flex justify-content-center my-3">
                       <Button @click="saveEntity">Guardar</Button>
                   </div>
-              </Modal>
+              </Dialog>
           </div>
         <div class="table-responsive">
           <table class="table table-bordered table-raffles">
@@ -60,7 +67,7 @@
                 <td>{{item.user.email}}</td>
                 <td>
                   <div class="d-flex justify-content-center">
-                    <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${modal}`" @click="showData(item.id)"><i class="fas fa-edit"></i></button>
+                    <button class="btn text-darkslategrey" @click="showData(item.id); visible = true"><i class="fas fa-edit"></i></button>
                     <router-link :to="`sellers-tracking/${item.id}/`"> <button class="btn btn-info mr-3"> Informe </button> </router-link>
                     <router-link :to="`sellers-tickets/${item.id}/`"> <button class="btn btn-info"> Asignar </button> </router-link>
                   </div>
@@ -81,6 +88,7 @@
   
   const sellers = ref([])
   const modal = ref('seller_list')
+  const visible = ref(false)
   const filters = ref({
     name: "",
     document_number: "",

@@ -1,22 +1,23 @@
 <template>
     <div>
     
-        <Modal :id="modal" label="Registrar" title="Crear Boleta" size="xl">
+        <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <Input v-model="ticket.number" type="text" label="Número"></Input>
+                    <Label>Número</Label>
+                    <Input v-model="ticket.number" type="text"></Input>
                 </div>
                 <div class="col-md-6 mb-3">
                     <Label>Vendedor</Label>
-                    <Select2 ref="multiselect" v-model="ticket.seller" :options="dependencies.sellers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                    <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                 </div>
                 <div class="col-md-6 mb-3">
                     <Label>Cliente (a quien se vende)</Label>
-                    <Select2 ref="multiselect" v-model="ticket.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                    <Select v-model="ticket.customer" :options="dependencies.customers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                 </div>
                 <div class="col-md-6 mb-3">
                     <Label>Rifa</Label>
-                    <Select2 ref="multiselect" v-model="ticket.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="name" track-by="id" />
+                    <Select v-model="ticket.raffle" :options="dependencies.raffles" @select="search" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                 </div>
             </div>
     
@@ -29,19 +30,21 @@
                 <div class="row" v-for="(i, index) in ticket.payments" :key="index">
                     <div class="col-3">
                         <Label>Boleta</Label>
-                        <Select2 ref="multiselect" v-model="i.ticket" :options="ticket.number" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
+                        <Select v-model="i.ticket" :options="ticket.number" filter class="w-100"></Select>
                     </div>
                     <div class="col-3">
                         <Label>Método de pago</Label>
-                        <Select2 ref="multiselect" v-model="i.payment_method" :options="payment_methods" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" track-by="id" />
+                        <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
                     </div>
                     <div class="col-3">
-                        <Input v-model="i.amount" type="text" label="Valor"></Input>
+                        <Label>Valor</Label>
+                        <InputNumber fluid v-model="i.amount" />
                     </div>
                     <div class="col-3">
                         <div class="row">
                             <div class="col-10">
-                                <Input v-model="i.expiration_date" type="date" label="Fecha de expiración"></Input>
+                                <Label>Fecha de expiración</Label>
+                                <DatePicker v-model="i.expiration_date" showIcon fluid  dateFormat="yy-mm-dd" :manualInput="false" @date-select="i.expiration_date = Helper.formatDateForm($event)" />
                             </div>
                             <div class="col-2">
                                 <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
@@ -52,7 +55,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                      <Button   data-toggle="modal"  :data-target="`#${modalwompi}`" > Guardar</Button>
+                      <Button data-toggle="modal"  :data-target="`#${modalwompi}`" > Guardar</Button>
                 </div>
 
             </div>
@@ -64,7 +67,7 @@
             </div>
     
             
-        </Modal>
+        </Dialog>
 
         <Modal  :id="modalwompi" label="Pagos" title="Paga Con Wompi" size="xl">
             <form ref="wompiForm"></form>
@@ -108,10 +111,12 @@
         <div class="row" v-if="typeScreen == 'admin'">
             <div class="col-md-4">
                 <Label>Rifa</Label>
-                <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" @select="search; getPromotionsByRaffle" />
+                <Select v-model="filters.raffle" :options="dependencies.raffles" @select="search" filter optionLabel="name" optionValue="id" fluid></Select>
+                <!-- <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" @select="search" /> -->
             </div>
             <div class="col-md-4">
-                <Input v-model="filters.number" required="0" label="Número"></Input>
+                <Label required="0">Número</Label>
+                <Input v-model="filters.number" required="0"></Input>
             </div>
         </div>
         <!-- <div class="mt-3 d-flex justify-content-center" v-if="typeScreen == 'admin'">
@@ -119,7 +124,7 @@
         </div> -->
 
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
-           <Button class="mt-3" data-toggle="modal" :data-target="`#customer-form`" @click="getPromotionsByRaffle">Comprar</Button> 
+           <Button class="mt-3" @click="getPromotionsByRaffle; visible = true">Comprar</Button> 
 
            <button id="modalTicket"  data-toggle="modal"  :data-target="`#${modal}`" style="display: none;"> prueba2</button>
            <!-- <a  class="mt-3 btn-dark"  data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
@@ -137,7 +142,7 @@
             <div v-if="typeScreen == 'admin'">
                 <Input disabled v-model="ticket.number" class="mb-3" label="Números seleccionados"></Input>
                 <div class="w-100 d-flex justify-content-center">
-                    <Button class="mt-3" data-toggle="modal" :data-target="`#${modal}`" @click="getPromotionsByRaffle">Comprar</Button>
+                    <Button class="mt-3" @click="getPromotionsByRaffle">Compra22r</Button>
                 </div>
             </div>
         </div>
@@ -150,9 +155,10 @@
 import { ref, onMounted, computed, defineProps } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
+import { RaffleServices } from '@/services/raffle.service'
 import Swal from 'sweetalert2'
 import CustomerForm from '@views/customer/CustomerForm.vue';
-
+import Helper from '@/helpers/Helper';
 
 
 const props = defineProps({
@@ -171,6 +177,7 @@ const modal = ref('ticket_modal')
 const modalwompi = ref('wompi-modal')
 
 const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
+const visible = ref(false);
 
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
 const ticket = ref({})
@@ -307,7 +314,7 @@ const search = async () => {
             return
         }
         filterJson = {
-            raffle: filters.value.raffle?.id
+            raffle: filters.value.raffle
         }
     }
     console.log('filterJson ==> ', filterJson);
@@ -339,23 +346,13 @@ const saveEntity = async () => {
         value += parseInt(element.amount)
     });
 
-    const form = {
-        id: ticket.value.id,
-        number: ticket.value.number,
-        value: value,
-        seller_id: ticket.value.seller?.id,
-        customer_id: ticket.value.customer?.id,
-        raffle_id: ticket.value.raffle?.id,
-        status: ticket.value.status,
-        payments: ticket.value.payments,
-        promotion_id: ticket.value.promotion_id,
-        value_to_pay: "30000",
-    }
+    ticket.value.value = value
+
     if (ticket.value.id) {
-        await TicketServices.updateCustomer(form, ticket.value.id)
+        await TicketServices.updateCustomer(ticket.value, ticket.value.id)
     } else {
         
-        await TicketServices.createCustomer(form)
+        await TicketServices.createCustomer(ticket.value)
 
     }
     document.getElementById('closeModal').click()
@@ -390,7 +387,8 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async() => {
-    console.log("entro a getPromotionsByRaffle")
+
+    
     if(props.typeScreen == 'client') {
         ticket.value.raffle = props.raffle
     }
@@ -399,7 +397,9 @@ const getPromotionsByRaffle = async() => {
         console.log("ticket.value.raffle", filters.value.raffle.value_ticket)
     }
     
-    promotion.value =  await PromotionServices.promotionsByRaffle(ticket.value.raffle?.id)
+    promotion.value =  await PromotionServices.promotionsByRaffle(ticket.value.raffle)
+    console.log('promotion ==> ', promotion.value);
+    
     if(promotion.value[0].number_of_tickets <= ticket.value.number.length){
         Swal.fire({
             title: '¡Felicitaciones!',
@@ -413,11 +413,16 @@ const getPromotionsByRaffle = async() => {
         if(props.typeScreen == 'client') {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
+            console.log('filters.value.raffle ==> ', filters.value.raffle);
+            
+            const raffle = await RaffleServices.show(filters.value.raffle)
+            console.log('raffle22 ==> ', raffle);
+            
             ticket.value.value_to_pay = filters.value.raffle.value_ticket
             ticket.value.promotion_id = null
         }
     }
-
+    visible.value = true
 }
 
 const generateRandomNumbers = () => {
