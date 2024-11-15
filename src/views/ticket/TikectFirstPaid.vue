@@ -34,7 +34,6 @@ const props = defineProps({
 });
 const { ticketData } = toRefs(props);
 
-console.log("seetickedata =>",ticketData?.value?.payments);
 
 onMounted(() => {
   const canvas = reciboCanvas.value;

@@ -234,8 +234,18 @@ const status = computed(() => {
 })
 
 onMounted(async () => {
-    datatable()
+    if (router.query) {
+       tickets.value = router.query
+    }
+    else{
+        datatable()
+    }
+    
+       
+    
+    
     limpiarFormulario()
+    console.log("see querysw", router.query);
     dependencies.value = await TicketServices.dependencies()
 })
 
@@ -255,6 +265,7 @@ const datatable = async () => {
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
     });
+    console.log('tickets ==> ', tickets.value)
 }
 
 watch(() => router.path, async () => {

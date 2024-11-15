@@ -12,7 +12,7 @@
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
+            <a class="nav-link" data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#ticket-form">
               Filtro general
             </a>
           </li>
@@ -109,12 +109,14 @@
       </footer>
     </div>
     <CustomerForm />
+    <TicketFilter />
   </template>
   
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Cookies from 'js-cookie';
 import CustomerForm from '@views/customer/CustomerForm.vue';
+import TicketFilter from '../ticket/TicketFilter.vue';
 
 // Reactive property for search term
 const searchTerm = ref('')
@@ -250,7 +252,7 @@ const toggleMenu = () => {
 <script>
 export default {
     components: {
-        CustomerForm
+        CustomerForm, TicketFilter
     }
 }
 </script>
