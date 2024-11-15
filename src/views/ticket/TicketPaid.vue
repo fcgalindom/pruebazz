@@ -56,7 +56,7 @@ onMounted(() => {
     ctx.textAlign = "left";
 
     // Ejemplo de texto encima de la imagen en los campos
-    ctx.fillText("#"+paymentData.value.ticket, 810, 130);
+    ctx.fillText("#"+ticketData.value.ticket, 810, 130);
     ctx.fillText(ticketData.value.raffle.raffle_date, 200, 295);
     ctx.fillText(formatNumber(paymentData.value.amount), 720, 235);
     ctx.fillText(ticketData.value.customer.name, 200, 360);

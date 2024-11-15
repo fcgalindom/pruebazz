@@ -25,6 +25,7 @@ import { ref, onMounted, computed, watch , toRefs  } from "vue";
 import loteriaBoyaca from "@/assets/customers/firstpayment.png";
 import drdentix from "@/assets/customers/dr_denix_logo.png";
 import { jsPDF } from "jspdf";
+import Helper from '@/helpers/Helper';
 const reciboCanvas = ref(null);8
 const props = defineProps({
   ticketData: {
@@ -36,8 +37,11 @@ const { ticketData } = toRefs(props);
 
 
 onMounted(() => {
+  console.log("see tickets", ticketData.value);
+  console.log("see ticketsnumber", ticketData?.value?.payments[0]?.amount);
   const canvas = reciboCanvas.value;
   const ctx = canvas.getContext("2d");
+  
 
 
 
@@ -100,17 +104,17 @@ onMounted(() => {
     // Campo: Abono
     ctx.fillText("Abono:", col2X, currentY);
     ctx.font = "normal 16px Arial";
-    ctx.fillText(formatNumber(ticketData?.value?.payments[0]?.amount), col2X + 80, currentY); // Valor de ejemplo
+    ctx.fillText(Helper.formatNumber(ticketData?.value?.payments[0]?.amount  === undefined ? 0 : ticketData?.value?.payments[0]?.amount  ), col2X + 80, currentY); // Valor de ejemplo
     ctx.font = "bold 16px Arial";
     currentY += 30;
 
     // Campo: Saldo
     ctx.fillText("Saldo:", col2X, currentY);
     ctx.font = "normal 16px Arial";
-    ctx.fillText(formatNumber(ticketData.value.raffle.value_ticket), col2X + 80, currentY); // Valor de ejemplo
+    ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay), col2X + 80, currentY); // Valor de ejemplo
     //Numero de boleta
     ctx.font = "normal 35px Arial";
-    ctx.fillText("#324", 270, 1310);
+    ctx.fillText( "#"+ticketData.value.number, 270, 1310);
    
     
 
@@ -125,9 +129,7 @@ onMounted(() => {
     };
   };
 });
-const formatNumber = (value) => {
-               return (value !== null && value !== undefined) ?  "$" + value.toLocaleString('es-ES') : '0';
-        };
+
 
 const downloadImage = () => {
       const canvas = reciboCanvas.value;
@@ -146,9 +148,10 @@ const downloadPDF = () => {
   // Configura las dimensiones de la imagen en el PDF
   const pdfWidth = pdf.internal.pageSize.getWidth();
   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  console.log(pdfHeight);
 
   // Agrega la imagen al PDF
-  pdf.addImage(imageUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+  pdf.addImage(imageUrl, "PNG", 0, 0, pdfWidth, pdfHeight-150);
 
   // Descarga el PDF
   pdf.save("recibo.pdf");
