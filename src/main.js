@@ -12,7 +12,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js' // Import the scripts of Boot
 
 import 'admin-lte/dist/css/adminlte.min.css' // Import the styles of AdminLTE
 import 'admin-lte/dist/js/adminlte.min.js' // Import the scripts of AdminLTE
-import primeVue from '@plugins/primevue' // Import PrimeVue
+import primevue from '@plugins/primevue' // Import PrimeVue
 
 
 import './styles/app.css'
@@ -22,7 +22,7 @@ const app = createApp(App)
 app.use(router)
 // app.component('Button', Button);
 // app.use('Select2', Select2)
-app.use(primeVue)
+app.use(primevue)
 app.use(globalComponents)
 // app.use(Helper)
 app.use(createPinia())

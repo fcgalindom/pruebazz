@@ -38,11 +38,11 @@
                       </div>
                       <div class="col-md-6">
                           <Label>Correo</Label>
-                            <Input v-model="seller.email" label="Correo"></Input>
+                            <Input v-model="seller.user.email" label="Correo"></Input>
                       </div>
                       <div class="col-md-6">
                           <Label>Contraseña</Label>
-                        <Input v-model="seller.password" label="Contraseña" type="password"></Input>
+                        <Input v-model="seller.user.password" label="Contraseña" type="password"></Input>
                       </div>
                   </div>
                   <div class="d-flex justify-content-center my-3">
