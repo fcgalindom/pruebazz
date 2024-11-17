@@ -29,11 +29,11 @@
                     </div>
                     <div class="col-3">
                         <Label required="0">Fecha inicial</Label>
-                        <DatePicker v-model="filters.init_date" showIcon fluid  dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
+                        <DatePicker v-model="filters.init_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
                     </div>
                     <div class="col-3">
                         <Label required="0">Fecha final</Label>
-                        <DatePicker v-model="filters.final_date" showIcon fluid  dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
+                        <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -61,9 +61,9 @@
                             <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                         </div>
                         <!-- <div class="col-md-6 mb-3">
-                            <Label>Estado de la boleta</Label>
-                            <Select v-model="ticket.status" :options="payment_methods" filter class="w-100"></Select>
-                        </div> -->
+                                <Label>Estado de la boleta</Label>
+                                <Select v-model="ticket.status" :options="payment_methods" filter class="w-100"></Select>
+                            </div> -->
                     </div>
     
                     <hr>
@@ -101,6 +101,7 @@
                 </Dialog>
             </div>
             <div class="table-responsive">
+                
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -110,7 +111,9 @@
                             <th>Documento</th>
                             <th>Teléfono</th>
                             <th>Ciudad</th>
-                            <th>Vendedor</th>
+                            <th v-if="!sellerRouteId">Vendedor</th>
+                            <th>Fecha venta</th>
+                            <th>Estado</th>
                             <th>Abonado</th>
                             <th>Saldo</th>
                             <th>Acciones</th>
@@ -118,64 +121,73 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(i, index) in tickets" :key="index">
+                        <tr v-for="(i, index) in tickets" :key="index" v-bind:class="getLigthTracking(i.customer)">
                             <td>#{{i.number}}</td>
                             <td>{{i.raffle.name}}</td>
-                            <td>{{i.customer.name}}</td>
-                            <td>{{ Helper.thousandSeparator(i.customer.document) }}</td>
-                            <td>{{ i.customer.phone }}</td>
-                            <td>{{ i.customer.city.name }}</td>
-                            <td>{{i.seller?.name}}</td>
-                            <td>{{ Helper.formatNumber(i.value) }}</td>
-                            <td>{{ Helper.formatNumber(i.value_to_pay) }}</td>
+                            <td>{{ i.customer?.name ?? 'N/A' }}</td>
+                            <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
+                            <td>{{ i.customer?.phone ?? 'N/A' }}</td>
+                            <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
+                            <td>{{ i.created_at ?? 'N/A' }}</td>
+                            <td v-if="!sellerRouteId">{{i.seller?.name ?? 'Cliente'}}</td>
+                            <td>{{ i.status ?? 'No vendida' }}</td>
+                            <td>{{ i.value ? Helper.formatNumber(i.value) : 'N/A' }}</td>
+                            <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay) : 'N/A' }}</td>
                             <td class="text-center">
-                                <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-between" v-if="i.customer">
                                     <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, status)"><i class="fas fa-check"></i></button>
                                     <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                 </div>
-                            </td>
-                            <td>  
-                                <div class="row">
-                                     <div class="col-3">
-                                        <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
-                                     </div>
-                                     <div class="col-3">
-                                        <button  data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
-                                     </div>
+                                <div v-else>
+                                    <span>No vendida</span>
                                 </div>
-                                <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
-                                    <TikectFirstPaid :ticketData="i" />
-                                </Modal>
-    
-                                <Modal :id="ticketsmodal" label="Descargar" title="Descarcar Boleta" size="xl">
-                                    <table class="table table-bordered">
-                                     <thead>
-                                       <tr>
-                                        <th>Número</th>
-                                        <th>abono</th>
-                                        <th>metodo de pago</th>
-                                        <th>Descarga</th>
-
-                                       </tr>
-                                      </thead>
-                                    <tbody>
-
-                                       <tr v-for="(f, index) in payments1" :key="index">
-
-                                         <td>{{f.ticket}}</td>
-                                         <td>{{f.amount}}</td>
-                                         <td>{{f.payment_method}}</td>
-                                         <td><TicketPaid :ticketData="i"  :paymentData="f"/> </td>
-                                      
-                                        </tr>
-
-                                    </tbody>
-
-                                   </table>
-                               
-                                    
-                                </Modal>
+                            </td>
+                            <td>
+                                <div v-if="i.customer">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn text-darkslategrey" data-toggle="modal" @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
+                                        </div>
+                                    </div>
+                                    <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
+                                        <TikectFirstPaid :ticketData="i" />
+                                    </Modal>
+        
+                                    <Modal :id="ticketsmodal" label="Descargar" title="Descarcar Boleta" size="xl">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Número</th>
+                                                    <th>abono</th>
+                                                    <th>metodo de pago</th>
+                                                    <th>Descarga</th>
+        
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+        
+                                                <tr v-for="(f, index) in payments1" :key="index">
+        
+                                                    <td>{{f.ticket}}</td>
+                                                    <td>{{f.amount}}</td>
+                                                    <td>{{f.payment_method}}</td>
+                                                    <td>
+                                                        <TicketPaid :ticketData="i" :paymentData="f" /> </td>
+        
+                                                </tr>
+        
+                                            </tbody>
+        
+                                        </table>
+                                    </Modal>
+                                </div>
+                                <div v-else>
+                                    <span>No vendida</span>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -183,11 +195,10 @@
             </div>
         </div>
     </div>
-  
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch  , createApp } from "vue";
+import { ref, onMounted, computed, watch, createApp } from "vue";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from 'vue-router';
 import Swal from 'sweetalert2'
@@ -195,12 +206,13 @@ import TicketPaid from "./TicketPaid.vue";
 import TikectFirstPaid from "./TikectFirstPaid.vue";
 // @ts-ignore
 import Helper from '@/helpers/Helper';
+import { SellerServices } from "@/services/seller.service";
 
 const tickets = ref([])
 const full_value = ref(0)
 const ticket = ref({})
+const seller = ref({})
 const payments1 = ref([])
-const modal = ref('ticket_modal')
 const firstpaymentmodal = ref('firstpayment_modal')
 const ticketsmodal = ref('tickets_modal')
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
@@ -231,6 +243,10 @@ const status = computed(() => {
 })
 
 onMounted(async () => {
+    if(sellerRouteId.value) {
+        seller.value = await SellerServices.show(sellerRouteId.value)
+    }
+
     getTitle()
     await datatable()
     limpiarFormulario()
@@ -245,15 +261,26 @@ const getTitle = () => {
             return 'Boletas con Abono'
         case 'Pagado':
             return 'Boletas Pagadas'
+        default:
+            return 'Seguimiento al vendedor ' + seller.value.name
     }
 }
 
 const datatable = async () => {
+    console.log('sellerRouteId.value ', sellerRouteId.value);
+    
     filters.value.status = status.value
-    tickets.value = await TicketServices.list(filters.value)
+    if(sellerRouteId.value) {
+        filters.value.seller = sellerRouteId.value
+        tickets.value = await SellerServices.tracking(sellerRouteId.value, filters.value)
+    }else {
+        tickets.value = await TicketServices.list(filters.value)
+    }
     full_value.value = 0
     tickets.value.forEach(element => {
-        full_value.value += parseInt(element.value)
+        if(element.value) {
+            full_value.value += parseInt(element.value)
+        }
     });
 }
 
@@ -268,7 +295,7 @@ const saveEntity = async () => {
     ticket.value.payments.forEach(element => {
         value += parseInt(element.amount)
     });
-    if(!value) value = 0
+    if (!value) value = 0
 
     ticket.value.value = value
     if (ticket.value.id) {
@@ -296,14 +323,12 @@ const remove_payment = (index) => {
 
 const showData = async (id) => {
     ticket.value = await TicketServices.show(id)
-    if(!ticket.value.payments){
-        ticket.value.payments = [
-        {
+    if (!ticket.value.payments) {
+        ticket.value.payments = [{
             payment_method: "",
             amount: "",
             expiration_date: ""
-        }
-        ]
+        }]
     }
 }
 const paymentdata = async (payments) => {
@@ -311,7 +336,7 @@ const paymentdata = async (payments) => {
 }
 
 
-const changeState = async(id, status) => {
+const changeState = async (id, status) => {
     let message = ""
     let newStatus = ""
     switch (status) {
@@ -324,24 +349,35 @@ const changeState = async(id, status) => {
             message = "¿Desea marcar esta boleta como totalmente pagada?"
             newStatus = "Pagado"
             break;
-    
+
         default:
             message = "¿Desea declinar esta boleta?"
             break;
     }
-    
+
     Swal.fire({
         title: message,
         showDenyButton: true,
         confirmButtonText: "Aceptar",
         denyButtonText: `Cancelar`,
-    }).then(async(result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
             await TicketServices.changeState(id, newStatus)
             Swal.fire("¡Guardado!", "", "success");
             await datatable()
         }
     });
+}
+
+const getLigthTracking = (customer) => {
+    if(!sellerRouteId.value) {
+        return ''
+    }
+    if (customer) {
+        return 'ligth-tracking-sold'
+    } else {
+        return 'ligth-tracking-not-sold'
+    }
 }
 
 const limpiarFormulario = () => {
@@ -359,30 +395,38 @@ const limpiarFormulario = () => {
         }]
     }
 }
+
 function showTicketAlert(ticketData) {
-  // Creamos un contenedor en el DOM donde renderizaremos el componente
-  const wrapper = document.createElement('div');
+    // Create a container in the DOM where we will render the component
+    const wrapper = document.createElement('div');
 
-  // Creamos una instancia de Vue con nuestro componente
-  const app = createApp(TikectFirstPaid, { ticketData });
+    // Create a Vue instance with our component
+    const app = createApp(TikectFirstPaid, { ticketData });
 
-  // Montamos la instancia en el contenedor creado
-  app.mount(wrapper);
+    // Mount the instance in the created container
+    app.mount(wrapper);
 
-  // Mostramos el SweetAlert con el componente montado en `html`
-  Swal.fire({
-  title: 'Descargar Boleta',
-  html: wrapper,
-  focusConfirm: false,
-  showCloseButton: true, // Muestra la "X" para cerrar
-  showConfirmButton: false, // Oculta el botón de confirmación
-  width: '400px', // Ajusta el tamaño si es necesario
-  didDestroy: () => {
-    // Desmonta el componente cuando se cierre el SweetAlert
-    app.unmount();
-  },
-});
+    // Show the SweetAlert with the component mounted in `html`
+    Swal.fire({
+        title: 'Download Ticket',
+        html: wrapper,
+        focusConfirm: false,
+        showCloseButton: true, // Show the "X" to close
+        showConfirmButton: false, // Hide the confirm button
+        width: '400px', // Adjust the size if necessary
+        didDestroy: () => {
+            // Unmount the component when the SweetAlert is closed
+            app.unmount();
+        },
+    });
 }
+
+const sellerRouteId = computed(() => {
+  return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
+});
+
 </script>
   
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
+<style src="vue-multiselect/dist/vue-multiselect.css">
+
+</style>

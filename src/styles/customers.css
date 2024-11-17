@@ -212,6 +212,14 @@
     width: 80% !important;
 }
 
+.ligth-tracking-sold {
+    background-color: #cff9b8;
+}
+
+.ligth-tracking-not-sold {
+    background-color: #fbd8d8;
+}
+
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (max-width: 1400px) { 
     .button-grid {

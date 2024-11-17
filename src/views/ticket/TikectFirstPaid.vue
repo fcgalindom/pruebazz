@@ -37,8 +37,6 @@ const { ticketData } = toRefs(props);
 
 
 onMounted(() => {
-  console.log("see tickets", ticketData.value);
-  console.log("see ticketsnumber", ticketData?.value?.payments[0]?.amount);
   const canvas = reciboCanvas.value;
   const ctx = canvas.getContext("2d");
   
