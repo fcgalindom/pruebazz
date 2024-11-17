@@ -169,7 +169,7 @@ if (Cookies.get('type_user') == 'true') {
         icon: 'fas fa-cogs',
         submenu: [
             { name: 'Boletas disponibles', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' },
-            // { name: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
+            { name: 'Boletas pendientes', link: '/tickets/Pendiente', icon: 'far fa-circle nav-icon' },
             { name: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
             { name: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' }
         ]

@@ -13,11 +13,9 @@ export class SellerTicketsServices {
         try {
             const url = enviroments.baseUrl + `sellers-tickets/store/${id}/`
             const response = await axios.post(url, data)
-            console.log('todo bien', response.data);
             
             return response.data   
         } catch (error) {
-            console.log(error.response.data);
             
             throw error.response.data
         }

@@ -28,6 +28,18 @@ const ticketsRoutes = [
 			}
 		}
 	},
+    {
+		path: '/tickets/Pendiente',
+		name: 'PendingTickets',
+		component: TicketList,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
+	},
 	{
 		path: '/tickets/Pagado',
 		name: 'PaidTickets',

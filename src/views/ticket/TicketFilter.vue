@@ -49,7 +49,6 @@ const dependencies = ref({
 })
 onMounted(async () => {
     dependencies.value = await TicketServices.dependencies()
-    console.log('dependencies ==> ', dependencies.value)    
 })
 
 
@@ -75,7 +74,6 @@ const filters = ref({
 
 
 const datatable = async () => {
-    console.log('filters ==> ', filters.value)
     const filtersForm = {
         number: filters.value.number,
         raffle: filters.value.raffle?.id,
@@ -91,10 +89,8 @@ const datatable = async () => {
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
     });
-    console.log('ticket ==> ', tickets.value)
     router.push({ name: 'BookedTickets', query: tickets.value });
     const currentPath = window.location.pathname; // Ruta después del dominio
-    console.log("Path:", currentPath);
     if(currentPath == '/tickets/Reservado'){
         window.location.reload();
     }   
@@ -104,10 +100,8 @@ const datatable = async () => {
 
 const saveEntity = async () => {
     datatable()
-    console.log('ticket ==> ', tickets.value)
     router.push({ name: 'BookedTickets', query: tickets.value });
     const currentPath = window.location.pathname; // Ruta después del dominio
-    console.log("Path:", currentPath);
     if(currentPath == '/tickets/Reservado'){
         window.location.reload();
     }   

@@ -8,6 +8,8 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Dialog from 'primevue/dialog';
 import Textarea from 'primevue/textarea';
+import Menu from 'primevue/menu';
+
 // import 'primevue/resources/themes/saga-blue/theme.css';
 // import Editor from 'primevue/editor';
 
@@ -24,6 +26,7 @@ export default {
         });
         // app.use(PrimeVue)
         app.component('Button', Button)
+        app.component('Menu', Menu)
         // app.component('Editor', Editor)
         app.component('Input', InputText)
         app.component('Select', Select)

@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <Label>Rifa</Label>
-                    <Select v-model="ticket.raffle" :options="dependencies.raffles" @select="search" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                    <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                 </div>
             </div>
     
@@ -111,7 +111,7 @@
         <div class="row" v-if="typeScreen == 'admin'">
             <div class="col-md-4">
                 <Label>Rifa</Label>
-                <Select v-model="filters.raffle" :options="dependencies.raffles" @select="search" filter optionLabel="name" optionValue="id" fluid></Select>
+                <Select v-model="filters.raffle" :options="dependencies.raffles" @change="search" filter optionLabel="name" optionValue="id" fluid></Select>
                 <!-- <Select2 ref="multiselect" v-model="filters.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" @select="search" /> -->
             </div>
             <div class="col-md-4">
@@ -175,6 +175,7 @@ const props = defineProps({
 
 const modal = ref('ticket_modal')
 const modalwompi = ref('wompi-modal')
+const raffle = ref({})
 
 const buttons = ref(Array.from({ length: 999 }, (_, i) => `${i + 1}`));
 const visible = ref(false);
@@ -251,9 +252,7 @@ onMounted(async () => {
    
 
  
-    console.log('referencia.value ==> ', referencia.value);
     
-    console.log('cifrar.value ==> ', cifrar.value);
     const script = document.createElement('script');
      script.src = 'https://checkout.wompi.co/widget.js';
      script.setAttribute('data-render', 'button');
@@ -276,15 +275,12 @@ onMounted(async () => {
 
     if (data.event === 'transaction_approved') {
       // Pago aprobado
-      console.log('Pago aprobado:', data.transaction);
     } else if (data.event === 'unprocessabletransaction') {
     
-      console.log('Pago declinado:', data.transaction);
       saveEntity()
 
     } else if (data.event === 'transaction_error') {
       // Error en el pago
-      console.log('Error en el pago:', data.transaction);
     }
   }
 });
@@ -303,7 +299,6 @@ const customerEmit = async (customerData) => {
 
 const search = async () => {
     let filterJson = {}
-    console.log('props.raffle ==> ', props.raffle);
     
     if(props.typeScreen == 'client') {
         filterJson = {
@@ -317,12 +312,12 @@ const search = async () => {
             raffle: filters.value.raffle
         }
     }
-    console.log('filterJson ==> ', filterJson);
     
     const response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
+    raffle.value = response.raffle
+    
 
     if (filters.value.number) {
-        console.log('response.tickets ==> ', response.tickets);
 
         if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
             buttons.value = [filters.value.number]
@@ -345,7 +340,9 @@ const saveEntity = async () => {
     ticket.value.payments.forEach(element => {
         value += parseInt(element.amount)
     });
-
+    if(!value) {
+        value = 0
+    }
     ticket.value.value = value
 
     if (ticket.value.id) {
@@ -393,12 +390,10 @@ const getPromotionsByRaffle = async() => {
         ticket.value.raffle = props.raffle
     }
     else {
-        ticket.value.raffle = filters.value.raffle.value_ticket
-        console.log("ticket.value.raffle", filters.value.raffle.value_ticket)
+        ticket.value.raffle = raffle.value.id
     }
     
     promotion.value =  await PromotionServices.promotionsByRaffle(ticket.value.raffle)
-    console.log('promotion ==> ', promotion.value);
     
     if(promotion.value[0].number_of_tickets <= ticket.value.number.length){
         Swal.fire({
@@ -413,12 +408,10 @@ const getPromotionsByRaffle = async() => {
         if(props.typeScreen == 'client') {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
-            console.log('filters.value.raffle ==> ', filters.value.raffle);
             
-            const raffle = await RaffleServices.show(filters.value.raffle)
-            console.log('raffle22 ==> ', raffle);
+            // const raffle = await RaffleServices.show(filters.value.raffle)
             
-            ticket.value.value_to_pay = filters.value.raffle.value_ticket
+            ticket.value.value_to_pay = raffle.value.value_ticket
             ticket.value.promotion_id = null
         }
     }
@@ -478,6 +471,7 @@ const filteredButtons = computed(() => {
   }
   return buttons.value;
 });
+
 </script>
 
 <style scoped>

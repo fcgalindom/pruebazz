@@ -56,7 +56,6 @@ const chargeForm = () => {
 }
 
 const listCustomers = async () => {
-    console.log(customer.value.document)
     customers.value = await CustomerServices.getByDocument(customer.value.document)
   .then(response => {
     if( response.length == 0){

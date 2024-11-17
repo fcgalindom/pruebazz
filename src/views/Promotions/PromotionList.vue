@@ -118,7 +118,6 @@ onMounted(async() => {
     dependencies.value = await TicketServices.dependencies()
 })
 const showData = async(id) => {
-    console.log("entro")
     promotion.value = await PromotionServices.show(id)
 }
 

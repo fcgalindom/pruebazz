@@ -9,8 +9,6 @@ export default class Helper {
     static thousandSeparator = (value) => {
       if (!value) return '';
       value = String(value).replace(/\./g, '');
-      console.log('value', value);
-      
 
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     };

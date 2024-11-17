@@ -145,8 +145,6 @@ onMounted(async () => {
 })
 
 const saveEntity = async () => {
-    console.log('raffle', raffle.value);
-    console.log('raffle.value.id', raffle.value.id);
     
     if (raffle.value.id) {
         await RaffleServices.updateCustomer(raffle.value, raffle.value.id)
@@ -179,8 +177,6 @@ const openWidget = (i) => {
 };
 
 const add_award = () => {
-    console.log('awards', raffle.value);
-
     raffle.value.awards.push({ award: "", date: "", type_award: "", image: "" })
 }
 
@@ -193,8 +189,6 @@ const showData = async (id) => {
 }
 
 const formatDateForm = (date) => {
-        console.log("date.toISOString().split('T')[0]", date);
-        
         return date.toISOString().split('T')[0]
     }
 

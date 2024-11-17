@@ -3,7 +3,7 @@
         <div class="container-fluid pt-3">
             <div class="my-3">
                 <div class="d-flex justify-content-between">
-                    <h3>Boletas Reservadas</h3>
+                    <h3>{{ getTitle() }}</h3>
                     <div class="d-flex flex-column">
                         <Button class="btn-sm mb-3">{{ tickets.length }} Boletas</Button>
                         <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value) }}</Button>
@@ -131,7 +131,7 @@
                             <td class="text-center">
                                 <div class="d-flex justify-content-between">
                                     <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Pagado')"><i class="fas fa-check"></i></button>
+                                    <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, status)"><i class="fas fa-check"></i></button>
                                     <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                 </div>
                             </td>
@@ -144,11 +144,6 @@
                                         <button  data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
                                      </div>
                                 </div>
-
-
-                               
-                      
-                        
                                 <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
                                     <TikectFirstPaid :ticketData="i" />
                                 </Modal>
@@ -181,12 +176,7 @@
                                
                                     
                                 </Modal>
-                               
-                               
-                                
-                                
                             </td>
-                            
                         </tr>
                     </tbody>
                 </table>
@@ -241,28 +231,30 @@ const status = computed(() => {
 })
 
 onMounted(async () => {
-    if (router.query) {
-       tickets.value = router.query
-    }
-    else{
-        datatable()
-    }
-    
-       
-    
-    
+    getTitle()
+    await datatable()
     limpiarFormulario()
-    console.log("see querysw", router.query);
     dependencies.value = await TicketServices.dependencies()
 })
 
+const getTitle = () => {
+    switch (status.value) {
+        case 'Pendiente':
+            return 'Boletas Pendientes'
+        case 'Reservado':
+            return 'Boletas con Abono'
+        case 'Pagado':
+            return 'Boletas Pagadas'
+    }
+}
+
 const datatable = async () => {
+    filters.value.status = status.value
     tickets.value = await TicketServices.list(filters.value)
     full_value.value = 0
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
     });
-    console.log('tickets ==> ', tickets.value)
 }
 
 watch(() => router.path, async () => {
@@ -320,7 +312,24 @@ const paymentdata = async (payments) => {
 
 
 const changeState = async(id, status) => {
-    const message = status == 'Libre' ? '¿Desea declinar esta boleta?' : '¿Desea marcar esta boleta como totalmente pagada?'
+    let message = ""
+    let newStatus = ""
+    switch (status) {
+        case 'Pendiente':
+            message = "¿Desea marcar esta boleta como Boleta con abono?"
+            newStatus = "Reservado"
+            break;
+
+        case 'Reservado':
+            message = "¿Desea marcar esta boleta como totalmente pagada?"
+            newStatus = "Pagado"
+            break;
+    
+        default:
+            message = "¿Desea declinar esta boleta?"
+            break;
+    }
+    
     Swal.fire({
         title: message,
         showDenyButton: true,
@@ -328,7 +337,7 @@ const changeState = async(id, status) => {
         denyButtonText: `Cancelar`,
     }).then(async(result) => {
         if (result.isConfirmed) {
-            await TicketServices.changeState(id, status)
+            await TicketServices.changeState(id, newStatus)
             Swal.fire("¡Guardado!", "", "success");
             await datatable()
         }

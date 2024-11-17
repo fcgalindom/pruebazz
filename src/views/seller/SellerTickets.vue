@@ -81,7 +81,6 @@ onMounted(async () => {
 })
 
 const buyTicket = (index, button, position) => {
-    console.log('button ==> ', button);
     
     if (activeButtons.value.has(button)) {
         range_tickets.value[position].numbers = range_tickets.value[position].numbers.filter(num => num !== (button))
@@ -94,7 +93,6 @@ const buyTicket = (index, button, position) => {
 }
 
 const search = async (item) => {
-    console.log('item.raffle ==> ', item.raffle);
     
     if(!item.raffle) {
         showKeyboard.value = false
@@ -141,7 +139,6 @@ const saveEntity = async () => {
         Swal.fire("¡Guardado!", error.error, "error");
 
     }
-    console.log(answer);
 
 }
 
@@ -154,7 +151,6 @@ const addRange = () => {
 
 const getRangeForClients = async () => {
     range_tickets.value = await SellerTicketsServices.show(route.params.id);
-    console.log('range_tickets.value ==> ', range_tickets.value);
     
     range_tickets.value.forEach((range, position) => {
         range.numbers.forEach(number => {
