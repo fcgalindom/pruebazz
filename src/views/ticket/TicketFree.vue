@@ -142,7 +142,7 @@
             <div v-if="typeScreen == 'admin'">
                 <Input disabled v-model="ticket.number" class="mb-3" label="Números seleccionados"></Input>
                 <div class="w-100 d-flex justify-content-center">
-                    <Button class="mt-3" @click="getPromotionsByRaffle">Compra22r</Button>
+                    <Button class="mt-3" @click="getPromotionsByRaffle">Comprar</Button>
                 </div>
             </div>
         </div>

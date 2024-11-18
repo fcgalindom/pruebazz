@@ -43,6 +43,19 @@
                 sameSite: 'Strict',  // Para prevenir ataques CSRF
                 expires: 1       // Duración de 7 días
             });
+            if(response.user.is_superuser){
+              Cookies.set('name', response.user.username, {
+                vsecure: true,    // Solo se enviará a través de HTTPS
+                sameSite: 'Strict',  // Para prevenir ataques CSRF
+                expires: 1       // Duración de 7 días
+            });
+          }else{
+              Cookies.set('name', response.user.seller[0].name, {
+                vsecure: true,    // Solo se enviará a través de HTTPS
+                sameSite: 'Strict',  // Para prevenir ataques CSRF
+                expires: 1       // Duración de 7 días
+            });
+            }
             
 
             window.location.href = '/customers';

@@ -20,10 +20,7 @@ import './styles/app.css'
 const app = createApp(App)
 
 app.use(router)
-// app.component('Button', Button);
-// app.use('Select2', Select2)
 app.use(primevue)
 app.use(globalComponents)
-// app.use(Helper)
 app.use(createPinia())
 app.mount('#app')
