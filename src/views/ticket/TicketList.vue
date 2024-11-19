@@ -137,8 +137,12 @@
                             </td>
                             <td>  
                                 <div class="row">
-                                     <div class="col-3">
+                                 
+                                     <div v-if="ticketstatus == 'Reservado'" class="col-3">
                                         <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
+                                     </div>
+                                     <div v-if="ticketstatus  == 'Pagado'" class="col-3">
+                                        <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
                                      </div>
                                      <div class="col-3">
                                         <button  data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
@@ -193,12 +197,14 @@ import { useRoute } from 'vue-router';
 import Swal from 'sweetalert2'
 import TicketPaid from "./TicketPaid.vue";
 import TikectFirstPaid from "./TikectFirstPaid.vue";
+import TicketPaidAll from "./TicketPaidAll.vue";
 // @ts-ignore
 import Helper from '@/helpers/Helper';
 
 const tickets = ref([])
 const full_value = ref(0)
 const ticket = ref({})
+const ticketstatus = ref("")
 const payments1 = ref([])
 const modal = ref('ticket_modal')
 const firstpaymentmodal = ref('firstpayment_modal')
@@ -240,10 +246,13 @@ onMounted(async () => {
 const getTitle = () => {
     switch (status.value) {
         case 'Pendiente':
+            ticketstatus.value = 'Pendiente'
             return 'Boletas Pendientes'
         case 'Reservado':
+            ticketstatus.value = 'Reservado'
             return 'Boletas con Abono'
         case 'Pagado':
+            ticketstatus.value = 'Pagado'
             return 'Boletas Pagadas'
     }
 }
@@ -365,6 +374,31 @@ function showTicketAlert(ticketData) {
 
   // Creamos una instancia de Vue con nuestro componente
   const app = createApp(TikectFirstPaid, { ticketData });
+
+  // Montamos la instancia en el contenedor creado
+  app.mount(wrapper);
+
+  // Mostramos el SweetAlert con el componente montado en `html`
+  Swal.fire({
+  title: 'Descargar Boleta',
+  html: wrapper,
+  focusConfirm: false,
+  showCloseButton: true, // Muestra la "X" para cerrar
+  showConfirmButton: false, // Oculta el botón de confirmación
+  width: '400px', // Ajusta el tamaño si es necesario
+  didDestroy: () => {
+    // Desmonta el componente cuando se cierre el SweetAlert
+    app.unmount();
+  },
+});
+}
+
+function showTicketAlertAll(ticketData) {
+  // Creamos un contenedor en el DOM donde renderizaremos el componente
+  const wrapper = document.createElement('div');
+
+  // Creamos una instancia de Vue con nuestro componente
+  const app = createApp(TicketPaidAll, { ticketData });
 
   // Montamos la instancia en el contenedor creado
   app.mount(wrapper);

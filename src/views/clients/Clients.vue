@@ -44,7 +44,7 @@
                                 <div v-else>
                                   <img :src="item.img" class="card-img-top" :alt="`Image of ${item.title}`">
                                 </div>
-    
+     
                                 <div class="card-body">
                                     <h5 class="card-title">{{ item.title }}</h5>
                                     <p class="card-text">{{ item.text }}</p>
