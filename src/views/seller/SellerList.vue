@@ -54,9 +54,9 @@
           <table class="table table-bordered table-raffles">
             <thead>
               <tr>
-                  <th>Nombre</th>
-                  <th>Documento</th>
-                  <th>Correo</th>
+                  <th style="width: 30%;">Nombre</th>
+                  <th style="width: 20%;">Documento</th>
+                  <th style="width: 30%;">Correo</th>
                   <th>Acciones</th>
               </tr>
             </thead>
@@ -68,8 +68,8 @@
                 <td>
                   <div class="d-flex justify-content-center">
                     <button class="btn text-darkslategrey" @click="showData(item.id); visible = true"><i class="fas fa-edit"></i></button>
-                    <router-link :to="`sellers-tracking/${item.id}/`"> <button class="btn btn-info mr-3"> Informe </button> </router-link>
-                    <router-link :to="`sellers-tickets/${item.id}/`"> <button class="btn btn-info"> Asignar </button> </router-link>
+                    <router-link :to="`sellers-tracking/${item.id}/`"> <Button class="btn btn-info mr-3"> Seguimiento </Button> </router-link>
+                    <router-link :to="`sellers-tickets/${item.id}/`"> <Button class="btn btn-info"> Asignar </Button> </router-link>
                   </div>
                 </td>
             </tr>

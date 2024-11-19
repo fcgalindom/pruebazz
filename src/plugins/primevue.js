@@ -8,26 +8,34 @@ import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import Dialog from 'primevue/dialog';
 import Textarea from 'primevue/textarea';
+import Badge  from 'primevue/badge';
+import Avatar  from 'primevue/avatar';
+import Drawer from 'primevue/drawer';
 import Menu from 'primevue/menu';
-
-// import 'primevue/resources/themes/saga-blue/theme.css';
-// import Editor from 'primevue/editor';
+import Menubar from 'primevue/menubar';
+import 'primeicons/primeicons.css'
 
 export default {
     install(app) {
-        app.component('Button', Button)
         app.use(PrimeVue, {
             theme: {
-                preset: Aura
-            },
-            options: {
-                darkModeSelector: false,
+                preset: Aura,
+                options: {
+                    // cssLayer: {
+                    //     name: 'primevue',
+                    //     order: 'primevue, tailwind-base, tailwind-utilities'
+                    // },
+                    darkModeSelector: false,
+                }
             }
         });
         // app.use(PrimeVue)
         app.component('Button', Button)
         app.component('Menu', Menu)
-        // app.component('Editor', Editor)
+        app.component('Avatar', Avatar)
+        app.component('Badge', Badge)
+        app.component('Drawer', Drawer)
+        app.component('Menubar', Menubar)
         app.component('Input', InputText)
         app.component('Select', Select)
         app.component('DatePicker', DatePicker)

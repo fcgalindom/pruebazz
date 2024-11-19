@@ -3,7 +3,7 @@
         <div class="container-fluid pt-3">
             <div class="my-3">
                 <div class="d-flex justify-content-between">
-                    <h3>Rifas</h3>
+                    <h1>Rifas</h1>
                 </div>
                 <hr>
                 <Button @click="limpiarFormulario; visible = true" label="Registrar" />

@@ -1,6 +1,7 @@
 import SellerList from '@/views/seller/SellerList.vue'
 import SellerTickets from '@/views/seller/SellerTickets.vue'
 import  SellerTracking from '@/views/seller/SellerTracking.vue'
+import TicketList from '@/views/ticket/TicketList.vue'
 import Cookies from 'js-cookie';
 const sellerRoutes = [
     {
@@ -18,7 +19,7 @@ const sellerRoutes = [
 	{
 		path: '/sellers-tracking/:id/',
 		name: 'SellerTracking',
-		component: SellerTracking,
+		component: TicketList,
 		beforeEnter: (to, from, next) => {
 			if (Cookies.get('token')) {
 				next()

@@ -25,4 +25,10 @@ export class SellerServices {
         const response = await axios.get(url)
         return response.data
     }
+
+    static async tracking(id, filters) {
+        const url = `${enviroments.baseUrl}sellers-tracking/${id}/`
+        const response = await axios.get(url, {params: filters})
+        return response.data
+    }
 }
