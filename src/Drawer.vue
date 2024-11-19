@@ -1,6 +1,6 @@
 
 <template>
-    <Menubar :model="items">
+    <!-- <Menubar :model="items">
         <template #submenulabel="{ item }">
                 <span class="text-primary font-bold">{{ item.label }}</span>
             </template>
@@ -23,8 +23,8 @@
                     </span>
                 </button>
             </template>
-    </Menubar>
-    <!-- <Drawer v-model:visible="visible" header="Dr. Dentix">
+    </Menubar> -->
+    <Drawer v-model:visible="visible" header="Dr. Dentix">
     <div class="d-flex justify-content-center">
         <Menu :model="items" class="w-100 md:w-60">
             <template #submenulabel="{ item }">
@@ -44,15 +44,15 @@
                 <button v-ripple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
                     <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" />
                     <span class="inline-flex flex-col items-start">
-                        <span class="font-bold">Amy Elsner</span>
-                        <span class="text-sm">Admin</span>
+                        <span class="font-bold">{{ Cookies.get('name') }}</span>
+                        <!-- <span class="text-sm">Admin</span> -->
                     </span>
                 </button>
             </template>
         </Menu>
     </div>
 </Drawer>
-<Button icon="pi pi-bars" @click="visible = true" ></Button> -->
+<Button icon="pi pi-bars" @click="visible = true" ></Button>
 </template>
 
 <script setup>
@@ -64,8 +64,6 @@ const items = ref([])
 
 onMounted(() => {
     drawMenu()
-    console.log(Cookies.get('name'));
-    
 })
 
 const getNameLogged = () => {
@@ -90,6 +88,7 @@ const drawMenu = () => {
             icon: 'fas fa-cogs',
             items: [
                 { label: 'Boletas disponibles', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' },
+                { label: 'Boletas pendientes', link: '/tickets/Pendiente', icon: 'far fa-circle nav-icon' },
                 // { label: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
                 { label: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
                 { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' }

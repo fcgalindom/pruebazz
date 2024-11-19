@@ -111,8 +111,8 @@
                             <th>Documento</th>
                             <th>Teléfono</th>
                             <th>Ciudad</th>
-                            <th v-if="!sellerRouteId">Vendedor</th>
                             <th>Fecha venta</th>
+                            <th v-if="!sellerRouteId">Vendedor</th>
                             <th>Estado</th>
                             <th>Abonado</th>
                             <th>Saldo</th>
