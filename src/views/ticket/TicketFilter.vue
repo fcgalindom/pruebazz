@@ -1,33 +1,35 @@
 <template>
-    <Modal id="ticket-form" label="Registrar" title="Crear Cliente" size="lg">
+    <Dialog :visible="visibleDialog" @update:visible="updateVisibleDialog" modal header="Filtro General" :style="{ width: '50%' }">
         <div class="row">
             <div class="col-md-6 mb-3">
-                            <Label>Cliente (a quien se vende)</Label>
-                            <Select2 ref="multiselect" v-model="filters.customer" :options="dependencies.customers" :multiple="false" :clear-on-select="true" :preserve-search="true" placeholder="Selecciona" label="document" track-by="id" />
+                <Label required="0">Cliente (a quien se vende)</Label>
+                <Select optionLabel="name" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid />
             </div>
             <div class="col-md-6 mb-3">
-                <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
+                <Label required="0">Nombre</Label>
+                <Input v-model="customer.name" :disabled="isDisabled"></Input>
             </div>
             <div class="col-md-6 mb-3">
-                <Input v-model="customer.phone" :disabled="isDisabled" label="Teléfono"></Input>
+                <Label required="0">Teléfono</Label>
+                <Input v-model="customer.phone" :disabled="isDisabled" ></Input>
             </div>
             <div class="col-md-6 mb-3">
-                <Input v-model="customer.document" type="number"  label="Numero de Boleta"></Input>
+                <Label required="0">Numero de Boleta</Label>
+                <Input v-model="customer.document"></Input>
             </div>
         </div>
         <div class="d-flex justify-content-center my-3">
-            <Button @click="datatable" >Guardarf</Button>
+            <Button @click="datatable" >Guardar</Button>
         </div>
-    </Modal>
+    </Dialog>
     
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps, defineEmits } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
-import { defineEmits } from 'vue'
 import { TicketServices } from "@/services/ticket.service";
 const router = useRouter();
 const customer = ref({})
@@ -38,6 +40,12 @@ const emit = defineEmits(['customEvent'])
 const ticket = ref({})
 const tickets = ref([])
 const full_value = ref(0)
+
+
+const props = defineProps({
+    visibleDialog: Boolean,
+});
+
 onMounted(async () => {
     cities.value = await CustomerServices.listCities()
     chargeForm()
