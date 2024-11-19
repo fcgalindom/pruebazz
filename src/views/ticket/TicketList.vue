@@ -100,9 +100,7 @@
                     </div>
                 </Dialog>
             </div>
-            <div class="table-responsive">
-                
-                <table class="table table-bordered">
+            <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Número</th>
@@ -111,8 +109,8 @@
                             <th>Documento</th>
                             <th>Teléfono</th>
                             <th>Ciudad</th>
-                            <th v-if="!sellerRouteId">Vendedor</th>
                             <th>Fecha venta</th>
+                            <th v-if="!sellerRouteId">Vendedor</th>
                             <th>Estado</th>
                             <th>Abonado</th>
                             <th>Saldo</th>
@@ -139,31 +137,24 @@
                                     <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, status)"><i class="fas fa-check"></i></button>
                                     <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                 </div>
-                            </td>
-                            <td>  
-                                <div class="row">
-                                 
-                                     <div v-if="ticketstatus == 'Reservado'" class="col-3">
-                                        <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
-                                     </div>
-                                     <div v-if="ticketstatus  == 'Pagado'" class="col-3">
-                                        <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
-                                     </div>
-                                     <div class="col-3">
-                                        <button  data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
-                                     </div>
+                                <div v-else>
+                                    <span>No vendida</span>
                                 </div>
                             </td>
                             <td>
                                 <div v-if="i.customer">
                                     <div class="row">
-                                        <div class="col-6">
-                                            <button class="btn text-darkslategrey" data-toggle="modal" @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>
-                                        </div>
-                                        <div class="col-6">
-                                            <button class="btn text-darkslategrey" data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
-                                        </div>
+                                 
+                                      <div v-if="ticketstatus == 'Reservado'" class="col-3">
+                                       <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
                                     </div>
+                                    <div v-if="ticketstatus  == 'Pagado'" class="col-3">
+                                       <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
+                                    </div>
+                                    <div class="col-3">
+                                       <button  data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
+                                    </div>
+                                   </div>
                                     <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
                                         <TikectFirstPaid :ticketData="i" />
                                     </Modal>
@@ -203,7 +194,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
 </template>
