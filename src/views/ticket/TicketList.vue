@@ -13,7 +13,7 @@
                 <div class="row mb-3">
                     <div class="col-md-3 mb-3">
                         <Label required="0">Número</Label>
-                        <Input required="0" v-model="filters.number" />
+                        <Input disabled required="0" v-model="filters.number" />
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Rifa</Label>

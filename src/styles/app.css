@@ -66,6 +66,15 @@ input {
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+h3 {
+    font-size: 1.5rem !important;
+}
+
+hr {
+    margin-top: .5em !important;
+    margin-bottom: .5em !important;
+}
+
 .p-drawer-content {
     padding: 0 !important;
 }
