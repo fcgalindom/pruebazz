@@ -384,8 +384,8 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async() => {
-
-    
+   
+   
     if(props.typeScreen == 'client') {
         ticket.value.raffle = props.raffle
     }
@@ -394,8 +394,11 @@ const getPromotionsByRaffle = async() => {
     }
     
     promotion.value =  await PromotionServices.promotionsByRaffle(ticket.value.raffle)
+   
     
-    if(promotion.value[0].number_of_tickets <= ticket.value.number.length){
+    
+    if(promotion.value[0]?.number_of_tickets <= ticket.value.number.length){
+        console.log("filipe")
         Swal.fire({
             title: '¡Felicitaciones!',
             text: `Genial se te aplicará la promoción ${promotion.value[0].name} con un valor de ${promotion.value[0].new_value} por boleta`,
@@ -410,6 +413,7 @@ const getPromotionsByRaffle = async() => {
         ticket.value.promotion_id = promotion.value[0].id
         ticket.value.value_to_pay = promotion.value[0].new_value
     } else {
+        visible.value = true   
         if(props.typeScreen == 'client') {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
@@ -420,6 +424,7 @@ const getPromotionsByRaffle = async() => {
             ticket.value.promotion_id = null
         }
     }
+   
 }
 
 const generateRandomNumbers = () => {
