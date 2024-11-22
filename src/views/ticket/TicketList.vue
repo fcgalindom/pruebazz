@@ -249,9 +249,15 @@ onMounted(async () => {
     if(sellerRouteId.value) {
         seller.value = await SellerServices.show(sellerRouteId.value)
     }
-
+    const ticketsee = JSON.parse(sessionStorage.getItem('tickets'));
+    if(ticketsee) {
+        tickets.value = ticketsee
+        sessionStorage.removeItem('tickets');
+        
+    }else{
+        await datatable()
+    }
     getTitle()
-    await datatable()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
 })

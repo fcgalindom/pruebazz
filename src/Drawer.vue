@@ -72,27 +72,7 @@
 
     <!-- Filtro General -->
     <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '50%' }">
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <Label required="0">Cliente (a quien se vende)</Label>
-                <Select optionLabel="name" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid />
-            </div>
-            <div class="col-md-6 mb-3">
-                <Label required="0">Nombre</Label>
-                <Input v-model="customer.name" :disabled="isDisabled"></Input>
-            </div>
-            <div class="col-md-6 mb-3">
-                <Label required="0">Teléfono</Label>
-                <Input v-model="customer.phone" :disabled="isDisabled" ></Input>
-            </div>
-            <div class="col-md-6 mb-3">
-                <Label required="0">Numero de Boleta</Label>
-                <Input v-model="customer.document"></Input>
-            </div>
-        </div>
-        <div class="d-flex justify-content-center my-3">
-            <Button @click="datatable" >Guardar</Button>
-        </div>
+        <TicketFilter/>
     </Dialog>
     <!-- <TicketFilter :visibleDialog="true" /> -->
 </template>
@@ -101,7 +81,7 @@
 import { ref, onMounted } from "vue";
 import Cookies from 'js-cookie';
 // import CustomerForm from '@views/customer/CustomerForm.vue';
-// import TicketFilter from '@views/ticket/TicketFilter.vue';
+import TicketFilter from '@views/ticket/TicketFilter.vue';
 import { CustomerServices } from '@/services/customer.service'
 import { TicketServices } from '@/services/ticket.service'
 
@@ -134,6 +114,7 @@ onMounted(async() => {
     cities.value = await CustomerServices.listCities()
     dependencies.value = await TicketServices.dependencies()
     chargeForm()
+    
 })
 
 const getNameLogged = () => {

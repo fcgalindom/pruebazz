@@ -110,6 +110,7 @@ onMounted(async () => {
 })
 
 const listCustomers = async () => {
+    console.log("entro")
     customers.value = await CustomerServices.list(filters.value)
 }
 
