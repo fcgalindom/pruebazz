@@ -42,7 +42,7 @@
                 <div class="d-flex justify-content-end">
                     <Button @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
-                <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
+                <Dialog v-model:visible="visible" modal header="Gestionar Boleta" :style="{ width: '80rem' }">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <Label>Número</Label>
@@ -152,14 +152,14 @@
                                        <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
                                     </div>
                                     <div class="col-3">
-                                       <button  data-toggle="modal" :data-target="`#${ticketsmodal}`" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
+                                       <button   @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
                                     </div>
                                    </div>
                                     <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
                                         <TikectFirstPaid :ticketData="i" />
                                     </Modal>
         
-                                    <Modal :id="ticketsmodal" label="Descargar" title="Descarcar Boleta" size="xl">
+                                    <Dialog v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{width : '75rem'}">
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -185,7 +185,7 @@
                                             </tbody>
         
                                         </table>
-                                    </Modal>
+                                    </Dialog>
                                 </div>
                                 <div v-else>
                                     <span>No vendida</span>
@@ -217,7 +217,8 @@ const ticketstatus = ref("")
 const seller = ref({})
 const payments1 = ref([])
 const firstpaymentmodal = ref('firstpayment_modal')
-const ticketsmodal = ref('tickets_modal')
+const ticketsmodal = ref(false)
+const position = ref('topcenter')
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
 const status_select = ref(['Free', 'Paid', 'Booked'])
 const visible = ref(false)
@@ -315,7 +316,7 @@ const saveEntity = async () => {
     } else {
         await TicketServices.createCustomer(ticket.value)
     }
-    document.getElementById('closeModal').click()
+    visible.value = false
     await datatable()
     Swal.fire({
         title: '¡Éxito!',
@@ -345,6 +346,7 @@ const showData = async (id) => {
 }
 const paymentdata = async (payments) => {
     payments1.value = payments
+    ticketsmodal.value = true
 }
 
 
@@ -420,7 +422,7 @@ function showTicketAlert(ticketData) {
 
     // Show the SweetAlert with the component mounted in `html`
     Swal.fire({
-        title: 'Download Ticket',
+        title: 'Descargar Boleta',
         html: wrapper,
         focusConfirm: false,
         showCloseButton: true, // Show the "X" to close
@@ -463,6 +465,3 @@ const sellerRouteId = computed(() => {
 
 </script>
   
-<style src="vue-multiselect/dist/vue-multiselect.css">
-
-</style>

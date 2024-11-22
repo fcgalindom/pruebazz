@@ -26,7 +26,7 @@
             <div class="d-flex justify-content-end">
               <Button @click="limpiarData; visible = true">Registrar</Button>
             </div>
-              <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
+              <Dialog v-model:visible="visible" modal header="Gestionar vendedores" :style="{ width: '80rem' }">
                   <div class="row">
                       <div class="col-md-6">
                           <Label>Nombre</Label>
@@ -125,7 +125,7 @@
       }
       await datatable()
       Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
-      document.getElementById('closeModal').click()
+      visible.value = false
 
   }
   const showData = async(id) => {

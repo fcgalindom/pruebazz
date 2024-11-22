@@ -1,6 +1,7 @@
 @import './carrousel.multiple.css';
 @import './customers.css';
 @import './fonts/fonts.css';
+@import './drawer.css';
 
 @tailwind base;
 @tailwind components;

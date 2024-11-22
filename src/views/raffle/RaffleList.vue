@@ -151,7 +151,7 @@ const saveEntity = async () => {
     } else {
         await RaffleServices.createCustomer(raffle.value)
     }
-    document.getElementById('closeModal').click()
+    visible.value = false
     Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
     raffles.value = await RaffleServices.list()
 }

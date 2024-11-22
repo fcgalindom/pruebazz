@@ -94,7 +94,7 @@ const saveEntity = async () => {
     emit('customerData', customerData)
  
     
-    document.getElementById('closeModal').click()
+    visible.value = false
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',
