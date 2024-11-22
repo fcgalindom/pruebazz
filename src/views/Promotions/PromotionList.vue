@@ -27,7 +27,7 @@
                 <Button @click="limpiarData">Registrar</Button>
         </div>
      
-        <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
+        <Dialog v-model:visible="visible" modal header="Gestionar Promociones" :style="{ width: '80rem' }">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <Label>Nombre</Label>
@@ -145,7 +145,7 @@ const saveEntity = async() => {
     }
     Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
     await datatable()
-    document.getElementById('closeModal').click()
+    visible.value = false
 }
 const deletePromotion = async(id) => {
     const form = {

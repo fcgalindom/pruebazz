@@ -33,7 +33,7 @@
                 </template>
                 <template #end>
                     <button v-ripple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-                        <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" />
+                        <Avatar image="/src/assets/customers/dr_denix_logo.png" class="mr-2" shape="circle" />
                         <span class="inline-flex flex-col items-start">
                             <span class="font-bold">{{ Cookies.get('name') }}</span>
                         </span>
@@ -266,7 +266,7 @@ const saveEntity = async () => {
     emit('customerData', customerData)
  
     
-    document.getElementById('closeModal').click()
+    visible.value = false
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',

@@ -94,7 +94,7 @@ const saveEntity = async () => {
     customer.value.city = customer.value.city.id
 
     await CustomerServices.createCustomer(customer.value)
-    document.getElementById('closeModal').click()
+    visible.value = false
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',

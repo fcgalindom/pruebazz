@@ -1,7 +1,7 @@
 <template>
     <div>
     
-        <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
+        <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <Label>Número</Label>
@@ -293,7 +293,7 @@ const isActive = (button) => {
 const customerEmit = async (customerData) => {
   dependencies.value = await TicketServices.dependencies()
    ticket.value.customer = customerData.customer
-    document.getElementById('closeModal').click()
+    visible.value = false
    document.getElementById('modalTicket').click()
 }
 
@@ -352,7 +352,7 @@ const saveEntity = async () => {
         await TicketServices.createCustomer(ticket.value)
 
     }
-    document.getElementById('closeModal').click()
+    visible.value = false
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',
@@ -401,7 +401,12 @@ const getPromotionsByRaffle = async() => {
             text: `Genial se te aplicará la promoción ${promotion.value[0].name} con un valor de ${promotion.value[0].new_value} por boleta`,
             icon: 'info',
             confirmButtonText: 'Continuar'
-        })
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                visible.value = true
+            }
+        });
         ticket.value.promotion_id = promotion.value[0].id
         ticket.value.value_to_pay = promotion.value[0].new_value
     } else {
@@ -415,7 +420,6 @@ const getPromotionsByRaffle = async() => {
             ticket.value.promotion_id = null
         }
     }
-    visible.value = true
 }
 
 const generateRandomNumbers = () => {

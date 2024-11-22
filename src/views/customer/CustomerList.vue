@@ -33,7 +33,7 @@
             <div class="d-flex justify-content-end mt-3">
                 <Button @click="limpiarData; visible = true">Registrar</Button>
             </div>
-            <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
+            <Dialog v-model:visible="visible" modal header="Gestionar Cliente" :style="{ width: '80rem' }">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <Label>Nombre</Label>
@@ -120,7 +120,7 @@ const saveEntity = async() => {
         await CustomerServices.createCustomer(customer.value)
     }
     await listCustomers()
-    document.getElementById('closeModal').click()
+    visible.value = false
     Swal.fire({
     title: '¡Éxito!',
     text: 'Datos guardados con Éxito.',
