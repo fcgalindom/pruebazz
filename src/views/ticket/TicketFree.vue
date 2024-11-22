@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <Label>Número</Label>
-                    <Input v-model="ticket.number" type="text"></Input>
+                    <Input disabled v-model="ticket.number" type="text"></Input>
                 </div>
                 <div class="col-md-6 mb-3">
                     <Label>Vendedor</Label>
