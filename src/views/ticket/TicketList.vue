@@ -105,8 +105,8 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Número</th>
-                            <th>Rifa</th>
+                            <th>Boleta</th>
+                            <!-- <th>Rifa</th> -->
                             <th>Cliente</th>
                             <th>Documento</th>
                             <th>Teléfono</th>
@@ -116,14 +116,16 @@
                             <th>Estado</th>
                             <th>Abonado</th>
                             <th>Saldo</th>
+                            <th>Facturas</th>
                             <th>Acciones</th>
-                            <th>Cerficado</th>
+                            <th>Certif. Boleta</th>
+                            <th>Whatsapp</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(i, index) in tickets" :key="index" v-bind:class="getLigthTracking(i.customer)">
                             <td>#{{i.number}}</td>
-                            <td>{{i.raffle.name}}</td>
+                            <!-- <td>{{i.raffle.name}}</td> -->
                             <td>{{ i.customer?.name ?? 'N/A' }}</td>
                             <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
                             <td>{{ i.customer?.phone ?? 'N/A' }}</td>
@@ -132,7 +134,12 @@
                             <td v-if="!sellerRouteId">{{i.seller?.name ?? 'Cliente'}}</td>
                             <td>{{ i.status ?? 'No vendida' }}</td>
                             <td>{{ i.value ? Helper.formatNumber(i.value) : 'N/A' }}</td>
-                            <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay) : 'N/A' }}</td>
+                            <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
+                            <td>
+                                <div class="text-center">
+                                    <button @click="paymentdata(i.payments)" class="btn"><i class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
+                                </div>
+                            </td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-between" v-if="i.customer">
                                     <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
@@ -147,11 +154,13 @@
                                 <div v-if="i.customer">
                                     <div class="row">
                                         <div class="col-6">
-                                            <button class="btn text-darkslategrey" data-toggle="modal" @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>
+                                            <button class="btn text-darkslategrey" data-toggle="modal" @click="showTicketAlert(i)">
+                                                <i class="fas fa-download fa-lg"></i>
+                                            </button>
                                         </div>
-                                        <div class="col-6">
+                                        <!-- <div class="col-6">
                                             <button class="btn text-darkslategrey" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <Modal :id="firstpaymentmodal" label="Descargar" title="Descargar Boleta" size="xl">
                                         <TikectFirstPaid :ticketData="i" />
@@ -169,24 +178,26 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-        
                                                 <tr v-for="(f, index) in payments1" :key="index">
         
                                                     <td>{{f.ticket}}</td>
                                                     <td>{{f.amount}}</td>
                                                     <td>{{f.payment_method}}</td>
-                                                    <td>
-                                                        <TicketPaid :ticketData="i" :paymentData="f" /> </td>
-        
+                                                    <td> <TicketPaid :ticketData="i" :paymentData="f" /> </td>
                                                 </tr>
-        
                                             </tbody>
-        
                                         </table>
                                     </Dialog>
                                 </div>
                                 <div v-else>
                                     <span>No vendida</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <button class="btn" @click="notifyCustomer(i.customer?.phone)">
+                                        <i class="text-success fab fa-whatsapp fa-lg"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -421,6 +432,10 @@ function showTicketAlert(ticketData) {
             app.unmount();
         },
     });
+}
+
+const notifyCustomer = (phone) => {
+    window.open(`https://wa.me/57${phone}`, '_blank');
 }
 
 const sellerRouteId = computed(() => {
