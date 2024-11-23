@@ -68,7 +68,7 @@ onMounted(() => {
     ctx.fillText(ticketData.value.raffle.raffle_date, 200, 295);
     ctx.fillText(Helper.formatNumber(paymentData.value[index.value].amount), 720, 235);
     ctx.fillText(ticketData.value.customer.name, 200, 360);
-    ctx.fillText(formatNumber(ticketData.value.value_to_pay), 720, 295);
+    ctx.fillText(formatNumber(ticketData.value.value_to_pay - ticketData.value.value), 720, 295);
     ctx.fillText(ticketData.value.seller.name, 200, 440);
 
     
