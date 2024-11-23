@@ -100,9 +100,7 @@
                     </div>
                 </Dialog>
             </div>
-            <div class="table-responsive">
-                
-                <table class="table table-bordered">
+            <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Boleta</th>
@@ -153,16 +151,18 @@
                             <td>
                                 <div v-if="i.customer">
                                     <div class="row">
-                                        <div class="col-6">
-                                            <button class="btn text-darkslategrey" data-toggle="modal" @click="showTicketAlert(i)">
-                                                <i class="fas fa-download fa-lg"></i>
-                                            </button>
-                                        </div>
-                                        <!-- <div class="col-6">
-                                            <button class="btn text-darkslategrey" @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
-                                        </div> -->
+                                 
+                                      <div v-if="ticketstatus == 'Reservado'" class="col-3">
+                                       <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
                                     </div>
-                                    <Modal :id="firstpaymentmodal" label="Descargar" title="Descargar Boleta" size="xl">
+                                    <div v-if="ticketstatus  == 'Pagado'" class="col-3">
+                                       <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
+                                    </div>
+                                    <div class="col-3">
+                                       <button   @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
+                                    </div>
+                                   </div>
+                                    <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
                                         <TikectFirstPaid :ticketData="i" />
                                     </Modal>
         
@@ -203,7 +203,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
 </template>
@@ -215,6 +214,7 @@ import { useRoute } from 'vue-router';
 import Swal from 'sweetalert2'
 import TicketPaid from "./TicketPaid.vue";
 import TikectFirstPaid from "./TikectFirstPaid.vue";
+import TicketPaidAll from "./TicketPaidAll.vue";
 // @ts-ignore
 import Helper from '@/helpers/Helper';
 import { SellerServices } from "@/services/seller.service";
@@ -222,6 +222,7 @@ import { SellerServices } from "@/services/seller.service";
 const tickets = ref([])
 const full_value = ref(0)
 const ticket = ref({})
+const ticketstatus = ref("")
 const seller = ref({})
 const payments1 = ref([])
 const firstpaymentmodal = ref('firstpayment_modal')
@@ -258,9 +259,15 @@ onMounted(async () => {
     if(sellerRouteId.value) {
         seller.value = await SellerServices.show(sellerRouteId.value)
     }
-
+    const ticketsee = JSON.parse(sessionStorage.getItem('tickets'));
+    if(ticketsee) {
+        tickets.value = ticketsee
+        sessionStorage.removeItem('tickets');
+        
+    }else{
+        await datatable()
+    }
     getTitle()
-    await datatable()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
 })
@@ -268,10 +275,13 @@ onMounted(async () => {
 const getTitle = () => {
     switch (status.value) {
         case 'Pendiente':
+            ticketstatus.value = 'Pendiente'
             return 'Boletas Pendientes'
         case 'Reservado':
+            ticketstatus.value = 'Reservado'
             return 'Boletas con Abono'
         case 'Pagado':
+            ticketstatus.value = 'Pagado'
             return 'Boletas Pagadas'
         default:
             return 'Seguimiento al vendedor ' + seller.value.name
@@ -438,12 +448,33 @@ const notifyCustomer = (phone) => {
     window.open(`https://wa.me/57${phone}`, '_blank');
 }
 
+function showTicketAlertAll(ticketData) {
+  // Creamos un contenedor en el DOM donde renderizaremos el componente
+  const wrapper = document.createElement('div');
+
+  // Creamos una instancia de Vue con nuestro componente
+  const app = createApp(TicketPaidAll, { ticketData });
+
+  // Montamos la instancia en el contenedor creado
+  app.mount(wrapper);
+
+  // Mostramos el SweetAlert con el componente montado en `html`
+  Swal.fire({
+  title: 'Descargar Boleta',
+  html: wrapper,
+  focusConfirm: false,
+  showCloseButton: true, // Muestra la "X" para cerrar
+  showConfirmButton: false, // Oculta el botón de confirmación
+  width: '400px', // Ajusta el tamaño si es necesario
+  didDestroy: () => {
+    // Desmonta el componente cuando se cierre el SweetAlert
+    app.unmount();
+  },
+});
+}
 const sellerRouteId = computed(() => {
   return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
 });
 
 </script>
   
-<style src="vue-multiselect/dist/vue-multiselect.css">
-
-</style>

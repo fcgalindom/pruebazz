@@ -1,45 +1,48 @@
 <template>
-    <Modal id="customer-form" label="Registrar" title="Crear Cliente" size="lg">
         <div class="row">
             <div class="col-md-6 mb-3">
                 <Label>Documento</Label>
                 <Input class="form-control" v-model="customer.document" type="number"   @blur="listCustomers" ></Input>
             </div>
             <div class="col-md-6 mb-3">
+                <Label>Nombre</Label>
                 <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
             </div>
             <div class="col-md-6 mb-3">
+                <Label>Telefono</Label>
                 <Input v-model="customer.phone" :disabled="isDisabled" label="Teléfono"></Input>
             </div>
             <div class="col-md-6 mb-3">
                 <Label>Ciudad</Label>
-                <Select class="form-control" filter optionValue="id" optionLabel="name" ref="multiselect" v-model="customer.city" :disabled="isDisabled" :options="cities" :multiple="false" :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" />
+                <Select  filter optionValue="id" fluid optionLabel="name" ref="multiselect" v-model="customer.city" :disabled="isDisabled" :options="cities" :multiple="false" :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name" track-by="id" @select="myChangeEvent" ></Select>
             </div>
         </div>
         <div class="d-flex justify-content-center my-3">
             <Button @click="saveEntity" >Guardar</Button>
         </div>
-    </Modal>
     
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,defineEmits   } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
-import { defineEmits } from 'vue'
 
 const customer = ref({})
 const cities = ref([])
 const customers = ref([])
 const isDisabled = ref(false)
-const emit = defineEmits(['customEvent'])
+const visible = ref(false)
+
 
 
 onMounted(async () => {
     cities.value = await CustomerServices.listCities()
     chargeForm()
 })
+const emit = defineEmits(['closedialog']);
+
+
 
 
 const chargeForm = () => {
@@ -53,11 +56,10 @@ const chargeForm = () => {
 }
 
 const listCustomers = async () => {
-    customers.value = await CustomerServices.getByDocument(customer.value.document)
+  await CustomerServices.getByDocument(customer.value.document)
   .then(response => {
+
     if( response.length == 0){
-        
- 
         customer.value = {
          document: customer.value.document,
          name: "",
@@ -65,7 +67,6 @@ const listCustomers = async () => {
          city: ""
       }
       isDisabled.value = false
-        
     }else{
         customer.value = {
         name: response[0].name,
@@ -88,13 +89,13 @@ const listCustomers = async () => {
 
 
 const saveEntity = async () => {
-    customer.value.city = customer.value.city.id
+    console.log("see data", customer.value)
+    
 
     const customerData =  await CustomerServices.createCustomer(customer.value)
     emit('customerData', customerData)
- 
-    
-    visible.value = false
+
+    emit('closedialog', false);
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',
