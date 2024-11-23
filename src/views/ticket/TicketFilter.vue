@@ -2,31 +2,31 @@
     <div class="row">
         <div class="col-md-6 mb-3">
             <Label required="0">Cliente</Label>
-            <Select optionLabel="document" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid ></Select>
+            <Select optionLabel="name" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid ></Select>
         </div>
         <div class="col-md-6 mb-3">
-            <Label>Vendedor</Label>
+            <Label required="0">Vendedor</Label>
             <Select v-model="filters.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-6 mb-3">
              <Label required="0">Rifa</Label>
              <Select v-model="filters.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-6 mb-3">
             <Label required="0">Número</Label>
             <Input required="0" v-model="filters.number" />
         </div>
-        <div class="col-3">
+        <div class="col-md-6">
             <Label required="0">Fecha inicial</Label>
             <DatePicker v-model="filters.init_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
          </div>
-        <div class="col-3">
+        <div class="col-md-6">
             <Label required="0">Fecha final</Label>
              <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
         </div>
     </div>
     <div class="d-flex justify-content-center my-3">
-        <Button @click="datatable" >Guardar</Button>
+        <Button @click="datatable" >Buscar</Button>
     </div>
 
 </template>
@@ -49,7 +49,7 @@ const customer = ref({})
 const cities = ref([])
 const customers = ref([])
 const isDisabled = ref(false)
-const emit = defineEmits(['customEvent'])
+const emit = defineEmits(['customEvent', 'closeFilter']);
 const tickets = ref([])
 const full_value = ref(0)
 
@@ -94,21 +94,18 @@ final_date: ""
 
 
 const datatable = async () => {
-
-
-tickets.value = await TicketServices.list(filters.value)
-full_value.value = 0
-tickets.value.forEach(element => {
-    full_value.value += parseInt(element.value)
-});
-sessionStorage.setItem('tickets', JSON.stringify(tickets.value));
-router.push({ name: 'BookedTickets' });
-const currentPath =  window.location.pathname
-if(currentPath == '/tickets/Reservado'){
-    window.location.reload();
-} 
-
-
+    tickets.value = await TicketServices.list(filters.value)
+    full_value.value = 0
+    tickets.value.forEach(element => {
+        full_value.value += parseInt(element.value)
+    });
+    sessionStorage.setItem('tickets', JSON.stringify(tickets.value));
+    emit('closeFilter', false)
+    router.push({ name: 'BookedTickets' });
+    const currentPath =  window.location.pathname
+    if(currentPath == '/tickets/Reservado'){
+        window.location.reload();
+    } 
 }
 
 

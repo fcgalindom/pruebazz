@@ -152,15 +152,19 @@
                                 <div v-if="i.customer">
                                     <div class="row">
                                  
-                                      <div v-if="ticketstatus == 'Reservado'" class="col-3">
-                                       <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
-                                    </div>
-                                    <div v-if="ticketstatus  == 'Pagado'" class="col-3">
-                                       <button class="btn  text-danger"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
-                                    </div>
-                                    <div class="col-3">
+                                      <div v-if="ticketstatus == 'Reservado' || ticketstatus  == 'Pagado'" class="col-3">
+                                       <button class="btn"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
+                                      </div>
+                                      <div class="w-100 text-center" v-else>
+                                        N/A
+                                      </div>
+
+                                    <!-- <div v-if="ticketstatus  == 'Pagado'" class="col-3">
+                                       <button class="btn"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
+                                    </div> -->
+                                    <!-- <div class="col-3">
                                        <button   @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
-                                    </div>
+                                    </div> -->
                                    </div>
                                     <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
                                         <TikectFirstPaid :ticketData="i" />
@@ -170,6 +174,7 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th>Fecha</th>
                                                     <th>Número</th>
                                                     <th>abono</th>
                                                     <th>metodo de pago</th>
@@ -179,9 +184,9 @@
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(f, index) in payments1" :key="index">
-        
+                                                    <td>{{ Helper.formatDateTime(f.created_at) }}</td>
                                                     <td>{{f.ticket}}</td>
-                                                    <td>{{f.amount}}</td>
+                                                    <td>{{Helper.formatNumber(f.amount)}}</td>
                                                     <td>{{f.payment_method}}</td>
                                                     <td> <TicketPaid :ticketData="i" :paymentData="f" /> </td>
                                                 </tr>

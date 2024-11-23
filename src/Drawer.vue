@@ -51,7 +51,7 @@
 
     <!-- Filtro General -->
     <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '50%' }">
-        <TicketFilter/>
+        <TicketFilter @closeFilter="VisibleFilterGeneral = false" />
     </Dialog>
     <!-- <TicketFilter :visibleDialog="true" /> -->
 </template>
