@@ -151,8 +151,11 @@
                             <td>
                                 <div v-if="i.customer">
                                     <div class="row">
-                                      <div v-if="ticketstatus == 'Reservado' || ticketstatus  == 'Pagado'" class="col-3">
+                                      <div v-if="ticketstatus == 'Reservado' " class="col-3">
                                        <button class="btn"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
+                                      </div>
+                                      <div v-if="ticketstatus  == 'Pagado'" class="col-3">
+                                       <button class="btn"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
                                       </div>
                                       <div class="w-100 text-center" v-else>
                                         N/A
