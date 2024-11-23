@@ -135,7 +135,7 @@
                             <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
                             <td>
                                 <div class="text-center">
-                                    <button @click="paymentdata(i.payments)" class="btn"><i class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
+                                    <button @click="paymentdata(i)" class="btn"><i class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
                                 </div>
                             </td>
                             <td class="text-center">
@@ -151,48 +151,18 @@
                             <td>
                                 <div v-if="i.customer">
                                     <div class="row">
-                                 
                                       <div v-if="ticketstatus == 'Reservado' || ticketstatus  == 'Pagado'" class="col-3">
                                        <button class="btn"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
                                       </div>
                                       <div class="w-100 text-center" v-else>
                                         N/A
                                       </div>
-
-                                    <!-- <div v-if="ticketstatus  == 'Pagado'" class="col-3">
-                                       <button class="btn"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
-                                    </div> -->
-                                    <!-- <div class="col-3">
-                                       <button   @click="paymentdata(i.payments)"><i class="fas fa-ticket-alt"></i></button>
-                                    </div> -->
                                    </div>
                                     <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
                                         <TikectFirstPaid :ticketData="i" />
                                     </Modal>
         
-                                    <Dialog v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{width : '75rem'}">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Fecha</th>
-                                                    <th>Número</th>
-                                                    <th>abono</th>
-                                                    <th>metodo de pago</th>
-                                                    <th>Descarga</th>
-        
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="(f, index) in payments1" :key="index">
-                                                    <td>{{ Helper.formatDateTime(f.created_at) }}</td>
-                                                    <td>{{f.ticket}}</td>
-                                                    <td>{{Helper.formatNumber(f.amount)}}</td>
-                                                    <td>{{f.payment_method}}</td>
-                                                    <td> <TicketPaid :ticketData="i" :paymentData="f" /> </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </Dialog>
+
                                 </div>
                                 <div v-else>
                                     <span>No vendida</span>
@@ -207,7 +177,31 @@
                             </td>
                         </tr>
                     </tbody>
+            </table>
+
+            <Dialog v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{width : '75rem'}">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Número</th>
+                            <th>abono</th>
+                            <th>metodo de pago</th>
+                            <th>Descarga</th>
+        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(f, index) in ticket_certif.payments" :key="index">
+                            <td>{{ Helper.formatDateTime(f.created_at) }}</td>
+                            <td># {{ticket_certif.number}}</td>
+                            <td>{{Helper.formatNumber(f.amount)}}</td>
+                            <td>{{f.payment_method}}</td>
+                            <td> <TicketPaid :ticketData="ticket_certif" :paymentData="ticket_certif.payments" :index="index" /> </td>
+                        </tr>
+                    </tbody>
                 </table>
+            </Dialog>
         </div>
     </div>
 </template>
@@ -225,6 +219,7 @@ import Helper from '@/helpers/Helper';
 import { SellerServices } from "@/services/seller.service";
 
 const tickets = ref([])
+const ticket_certif = ref({})
 const full_value = ref(0)
 const ticket = ref({})
 const ticketstatus = ref("")
@@ -358,8 +353,8 @@ const showData = async (id) => {
         }]
     }
 }
-const paymentdata = async (payments) => {
-    payments1.value = payments
+const paymentdata = async (ticket) => {
+    ticket_certif.value = ticket
     ticketsmodal.value = true
 }
 

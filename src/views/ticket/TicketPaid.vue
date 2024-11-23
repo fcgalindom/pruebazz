@@ -20,6 +20,7 @@
 import { ref, onMounted, computed, watch ,toRefs } from "vue";
 import loteriaBoyaca from "@/assets/customers/recibo2.png";
 import { jsPDF } from "jspdf";
+import Helper from '@/helpers/Helper';
 
 const reciboCanvas = ref(null);
 
@@ -32,9 +33,13 @@ const props = defineProps({
 
     type: Array,
     required: true
+  },
+  index: {
+    type: Number,
+    required: true
   }
 });
-const { ticketData  , paymentData} = toRefs(props);
+const { ticketData, paymentData, index} = toRefs(props);
 
 
 
@@ -56,11 +61,14 @@ onMounted(() => {
     ctx.textAlign = "left";
 
     // Ejemplo de texto encima de la imagen en los campos
-    ctx.fillText("#"+ticketData.value.ticket, 810, 130);
+    console.log('ticketData.value',ticketData.value);
+    console.log('paymentData.value',paymentData.value);
+    
+    ctx.fillText("#"+ticketData.value.number, 810, 130);
     ctx.fillText(ticketData.value.raffle.raffle_date, 200, 295);
-    ctx.fillText(formatNumber(paymentData.value.amount), 720, 235);
+    ctx.fillText(Helper.formatNumber(paymentData.value[index.value].amount), 720, 235);
     ctx.fillText(ticketData.value.customer.name, 200, 360);
-    ctx.fillText(formatNumber(ticketData.value.raffle.value_ticket), 720, 295);
+    ctx.fillText(formatNumber(ticketData.value.value_to_pay), 720, 295);
     ctx.fillText(ticketData.value.seller.name, 200, 440);
 
     
