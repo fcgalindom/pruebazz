@@ -49,4 +49,24 @@ export class TicketServices {
         const response = await axios.get(url)
         return response.data;
     }
+
+    static async downloadExcel() {
+        try {
+            const urlAxios = `${enviroments.baseUrl}tickets/generate-excel/`
+            const response = await axios.get(urlAxios, {
+              responseType: 'blob', // Importante para manejar el archivo
+            });
+    
+            // Crear un enlace de descarga
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'report.xlsx'); // Nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+          } catch (error) {
+            console.error('Error descargando el Excel:', error);
+          }
+    }
 }

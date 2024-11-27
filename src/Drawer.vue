@@ -3,10 +3,11 @@
     <Menubar>
         <template #start>
             <Button class="mr-3" icon="pi pi-bars" @click="visible = true"></Button>
-            <span @click="VisibleFilterGeneral = true" class="mr-3" style="cursor: pointer;">Filtro general</span>
-            <span @click="visibleCustomer = true" style="cursor: pointer;">Crear cliente</span>
         </template>
         <template #end>
+            <span @click="VisibleFilterGeneral = true" class="mr-3" style="cursor: pointer;">Filtro general</span>
+            <span class="mr-3" @click="visibleCustomer = true" style="cursor: pointer;">Crear cliente</span>
+            <span @click="logout" style="cursor: pointer;">Logout</span>
             <button v-ripple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
                 <Avatar image="/src/assets/customers/dr_denix_logo.png" class="mr-2" shape="circle" />
                 <span class="inline-flex flex-col items-start">
@@ -217,6 +218,11 @@ const listCustomers = async () => {
    
 }  
 
+const logout = () => {
+
+Cookies.remove('token');
+window.location.href = '/admin';
+}
 
 const saveEntity = async () => {
     customer.value.city = customer.value.city.id
