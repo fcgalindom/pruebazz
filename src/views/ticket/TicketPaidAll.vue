@@ -22,11 +22,11 @@
     
     <script setup>
     import { ref, onMounted, computed, watch , toRefs  } from "vue";
-    import loteriaBoyaca from "@/assets/customers/allpayment.png";
+    import loteriaBoyaca from "@/assets/customers/paymentall.png";
     import drdentix from "@/assets/customers/dr_denix_logo.png";
     import { jsPDF } from "jspdf";
     import Helper from '@/helpers/Helper';
-    const reciboCanvas = ref(null);8
+    const reciboCanvas = ref(null);
     const props = defineProps({
       ticketData: {
         type: Object,
@@ -61,70 +61,63 @@
       ctx.shadowOffsetX = 2; // Desplazamiento en X de la sombra
       ctx.shadowOffsetY = 2; // Desplazamiento en Y de la sombra
         // Añadir texto en la parte superior
-        ctx.font = "bold 18px Arial";
+        ctx.font = "18px Arial";
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
         const startX = 120; // Coordenada X inicial para el texto
-        let currentY = 30; // Coordenada Y inicial para el texto, ajustada para que se vea bien
+        let currentY = 160; // Coordenada Y inicial para el texto, ajustada para que se vea bien
     
            // Posiciones de las columnas
         const col1X = 10; // Primera columna
         const col2X = 250; // Segunda columna
+        
+        ctx.font = "25px Arial";
+         ctx.fillText(ticketData.value.customer.name, col1X + 310, currentY); // Valor de ejemplo
+        ctx.font = "25px Arial";
+         currentY += 55;
+        
+        
     
     
         // Campo: Documento
-        ctx.fillText("Documento:", col1X, currentY);
-        ctx.font = "normal 16px Arial";
-        ctx.fillText(ticketData.value.customer.document, col1X + 120, currentY); // Valor de ejemplo
-        ctx.font = "bold 16px Arial";
-        currentY += 30;
+        ctx.fillText(ticketData.value.customer.document, col1X + 250, currentY); // Valor de ejemplo
+        ctx.font = "25px Arial";
+         currentY += 58;
     
         // Campo: Celular
-        ctx.fillText("Celular:", col1X, currentY);
-        ctx.font = "normal 16px Arial";
-        ctx.fillText(ticketData.value.customer.phone, col1X + 100, currentY); // Valor de ejemplo
-        ctx.font = "bold 16px Arial";
-        currentY += 30;
+        ctx.fillText(ticketData.value.customer.phone, col1X + 200, currentY); // Valor de ejemplo
+         ctx.font = "25px Arial";
+         currentY += 52;
     
         // Campo: Ciudad
-        ctx.fillText("Ciudad:", col1X, currentY);
-        ctx.font = "normal 16px Arial";
-        ctx.fillText(ticketData.value.customer.city.name, col1X + 100, currentY); // Valor de ejemplo
-        ctx.font = "bold 16px Arial";
+        ctx.fillText(ticketData.value.customer.city.name, col1X + 200, currentY); // Valor de ejemplo
+        ctx.font = "25px Arial";
+        currentY += 54;
+
+        //Campo: Seller 
+        ctx.fillText(ticketData.value.seller.name, col1X + 220, currentY); // Valor de ejemplo
     
         // Separador vertical entre columnas
         ctx.strokeStyle = "#ddd";
         ctx.beginPath();
         ctx.moveTo(350, 20);
         // Reiniciar Y para la segunda columna
-        currentY = 40;
+        currentY += 78;
     
         // Campo: Abono
-        ctx.fillText("Abono:", col2X, currentY);
-        ctx.font = "normal 16px Arial";
-        ctx.fillText("Pagado Total Mente", col2X + 80, currentY); // Valor de ejemplo
-        ctx.font = "bold 16px Arial";
-        currentY += 30;
+         ctx.fillText(Helper.formatNumber(ticketData?.value?.payments[0]?.amount  === undefined ? 0 : ticketData?.value?.payments[0]?.amount  ), col2X  - 40, currentY); // Valor de ejemplo
+         ctx.font = "bold 25px Arial";
     
         // Campo: Saldo
-        ctx.fillText("Saldo:", col2X, currentY);
-        ctx.font = "normal 16px Arial";
-        ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay), col2X + 80, currentY); // Valor de ejemplo
+         ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay), col2X + 250, currentY); // Valor de ejemplo
+         currentY += 159;
         //Numero de boleta
         ctx.font = "normal 35px Arial";
-        ctx.fillText( "#"+ticketData.value.number, 270, 1540);
+        ctx.fillText( "#"+ticketData.value.number, 320,currentY);
+         //Numero de boleta
+        ctx.font = "normal 35px Arial";
+        ctx.fillText( "#"+ticketData.value.number, 320, 1648);
        
-        
-    
-    
-        
-    
-        // Cargar y dibujar el logo
-        const logo = new Image();
-        logo.src = drdentix; // Cambia a la ruta de tu logo
-        logo.onload = () => {
-          ctx.drawImage(logo, 500, 0, 170, 100); // Ajusta la posición y tamaño del logo
-        };
       };
     });
     
