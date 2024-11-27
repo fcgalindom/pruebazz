@@ -40,6 +40,7 @@
                     <Button @click="datatable">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
+                    <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
                     <Button @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
                 <Dialog v-model:visible="visible" modal header="Gestionar Boleta" :style="{ width: '80rem' }">
@@ -141,8 +142,10 @@
                             <td class="text-center">
                                 <div class="d-flex justify-content-between" v-if="i.customer">
                                     <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, status)"><i class="fas fa-check"></i></button>
-                                    <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
+                                    <div class="d-flex" v-if="i.status != 'Pagado'">
+                                        <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, status)"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
+                                    </div>
                                 </div>
                                 <div v-else>
                                     <span>No vendida</span>
@@ -449,6 +452,11 @@ function showTicketAlert(ticketData) {
 
 const notifyCustomer = (phone) => {
     window.open(`https://wa.me/57${phone}`, '_blank');
+}
+
+const downloadExcel = () => {
+    console.log('downloadExcel');
+    
 }
 
 function showTicketAlertAll(ticketData) {
