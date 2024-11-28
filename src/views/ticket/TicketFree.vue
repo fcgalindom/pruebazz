@@ -142,11 +142,13 @@
             <div v-if="typeScreen == 'admin'">
                 <Input disabled v-model="ticket.number" class="mb-3" label="Números seleccionados"></Input>
                 <div class="w-100 d-flex justify-content-center">
-                    <Button class="mt-3" @click="getPromotionsByRaffle">Comprar</Button>
+                    <Button class="mt-3" @click="visibleCustomer = true">Comprar</Button>
                 </div>
             </div>
         </div>
-        <CustomerForm @customerData="customerEmit"   />
+        <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
+          <CustomerForm   @customerData = "handleUpdateData"     @closedialog = "visibleCustomer = false" />
+       </Dialog>
     
     </div>
 </template>
@@ -194,7 +196,9 @@ const dependencies = ref({
     raffles: []
 })
 const wompiForm = ref(null);
+const visibleCustomer = ref(false);
 const cifrar = ref("")
+const costumerdata = ref("")
 
 const referencia = ref("");
 const monto = "200000";
@@ -234,6 +238,13 @@ function generarYValidarCodigo(longitud = 16 ) {
             return   codigoAleatorio;
         }
     }
+}
+const handleUpdateData = async (data) => {
+    dependencies.value = await TicketServices.dependencies()
+    ticket.value.customer = data.customer.id
+    console.log("dataver", ticket.value.customer)
+    getPromotionsByRaffle()
+
 }
 generarYValidarCodigo(16);
 
@@ -414,6 +425,7 @@ const getPromotionsByRaffle = async() => {
         ticket.value.value_to_pay = promotion.value[0].new_value
     } else {
         visible.value = true   
+        console.log(ticket.value)
         if(props.typeScreen == 'client') {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
