@@ -127,7 +127,7 @@
             </div>
             <div class="col-12">
                 <div class="w-100 d-flex justify-content-center">
-                    <Button class="mt-3" @click="getPromotionsByRaffle">Comprar</Button>
+                    <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -136,7 +136,7 @@
         </div> -->
 
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
-           <Button class="mt-3" @click="getPromotionsByRaffle; visible = true">Comprar</Button> 
+           <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button> 
 
            <button id="modalTicket"  data-toggle="modal"  :data-target="`#${modal}`" style="display: none;"> prueba2</button>
            <!-- <a  class="mt-3 btn-dark"  data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
@@ -151,9 +151,14 @@
                       {{ button }}
                 </button>
             </div>
-
         </div>
+<<<<<<< HEAD
         <!-- <CustomerForm @customerData="customerEmit"   /> -->
+=======
+        <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
+          <CustomerForm   @customerData = "handleUpdateData"     @closedialog = "visibleCustomer = false" />
+       </Dialog>
+>>>>>>> 2b603bace77e90781828416f3c0b33c180fc474f
     
     </div>
 </template>
@@ -201,7 +206,9 @@ const dependencies = ref({
     raffles: []
 })
 const wompiForm = ref(null);
+const visibleCustomer = ref(false);
 const cifrar = ref("")
+const costumerdata = ref("")
 
 const referencia = ref("");
 const monto = "200000";
@@ -241,6 +248,13 @@ function generarYValidarCodigo(longitud = 16 ) {
             return   codigoAleatorio;
         }
     }
+}
+const handleUpdateData = async (data) => {
+    dependencies.value = await TicketServices.dependencies()
+    ticket.value.customer = data.customer.id
+    console.log("dataver", ticket.value.customer)
+    getPromotionsByRaffle()
+
 }
 generarYValidarCodigo(16);
 
@@ -361,6 +375,7 @@ const saveEntity = async () => {
 
     }
     visible.value = false
+    visibleCustomer.value = false
     Swal.fire({
         title: '¡Éxito!',
         text: 'Datos guardados con Éxito.',
@@ -422,6 +437,7 @@ const getPromotionsByRaffle = async() => {
         ticket.value.value_to_pay = promotion.value[0].new_value
     } else {
         visible.value = true   
+        console.log(ticket.value)
         if(props.typeScreen == 'client') {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {

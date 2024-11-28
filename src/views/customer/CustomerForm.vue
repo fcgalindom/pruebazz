@@ -72,7 +72,7 @@ const listCustomers = async () => {
         name: response[0].name,
         document: response[0].document,
         phone: response[0].phone,
-        city: response[0].city
+        city: response[0].city.id
        
      }
       isDisabled.value = true
@@ -95,13 +95,7 @@ const saveEntity = async () => {
     const customerData =  await CustomerServices.createCustomer(customer.value)
     emit('customerData', customerData)
 
-    emit('closedialog', false);
-    Swal.fire({
-        title: '¡Éxito!',
-        text: 'Datos guardados con Éxito.',
-        icon: 'success',
-        confirmButtonText: 'Continuar'
-    })
+   
    
 }
 </script>

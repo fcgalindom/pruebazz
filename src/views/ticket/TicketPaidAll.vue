@@ -1,6 +1,6 @@
 <template>
 
-    <canvas ref="reciboCanvas" width="1550" height="1350"  style="display: none;" ></canvas>
+    <canvas ref="reciboCanvas" width="1550" height="1350"  ></canvas>
     <div class="container">
        <div class="row">
              <div class="col-2">
@@ -106,22 +106,26 @@
     
         // Campo: Abono
          ctx.fillText(Helper.formatNumber(ticketData?.value?.payments[0]?.amount  === undefined ? 0 : ticketData?.value?.payments[0]?.amount  ), col2X  - 40, currentY); // Valor de ejemplo
-         ctx.font = "bold 25px Arial";
+         ctx.font = "25px Arial";
     
         // Campo: Saldo
          ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay), col2X + 250, currentY); // Valor de ejemplo
          currentY += 159;
         //Numero de boleta
+        ctx.fillStyle = "red";
         ctx.font = "normal 35px Arial";
         ctx.fillText( "#"+ticketData.value.number, 320,currentY);
          //Numero de boleta
+        ctx.fillStyle = "red";
         ctx.font = "normal 35px Arial";
+        
         ctx.fillText( "#"+ticketData.value.number, 320, 1648);
        
       };
     });
     
-    
+    const handleUpdateData = (data) => {
+    }
     const downloadImage = () => {
           const canvas = reciboCanvas.value;
           const imageUrl = canvas.toDataURL("image/png");
