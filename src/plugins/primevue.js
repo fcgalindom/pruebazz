@@ -13,6 +13,7 @@ import Avatar  from 'primevue/avatar';
 import Drawer from 'primevue/drawer';
 import Menu from 'primevue/menu';
 import Menubar from 'primevue/menubar';
+import MultiSelect from 'primevue/multiselect';
 import 'primeicons/primeicons.css'
 import DialogService from 'primevue/dialogservice';
 import DynamicDialog from 'primevue/dynamicdialog';
@@ -45,6 +46,7 @@ export default {
         app.component('InputNumber', InputNumber)
         app.component('Dialog', Dialog)
         app.component('Textarea', Textarea)
+        app.component('MultiSelect', MultiSelect)
      
       }
 }
