@@ -8,22 +8,12 @@
             <Label required="0">Vendedor</Label>
             <Select v-model="filters.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
         </div>
-        <div class="col-md-6 mb-3">
-             <Label required="0">Rifa</Label>
-             <Select v-model="filters.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
-        </div>
+       
         <div class="col-md-6 mb-3">
             <Label required="0">Número</Label>
             <Input required="0" v-model="filters.number" />
         </div>
-        <div class="col-md-6">
-            <Label required="0">Fecha inicial</Label>
-            <DatePicker v-model="filters.init_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
-         </div>
-        <div class="col-md-6">
-            <Label required="0">Fecha final</Label>
-             <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
-        </div>
+       
     </div>
     <div class="d-flex justify-content-center my-3">
         <Button @click="datatable" >Buscar</Button>
