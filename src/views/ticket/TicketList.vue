@@ -143,7 +143,7 @@
                                 <div class="d-flex justify-content-between" v-if="i.customer">
                                     <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
                                     <div class="d-flex" v-if="i.status != 'Pagado'">
-                                        <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, status)"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, i.status)"><i class="fas fa-check"></i></button>
                                         <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                     </div>
                                 </div>

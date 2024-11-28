@@ -152,9 +152,13 @@
                 </button>
             </div>
         </div>
+<<<<<<< HEAD
+        <!-- <CustomerForm @customerData="customerEmit"   /> -->
+=======
         <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
           <CustomerForm   @customerData = "handleUpdateData"     @closedialog = "visibleCustomer = false" />
        </Dialog>
+>>>>>>> 2b603bace77e90781828416f3c0b33c180fc474f
     
     </div>
 </template>
