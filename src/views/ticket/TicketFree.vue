@@ -153,7 +153,7 @@
             </div>
 
         </div>
-        <CustomerForm @customerData="customerEmit"   />
+        <!-- <CustomerForm @customerData="customerEmit"   /> -->
     
     </div>
 </template>
