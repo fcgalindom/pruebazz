@@ -1,6 +1,6 @@
 <template>
 
-     <canvas ref="reciboCanvas" width="1000" height="600"  style="display: none;"  ></canvas>
+     <canvas ref="reciboCanvas" width="1000" height="600" style="display: none;"   ></canvas>
      <div class="container">
    <div class="row">
          <div class="col-4">
@@ -14,7 +14,7 @@
     
 
      
-     
+
 </template>
 <script setup>
 import { ref, onMounted, computed, watch ,toRefs } from "vue";
@@ -23,6 +23,7 @@ import { jsPDF } from "jspdf";
 import Helper from '@/helpers/Helper';
 
 const reciboCanvas = ref(null);
+
 
 const props = defineProps({
   ticketData: {
@@ -41,7 +42,17 @@ const props = defineProps({
 });
 const { ticketData, paymentData, index} = toRefs(props);
 
+console.log("index",index.value);
 
+const   getotalAmount  = () => {
+   let totalAmount = 0;
+   for (let f = 0; f <= index.value; f++ ) {
+         
+       totalAmount += paymentData.value[f].amount;
+   }
+   return totalAmount;
+              
+};
 
 onMounted(() => {
   const canvas = reciboCanvas.value;
@@ -68,7 +79,7 @@ onMounted(() => {
     ctx.fillText(ticketData.value.raffle.raffle_date, 200, 295);
     ctx.fillText(Helper.formatNumber(paymentData.value[index.value].amount), 720, 235);
     ctx.fillText(ticketData.value.customer.name, 200, 360);
-    ctx.fillText(formatNumber(ticketData.value.value_to_pay - ticketData.value.value), 720, 295);
+    ctx.fillText(formatNumber(ticketData.value.value_to_pay - getotalAmount()), 720, 295);
     ctx.fillText(ticketData.value.seller.name, 200, 440);
 
     

@@ -1,6 +1,8 @@
 import TicketList from '@/views/ticket/TicketList.vue'
 import TicketFree from '@/views/ticket/TicketFree.vue'
 import TikectFirstPaid from '@/views/ticket/TikectFirstPaid.vue';
+import chartprincipal from '@/views/charts/chartprincipal.vue';
+
 
 import Cookies from 'js-cookie';
 const ticketsRoutes = [
@@ -63,6 +65,12 @@ const ticketsRoutes = [
 				next('/admin')
 			}
 		}
+	},
+	{
+		path:'/reports/sales',
+		name: 'chartprincipal',
+		component: chartprincipal,
+		
 	}
 ]
 
