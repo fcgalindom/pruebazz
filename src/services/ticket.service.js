@@ -69,4 +69,18 @@ export class TicketServices {
             console.error('Error descargando el Excel:', error);
           }
     }
+    static  getnumberticket(id){
+
+        const url = `${enviroments.baseUrl}tickets/getnumer/${id}/`
+        const response =  axios.get(url)
+        return response.data
+
+    }
+    static  getnumberrafle(id){
+
+        const url = `${enviroments.baseUrl}rafle/getnumber/${id}/`
+        const response =  axios.get(url)
+        return response.data
+
+    }
 }

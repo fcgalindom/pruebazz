@@ -18,6 +18,8 @@ import 'primeicons/primeicons.css'
 import DialogService from 'primevue/dialogservice';
 import DynamicDialog from 'primevue/dynamicdialog';
 import { useDialog } from 'primevue/usedialog';
+import Chart from 'primevue/chart';
+
 
 export default {
     install(app) {
@@ -47,6 +49,7 @@ export default {
         app.component('Dialog', Dialog)
         app.component('Textarea', Textarea)
         app.component('MultiSelect', MultiSelect)
+        app.component('Chart', Chart)
      
       }
 }
