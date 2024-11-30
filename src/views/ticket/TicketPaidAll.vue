@@ -109,12 +109,12 @@
         //Numero de boleta
         ctx.fillStyle = "red";
         ctx.font = "normal 35px Arial";
-        ctx.fillText( "#"+ticketData.value.number, 320,currentY);
+        ctx.fillText( "Nº"+ticketData.value.number, 320,currentY);
          //Numero de boleta
         ctx.fillStyle = "red";
         ctx.font = "normal 35px Arial";
         
-        ctx.fillText( "#"+ticketData.value.number, 320, 1648);
+        ctx.fillText( "Nº"+ticketData.value.number, 320, 1648);
        
       };
     });
