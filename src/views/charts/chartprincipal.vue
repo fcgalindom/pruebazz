@@ -67,7 +67,7 @@ const chartOptions = ref();
 const showData = async () => {
     raffles.value = await RaffleServices.listlast();
     tickets.value = await TicketServices.getnumberticket(raffles.value.id);
-    const tolalTickets = raffles.value.final_number - raffles.value.start_number
+    const tolalTickets = (raffles.value.final_number - raffles.value.start_number) + 1;
     free.value = tolalTickets - tickets.value.data.total;
 }
 
