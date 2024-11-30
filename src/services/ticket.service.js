@@ -70,10 +70,9 @@ export class TicketServices {
           }
     }
     static  getnumberticket(id){
-
         const url = `${enviroments.baseUrl}tickets/getnumer/${id}/`
         const response =  axios.get(url)
-        return response.data
+        return response
 
     }
     static  getnumberrafle(id){
