@@ -108,6 +108,10 @@
                 </div>
             </div>
         </div>
+        <div v-if="typeScreen == 'admin'" class="my-3">
+            <h3>Boletas Disponibles</h3>
+        </div>
+        <hr>
         <div class="row" v-if="typeScreen == 'admin'">
             <!-- <div class="col-md-4">
                 <Label>Rifa</Label>
