@@ -23,7 +23,7 @@
                     <span class="text-primary font-bold">{{ item.label }}</span>
                 </template>
                 <template #item="{ item, props }">
-                    <router-link v-if="item.link" :to="item.link">
+                    <router-link v-if="item.link" :to="item.link" @click="visible = false">
                         <a v-ripple class="flex items-center" v-bind="props.action">
                             <span :class="item.icon" ></span>
                             <span>{{ item.label }}</span>

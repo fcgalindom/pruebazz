@@ -1,6 +1,10 @@
 <template #container="{ closeCallback }">
     <div class="row">
         <div class="col-md-6 mb-3">
+            <Label required="0">Documento</Label>
+            <Input required="0" v-model="filters.document" />
+        </div>
+        <div class="col-md-6 mb-3">
             <Label required="0">Cliente</Label>
             <Select optionLabel="name" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid ></Select>
         </div>
@@ -10,7 +14,7 @@
         </div>
        
         <div class="col-md-6 mb-3">
-            <Label required="0">Número</Label>
+            <Label required="0">Número de Boleta</Label>
             <Input required="0" v-model="filters.number" />
         </div>
        

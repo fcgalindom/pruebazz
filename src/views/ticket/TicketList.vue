@@ -230,12 +230,9 @@ const full_value = ref(0)
 const ticket = ref({})
 const ticketstatus = ref("")
 const seller = ref({})
-const payments1 = ref([])
 const firstpaymentmodal = ref('firstpayment_modal')
 const ticketsmodal = ref(false)
-const position = ref('topcenter')
 const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
-const status_select = ref(['Free', 'Paid', 'Booked'])
 const visible = ref(false)
 const dependencies = ref({
     sellers: [],
@@ -307,6 +304,8 @@ const datatable = async () => {
     full_value.value = 0
     tickets.value.forEach(element => {
         if(element.value) {
+            console.log('element.value ', element.value);
+            
             full_value.value += parseInt(element.value)
         }
     });

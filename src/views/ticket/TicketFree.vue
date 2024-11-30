@@ -329,8 +329,8 @@ const search = async () => {
         //     raffle: filters.value.raffle
         // }
     }
-    filters.value.raffle = 1
-    filterJson.raffle = 1
+    filters.value.raffle = 7
+    filterJson.raffle = 7
     const response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
     raffle.value = response.raffle
     

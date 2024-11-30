@@ -1,5 +1,4 @@
 <template>
-
     <canvas ref="reciboCanvas" width="1550" height="1350"  ></canvas>
     <div class="container">
        <div class="row">
@@ -14,10 +13,6 @@
              </div>
        </div>
     </div>
-    
-    
-    
-    
     </template>
     
     <script setup>
@@ -105,11 +100,11 @@
         currentY += 78;
     
         // Campo: Abono
-         ctx.fillText(Helper.formatNumber(ticketData?.value?.payments[0]?.amount  === undefined ? 0 : ticketData?.value?.payments[0]?.amount  ), col2X  - 40, currentY); // Valor de ejemplo
+         ctx.fillText(Helper.formatNumber(ticketData.value.value), col2X  - 40, currentY); // Valor de ejemplo
          ctx.font = "25px Arial";
     
         // Campo: Saldo
-         ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay), col2X + 250, currentY); // Valor de ejemplo
+         ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay - ticketData.value.value ), col2X + 250, currentY); // Valor de ejemplo
          currentY += 159;
         //Numero de boleta
         ctx.fillStyle = "red";
