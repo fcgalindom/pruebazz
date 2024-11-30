@@ -188,7 +188,7 @@ const raffle = ref({})
 const buttons = ref(Array.from({ length: 10 }, (_, i) => `${i + 1}`));
 const visible = ref(false);
 
-const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
+const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
 const ticket = ref({})
 const filters = ref({
     number: "",

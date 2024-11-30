@@ -5,9 +5,9 @@
             <Button class="mr-3" icon="pi pi-bars" @click="visible = true"></Button>
         </template>
         <template #end>
-            <span @click="VisibleFilterGeneral = true" class="mr-3" style="cursor: pointer;">Filtro general</span>
-            <span class="mr-3" @click="visibleCustomer = true" style="cursor: pointer;">Crear cliente</span>
-            <span @click="logout" style="cursor: pointer;">Logout</span>
+            <Button @click="VisibleFilterGeneral = true" class="mr-3" style="cursor: pointer;">Filtro general</Button>
+            <Button class="mr-3" @click="visibleCustomer = true" style="cursor: pointer;">Crear cliente</Button>
+            <Button @click="logout" style="cursor: pointer;">Logout</Button>
             <button v-ripple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
                 <Avatar image="/src/assets/customers/dr_denix_logo.png" class="mr-2" shape="circle" />
                 <span class="inline-flex flex-col items-start">
