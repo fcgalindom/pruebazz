@@ -131,7 +131,7 @@
             </div>
             <div class="col-12">
                 <div class="w-100 d-flex justify-content-center">
-                    <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button>
+                    <Button class="mt-3" @click="visiblefindcustomer = true;"  >Comprar</Button>
                 </div>
             </div>
         </div>
@@ -159,6 +159,9 @@
         <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
           <CustomerForm   @customerData = "handleUpdateData"     @closedialog = "visibleCustomer = false" />
        </Dialog>
+       <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '50%' }">
+           <CustomerFInd @customerData = "getcutomerevent" />
+       </Dialog>
     
     </div>
 </template>
@@ -170,6 +173,7 @@ import { PromotionServices } from '@/services/promotion.service'
 import { RaffleServices } from '@/services/raffle.service'
 import Swal from 'sweetalert2'
 import CustomerForm from '@views/customer/CustomerForm.vue';
+import CustomerFInd from '../customer/CustomerFInd.vue';
 import Helper from '@/helpers/Helper';
 
 
@@ -209,6 +213,7 @@ const wompiForm = ref(null);
 const visibleCustomer = ref(false);
 const cifrar = ref("")
 const costumerdata = ref("")
+const visiblefindcustomer = ref(false)
 
 const referencia = ref("");
 const monto = "200000";
@@ -230,6 +235,8 @@ async function hashSHA256(message) {
     
     return hashHex;
 }
+
+
 function generarYValidarCodigo(longitud = 16 ) {
     // Definir el conjunto de caracteres que se utilizarán
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'; // Letras, dígitos, guiones y guiones bajos
@@ -253,7 +260,9 @@ const handleUpdateData = async (data) => {
     dependencies.value = await TicketServices.dependencies()
     ticket.value.customer = data.customer.id
     console.log("dataver", ticket.value.customer)
+    visibleCustomer.value = false
     getPromotionsByRaffle()
+    
 
 }
 generarYValidarCodigo(16);
@@ -262,7 +271,16 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
-
+const  getcutomerevent = (data) => {
+   if(data){
+    ticket.value.customer = data.id
+    visiblefindcustomer.value = false
+    getPromotionsByRaffle()
+   }else{
+    visiblefindcustomer.value = false
+    visibleCustomer.value = true
+   }
+}
 onMounted(async () => {
 
     limpiarFormulario()
