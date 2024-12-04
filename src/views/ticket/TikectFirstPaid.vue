@@ -102,7 +102,7 @@ onMounted(() => {
         // Campo: Saldo
         ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay - ticketData.value.value), col2X + 250, currentY); // Valor de ejemplo
         //Numero de boleta
-        ctx.font = "normal 35px Arial";
+        ctx.font = "normal 30px Arial";
         ctx.fillStyle = "red";
         ctx.fillText("Nº" + ticketData.value.number, 300, 1330);
 

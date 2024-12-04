@@ -44,11 +44,10 @@
         </div>
     </Drawer>
 
-
+    <!-- Crear Cliente -->
     <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
         <CustomerForm  @closedialog = "visibleCustomer = false" />
     </Dialog>
-
 
     <!-- Filtro General -->
     <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '50%' }">
@@ -61,6 +60,7 @@
 import { ref, onMounted } from "vue";
 import Cookies from 'js-cookie';
 import CustomerForm from '@views/customer/CustomerForm.vue';
+import CustomerFInd from "./views/customer/CustomerFInd.vue";
 import TicketFilter from '@views/ticket/TicketFilter.vue';
 import { CustomerServices } from '@/services/customer.service'
 import { TicketServices } from '@/services/ticket.service'

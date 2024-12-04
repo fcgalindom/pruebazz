@@ -70,7 +70,7 @@ onMounted(() => {
         console.log('ticketData.value', ticketData.value);
         console.log('paymentData.value', paymentData.value);
 
-        ctx.fillText("#" + ticketData.value.number, 810, 130);
+        ctx.fillText("Nº" + ticketData.value.number, 810, 130);
         ctx.fillText(ticketData.value.raffle.raffle_date, 200, 295);
         ctx.fillText(Helper.formatNumber(paymentData.value[index.value].amount), 720, 235);
         ctx.fillText(ticketData.value.customer.name, 200, 360);
