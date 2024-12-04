@@ -60,8 +60,9 @@
         <div class="table-responsive">
             <table class="table table-bordered table-raffles">
             <thead>
-                <tr>
+                <tr>                  
                 <th>Nombre</th>
+
                 <th>Numero de Boletas</th>
                 <th>Valor nuevo</th>
                 <th>Fecha de Fin</th>

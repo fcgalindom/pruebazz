@@ -31,4 +31,9 @@ export class SellerServices {
         const response = await axios.get(url, {params: filters})
         return response.data
     }
+    static async getsellerofice() {
+        const url = `${enviroments.baseUrl}sellers/ofice/`
+        const response = await axios.get(url)
+        return response.data
+    }
 }

@@ -175,6 +175,7 @@ import Swal from 'sweetalert2'
 import CustomerForm from '@views/customer/CustomerForm.vue';
 import CustomerFInd from '../customer/CustomerFInd.vue';
 import Helper from '@/helpers/Helper';
+import { SellerServices } from '@/services/seller.service';
 
 
 const props = defineProps({
@@ -286,6 +287,10 @@ onMounted(async () => {
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
+    const selleridofice =  await SellerServices.getsellerofice()
+
+    ticket.value.seller = selleridofice[0].id
+    
     //referencia.value = await TicketServices.getTiketsRefferece()
    
    
