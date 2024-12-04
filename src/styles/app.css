@@ -82,6 +82,16 @@ hr {
 .p-datepicker-panel {
     z-index: 9999 !important;
 }
+
+.p-multiselect-label .p-chip {
+    background-color: #02afef !important;
+    color: white !important;
+}
+
+.p-multiselect-label .p-chip svg {
+    color: orangered !important;
+}
+
 /* .personali {
     background-color: white !important;
 } */
