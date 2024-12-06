@@ -85,21 +85,37 @@ seller: "",
 init_date: "",
 final_date: ""
 })
-
+const filtersticket = ref({})
+const getvalidate = ref(false)
 
 const datatable = async () => {
     tickets.value = await TicketServices.list(filters.value)
+    filtersticket.value = {number: filters.value.number , raffle : 1}
+    console.log('filtersticket', filtersticket.value)
+    
+    getvalidate.value = await TicketServices.getticketbyraffle(filtersticket.value)
+
+    console.log('getvalidate', filters.value.number)
+
     full_value.value = 0
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
     });
-    sessionStorage.setItem('tickets', JSON.stringify(tickets.value));
+    
     emit('closeFilter', false)
-    router.push({ name: 'BookedTickets' });
+    if(getvalidate.value.exists){
+        router.push({ name: 'BookedTickets' });
+
+    }else{
+        sessionStorage.setItem('ticket',filters.value.number);
+        router.push({ name: 'TicketFree' });
+        
+    }
+     /*router.push({ name: 'BookedTickets' });
     const currentPath =  window.location.pathname
     if(currentPath == '/tickets/Reservado'){
         window.location.reload();
-    } 
+    } */
 }
 
 

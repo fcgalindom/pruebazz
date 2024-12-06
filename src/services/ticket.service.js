@@ -82,4 +82,9 @@ export class TicketServices {
         return response.data
 
     }
+    static async getticketbyraffle(raffle) {
+        const url = `${enviroments.baseUrl}tickets/getTicketsByrafflenumber/`
+        const response = await axios.post(url, raffle)
+        return response.data;
+    }
 }
