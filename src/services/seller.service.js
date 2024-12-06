@@ -36,4 +36,9 @@ export class SellerServices {
         const response = await axios.get(url)
         return response.data
     }
+    static async updateSellerStatus(id,status) {
+        const url =  `${enviroments.baseUrl}sellers/update-status/${id}/`;
+        const response = await axios.put(url, status)
+        return response.data;
+    }
 }

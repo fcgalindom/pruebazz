@@ -19,6 +19,7 @@ import DialogService from 'primevue/dialogservice';
 import DynamicDialog from 'primevue/dynamicdialog';
 import { useDialog } from 'primevue/usedialog';
 import Chart from 'primevue/chart';
+import ToggleSwitch from 'primevue/toggleswitch';
 
 
 export default {
@@ -50,6 +51,7 @@ export default {
         app.component('Textarea', Textarea)
         app.component('MultiSelect', MultiSelect)
         app.component('Chart', Chart)
+        app.component('ToggleSwitch', ToggleSwitch)
      
       }
 }
