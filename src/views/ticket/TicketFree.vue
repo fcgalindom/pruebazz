@@ -175,6 +175,7 @@ import Swal from 'sweetalert2'
 import CustomerForm from '@views/customer/CustomerForm.vue';
 import CustomerFInd from '../customer/CustomerFInd.vue';
 import Helper from '@/helpers/Helper';
+import { SellerServices } from '@/services/seller.service';
 
 
 const props = defineProps({
@@ -259,7 +260,6 @@ function generarYValidarCodigo(longitud = 16 ) {
 const handleUpdateData = async (data) => {
     dependencies.value = await TicketServices.dependencies()
     ticket.value.customer = data.customer.id
-    console.log("dataver", ticket.value.customer)
     visibleCustomer.value = false
     getPromotionsByRaffle()
     
@@ -272,6 +272,7 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const  getcutomerevent = (data) => {
+   console.log("numbre", ticket.value.number)
    if(data){
     ticket.value.customer = data.id
     visiblefindcustomer.value = false
@@ -286,6 +287,11 @@ onMounted(async () => {
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
+    const selleridofice =  await SellerServices.getsellerofice()
+
+    ticket.value.seller = selleridofice[0].id
+    ticket.value.number.push("0001")
+    
     //referencia.value = await TicketServices.getTiketsRefferece()
    
    
@@ -355,9 +361,10 @@ const search = async () => {
     filterJson.raffle = 1
     const response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
     raffle.value = response.raffle
-    
+
 
     if (filters.value.number) {
+       
         if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
             buttons.value = [filters.value.number]
         } else {

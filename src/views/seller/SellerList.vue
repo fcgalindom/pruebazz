@@ -58,6 +58,7 @@
                   <th style="width: 20%;">Documento</th>
                   <th style="width: 30%;">Correo</th>
                   <th>Acciones</th>
+                  <th>Habilitar</th>
               </tr>
             </thead>
             <tbody>
@@ -67,9 +68,14 @@
                 <td>{{item.user.email}}</td>
                 <td>
                   <div class="d-flex justify-content-center">
-                    <button class="btn text-darkslategrey" @click="showData(item.id); visible = true"><i class="fas fa-edit"></i></button>
-                    <router-link :to="`sellers-tracking/${item.id}/`"> <Button class="btn btn-info mr-3"> Seguimiento </Button> </router-link>
-                    <router-link :to="`sellers-tickets/${item.id}/`"> <Button class="btn btn-info"> Asignar </Button> </router-link>
+                    <Button    :disabled="item.state === 0"  class="btn text-darkslategrey" @click="showData(item.id); visible = true" variant="text" ><i class="fas fa-edit"></i></Button>
+                    <router-link  :to="`sellers-tracking/${item.id}/`"> <Button  :disabled="item.state === 0" class="btn btn-info mr-3"> Seguimiento </Button> </router-link>
+                    <router-link   :to="`sellers-tickets/${item.id}/`"> <Button  :disabled="item.state === 0"  class="btn btn-info"> Asignar </Button> </router-link>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex justify-content-center">
+                    <ToggleSwitch   :modelValue="item.state === 1" @update:modelValue="toggleState($event, item)"/>
                   </div>
                 </td>
             </tr>
@@ -85,6 +91,8 @@
   import { SellerServices } from "@/services/seller.service";
   import Swal from 'sweetalert2'
   import Helper from '@/helpers/Helper';
+
+  const checked = ref(true);
   
   const sellers = ref([])
   const modal = ref('seller_list')
@@ -101,6 +109,7 @@
             email: "",
             password: ""
         }})
+  const usersatus = ref({"status": 0})
   
   onMounted(async () => {
       await datatable()
@@ -109,7 +118,17 @@
   const datatable = async () => {
     sellers.value = await SellerServices.list(filters.value)
   }
-  
+  const changeState = async(id, status) => {
+    console.log("sser",id, status)
+    if (status === 1) {
+      status = 0
+    } else {
+      status = 1
+    }
+    usersatus.value.status = status
+    await SellerServices.updateSellerStatus(id, usersatus.value)
+    await datatable()
+  }
   const saveEntity = async() => {
       const formupdate = {
         name: seller.value.name,
@@ -144,6 +163,10 @@
         }
     }
   }
+  function toggleState(newValue, item) {
+    changeState(item.id, item.state)
+    item.state = newValue ? 1 : 0;
+   }
 
   
   </script>
