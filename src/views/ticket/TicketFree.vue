@@ -47,7 +47,7 @@
                                 <DatePicker v-model="i.expiration_date" showIcon fluid  dateFormat="yy-mm-dd" :manualInput="false" @date-select="i.expiration_date = Helper.formatDateForm($event)" />
                             </div>
                             <div class="col-2">
-                                <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
+                                <button class="btn btn-danger mt-4" @click="remove_payment(index)">X</button>
                             </div>
                         </div>
                     </div>
@@ -384,19 +384,22 @@ const saveEntity = async () => {
         value = 0
     }
     ticket.value.value = value
-
+    let message = ''
     if (ticket.value.id) {
         await TicketServices.updateCustomer(ticket.value, ticket.value.id)
+        message = 'Datos guardados con Éxito.'
     } else {
-        
-        await TicketServices.createCustomer(ticket.value)
-
+        const response = await TicketServices.createCustomer(ticket.value)
+        if(response.duplicated.length > 0)
+            message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
+        else 
+            message = `Tickets creados con éxito. ${response.success}`
     }
     visible.value = false
     visibleCustomer.value = false
     Swal.fire({
         title: '¡Éxito!',
-        text: 'Datos guardados con Éxito.',
+        text: message,
         icon: 'success',
         confirmButtonText: 'Continuar'
     })
