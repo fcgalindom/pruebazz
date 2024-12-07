@@ -1,17 +1,11 @@
 <template #container="{ closeCallback }">
     <div class="row">
-        <div class="col-md-6 mb-3">
-            <Label required="0">Documento</Label>
-            <Input required="0" v-model="filters.document" />
-        </div>
+        
         <div class="col-md-6 mb-3">
             <Label required="0">Cliente</Label>
             <Select optionLabel="name" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid ></Select>
         </div>
-        <div class="col-md-6 mb-3">
-            <Label required="0">Vendedor</Label>
-            <Select v-model="filters.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
-        </div>
+   
        
         <div class="col-md-6 mb-3">
             <Label required="0">Número de Boleta</Label>
@@ -108,7 +102,13 @@ const datatable = async () => {
 
     }else{
         sessionStorage.setItem('ticket',filters.value.number);
+
+        const currentPath =  window.location.pathname
+        if(currentPath == '/tickets/Libre'){
+           window.location.reload();
+        } 
         router.push({ name: 'TicketFree' });
+        
         
     }
      /*router.push({ name: 'BookedTickets' });

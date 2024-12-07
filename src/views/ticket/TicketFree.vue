@@ -294,7 +294,7 @@ onMounted(async () => {
     const ticketsee = sessionStorage.getItem('ticket');
     console.log("ticketsee", ticketsee)
     if(ticketsee) {
-        ticket.value.number.push("0005")
+        ticket.value.number.push(ticketsee)
         sessionStorage.removeItem('ticket');
         
     }
