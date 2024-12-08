@@ -25,13 +25,18 @@
                     <button class="btn btn-danger" @click="deleteRange(position)">X</button>
                 </div>
                 <div class="container-fluid">
-                    <div class="col-md-4">
-                        <Label>Rifa</Label>
-                        <Select2 ref="multiselect" v-model="item.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" 
-                        @select="search(item)" />
-                    </div>
-                    <div>
-                        <Input disabled v-model="range_tickets[position].numbers" class="mb-3" label="Números seleccionados"></Input>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <Label>Rifa</Label>
+                            <Select2 ref="multiselect" v-model="item.raffle" :options="dependencies.raffles" :multiple="false" :clear-on-select="true" :preserve-search="true" label="name" placeholder="Selecciona" track-by="id" 
+                            @select="search(item)" />
+                        </div>
+                        <div class="col-md-8">
+                            <Label required="0">Números seleccionados</Label>
+                            <MultiSelect v-model="range_tickets[position].numbers" display="chip" :options="range_tickets[position].numbers" filter fluid
+                                :maxSelectedLabels="15" class="w-full md:w-80"  @change="deleteTicket($event, position)" />
+                            <!-- <Input disabled v-model="range_tickets[position].numbers" class="mb-3" label="Números seleccionados"></Input> -->
+                        </div>
                     </div>
                 </div>
                 <div class="container-fluid d-flex justify-content-between mt-3 pb-5" v-if="showKeyboard">
@@ -123,7 +128,15 @@ const search = async (item) => {
   
 }
 
-
+const deleteTicket = (ticketEvent, position) => {
+    console.log('ticket', ticketEvent);
+    activeButtons.value = new Set()
+    // console.log('range_tickets.value[position].numbers', range_tickets.value[position].numbers);
+    
+    range_tickets.value[position].numbers.forEach(element => {
+        activeButtons.value.add(element);
+    });
+}
 
 const saveEntity = async () => {
     const form = range_tickets.value.map(item => {
