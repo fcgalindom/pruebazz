@@ -289,7 +289,7 @@ onMounted(async () => {
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
-    // const selleridofice =  await SellerServices.getsellerofice()
+    const selleridofice =  await SellerServices.getsellerofice()
 
     ticket.value.seller = selleridofice[0].id
 
