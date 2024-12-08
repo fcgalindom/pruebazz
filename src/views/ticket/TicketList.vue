@@ -259,6 +259,17 @@ const status = computed(() => {
 })
 
 onMounted(async () => {
+   
+    filters.value.raffle = 1
+    const ticketsee = sessionStorage.getItem('ticket');
+    if(ticketsee ) {
+        filters.value.number =  ticketsee
+        datatable()
+        sessionStorage.removeItem('ticket');
+         
+    }
+    
+    
     if(sellerRouteId.value) {
         seller.value = await SellerServices.show(sellerRouteId.value)
     }

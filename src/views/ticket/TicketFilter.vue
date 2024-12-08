@@ -27,6 +27,7 @@ import Swal from 'sweetalert2'
 import { TicketServices } from "@/services/ticket.service";
 import { inject } from "vue";
 import { Button } from 'primevue';
+import { get } from 'jquery';
 const dialogRef = inject('dialogRef');
 const closeDialog = () => {
 dialogRef.value.close();
@@ -80,7 +81,10 @@ init_date: "",
 final_date: ""
 })
 const filtersticket = ref({})
-const getvalidate = ref(false)
+const getvalidate = ref({
+    exists: false,
+    seller: 0
+})
 
 const datatable = async () => {
     tickets.value = await TicketServices.list(filters.value)
@@ -89,21 +93,31 @@ const datatable = async () => {
     
     getvalidate.value = await TicketServices.getticketbyraffle(filtersticket.value)
 
-    console.log('getvalidate', filters.value.number)
+    console.log('getvalidate', getvalidate.value)
 
     full_value.value = 0
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
     });
-    
+    const currentPath =  window.location.pathname
     emit('closeFilter', false)
     if(getvalidate.value.exists){
-        router.push({ name: 'BookedTickets' });
+
+        console.log('seller_id',getvalidate.value.seller)
+        sessionStorage.setItem('ticket',filters.value.number);
+        sessionStorage.setItem('seller_id',getvalidate.value.seller);
+        console.log('currentPath',currentPath)
+        if (currentPath == `/sellers-tracking/${getvalidate.value.seller}/`) {
+            window.location.reload();
+        }
+        router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }});
+        
+        
 
     }else{
         sessionStorage.setItem('ticket',filters.value.number);
 
-        const currentPath =  window.location.pathname
+        
         if(currentPath == '/tickets/Libre'){
            window.location.reload();
         } 
