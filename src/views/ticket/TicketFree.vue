@@ -291,12 +291,19 @@ onMounted(async () => {
     dependencies.value = await TicketServices.dependencies()
     // const selleridofice =  await SellerServices.getsellerofice()
 
-    // ticket.value.seller = selleridofice[0].id
-    ticket.value.seller = Cookies.get('seller_id')
-    ticket.value.number.push("0001")
+    ticket.value.seller = selleridofice[0].id
+
+    const ticketsee = sessionStorage.getItem('ticket');
+    console.log("ticketsee", ticketsee)
+    if(ticketsee) {
+        ticket.value.number.push(ticketsee)
+        sessionStorage.removeItem('ticket');
+        
+    }
+    
     
     //referencia.value = await TicketServices.getTiketsRefferece()
-   
+      
     const script = document.createElement('script');
      script.src = 'https://checkout.wompi.co/widget.js';
      script.setAttribute('data-render', 'button');
