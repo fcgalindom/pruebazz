@@ -117,11 +117,11 @@
                 <Label>Rifa</Label>
                 <Select v-model="filters.raffle" :options="dependencies.raffles" @change="search" filter optionLabel="name" optionValue="id" fluid></Select>
             </div> -->
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <Label required="0">Filtrar Número</Label>
                 <Input v-model="filters.number" required="0"></Input>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div v-if="typeScreen == 'admin'">
                 <Label>Número seleccionados</Label>
                 <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid
@@ -170,13 +170,14 @@
 import { ref, onMounted, computed, defineProps } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
-import { RaffleServices } from '@/services/raffle.service'
+// import { RaffleServices } from '@/services/raffle.service'
+import { SellerTicketsServices } from "@/services/seller_tickets.service";
 import Swal from 'sweetalert2'
 import CustomerForm from '@views/customer/CustomerForm.vue';
 import CustomerFInd from '../customer/CustomerFInd.vue';
 import Helper from '@/helpers/Helper';
 import { SellerServices } from '@/services/seller.service';
-
+import Cookies from 'js-cookie';
 
 const props = defineProps({
     typeScreen: {
@@ -193,6 +194,7 @@ const props = defineProps({
 const modal = ref('ticket_modal')
 const modalwompi = ref('wompi-modal')
 const raffle = ref({})
+const range_tickets = ref([])
 
 const buttons = ref(Array.from({ length: 10 }, (_, i) => `${i + 1}`));
 const visible = ref(false);
@@ -287,17 +289,14 @@ onMounted(async () => {
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
-    const selleridofice =  await SellerServices.getsellerofice()
+    // const selleridofice =  await SellerServices.getsellerofice()
 
-    ticket.value.seller = selleridofice[0].id
+    // ticket.value.seller = selleridofice[0].id
+    ticket.value.seller = Cookies.get('seller_id')
     ticket.value.number.push("0001")
     
     //referencia.value = await TicketServices.getTiketsRefferece()
    
-   
-
- 
-    
     const script = document.createElement('script');
      script.src = 'https://checkout.wompi.co/widget.js';
      script.setAttribute('data-render', 'button');
@@ -328,7 +327,7 @@ onMounted(async () => {
       // Error en el pago
     }
   }
-});
+    });
 })
 
 const isActive = (button) => {
@@ -372,6 +371,11 @@ const search = async () => {
         }
     } else {
         buttons.value = [];
+
+        // if(Cookies.get('seller_id')){
+        //     getRangeForClients()
+        // }else {
+        // }
         for (let index = response.raffle.start_number; index <= response.raffle.final_number; index++) {
             if (!response.tickets.some(ticket => ticket.number == index)) {
                 let formattedNumber = index.toString().padStart(4, '0');
@@ -380,6 +384,16 @@ const search = async () => {
         }
     }
 }
+
+const getRangeForClients = async () => {
+    range_tickets.value = await SellerTicketsServices.show(Cookies.get('seller_id'));
+    console.log('range_tickets.value ==> ', range_tickets.value[0].numbers);
+    
+    range_tickets.value[0].numbers.forEach((index) => {
+        let formattedNumber = index.toString().padStart(4, '0');
+        buttons.value.push(formattedNumber);
+    });
+};
 
 const saveEntity = async () => {
     
@@ -449,7 +463,6 @@ const getPromotionsByRaffle = async() => {
     
     
     if(promotion.value[0]?.number_of_tickets <= ticket.value.number.length){
-        console.log("filipe")
         Swal.fire({
             title: '¡Felicitaciones!',
             text: `Genial se te aplicará la promoción ${promotion.value[0].name} con un valor de ${promotion.value[0].new_value} por boleta`,
@@ -465,7 +478,7 @@ const getPromotionsByRaffle = async() => {
         ticket.value.value_to_pay = promotion.value[0].new_value
     } else {
         visible.value = true   
-        console.log(ticket.value)
+
         if(props.typeScreen == 'client') {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
@@ -504,9 +517,6 @@ const generateRandomNumbers = () => {
 
   ticket.value.number = randomNumbers;
 };
-// watch(ticket, (newTicket) => {
-//   ticketNumbers.value = newTicket.number.join(", ");
-// }, { deep: true });
 
 const limpiarFormulario = () => {
     ticket.value = {

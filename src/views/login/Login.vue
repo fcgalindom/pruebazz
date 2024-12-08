@@ -57,6 +57,11 @@
                 sameSite: 'Strict',  // Para prevenir ataques CSRF
                 expires: 1       // Duración de 7 días
             });
+              Cookies.set('seller_id', response.seller[0].id, {
+                vsecure: true,    // Solo se enviará a través de HTTPS
+                sameSite: 'Strict',  // Para prevenir ataques CSRF
+                expires: 1       // Duración de 7 días
+            });
             }
             
 
