@@ -131,7 +131,7 @@
             </div>
             <div class="col-12">
                 <div class="w-100 d-flex justify-content-center">
-                    <Button class="mt-3" @click="visiblefindcustomer = true;"  >Comprar</Button>
+                    <Button class="mt-3" :disabled="ticket.number.length == 0" @click="visiblefindcustomer = true;"  >Comprar</Button>
                 </div>
             </div>
         </div>
@@ -200,7 +200,7 @@ const buttons = ref(Array.from({ length: 10 }, (_, i) => `${i + 1}`));
 const visible = ref(false);
 
 const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
-const ticket = ref({})
+const ticket = ref({number: []})
 const filters = ref({
     number: "",
     raffle: ""
@@ -289,7 +289,7 @@ onMounted(async () => {
     limpiarFormulario()
     search()
     dependencies.value = await TicketServices.dependencies()
-    // const selleridofice =  await SellerServices.getsellerofice()
+    const selleridofice =  await SellerServices.getsellerofice()
 
     ticket.value.seller = selleridofice[0].id
 
@@ -393,7 +393,7 @@ const search = async () => {
 }
 
 const getRangeForClients = async () => {
-    range_tickets.value = await SellerTicketsServices.show(Cookies.get('seller_id'));
+    range_tickets.value = await SellerTicketsServices.show(Cookies.get('seller_id'), false);
     console.log('range_tickets.value ==> ', range_tickets.value[0].numbers);
     
     range_tickets.value[0].numbers.forEach((index) => {
