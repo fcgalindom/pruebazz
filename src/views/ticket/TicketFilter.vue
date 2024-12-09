@@ -121,7 +121,7 @@ const datatable = async () => {
     }
     else if(filters.value.customer){
         sessionStorage.setItem('customer_id',filters.value.customer);
-        if (currentPath == `/tickets/Pendiente/`) {
+        if (currentPath == `/tickets/Pendiente`) {
             window.location.reload();
         }
         router.push({ name: 'PendingTickets'})
