@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"  style="display: none; "></canvas>
+    <canvas ref="reciboCanvas"  ></canvas>
     
     <div class="container">
         <div class="row">
@@ -94,17 +94,18 @@ onMounted(() => {
         ctx.moveTo(350, 20);
         // Reiniciar Y para la segunda columna
         currentY += 107;
+        ctx.font = "bold 35px Arial";
 
         // Campo: Abono
         ctx.fillText(Helper.formatNumber(ticketData.value.value), col2X - 70, currentY); // Valor de ejemplo
-        ctx.font = "35px Arial";
+        ctx.font = "bold 35px Arial";
 
         // Campo: Saldo
         ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay - ticketData.value.value), col2X + 520, currentY); // Valor de ejemplo
         //Numero de boleta
-        ctx.font = "35px Arial";
+        ctx.font = "60px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("Nº" + ticketData.value.number, 420, 2140);
+        ctx.fillText("Nº " + ticketData.value.number, 370, 2150);
 
     };
 });
