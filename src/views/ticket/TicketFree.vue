@@ -157,7 +157,7 @@
             </div>
         </div>
         <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
-          <CustomerForm   @customerData = "handleUpdateData"     @closedialog = "visibleCustomer = false" />
+          <CustomerForm   @customerData = "handleUpdateData"  :datadocument = "documentcustomer"   @closedialog = "visibleCustomer = false" />
        </Dialog>
        <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '50%' }">
            <CustomerFInd @customerData = "getcutomerevent" />
@@ -179,6 +179,8 @@ import Helper from '@/helpers/Helper';
 import { SellerServices } from '@/services/seller.service';
 import Cookies from 'js-cookie';
 
+
+
 const props = defineProps({
     typeScreen: {
         type: String,
@@ -190,7 +192,7 @@ const props = defineProps({
     }
 })
 // const emits = defineEmits(['update:modelValue', 'update:error', 'update:type', 'update:disabled', 'update:placeholder', 'update:id', 'update:label', 'update:required']);
-
+const documentcustomer = ref("")
 const modal = ref('ticket_modal')
 const modalwompi = ref('wompi-modal')
 const raffle = ref({})
@@ -274,14 +276,15 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const  getcutomerevent = (data) => {
-   console.log("numbre", ticket.value.number)
-   if(data){
-    ticket.value.customer = data.id
+   console.log("seedata", data)
+   if(data.validate){
+    ticket.value.customer = data.customer.id
     visiblefindcustomer.value = false
     getPromotionsByRaffle()
    }else{
     visiblefindcustomer.value = false
     visibleCustomer.value = true
+    documentcustomer.value = data.customer.document
    }
 }
 onMounted(async () => {

@@ -21,11 +21,16 @@ import { CustomerServices } from '@/services/customer.service'
 
 const customer = ref({})
 const emit = defineEmits(['customerData']);
+const datacustomer = ref ({
+         customer :{},
+         validate : false
+      
+})
 
 const listCustomers = async () => {
  console.log("entrof")
   await CustomerServices.getByDocument(customer.value.document)
-  .then(response => {﻿
+  .then(response => {
      
     if( response.length == 0){
         customer.value = {
@@ -34,8 +39,11 @@ const listCustomers = async () => {
          phone: "",
          city: ""
       }
-      emit('customerData', null)
+      datacustomer.value.customer = customer.value
+      datacustomer.value.validate = false
+      emit('customerData', datacustomer.value)
     }else{
+       
         customer.value = {
         name: response[0].name,
         document: response[0].document,
@@ -44,7 +52,9 @@ const listCustomers = async () => {
 
        
      }
-     emit('customerData', response[0])
+     datacustomer.value.customer = response[0]
+     datacustomer.value.validate = true
+     emit('customerData', datacustomer.value)
     }
   })
   .catch(error => {
