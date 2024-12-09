@@ -273,7 +273,7 @@ onMounted(async () => {
         filters.value.number = ""
         filters.value.customer = ""
     }
-    else if(ticketsee ) {
+    else if(ticketsee) {
         filters.value.number =  ticketsee
         datatable()
         sessionStorage.removeItem('ticket');
