@@ -108,13 +108,13 @@
          currentY += 159;
         //Numero de boleta
         ctx.fillStyle = "red";
-        ctx.font = "normal 35px Arial";
-        ctx.fillText( "Nº"+ticketData.value.number, 320,currentY);
+        ctx.font = "normal 30px Arial";
+        ctx.fillText( "Nº"+ticketData.value.number, 300,currentY);
          //Numero de boleta
         ctx.fillStyle = "red";
-        ctx.font = "normal 35px Arial";
+        ctx.font = "normal 30px Arial";
         
-        ctx.fillText( "Nº"+ticketData.value.number, 320, 1648);
+        ctx.fillText( "Nº"+ticketData.value.number, 300, 1648);
        
       };
     });
@@ -123,10 +123,10 @@
     }
     const downloadImage = () => {
           const canvas = reciboCanvas.value;
-          const imageUrl = canvas.toDataURL("image/png");
+          const imageUrl = canvas.toDataURL("image/jpg");
           const downloadLink = document.createElement("a");
           downloadLink.href = imageUrl;
-          downloadLink.download = "recibo.png";
+          downloadLink.download = "recibo.jpg";
           downloadLink.click();
         }; 
     const downloadPDF = () => {
