@@ -114,6 +114,11 @@ const datatable = async () => {
         if (currentPath == `/sellers-tracking/${getvalidate.value.seller}/`) {
             window.location.reload();
         }
+        if (currentPath == `/tickets/Pendiente`) {
+            router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }}).then(() => {
+                window.location.reload(); // Forzar recarga
+            });
+        }
         router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }})
         
         
