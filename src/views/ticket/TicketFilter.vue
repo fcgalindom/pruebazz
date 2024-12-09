@@ -101,27 +101,39 @@ const datatable = async () => {
     });
     const currentPath =  window.location.pathname
     emit('closeFilter', false)
+    console.log("customer",filters.value.customer)
+   
     if(getvalidate.value.exists){
-
+        
         console.log('seller_id',getvalidate.value.seller)
+   
         sessionStorage.setItem('ticket',filters.value.number);
-        sessionStorage.setItem('seller_id',getvalidate.value.seller);
+        
+        sessionStorage.setItem('customer_id',filters.value.customer);
         console.log('currentPath',currentPath)
-        if (currentPath == `/sellers-tracking/${getvalidate.value.seller}/`) {
-            window.location.reload();
-        }
-        router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }});
+        
+        router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }}).then(() => {
+                window.location.reload(); // Forzar recarga
+        });
         
         
 
-    }else{
+    }
+    else if(filters.value.customer){
+        sessionStorage.setItem('customer_id',filters.value.customer);
+        
+        router.push({ name: 'PendingTickets'}).then(() => {
+                window.location.reload(); // Forzar recarga
+        });
+
+    }
+    else{
+        
         sessionStorage.setItem('ticket',filters.value.number);
-
         
-        if(currentPath == '/tickets/Libre'){
-           window.location.reload();
-        } 
-        router.push({ name: 'TicketFree' });
+        router.push({ name: 'TicketFree' }).then(() => {
+                window.location.reload(); // Forzar recarga
+         });
         
         
     }

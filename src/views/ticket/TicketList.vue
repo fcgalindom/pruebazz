@@ -262,11 +262,29 @@ onMounted(async () => {
    
     filters.value.raffle = 1
     const ticketsee = sessionStorage.getItem('ticket');
-    if(ticketsee ) {
+    const ticketcustomer = sessionStorage.getItem('customer_id');
+    
+    if(ticketsee && ticketcustomer ){
+        filters.value.number =  ticketsee
+        filters.value.customer = ticketcustomer
+        datatable()
+        sessionStorage.removeItem('ticket');
+        sessionStorage.removeItem('customer_id');
+        filters.value.number = ""
+        filters.value.customer = ""
+    }
+    else if(ticketsee ) {
         filters.value.number =  ticketsee
         datatable()
         sessionStorage.removeItem('ticket');
+        filters.value.number = ""
          
+    }
+    else if(ticketcustomer){
+        filters.value.customer = ticketcustomer
+        datatable()
+        sessionStorage.removeItem('customer_id');
+        filters.value.customer = ""
     }
     
     
