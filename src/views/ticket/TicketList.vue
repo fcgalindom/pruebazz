@@ -263,28 +263,34 @@ onMounted(async () => {
     filters.value.raffle = 1
     const ticketsee = sessionStorage.getItem('ticket');
     const ticketcustomer = sessionStorage.getItem('customer_id');
-    
+    filters.value.status = status.value
     if(ticketsee && ticketcustomer ){
         filters.value.number =  ticketsee
         filters.value.customer = ticketcustomer
+        filters.value.status = ""
         datatable()
         sessionStorage.removeItem('ticket');
         sessionStorage.removeItem('customer_id');
         filters.value.number = ""
         filters.value.customer = ""
+        
     }
     else if(ticketsee) {
         filters.value.number =  ticketsee
+        filters.value.status = ""
         datatable()
         sessionStorage.removeItem('ticket');
         filters.value.number = ""
+        
          
     }
     else if(ticketcustomer){
         filters.value.customer = ticketcustomer
+        filters.value.status = ""
         datatable()
         sessionStorage.removeItem('customer_id');
         filters.value.customer = ""
+        
     }
     
     
@@ -316,7 +322,7 @@ const getTitle = () => {
 const datatable = async () => {
     console.log('sellerRouteId.value ', sellerRouteId.value);
     
-    filters.value.status = status.value
+    //filters.value.status = status.value
     if(sellerRouteId.value) {
         filters.value.seller = sellerRouteId.value
         tickets.value = await SellerServices.tracking(sellerRouteId.value, filters.value)
