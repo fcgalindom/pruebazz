@@ -4,10 +4,10 @@
             <div class="my-3">
                 <div class="d-flex justify-content-between">
                     <h3>{{ getTitle() }}</h3>
-                    <div class="d-flex flex-column">
+                    <!-- <div class="d-flex flex-column">
                         <Button class="btn-sm mb-3">{{ tickets.length }} Boletas</Button>
                         <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value) }}</Button>
-                    </div>
+                    </div> -->
                 </div>
                 <hr>
                 <div class="row mb-3">

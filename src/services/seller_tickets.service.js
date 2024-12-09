@@ -21,7 +21,7 @@ export class SellerTicketsServices {
         }
     }
 
-    static async show(id) {
+    static async show(id, is_tracking) {
         const url = enviroments.baseUrl + `sellers-tickets/show/${id}/`
         const response = await axios.get(url)
         return response.data
