@@ -3,7 +3,8 @@
         
         <div class="col-md-6 mb-3">
             <Label required="0">Cliente</Label>
-            <Select optionLabel="name" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid ></Select>
+            <Select optionLabel="documentname" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid >
+            </Select>
         </div>
    
        
@@ -58,6 +59,10 @@ raffles: []
 })
 onMounted(async () => {
 dependencies.value = await TicketServices.dependencies()
+dependencies.value.customers = dependencies.value.customers.map((customer) => ({
+  ...customer,
+  documentname: `${customer.name} - ${customer.document}`,
+}));
 })
 
 
