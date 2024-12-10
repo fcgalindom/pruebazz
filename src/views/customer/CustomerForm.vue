@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits } from "vue";
+import { ref, onMounted, defineEmits , defineProps } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
 
@@ -34,11 +34,17 @@ const customers = ref([])
 const isDisabled = ref(false)
 const visible = ref(false)
 
+const props = defineProps({
+  datadocument: String, 
+  default: ""
 
+});
 
 onMounted(async () => {
+    
     cities.value = await CustomerServices.listCities()
     chargeForm()
+    
 })
 const emit = defineEmits(['closedialog']);
 
@@ -50,6 +56,8 @@ const chargeForm = () => {
         phone: "",
         city: ""
     }
+    
+    customer.value.document = props.datadocument
 }
 
 const listCustomers = async () => {

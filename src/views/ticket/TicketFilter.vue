@@ -111,30 +111,34 @@ const datatable = async () => {
         
         sessionStorage.setItem('customer_id',filters.value.customer);
         console.log('currentPath',currentPath)
-        
-        router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }}).then(() => {
+        if (currentPath == `/sellers-tracking/${getvalidate.value.seller}/`) {
+            window.location.reload();
+        }
+        if (currentPath == `/tickets/Pendiente`) {
+            router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }}).then(() => {
                 window.location.reload(); // Forzar recarga
-        });
+            });
+        }
+        router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }})
         
         
 
     }
     else if(filters.value.customer){
         sessionStorage.setItem('customer_id',filters.value.customer);
-        
-        router.push({ name: 'PendingTickets'}).then(() => {
-                window.location.reload(); // Forzar recarga
-        });
+        if (currentPath == `/tickets/Pendiente`) {
+            window.location.reload();
+        }
+        router.push({ name: 'PendingTickets'})
 
     }
     else{
         
         sessionStorage.setItem('ticket',filters.value.number);
-        
-        router.push({ name: 'TicketFree' }).then(() => {
-                window.location.reload(); // Forzar recarga
-         });
-        
+        if(currentPath == '/tickets/Libre'){
+           window.location.reload();
+        } 
+        router.push({ name: 'TicketFree' })
         
     }
      /*router.push({ name: 'BookedTickets' });
