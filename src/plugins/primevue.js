@@ -20,6 +20,7 @@ import DynamicDialog from 'primevue/dynamicdialog';
 import { useDialog } from 'primevue/usedialog';
 import Chart from 'primevue/chart';
 import ToggleSwitch from 'primevue/toggleswitch';
+import AutoComplete from 'primevue/autocomplete';
 
 
 export default {
@@ -52,6 +53,7 @@ export default {
         app.component('MultiSelect', MultiSelect)
         app.component('Chart', Chart)
         app.component('ToggleSwitch', ToggleSwitch)
+        app.component('AutoComplete', AutoComplete)
      
       }
 }

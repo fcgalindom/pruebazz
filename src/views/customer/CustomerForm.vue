@@ -42,9 +42,6 @@ onMounted(async () => {
 })
 const emit = defineEmits(['closedialog']);
 
-
-
-
 const chargeForm = () => {
     customer.value = {
         first_name: "",
