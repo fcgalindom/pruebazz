@@ -322,7 +322,7 @@ const getTitle = () => {
 const datatable = async () => {
     console.log('sellerRouteId.value ', sellerRouteId.value);
     
-    //filters.value.status = status.value
+    filters.value.status = status.value
     if(sellerRouteId.value) {
         filters.value.seller = sellerRouteId.value
         tickets.value = await SellerServices.tracking(sellerRouteId.value, filters.value)
