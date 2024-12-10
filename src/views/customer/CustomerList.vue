@@ -106,7 +106,6 @@ import Swal from 'sweetalert2'
 import Helper from "@/helpers/Helper";
 
 const customers = ref([])
-const customer = ref({})
 const visible = ref(false)
 
 const filters = ref({
@@ -173,12 +172,12 @@ const countries = ref([{
     }
 ]);
 
-const modal = ref('customer_list')
 const cities = ref([])
+const customer = ref({})
 
 onMounted(async () => {
     cities.value = await CustomerServices.listCities()
-    limpiarData()
+    // limpiarData()
     listCustomers()
 })
 
