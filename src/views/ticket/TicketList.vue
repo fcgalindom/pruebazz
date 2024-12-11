@@ -260,43 +260,7 @@ const status = computed(() => {
 
 onMounted(async () => {
    
-    filters.value.raffle = 1
-    const ticketsee = sessionStorage.getItem('ticket');
-    const ticketcustomer = sessionStorage.getItem('customer_id');
-    filters.value.status = status.value
-    if(ticketsee && ticketcustomer ){
-        filters.value.number =  ticketsee
-        filters.value.customer = ticketcustomer
-        filters.value.status = ""
-        datatable()
-        sessionStorage.removeItem('ticket');
-        sessionStorage.removeItem('customer_id');
-        filters.value.number = ""
-        filters.value.customer = ""
-        
-    }
-    else if(ticketsee) {
-        filters.value.number =  ticketsee
-        filters.value.status = ""
-        datatable()
-        sessionStorage.removeItem('ticket');
-        filters.value.number = ""
-        
-         
-    }
-    else if(ticketcustomer){
-        filters.value.customer = ticketcustomer
-        filters.value.status = ""
-        datatable()
-        sessionStorage.removeItem('customer_id');
-        filters.value.customer = ""
-        
-    }
-    
-    
-    if(sellerRouteId.value) {
-        seller.value = await SellerServices.show(sellerRouteId.value)
-    }
+    datatable()
    
     getTitle()
     limpiarFormulario()

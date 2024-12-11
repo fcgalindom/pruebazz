@@ -110,7 +110,7 @@ const datatable = async () => {
    
     if(getvalidate.value.exists){
         
-        console.log('seller_id',getvalidate.value.seller)
+        console.log('costumer_id',filters.value.costumer)
    
         sessionStorage.setItem('ticket',filters.value.number);
         
