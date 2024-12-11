@@ -45,7 +45,7 @@ onMounted(() => {
         const margenSuperior = 700;
         canvas.width = fondo.width;
         canvas.height = fondo.height;
-        ctx.fillRect(0, 0, canvas.width, margenSuperior);
+        ctx.fillRect(0, 0, canvas.width, fondo.height);
 
         // Dibujar la imagen de fondo
         ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
@@ -119,22 +119,44 @@ const downloadImage = () => {
     downloadLink.download = "recibo.jpg";
     downloadLink.click();
 };
-const downloadPDF = () => {
+function downloadPDF() {
     const canvas = reciboCanvas.value;
-    const imageUrl = canvas.toDataURL("image/png"); // Genera la imagen en base64
+    const pdf = new jsPDF({
+        orientation: "portrait", // Orientación vertical
+        unit: "pt",              // Unidad de medida en puntos (pt)
+        format: "letter",        // Tamaño carta
+    });
 
-    const pdf = new jsPDF("p", "mm", "a4"); // Crea un PDF en tamaño A4
+    // Convierte el canvas a imagen
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-    // Configura las dimensiones de la imagen en el PDF
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    console.log(pdfHeight);
+    // Ajusta las dimensiones de la imagen al tamaño carta
+    const pageWidth = 612; // Ancho en puntos para tamaño carta
+    const pageHeight = 792; // Altura en puntos para tamaño carta
+    const canvasAspectRatio = canvas.width / canvas.height;
+    const pageAspectRatio = pageWidth / pageHeight;
 
-    // Agrega la imagen al PDF
-    pdf.addImage(imageUrl, "PNG", 0, 0, pdfWidth, pdfHeight - 150);
+    let imgWidth, imgHeight;
 
-    // Descarga el PDF
-    pdf.save("recibo.pdf");
-};
+    if (canvasAspectRatio > pageAspectRatio) {
+        // Imagen más ancha que alta
+        imgWidth = pageWidth;
+        imgHeight = pageWidth / canvasAspectRatio;
+    } else {
+        // Imagen más alta que ancha
+        imgHeight = pageHeight;
+        imgWidth = pageHeight * canvasAspectRatio;
+    }
+
+    // Centrar la imagen en el PDF
+    const xOffset = (pageWidth - imgWidth) / 2;
+    const yOffset = (pageHeight - imgHeight) / 2;
+
+    // Agregar la imagen al PDF
+    pdf.addImage(imgData, "JPEG", xOffset, yOffset, imgWidth, imgHeight);
+
+    // Descargar el PDF
+    pdf.save("ticket.pdf");
+}
 </script>
 

@@ -47,7 +47,7 @@
         canvas.width = fondo.width;
         canvas.height = fondo.height;
         ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, margenSuperior);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         // Dibujar la imagen de fondo
         ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
         
@@ -126,23 +126,45 @@
           downloadLink.download = "recibo.jpg";
           downloadLink.click();
         }; 
-    const downloadPDF = () => {
-      const canvas = reciboCanvas.value;
-      const imageUrl = canvas.toDataURL("image/png"); // Genera la imagen en base64
-    
-      const pdf = new jsPDF("p", "mm", "a4"); // Crea un PDF en tamaño A4
-    
-      // Configura las dimensiones de la imagen en el PDF
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      console.log(pdfHeight);
-    
-      // Agrega la imagen al PDF
-      pdf.addImage(imageUrl, "PNG", 0, 0, pdfWidth, pdfHeight-220);
-    
-      // Descarga el PDF
-      pdf.save("recibo.pdf");
-    };
+function downloadPDF() {
+    const canvas = reciboCanvas.value;
+    const pdf = new jsPDF({
+        orientation: "portrait", // Orientación vertical
+        unit: "pt",              // Unidad de medida en puntos (pt)
+        format: "letter",        // Tamaño carta
+    });
+
+    // Convierte el canvas a imagen
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+    // Ajusta las dimensiones de la imagen al tamaño carta
+    const pageWidth = 612; // Ancho en puntos para tamaño carta
+    const pageHeight = 792; // Altura en puntos para tamaño carta
+    const canvasAspectRatio = canvas.width / canvas.height;
+    const pageAspectRatio = pageWidth / pageHeight;
+
+    let imgWidth, imgHeight;
+
+    if (canvasAspectRatio > pageAspectRatio) {
+        // Imagen más ancha que alta
+        imgWidth = pageWidth;
+        imgHeight = pageWidth / canvasAspectRatio;
+    } else {
+        // Imagen más alta que ancha
+        imgHeight = pageHeight;
+        imgWidth = pageHeight * canvasAspectRatio;
+    }
+
+    // Centrar la imagen en el PDF
+    const xOffset = (pageWidth - imgWidth) / 2;
+    const yOffset = (pageHeight - imgHeight) / 2;
+
+    // Agregar la imagen al PDF
+    pdf.addImage(imgData, "JPEG", xOffset, yOffset, imgWidth, imgHeight);
+
+    // Descargar el PDF
+    pdf.save("ticket.pdf");
+}
     
     
     </script>
