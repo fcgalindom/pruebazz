@@ -44,7 +44,7 @@ onMounted(() => {
 
         const margenSuperior = 700;
         canvas.width = fondo.width;
-        canvas.height = fondo.height + margenSuperior;
+        canvas.height = fondo.height;
         ctx.fillRect(0, 0, canvas.width, margenSuperior);
 
         // Dibujar la imagen de fondo
@@ -58,7 +58,7 @@ onMounted(() => {
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
         const startX = 120; // Coordenada X inicial para el texto
-        let currentY = 60; // Coordenada Y inicial para el texto, ajustada para que se vea bien
+        let currentY = 48; // Coordenada Y inicial para el texto, ajustada para que se vea bien
 
         // Posiciones de las columnas
         const col1X = 10; // Primera columna
@@ -67,23 +67,23 @@ onMounted(() => {
         ctx.font = "35px Arial";
         ctx.fillText(ticketData.value.customer.name, col1X + 390, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 80;
+        currentY += 55;
 
 
         // Campo: Documento
         ctx.fillText(ticketData.value.customer.document, col1X + 250, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 78;
+        currentY += 57;
 
         // Campo: Celular
         ctx.fillText(ticketData.value.customer.phone, col1X + 160, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 77;
+        currentY += 57;
 
         // Campo: Ciudad
         ctx.fillText(ticketData.value.customer.city.name, col1X + 160, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 77;
+        currentY += 57;
 
         //Campo: Seller 
         ctx.fillText(ticketData.value.seller.name, col1X + 220, currentY); // Valor de ejemplo
@@ -93,7 +93,7 @@ onMounted(() => {
         ctx.beginPath();
         ctx.moveTo(350, 20);
         // Reiniciar Y para la segunda columna
-        currentY += 107;
+        currentY += 77;
         ctx.font = "bold 35px Arial";
 
         // Campo: Abono
@@ -105,7 +105,7 @@ onMounted(() => {
         //Numero de boleta
         ctx.font = "60px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("Nº " + ticketData.value.number, 370, 2150);
+        ctx.fillText("Nº " + ticketData.value.number, 370, 1570);
 
     };
 });

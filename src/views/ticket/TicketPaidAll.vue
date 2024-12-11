@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"   ></canvas>
+    <canvas ref="reciboCanvas"  style="display: none;"  ></canvas>
     <div class="container">
        <div class="row">
              <div class="col-2">
@@ -45,7 +45,7 @@
     
         const margenSuperior = 1000;
         canvas.width = fondo.width;
-        canvas.height = fondo.height + margenSuperior;
+        canvas.height = fondo.height;
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, margenSuperior);
         // Dibujar la imagen de fondo
@@ -56,7 +56,7 @@
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
         const startX = 120; // Coordenada X inicial para el texto
-        let currentY = 70; // Coordenada Y inicial para el texto, ajustada para que se vea bien
+        let currentY = 45; // Coordenada Y inicial para el texto, ajustada para que se vea bien
     
            // Posiciones de las columnas
         const col1X = 10; // Primera columna
@@ -65,7 +65,7 @@
         ctx.font = "35px Arial";
          ctx.fillText(ticketData.value.customer.name, col1X + 340, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-         currentY += 75;
+         currentY += 50;
         
         
     
@@ -73,17 +73,17 @@
         // Campo: Documento
         ctx.fillText(ticketData.value.customer.document, col1X + 220, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-         currentY += 80;
+         currentY += 48;
     
         // Campo: Celular
         ctx.fillText(ticketData.value.customer.phone, col1X + 140, currentY); // Valor de ejemplo
          ctx.font = "35px Arial";
-         currentY += 80;
+         currentY += 45;
     
         // Campo: Ciudad
         ctx.fillText(ticketData.value.customer.city.name, col1X + 140, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 80;
+        currentY += 50;
 
         //Campo: Seller 
         ctx.fillText(ticketData.value.seller.name, col1X + 190, currentY); // Valor de ejemplo
@@ -93,7 +93,7 @@
         ctx.beginPath();
         ctx.moveTo(350, 20);
         // Reiniciar Y para la segunda columna
-        currentY += 107;
+        currentY += 68;
         ctx.font = "bold 35px Arial";
     
         // Campo: Abono
@@ -102,7 +102,7 @@
     
         // Campo: Saldo
          ctx.fillText(Helper.formatNumber(ticketData.value.value_to_pay - ticketData.value.value ), col2X + 430, currentY); // Valor de ejemplo
-         currentY += 230;
+         currentY += 140;
         //Numero de boleta
         ctx.fillStyle = "red";
         ctx.font = "55px Arial";
@@ -111,7 +111,7 @@
         ctx.fillStyle = "red";
         ctx.font = "normal 55px Arial";
         
-        ctx.fillText( "Nº "+ticketData.value.number, 315, 2210);
+        ctx.fillText( "Nº "+ticketData.value.number, 315, 1360);
        
       };
     });
