@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"  ></canvas>
+    <canvas ref="reciboCanvas"  style="display: none;"  ></canvas>
     
     <div class="container">
         <div class="row">
