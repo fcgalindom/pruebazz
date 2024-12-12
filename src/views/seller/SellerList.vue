@@ -119,7 +119,6 @@
     sellers.value = await SellerServices.list(filters.value)
   }
   const changeState = async(id, status) => {
-    console.log("sser",id, status)
     if (status === 1) {
       status = 0
     } else {

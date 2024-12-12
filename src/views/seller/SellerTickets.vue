@@ -129,9 +129,7 @@ const search = async (item) => {
 }
 
 const deleteTicket = (ticketEvent, position) => {
-    console.log('ticket', ticketEvent);
     activeButtons.value = new Set()
-    // console.log('range_tickets.value[position].numbers', range_tickets.value[position].numbers);
     
     range_tickets.value[position].numbers.forEach(element => {
         activeButtons.value.add(element);

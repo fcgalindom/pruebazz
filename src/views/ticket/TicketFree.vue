@@ -264,7 +264,6 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const  getcutomerevent = (data) => {
-   console.log("seedata", data)
    if(data.validate){
     ticket.value.customer = data.customer.id
     visiblefindcustomer.value = false
@@ -285,7 +284,6 @@ onMounted(async () => {
     ticket.value.seller = selleridofice[0].id
 
     const ticketsee = sessionStorage.getItem('ticket');
-    console.log("ticketsee", ticketsee)
     if(ticketsee) {
         ticket.value.number.push(ticketsee)
         sessionStorage.removeItem('ticket');
@@ -385,8 +383,6 @@ const search = async () => {
 
 const getRangeForClients = async () => {
     range_tickets.value = await SellerTicketsServices.show(Cookies.get('seller_id'), false);
-    console.log('range_tickets.value ==> ', range_tickets.value[0].numbers);
-    
     range_tickets.value[0].numbers.forEach((index) => {
         let formattedNumber = index.toString().padStart(4, '0');
         buttons.value.push(formattedNumber);
@@ -535,7 +531,6 @@ const limpiarFormulario = () => {
 }
 
 const deleteTicket = (ticketEvent) => {
-    console.log('ticket', ticketEvent);
     activeButtons.value = new Set()
     
     ticket.value.number.forEach(element => {

@@ -66,10 +66,6 @@ onMounted(() => {
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
 
-        // Ejemplo de texto encima de la imagen en los campos
-        console.log('ticketData.value', ticketData.value);
-        console.log('paymentData.value', paymentData.value);
-
         ctx.fillText("Nº" + ticketData.value.number, 810, 130);
         ctx.fillText(ticketData.value.raffle.raffle_date, 200, 295);
         ctx.fillText(Helper.formatNumber(paymentData.value[index.value].amount), 720, 235);

@@ -168,13 +168,7 @@ const listCustomers = async () => {
 
 
 const saveEntity = async () => {
-    console.log("see data", customer.value)
-
-
     const customerData = await CustomerServices.createCustomer(customer.value)
     emit('customerData', customerData)
-
-
-
 }
 </script>

@@ -182,13 +182,10 @@ onMounted(async () => {
 })
 
 const listCustomers = async () => {
-    console.log("entro")
     customers.value = await CustomerServices.list(filters.value)
 }
 
 const saveEntity = async () => {
-    // console.log('customer.value ==> ', customer.value);
-    // return
     customer.value.country_code = customer.value.country_code.dialCode
     if (customer.value.id != null) {
         await CustomerServices.updateCustomer(customer.value, customer.value.id)

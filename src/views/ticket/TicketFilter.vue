@@ -101,45 +101,21 @@ const getvalidate = ref({
 
 const datatable = async () => {
   
+    const currentPath =  window.location.pathname
     filtersticket.value = {number: filters.value.number , raffle : 1}
-    console.log('filtersticket', filtersticket.value)
-    
     getvalidate.value = await TicketServices.getticketbyraffle(filtersticket.value)
-
-    console.log('getvalidate', getvalidate.value)
-
     full_value.value = 0
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
     });
-    const currentPath =  window.location.pathname
-    emit('closeFilter', false)
-    console.log("customer",filters.value.customer)
-   
+    
     if(getvalidate.value.exists){
-        
-        console.log("entroffff" , filters.value)
-   
         fitroticket.setFilter(filters.value.number);
-        
-        filtrocustomer.setFilter(filters.value.customer);
-        /*console.log('currentPath',currentPath)
-        if (currentPath == `/sellers-tracking/${getvalidate.value.seller}/`) {
-            window.location.reload();
-        }
-        if (currentPath == `/tickets/Pendiente`) {
-            router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }}).then(() => {
-                window.location.reload(); // Forzar recarga
-            });
-        } */
         router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }})
-        
-        
-
     }
     else if(filters.value.customer){
-        console.log("customerf",filters.value.customer)
         filtroStore.setFilter(filters.value.customer);
+
         router.push({ name: 'PendingTickets'})
     }
     else{

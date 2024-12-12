@@ -50,8 +50,6 @@
                 expires: 1       // Duración de 7 días
             });
           }else{
-            console.log('response.user.seller[0].name', response);
-            
               Cookies.set('name', response.seller[0].name, {
                 vsecure: true,    // Solo se enviará a través de HTTPS
                 sameSite: 'Strict',  // Para prevenir ataques CSRF

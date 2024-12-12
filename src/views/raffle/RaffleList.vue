@@ -165,11 +165,7 @@ const openWidget = (i) => {
 
         (error, result) => {
             if (!error && result && result.event === "success") {
-                console.log("Done! Here is the image info: ", result.info);
-
                 i.image = result.info.url;
-                console.log('image', i.image);
-
             }
         }
     );

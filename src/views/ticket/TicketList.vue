@@ -268,13 +268,7 @@ onMounted(async () => {
     customerf.value = filtroStore.filter;
     numberf.value = fitroticket.filter;
     
-    console.log("filtro",fitroticket.filter)
-    
-    
-   
     datatable()
-
-   
     getTitle()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
@@ -297,9 +291,6 @@ const getTitle = () => {
 }
 
 const datatable = async () => {
-    console.log('sellerRouteId.valuesssss ');
-    
-    
     filters.value.status = status.value
     filters.value.customer = ""
     
@@ -316,16 +307,11 @@ const datatable = async () => {
     if(sellerRouteId.value) {
         if(numberf.value){
           filters.value.number = numberf.value
-          console.log("filters.value.number",filters.value.number)
           filters.value.status = ""
           numberf.value = ""
-          console.log("filters.value.number2",filters.value.number)
-
           fitroticket.clearFilter()
         }
-        console.log("dasda",filters.value)
         filters.value.seller = sellerRouteId.value
-        console.log("fff")
         tickets.value = await SellerServices.tracking(sellerRouteId.value, filters.value)
         
     }else {
@@ -334,8 +320,6 @@ const datatable = async () => {
     full_value.value = 0
     tickets.value.forEach(element => {
         if(element.value) {
-            console.log('element.value ', element.value);
-            
             full_value.value += parseInt(element.value)
         }
     });
@@ -344,7 +328,6 @@ const datatable = async () => {
 
 watch(() => router.path, async () => {
    // customerf.value = filtroStore.filter;
-    console.log("wathc1")
     await datatable()
 
 })
@@ -352,11 +335,9 @@ watch(
   () => filtroStore.filter,
   (newValue) => {
     if (newValue) {
-        console.log("wathc12")
         customerf.value = filtroStore.filter;
         datatable()
     } else {
-      console.log('La modal se cerró');
     }
   }
 );
@@ -365,7 +346,6 @@ watch(
   (newValue) => {
     if (newValue) {
 
-       console.log("prueba")
        
     } else {
        

@@ -28,7 +28,6 @@ const datacustomer = ref ({
 })
 
 const listCustomers = async () => {
- console.log("entrof")
   await CustomerServices.getByDocument(customer.value.document)
   .then(response => {
      

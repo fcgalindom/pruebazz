@@ -13,6 +13,7 @@ export const useFilterStore = defineStore('filter', {
     },
   },
 });
+
 export const useModalStore = defineStore('modal', {
   state: () => ({
     isOpen: false, // Estado de la modal
@@ -26,12 +27,14 @@ export const useModalStore = defineStore('modal', {
     },
   },
 });
+
 export const useFilterCustomer = defineStore('filter', {
   state: () => ({
     filter: "", // Aquí almacenaremos los filtros
   }),
   actions: {
     setFilter(newFilter) {
+      
       this.filter = String(newFilter); // Actualiza los filtros
     },
     clearFilter() {
@@ -39,14 +42,14 @@ export const useFilterCustomer = defineStore('filter', {
     },
   },
 });
-export const useFilterTicket = defineStore('filter', {
+
+export const useFilterTicket = defineStore('filterTicket', {
   state: () => ({
-    filter: "prueba", // Aquí almacenaremos los filtros
+    filterTicket: "", // Aquí almacenaremos los filtros
   }),
   actions: {
     
     setFilter(newFilter) {
-      cosnole.log("neeww",newFilter)
       this.filter = String(newFilter); // Actualiza los filtros
     },
     clearFilter() {
