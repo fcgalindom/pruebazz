@@ -176,7 +176,7 @@
                             </td>
                             <td>
                                 <div class="text-center">
-                                    <button class="btn" @click="notifyCustomer(i.customer?.phone)">
+                                    <button class="btn" @click="notifyCustomer(i.customer)">
                                         <i class="text-success fab fa-whatsapp fa-lg"></i>
                                     </button>
                                 </div>
@@ -477,8 +477,8 @@ function showTicketAlert(ticketData) {
     });
 }
 
-const notifyCustomer = (phone) => {
-    window.open(`https://wa.me/57${phone}`, '_blank');
+const notifyCustomer = (customer) => {
+    window.open(`https://wa.me/${customer.country_code}${customer.phone}`, '_blank');
 }
 
 const downloadExcel = () => {

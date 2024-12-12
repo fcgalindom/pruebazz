@@ -27,20 +27,20 @@
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success" @click="add_payment()">+</button>
                 </div>
-                <div class="row" v-for="(i, index) in ticket.payments" :key="index">
-                    <div class="col-3">
+                <div class="row border p-2 my-3" v-for="(i, index) in ticket.payments" :key="index">
+                    <div class="col-md-3">
                         <Label>Boleta</Label>
                         <Select v-model="i.ticket" :options="ticket.number" filter class="w-100"></Select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <Label>Método de pago</Label>
                         <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <Label>Valor</Label>
                         <InputNumber fluid v-model="i.amount" />
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <div class="row">
                             <div class="col-10">
                                 <Label>Fecha de expiración</Label>
@@ -51,6 +51,7 @@
                             </div>
                         </div>
                     </div>
+                    <hr class="my-3">
                 </div>
             </div>
             <div v-if="typeScreen == 'client'">
@@ -113,10 +114,6 @@
         </div>
         <hr>
         <div class="row" v-if="typeScreen == 'admin'">
-            <!-- <div class="col-md-4">
-                <Label>Rifa</Label>
-                <Select v-model="filters.raffle" :options="dependencies.raffles" @change="search" filter optionLabel="name" optionValue="id" fluid></Select>
-            </div> -->
             <div class="col-md-2">
                 <Label required="0">Filtrar Número</Label>
                 <Input v-model="filters.number" required="0"></Input>
@@ -126,7 +123,6 @@
                 <Label>Número seleccionados</Label>
                 <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid
                 :maxSelectedLabels="15" class="w-full md:w-80"  @change="deleteTicket" />
-                <!-- <Input disabled v-model="ticket.number" class="mb-3" label="Números seleccionados"></Input> -->
             </div>
             </div>
             <div class="col-12">
@@ -135,31 +131,23 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="mt-3 d-flex justify-content-center" v-if="typeScreen == 'admin'">
-            <Button :disabled="!filters.raffle" @click="search">Buscar</Button>
-        </div> -->
-
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
            <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button> 
 
            <button id="modalTicket"  data-toggle="modal"  :data-target="`#${modal}`" style="display: none;"> prueba2</button>
-           <!-- <a  class="mt-3 btn-dark"  data-widget="navbar-search" href="#" role="button" data-toggle="modal" data-target="#customer-form">
-                  Crear cliente
-           </a> -->
         </div>
         
         <div class="container-fluid d-flex flex-column-reverse flex-md-row mt-3 pb-5" :class="typeScreen == 'admin' ? 'justify-content-between' : 'justify-content-center'">
             <div class="button-grid w-80 grid-buttons-tickets scroll-container">
                 <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'" v-for="(button, index) in filteredButtons" :key="index" class="grid-button" @click="buyTicket(button, button)">
-                    <!-- <button :disabled="!filters.raffle" v-for="(button, index) in buttons" :key="index" class="grid-button" data-toggle="modal" :data-target="`#${modal}`" @click="buyTicket(button)"> -->
                       {{ button }}
                 </button>
             </div>
         </div>
-        <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
+        <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '80rem' }">
           <CustomerForm   @customerData = "handleUpdateData"  :datadocument = "documentcustomer"   @closedialog = "visibleCustomer = false" />
        </Dialog>
-       <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '50%' }">
+       <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
            <CustomerFInd @customerData = "getcutomerevent" />
        </Dialog>
     
@@ -555,6 +543,10 @@ const deleteTicket = (ticketEvent) => {
     });
 }
 
+const remove_payment = (index) => {
+    ticket.value.payments.splice(index, 1);
+}
+
 const filteredButtons = computed(() => {
   if (filters.value.number) {
     return buttons.value.filter(button => button.toString().includes(filters.value.number));
@@ -566,16 +558,6 @@ const filteredButtons = computed(() => {
 
 <style scoped>
 /* Estilos específicos para este componente */
-
-/* button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-} */
 
 button.active {
     background-color: #28a745;

@@ -45,12 +45,12 @@
     </Drawer>
 
     <!-- Crear Cliente -->
-    <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '50%' }">
+    <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '80rem' }">
         <CustomerForm  @closedialog = "visibleCustomer = false" />
     </Dialog>
 
     <!-- Filtro General -->
-    <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '50%' }">
+    <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '80rem' }">
         <TicketFilter @closeFilter="VisibleFilterGeneral = false" />
     </Dialog>
     <!-- <TicketFilter :visibleDialog="true" /> -->

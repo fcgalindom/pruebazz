@@ -46,7 +46,7 @@
                         <div class="col-md-6 mb-3">
                             <Label>Teléfono</Label>
                             <div class="row">
-                                <Select v-model="customer.country_code" optionLabel="name" :options="countries" class="col-3">
+                                <Select v-model="customer.country_code" optionLabel="name" :options="countries" class="col-md-3 mb-3">
                                     <template #value="slotProps">
                                         <div v-if="slotProps.value" class="d-flex align-items-center justify-content-center">
                                             <img :src="slotProps.value.flag" style="width: 20px" />
@@ -59,7 +59,7 @@
                                         </div>
                                     </template>
                                 </Select>
-                                <Input class="col-9" v-model="customer.phone" label="Teléfono"></Input>
+                                <Input class="col-md-9" v-model="customer.phone" label="Teléfono"></Input>
                             </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -117,57 +117,57 @@ const filters = ref({
 
 const countries = ref([{
         name: "Mexico",
-        dialCode: "+52",
+        dialCode: "52",
         flag: "https://flagcdn.com/mx.svg"
     },
     {
         name: "Chile",
-        dialCode: "+56",
+        dialCode: "56",
         flag: "https://flagcdn.com/cl.svg"
     },
     {
         name: "Colombia",
-        dialCode: "+57",
+        dialCode: "57",
         flag: "https://flagcdn.com/co.svg"
     },
     {
         name: "Argentina",
-        dialCode: "+54",
+        dialCode: "54",
         flag: "https://flagcdn.com/ar.svg"
     },
     {
         name: "Bolivia",
-        dialCode: "+591",
+        dialCode: "591",
         flag: "https://flagcdn.com/bo.svg"
     },
     {
         name: "Brazil",
-        dialCode: "+55",
+        dialCode: "55",
         flag: "https://flagcdn.com/br.svg"
     },
     {
         name: "Ecuador",
-        dialCode: "+593",
+        dialCode: "593",
         flag: "https://flagcdn.com/ec.svg"
     },
     {
         name: "Paraguay",
-        dialCode: "+595",
+        dialCode: "595",
         flag: "https://flagcdn.com/py.svg"
     },
     {
         name: "Peru",
-        dialCode: "+51",
+        dialCode: "51",
         flag: "https://flagcdn.com/pe.svg"
     },
     {
         name: "Uruguay",
-        dialCode: "+598",
+        dialCode: "598",
         flag: "https://flagcdn.com/uy.svg"
     },
     {
         name: "Venezuela",
-        dialCode: "+58",
+        dialCode: "58",
         flag: "https://flagcdn.com/ve.svg"
     }
 ]);
