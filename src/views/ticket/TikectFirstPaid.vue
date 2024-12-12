@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"  ></canvas>
+    <canvas ref="reciboCanvas"  style="display: none;"  ></canvas>
     
     <div class="container">
         <div class="row">
@@ -44,8 +44,8 @@ onMounted(() => {
 
         const margenSuperior = 700;
         canvas.width = fondo.width;
-        canvas.height = fondo.height + margenSuperior;
-        ctx.fillRect(0, 0, canvas.width, margenSuperior);
+        canvas.height = fondo.height;
+        ctx.fillRect(0, 0, canvas.width, fondo.height);
 
         // Dibujar la imagen de fondo
         ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
@@ -58,7 +58,7 @@ onMounted(() => {
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
         const startX = 120; // Coordenada X inicial para el texto
-        let currentY = 60; // Coordenada Y inicial para el texto, ajustada para que se vea bien
+        let currentY = 48; // Coordenada Y inicial para el texto, ajustada para que se vea bien
 
         // Posiciones de las columnas
         const col1X = 10; // Primera columna
@@ -67,23 +67,23 @@ onMounted(() => {
         ctx.font = "35px Arial";
         ctx.fillText(ticketData.value.customer.name, col1X + 390, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 80;
+        currentY += 55;
 
 
         // Campo: Documento
         ctx.fillText(ticketData.value.customer.document, col1X + 250, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 78;
+        currentY += 57;
 
         // Campo: Celular
         ctx.fillText(ticketData.value.customer.phone, col1X + 160, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 77;
+        currentY += 57;
 
         // Campo: Ciudad
         ctx.fillText(ticketData.value.customer.city.name, col1X + 160, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 77;
+        currentY += 57;
 
         //Campo: Seller 
         ctx.fillText(ticketData.value.seller.name, col1X + 220, currentY); // Valor de ejemplo
@@ -93,7 +93,7 @@ onMounted(() => {
         ctx.beginPath();
         ctx.moveTo(350, 20);
         // Reiniciar Y para la segunda columna
-        currentY += 107;
+        currentY += 77;
         ctx.font = "bold 35px Arial";
 
         // Campo: Abono
@@ -105,7 +105,7 @@ onMounted(() => {
         //Numero de boleta
         ctx.font = "60px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("Nº " + ticketData.value.number, 370, 2150);
+        ctx.fillText("Nº " + ticketData.value.number, 370, 1570);
 
     };
 });
@@ -119,22 +119,44 @@ const downloadImage = () => {
     downloadLink.download = "recibo.jpg";
     downloadLink.click();
 };
-const downloadPDF = () => {
+function downloadPDF() {
     const canvas = reciboCanvas.value;
-    const imageUrl = canvas.toDataURL("image/png"); // Genera la imagen en base64
+    const pdf = new jsPDF({
+        orientation: "portrait", // Orientación vertical
+        unit: "pt",              // Unidad de medida en puntos (pt)
+        format: "letter",        // Tamaño carta
+    });
 
-    const pdf = new jsPDF("p", "mm", "a4"); // Crea un PDF en tamaño A4
+    // Convierte el canvas a imagen
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-    // Configura las dimensiones de la imagen en el PDF
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    console.log(pdfHeight);
+    // Ajusta las dimensiones de la imagen al tamaño carta
+    const pageWidth = 612; // Ancho en puntos para tamaño carta
+    const pageHeight = 792; // Altura en puntos para tamaño carta
+    const canvasAspectRatio = canvas.width / canvas.height;
+    const pageAspectRatio = pageWidth / pageHeight;
 
-    // Agrega la imagen al PDF
-    pdf.addImage(imageUrl, "PNG", 0, 0, pdfWidth, pdfHeight - 150);
+    let imgWidth, imgHeight;
 
-    // Descarga el PDF
-    pdf.save("recibo.pdf");
-};
+    if (canvasAspectRatio > pageAspectRatio) {
+        // Imagen más ancha que alta
+        imgWidth = pageWidth;
+        imgHeight = pageWidth / canvasAspectRatio;
+    } else {
+        // Imagen más alta que ancha
+        imgHeight = pageHeight;
+        imgWidth = pageHeight * canvasAspectRatio;
+    }
+
+    // Centrar la imagen en el PDF
+    const xOffset = (pageWidth - imgWidth) / 2;
+    const yOffset = (pageHeight - imgHeight) / 2;
+
+    // Agregar la imagen al PDF
+    pdf.addImage(imgData, "JPEG", xOffset, yOffset, imgWidth, imgHeight);
+
+    // Descargar el PDF
+    pdf.save("ticket.pdf");
+}
 </script>
 

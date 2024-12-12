@@ -13,7 +13,7 @@
                 <div class="row mb-3">
                     <div class="col-md-3 mb-3">
                         <Label required="0">Número</Label>
-                        <Input disabled required="0" v-model="filters.number" />
+                        <Input  required="0" v-model="filters.number" />
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Rifa</Label>
@@ -223,7 +223,7 @@ import TicketPaidAll from "./TicketPaidAll.vue";
 // @ts-ignore
 import Helper from '@/helpers/Helper';
 import { SellerServices } from "@/services/seller.service";
-
+import { useFilterStore , useModalStore  ,  useFilterTicket} from '@/stores/filterStore';
 const tickets = ref([])
 const ticket_certif = ref({})
 const full_value = ref(0)
@@ -240,6 +240,8 @@ const dependencies = ref({
     raffles: []
 })
 const reciboCanvas = ref(null);
+const filtroStore = useFilterStore();
+const fitroticket = useFilterTicket();
 
 
 const filters = ref({
@@ -257,46 +259,21 @@ const status = computed(() => {
     const path = router.path
     return path.split('/').pop()
 })
+const customerf = ref (null)
+const customerf2 = ref (null)
+const numberf = ref (null)
 
 onMounted(async () => {
+
+    customerf.value = filtroStore.filter;
+    numberf.value = fitroticket.filter;
+    
+    console.log("filtro",fitroticket.filter)
+    
+    
    
-    filters.value.raffle = 1
-    const ticketsee = sessionStorage.getItem('ticket');
-    const ticketcustomer = sessionStorage.getItem('customer_id');
-    filters.value.status = status.value
-    if(ticketsee && ticketcustomer ){
-        filters.value.number =  ticketsee
-        filters.value.customer = ticketcustomer
-        filters.value.status = ""
-        datatable()
-        sessionStorage.removeItem('ticket');
-        sessionStorage.removeItem('customer_id');
-        filters.value.number = ""
-        filters.value.customer = ""
-        
-    }
-    else if(ticketsee) {
-        filters.value.number =  ticketsee
-        filters.value.status = ""
-        datatable()
-        sessionStorage.removeItem('ticket');
-        filters.value.number = ""
-        
-         
-    }
-    else if(ticketcustomer){
-        filters.value.customer = ticketcustomer
-        filters.value.status = ""
-        datatable()
-        sessionStorage.removeItem('customer_id');
-        filters.value.customer = ""
-        
-    }
-    
-    
-    if(sellerRouteId.value) {
-        seller.value = await SellerServices.show(sellerRouteId.value)
-    }
+    datatable()
+
    
     getTitle()
     limpiarFormulario()
@@ -320,12 +297,37 @@ const getTitle = () => {
 }
 
 const datatable = async () => {
-    console.log('sellerRouteId.value ', sellerRouteId.value);
+    console.log('sellerRouteId.valuesssss ');
+    
     
     filters.value.status = status.value
+    filters.value.customer = ""
+    
+
+    if(customerf.value){
+        filters.value.customer = customerf.value
+        filters.value.status = ""
+        customerf.value = ""
+        filtroStore.clearFilter()
+      
+    }
+   
+    
     if(sellerRouteId.value) {
+        if(numberf.value){
+          filters.value.number = numberf.value
+          console.log("filters.value.number",filters.value.number)
+          filters.value.status = ""
+          numberf.value = ""
+          console.log("filters.value.number2",filters.value.number)
+
+          fitroticket.clearFilter()
+        }
+        console.log("dasda",filters.value)
         filters.value.seller = sellerRouteId.value
+        console.log("fff")
         tickets.value = await SellerServices.tracking(sellerRouteId.value, filters.value)
+        
     }else {
         tickets.value = await TicketServices.list(filters.value)
     }
@@ -337,11 +339,41 @@ const datatable = async () => {
             full_value.value += parseInt(element.value)
         }
     });
+    filtroStore.clearFilter()
 }
 
 watch(() => router.path, async () => {
+   // customerf.value = filtroStore.filter;
+    console.log("wathc1")
     await datatable()
+
 })
+watch(
+  () => filtroStore.filter,
+  (newValue) => {
+    if (newValue) {
+        console.log("wathc12")
+        customerf.value = filtroStore.filter;
+        datatable()
+    } else {
+      console.log('La modal se cerró');
+    }
+  }
+);
+watch(
+  () => fitroticket.filter,
+  (newValue) => {
+    if (newValue) {
+
+       console.log("prueba")
+       
+    } else {
+       
+     
+    }
+  }
+);
+
 
 
 const saveEntity = async () => {
