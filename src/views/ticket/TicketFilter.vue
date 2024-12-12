@@ -24,6 +24,7 @@
 import { useRouter } from 'vue-router';
 import { ref, onMounted, defineProps, defineEmits  , toRefs} from "vue";
 import { CustomerServices } from '@/services/customer.service'
+import { useFilterStore , useFilterTicket , useFilterCustomer} from '@/stores/filterStore';
 import Swal from 'sweetalert2'
 import { TicketServices } from "@/services/ticket.service";
 import { inject } from "vue";
@@ -64,6 +65,13 @@ dependencies.value.customers = dependencies.value.customers.map((customer) => ({
   documentname: `${customer.name} - ${customer.document}`,
 }));
 })
+const filtroStore = useFilterStore();
+const fitroticket = useFilterTicket();
+const filtrocustomer = useFilterCustomer();
+
+
+
+
 
 
 const chargeForm = () => {
@@ -92,7 +100,7 @@ const getvalidate = ref({
 })
 
 const datatable = async () => {
-    tickets.value = await TicketServices.list(filters.value)
+  
     filtersticket.value = {number: filters.value.number , raffle : 1}
     console.log('filtersticket', filtersticket.value)
     
@@ -110,12 +118,12 @@ const datatable = async () => {
    
     if(getvalidate.value.exists){
         
-        console.log('costumer_id',filters.value.costumer)
+        console.log("entroffff" , filters.value)
    
-        sessionStorage.setItem('ticket',filters.value.number);
+        fitroticket.setFilter(filters.value.number);
         
-        sessionStorage.setItem('customer_id',filters.value.customer);
-        console.log('currentPath',currentPath)
+        filtrocustomer.setFilter(filters.value.customer);
+        /*console.log('currentPath',currentPath)
         if (currentPath == `/sellers-tracking/${getvalidate.value.seller}/`) {
             window.location.reload();
         }
@@ -123,19 +131,16 @@ const datatable = async () => {
             router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }}).then(() => {
                 window.location.reload(); // Forzar recarga
             });
-        }
+        } */
         router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }})
         
         
 
     }
     else if(filters.value.customer){
-        sessionStorage.setItem('customer_id',filters.value.customer);
-        if (currentPath == `/tickets/Pendiente`) {
-            window.location.reload();
-        }
+        console.log("customerf",filters.value.customer)
+        filtroStore.setFilter(filters.value.customer);
         router.push({ name: 'PendingTickets'})
-
     }
     else{
         
