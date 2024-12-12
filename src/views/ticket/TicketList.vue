@@ -324,6 +324,7 @@ const datatable = async () => {
         }
     });
     filtroStore.clearFilter()
+    fitroticket.clearFilter()
 }
 
 watch(() => router.path, async () => {
@@ -345,7 +346,9 @@ watch(
   () => fitroticket.filter,
   (newValue) => {
     if (newValue) {
-
+        numberf.value = fitroticket.filter;
+        datatable()
+      
        
     } else {
        
