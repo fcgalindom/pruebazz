@@ -11,7 +11,7 @@
         <div class="col-md-6 mb-3">
             <Label>Teléfono</Label>
             <div class="row">
-                <Select v-model="customer.country_code" optionLabel="name" :options="countries" class="col-6 col-md-3 mb-3 mb-md-0">
+                <Select v-model="customer.country_code"  optionLabel="name"  :options="countries" class="col-6 col-md-3 mb-3 mb-md-0">
                     <template #value="slotProps">
                         <div v-if="slotProps.value" class="d-flex align-items-center justify-content-center">
                             <img :src="slotProps.value.flag" style="width: 20px" />
@@ -168,6 +168,7 @@ const listCustomers = async () => {
 
 
 const saveEntity = async () => {
+    customer.value.country_code = customer.value.country_code.dialCode
     const customerData = await CustomerServices.createCustomer(customer.value)
     emit('customerData', customerData)
 }
