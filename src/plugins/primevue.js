@@ -22,6 +22,14 @@ import Chart from 'primevue/chart';
 import ToggleSwitch from 'primevue/toggleswitch';
 import AutoComplete from 'primevue/autocomplete';
 
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row';                   // optional
+
+import Paginator from 'primevue/paginator';
+
+
 
 export default {
     install(app) {
@@ -38,6 +46,11 @@ export default {
             }
         });
         // app.use(PrimeVue)
+        app.component('DataTable', DataTable)
+        app.component('Column', Column)
+        app.component('Paginator', Paginator)
+        app.component('ColumnGroup', ColumnGroup)
+        app.component('Row', Row)
         app.component('Button', Button)
         app.component('Menu', Menu)
         app.component('Avatar', Avatar)

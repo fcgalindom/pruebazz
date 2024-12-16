@@ -13,27 +13,32 @@
                 <div class="row mb-3">
                     <div class="col-md-3 mb-3">
                         <Label required="0">Número</Label>
-                        <Input  required="0" v-model="filters.number" />
+                        <Input required="0" v-model="filters.number" />
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Rifa</Label>
-                        <Select v-model="filters.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                        <Select v-model="filters.raffle" :options="dependencies.raffles" filter optionLabel="name"
+                            optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Cliente</Label>
-                        <Select v-model="filters.customer" :options="dependencies.customers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                        <Select v-model="filters.customer" :options="dependencies.customers" filter optionLabel="name"
+                            optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Vendedor</Label>
-                        <Select v-model="filters.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                        <Select v-model="filters.seller" :options="dependencies.sellers" filter optionLabel="name"
+                            optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-3">
                         <Label required="0">Fecha inicial</Label>
-                        <DatePicker v-model="filters.init_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
+                        <DatePicker v-model="filters.init_date" showIcon fluid dateFormat="yy-mm-dd"
+                            :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
                     </div>
                     <div class="col-3">
                         <Label required="0">Fecha final</Label>
-                        <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd" :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
+                        <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd"
+                            :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -51,24 +56,27 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Vendedor</Label>
-                            <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                            <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
+                                optionValue="id" class="w-100"></Select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Cliente (a quien se vende)</Label>
-                            <Select v-model="ticket.customer" :options="dependencies.customers" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                            <Select v-model="ticket.customer" :options="dependencies.customers" filter
+                                optionLabel="name" optionValue="id" class="w-100"></Select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Rifa</Label>
-                            <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                            <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name"
+                                optionValue="id" class="w-100"></Select>
                         </div>
                         <!-- <div class="col-md-6 mb-3">
                                 <Label>Estado de la boleta</Label>
                                 <Select v-model="ticket.status" :options="payment_methods" filter class="w-100"></Select>
                             </div> -->
                     </div>
-    
+
                     <hr>
-    
+
                     <div>
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-success" @click="add_payment()">+</button>
@@ -76,116 +84,146 @@
                         <div class="row" v-for="(i, index) in ticket.payments" :key="index">
                             <div class="col-4">
                                 <Label>Método de pago</Label>
-                                <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
+                                <Select v-model="i.payment_method" :options="payment_methods" filter
+                                    class="w-100"></Select>
                             </div>
                             <div class="col-4">
                                 <Label>Valor</Label>
-                                <InputNumber mode="currency" currency="USD" locale="en-US" fluid v-model="i.amount" type="text"></InputNumber>
+                                <InputNumber mode="currency" currency="USD" locale="en-US" fluid v-model="i.amount"
+                                    type="text"></InputNumber>
                             </div>
                             <div class="col-4">
                                 <div class="row">
                                     <div class="col-10">
                                         <Label>Fecha de expiración</Label>
-                                        <DatePicker v-model="i.expiration_date" showIcon fluid :showOnFocus="false" @date-select="i.expiration_date = Helper.formatDateForm($event)" />
+                                        <DatePicker v-model="i.expiration_date" showIcon fluid :showOnFocus="false"
+                                            @date-select="i.expiration_date = Helper.formatDateForm($event)" />
                                     </div>
                                     <div class="col-2">
-                                        <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
+                                        <button class="btn btn-danger mt-4 ml-3"
+                                            @click="remove_payment(index)">X</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-    
+
                     <div class="d-flex justify-content-center my-3">
                         <Button @click="saveEntity">Guardar</Button>
                     </div>
                 </Dialog>
             </div>
-            <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Boleta</th>
-                            <!-- <th>Rifa</th> -->
-                            <th>Cliente</th>
-                            <th>Documento</th>
-                            <th>Teléfono</th>
-                            <th>Ciudad</th>
-                            <th>Fecha venta</th>
-                            <th v-if="!sellerRouteId">Vendedor</th>
-                            <th>Estado</th>
-                            <th>Abonado</th>
-                            <th>Saldo</th>
-                            <th>Facturas</th>
-                            <th>Acciones</th>
-                            <th>Certif. Boleta</th>
-                            <th>Whatsapp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(i, index) in tickets" :key="index" v-bind:class="getLigthTracking(i.customer)">
-                            <td>#{{i.number}}</td>
-                            <!-- <td>{{i.raffle.name}}</td> -->
-                            <td>{{ i.customer?.name ?? 'N/A' }}</td>
-                            <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
-                            <td>{{ i.customer?.phone ?? 'N/A' }}</td>
-                            <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
-                            <td>{{ i.created_at ?? 'N/A' }}</td>
-                            <td v-if="!sellerRouteId">{{i.seller?.name ?? 'Cliente'}}</td>
-                            <td>{{ i.status ?? 'No vendida' }}</td>
-                            <td>{{ i.value ? Helper.formatNumber(i.value) : 'N/A' }}</td>
-                            <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
-                            <td>
-                                <div class="text-center">
-                                    <button @click="paymentdata(i)" class="btn"><i class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="d-flex justify-content-between" v-if="i.customer">
-                                    <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
-                                    <div class="d-flex" v-if="i.status != 'Pagado'">
-                                        <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, i.status)"><i class="fas fa-check"></i></button>
-                                        <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
+            <div class="table-responsive">
+                <!-- <div class="card">
+                    <DataTable :value="tickets.results" :paginator="true" :rows="10" :rows-per-page-options="[10, 20, 50]"
+                        :loading="loading" sortField="created_at" sortOrder="-1" class="p-datatable-gridlines">
+                        <Column field="number" header="Boleta" sortable />
+                        <Column field="customer.name" header="Cliente" sortable />
+                        <Column field="customer.document" header="Documento" :body="documentTemplate" />
+                        <Column field="customer.phone" header="Teléfono" />
+                        <Column field="customer.city.name" header="Ciudad" />
+                        <Column field="created_at" header="Fecha Venta" sortable />
+                        <Column v-if="!sellerRouteId" field="seller.name" header="Vendedor" />
+                        <Column field="status" header="Estado" />
+                        <Column field="value" header="Abonado" :body="valueTemplate" />
+                        <Column field="value_to_pay" header="Saldo" :body="saldoTemplate" />
+                        <Column field="actions" header="Acciones" :body="actionsTemplate" />
+                        <Column header="Certif. Boleta" :body="certifTemplate" />
+                        <Column header="Whatsapp" :body="whatsappTemplate" />
+                    </DataTable>
+                </div> -->
+                <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Boleta</th>
+                                <th>Cliente</th>
+                                <th>Documento</th>
+                                <th>Teléfono</th>
+                                <th>Ciudad</th>
+                                <th>Fecha venta</th>
+                                <th v-if="!sellerRouteId">Vendedor</th>
+                                <th>Estado</th>
+                                <th>Abonado</th>
+                                <th>Saldo</th>
+                                <th>Facturas</th>
+                                <th>Acciones</th>
+                                <th>Certif. Boleta</th>
+                                <th>Whatsapp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(i, index) in tickets.results" :key="index" v-bind:class="getLigthTracking(i.customer)">
+                                <td>#{{i.number}}</td>
+                                <td>{{ i.customer?.name ?? 'N/A' }}</td>
+                                <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
+                                <td>{{ i.customer?.phone ?? 'N/A' }}</td>
+                                <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
+                                <td>{{ i.created_at ?? 'N/A' }}</td>
+                                <td v-if="!sellerRouteId">{{i.seller?.name ?? 'Cliente'}}</td>
+                                <td>{{ i.status ?? 'No vendida' }}</td>
+                                <td>{{ i.value ? Helper.formatNumber(i.value) : 'N/A' }}</td>
+                                <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
+                                <td>
+                                    <div class="text-center">
+                                        <button @click="paymentdata(i)" class="btn"><i class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
                                     </div>
-                                </div>
-                                <div v-else>
-                                    <span>No vendida</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div v-if="i.customer">
-                                    <div class="row">
-                                      <div v-if="ticketstatus == 'Reservado' " class="col-3">
-                                       <button class="btn"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
-                                      </div>
-                                      <div v-if="ticketstatus  == 'Pagado'" class="col-3">
-                                       <button class="btn"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
-                                      </div>
-                                      <div class="w-100 text-center" v-else>
-                                        N/A
-                                      </div>
-                                   </div>
-                                    <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
-                                        <TikectFirstPaid :ticketData="i" />
-                                    </Modal>
-        
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-between" v-if="i.customer">
+                                        <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
+                                        <div class="d-flex" v-if="i.status != 'Pagado'">
+                                            <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, i.status)"><i class="fas fa-check"></i></button>
+                                            <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div v-else>
+                                        <span>No vendida</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div v-if="i.customer">
+                                        <div class="row">
+                                          <div v-if="ticketstatus == 'Reservado' " class="col-3">
+                                           <button class="btn"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
+                                          </div>
+                                          <div v-if="ticketstatus  == 'Pagado'" class="col-3">
+                                           <button class="btn"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
+                                          </div>
+                                          <div class="w-100 text-center" v-else>
+                                            N/A
+                                          </div>
+                                       </div>
+                                        <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
+                                            <TikectFirstPaid :ticketData="i" />
+                                        </Modal>
+            
+    
+                                    </div>
+                                    <div v-else>
+                                        <span>No vendida</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-center">
+                                        <button class="btn" @click="notifyCustomer(i.customer)">
+                                            <i class="text-success fab fa-whatsapp fa-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                </table>
+            </div>
+                    <!-- Paginador -->
+        <Paginator 
+            :first="pagination.page * pagination.rows" 
+            :rows="pagination.rows" 
+            :total-records="pagination.totalRecords"
+            @page="onPageChange"
+            :rows-per-page-options="[10, 20, 50]"
+        />
 
-                                </div>
-                                <div v-else>
-                                    <span>No vendida</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <button class="btn" @click="notifyCustomer(i.customer)">
-                                        <i class="text-success fab fa-whatsapp fa-lg"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-            </table>
-
-            <Dialog v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{width : '75rem'}">
+            <Dialog v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{ width: '75rem' }">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -194,16 +232,19 @@
                             <th>abono</th>
                             <th>metodo de pago</th>
                             <th>Descarga</th>
-        
+
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(f, index) in ticket_certif.payments" :key="index">
                             <td>{{ Helper.formatDateTime(f.created_at) }}</td>
-                            <td># {{ticket_certif.number}}</td>
-                            <td>{{Helper.formatNumber(f.amount)}}</td>
-                            <td>{{f.payment_method}}</td>
-                            <td> <TicketPaid :ticketData="ticket_certif" :paymentData="ticket_certif.payments" :index="index" /> </td>
+                            <td># {{ ticket_certif.number }}</td>
+                            <td>{{ Helper.formatNumber(f.amount) }}</td>
+                            <td>{{ f.payment_method }}</td>
+                            <td>
+                                <TicketPaid :ticketData="ticket_certif" :paymentData="ticket_certif.payments"
+                                    :index="index" />
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -213,7 +254,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, createApp } from "vue";
+import { ref, onMounted, computed, watch, createApp, reactive } from "vue";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from 'vue-router';
 import Swal from 'sweetalert2'
@@ -223,7 +264,7 @@ import TicketPaidAll from "./TicketPaidAll.vue";
 // @ts-ignore
 import Helper from '@/helpers/Helper';
 import { SellerServices } from "@/services/seller.service";
-import { useFilterStore , useModalStore  ,  useFilterTicket} from '@/stores/filterStore';
+import { useFilterStore, useModalStore, useFilterTicket } from '@/stores/filterStore';
 const tickets = ref([])
 const ticket_certif = ref({})
 const full_value = ref(0)
@@ -242,6 +283,7 @@ const dependencies = ref({
 const reciboCanvas = ref(null);
 const filtroStore = useFilterStore();
 const fitroticket = useFilterTicket();
+const loading = ref(false)
 
 
 const filters = ref({
@@ -250,7 +292,8 @@ const filters = ref({
     customer: "",
     seller: "",
     init_date: "",
-    final_date: ""
+    final_date: "",
+    page: 1
 })
 
 const router = useRoute()
@@ -259,15 +302,23 @@ const status = computed(() => {
     const path = router.path
     return path.split('/').pop()
 })
-const customerf = ref (null)
-const customerf2 = ref (null)
-const numberf = ref (null)
+const customerf = ref(null)
+const customerf2 = ref(null)
+const numberf = ref(null)
+
+
+const pagination = reactive({
+            page: 0, // Página actual (empieza desde 0)
+            rows: 10, // Cantidad de registros por página
+            totalRecords: 200, // Total de registros
+        });
+
 
 onMounted(async () => {
 
     customerf.value = filtroStore.filter;
     numberf.value = fitroticket.filter;
-    
+
     datatable()
     getTitle()
     limpiarFormulario()
@@ -291,67 +342,75 @@ const getTitle = () => {
 }
 
 const datatable = async () => {
+    loading.value = true
     filters.value.status = status.value
     filters.value.customer = ""
-    
 
-    if(customerf.value){
+
+    if (customerf.value) {
         filters.value.customer = customerf.value
         filters.value.status = ""
         customerf.value = ""
         filtroStore.clearFilter()
-      
+
     }
-   
-    
-    if(sellerRouteId.value) {
-        if(numberf.value){
-          filters.value.number = numberf.value
-          filters.value.status = ""
-          numberf.value = ""
-          fitroticket.clearFilter()
+
+
+    if (sellerRouteId.value) {
+        if (numberf.value) {
+            filters.value.number = numberf.value
+            filters.value.status = ""
+            numberf.value = ""
+            fitroticket.clearFilter()
         }
         filters.value.seller = sellerRouteId.value
         tickets.value = await SellerServices.tracking(sellerRouteId.value, filters.value)
-        
-    }else {
-        tickets.value = await TicketServices.list(filters.value)
+
+    } else {
+        filters.value.page = 1
+        const response = await TicketServices.list(filters.value)
+        // pagination.page = 0;
+        tickets.value = response
+        // if(response.count )
+        pagination.totalRecords = response.count;
+        // pagination.page = response.page - 1;
     }
-    full_value.value = 0
-    tickets.value.forEach(element => {
-        if(element.value) {
-            full_value.value += parseInt(element.value)
-        }
-    });
     filtroStore.clearFilter()
 }
 
+const onPageChange = (event) => {
+            pagination.page = event.page;
+            pagination.rows = event.rows;
+            filters.value.page = pagination.page + 1;
+            // filters.value.page_size = event.rows;
+            datatable();
+        };
+
 watch(() => router.path, async () => {
-   // customerf.value = filtroStore.filter;
     await datatable()
 
 })
 watch(
-  () => filtroStore.filter,
-  (newValue) => {
-    if (newValue) {
-        customerf.value = filtroStore.filter;
-        datatable()
-    } else {
+    () => filtroStore.filter,
+    (newValue) => {
+        if (newValue) {
+            customerf.value = filtroStore.filter;
+            datatable()
+        } else {
+        }
     }
-  }
 );
 watch(
-  () => fitroticket.filter,
-  (newValue) => {
-    if (newValue) {
+    () => fitroticket.filter,
+    (newValue) => {
+        if (newValue) {
 
-       
-    } else {
-       
-     
+
+        } else {
+
+
+        }
     }
-  }
 );
 
 
@@ -438,7 +497,7 @@ const changeState = async (id, status) => {
 }
 
 const getLigthTracking = (customer) => {
-    if(!sellerRouteId.value) {
+    if (!sellerRouteId.value) {
         return ''
     }
     if (customer) {
@@ -495,36 +554,35 @@ const notifyCustomer = (customer) => {
 
 const downloadExcel = () => {
     console.log('downloadExcel');
-    
+
 }
 
 function showTicketAlertAll(ticketData) {
-  // Creamos un contenedor en el DOM donde renderizaremos el componente
-  const wrapper = document.createElement('div');
+    // Creamos un contenedor en el DOM donde renderizaremos el componente
+    const wrapper = document.createElement('div');
 
-  // Creamos una instancia de Vue con nuestro componente
-  const app = createApp(TicketPaidAll, { ticketData });
+    // Creamos una instancia de Vue con nuestro componente
+    const app = createApp(TicketPaidAll, { ticketData });
 
-  // Montamos la instancia en el contenedor creado
-  app.mount(wrapper);
+    // Montamos la instancia en el contenedor creado
+    app.mount(wrapper);
 
-  // Mostramos el SweetAlert con el componente montado en `html`
-  Swal.fire({
-  title: 'Descargar Boleta',
-  html: wrapper,
-  focusConfirm: false,
-  showCloseButton: true, // Muestra la "X" para cerrar
-  showConfirmButton: false, // Oculta el botón de confirmación
-  width: '400px', // Ajusta el tamaño si es necesario
-  didDestroy: () => {
-    // Desmonta el componente cuando se cierre el SweetAlert
-    app.unmount();
-  },
-});
+    // Mostramos el SweetAlert con el componente montado en `html`
+    Swal.fire({
+        title: 'Descargar Boleta',
+        html: wrapper,
+        focusConfirm: false,
+        showCloseButton: true, // Muestra la "X" para cerrar
+        showConfirmButton: false, // Oculta el botón de confirmación
+        width: '400px', // Ajusta el tamaño si es necesario
+        didDestroy: () => {
+            // Desmonta el componente cuando se cierre el SweetAlert
+            app.unmount();
+        },
+    });
 }
 const sellerRouteId = computed(() => {
-  return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
+    return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
 });
 
 </script>
-  
