@@ -376,6 +376,7 @@ const datatable = async () => {
         // pagination.page = response.page - 1;
     }
     filtroStore.clearFilter()
+    fitroticket.clearFilter()
 }
 
 const onPageChange = (event) => {
@@ -401,15 +402,16 @@ watch(
     }
 );
 watch(
-    () => fitroticket.filter,
-    (newValue) => {
-        if (newValue) {
-
-
-        } else {
-
-
-        }
+  () => fitroticket.filter,
+  (newValue) => {
+    if (newValue) {
+        numberf.value = fitroticket.filter;
+        datatable()
+      
+       
+    } else {
+       
+     
     }
 );
 

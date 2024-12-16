@@ -127,6 +127,7 @@ const datatable = async () => {
         router.push({ name: 'TicketFree' })
         
     }
+    emit('closeFilter', false)
      /*router.push({ name: 'BookedTickets' });
     const currentPath =  window.location.pathname
     if(currentPath == '/tickets/Reservado'){
