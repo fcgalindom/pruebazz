@@ -215,7 +215,7 @@
                 </table>
             </div>
                     <!-- Paginador -->
-        <Paginator 
+        <Paginator v-if="!sellerRouteId"
             :first="pagination.page * pagination.rows" 
             :rows="pagination.rows" 
             :total-records="pagination.totalRecords"
@@ -355,7 +355,8 @@ const datatable = async () => {
 
     }
 
-
+    console.log('sellerRouteId.value', sellerRouteId.value);
+    
     if (sellerRouteId.value) {
         if (numberf.value) {
             filters.value.number = numberf.value
@@ -364,16 +365,15 @@ const datatable = async () => {
             fitroticket.clearFilter()
         }
         filters.value.seller = sellerRouteId.value
-        tickets.value = await SellerServices.tracking(sellerRouteId.value, filters.value)
-
+        
+        tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
     } else {
-        filters.value.page = 1
+        if(filters.value.number || filters.value.raffle || filters.value.customer || filters.value.seller || filters.value.init_date || filters.value.final_date){
+            filters.value.page = 1
+        }
         const response = await TicketServices.list(filters.value)
-        // pagination.page = 0;
         tickets.value = response
-        // if(response.count )
         pagination.totalRecords = response.count;
-        // pagination.page = response.page - 1;
     }
     filtroStore.clearFilter()
     fitroticket.clearFilter()
@@ -413,6 +413,7 @@ watch(
        
      
     }
+}
 );
 
 
