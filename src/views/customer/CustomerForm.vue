@@ -177,5 +177,6 @@ const saveEntity = async () => {
         confirmButtonText: 'Continuar'
     })
     emit('customerData', customerData)
+    emit('closedialog', false)
 }
 </script>

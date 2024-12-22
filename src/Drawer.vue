@@ -46,7 +46,7 @@
 
     <!-- Crear Cliente -->
     <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '80rem' }">
-        <CustomerForm  @closedialog = "visibleCustomer = false" />
+        <CustomerForm @closedialog = "visibleCustomer = false" />
     </Dialog>
 
     <!-- Filtro General -->
