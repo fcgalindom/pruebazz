@@ -170,6 +170,12 @@ const listCustomers = async () => {
 const saveEntity = async () => {
     customer.value.country_code = customer.value.country_code.dialCode
     const customerData = await CustomerServices.createCustomer(customer.value)
+    Swal.fire({
+        title: '¡Éxito!',
+        text: 'Datos guardados con Éxito.',
+        icon: 'success',
+        confirmButtonText: 'Continuar'
+    })
     emit('customerData', customerData)
 }
 </script>
