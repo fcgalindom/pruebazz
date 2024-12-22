@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <Button @click="listCustomers">Buscar</Button>
+                    <Button @click="datatable">Buscar</Button>
                 </div>
     
                 <hr>
@@ -84,7 +84,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in customers" :key="index">
+            <tr v-for="(item, index) in customers.results" :key="index">
                 <td>{{item.name}}</td>
                 <td>{{item.phone}}</td>
                 <td>{{ Helper.thousandSeparator(item.document)}}</td>
@@ -94,12 +94,19 @@
           </tbody>
         </table>
       </div>
+      <Paginator v-if="!sellerRouteId"
+            :first="pagination.page * pagination.rows" 
+            :rows="pagination.rows" 
+            :total-records="pagination.totalRecords"
+            @page="onPageChange"
+            :rows-per-page-options="[10, 20, 50]"
+        />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
 // @ts-ignore
@@ -114,6 +121,12 @@ const filters = ref({
     phone: "",
     city: ""
 })
+
+const pagination = reactive({
+            page: 0, // Página actual (empieza desde 0)
+            rows: 10, // Cantidad de registros por página
+            totalRecords: 200, // Total de registros
+        });
 
 const countries = ref([{
         name: "Mexico",
@@ -178,11 +191,16 @@ const customer = ref({})
 onMounted(async () => {
     cities.value = await CustomerServices.listCities()
     // limpiarData()
-    listCustomers()
+    datatable()
 })
 
-const listCustomers = async () => {
-    customers.value = await CustomerServices.list(filters.value)
+const datatable = async () => {
+    if(filters.value.name || filters.value.document || filters.value.phone || filters.value.city){
+            filters.value.page = 1
+        }
+    const response = await CustomerServices.list(filters.value)
+    customers.value = response
+    pagination.totalRecords = response.count;
 }
 
 const saveEntity = async () => {
@@ -192,7 +210,7 @@ const saveEntity = async () => {
     } else {
         await CustomerServices.createCustomer(customer.value)
     }
-    await listCustomers()
+    await datatable()
     visible.value = false
     Swal.fire({
         title: '¡Éxito!',
@@ -206,6 +224,14 @@ const showData = async (id) => {
     customer.value = await CustomerServices.show(id)
     customer.value.country_code = countries.value.find(item => item.dialCode == customer.value.country_code)
 }
+
+const onPageChange = (event) => {
+            pagination.page = event.page;
+            pagination.rows = event.rows;
+            filters.value.page = pagination.page + 1;
+            // filters.value.page_size = event.rows;
+            datatable();
+        };
 
 const limpiarData = () => {
     visible.value = true
