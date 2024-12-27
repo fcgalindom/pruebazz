@@ -88,6 +88,7 @@
                     <input v-model="filters.number_random" type="text" class="input-customer poppins-medium"
                         placeholder="Cantidad de Números" aria-label="Cantidad de Números"
                         aria-describedby="basic-addon2">
+                    <button class="blinking-button-2 mt-3" @click="generateRandomNumbers">Generar</button>
                     <!-- <div class="input-group mb-3 input-customer">
                         <div class="input-group-append" @click="generateRandomNumbers" style="cursor: pointer;">
                             <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
@@ -99,7 +100,7 @@
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
                     <div class="input-group mb-3">
-                        <input v-model="filters.number" type="number" class="input-customer poppins-medium"
+                        <input v-model="filters.number" type="text" class="input-customer poppins-medium"
                             placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar"
                             aria-describedby="basic-addon2">
                         <!-- <div class="input-group-append">
@@ -146,7 +147,7 @@
             </div>
         </div>
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
-            <button class="blinking-button-2 poppins-semibold mt-3" @click="visiblefindcustomer = true;">Comprar</button>
+            <button v-if="ticket.number.length > 0" class="blinking-button-2 poppins-semibold mt-3" @click="visiblefindcustomer = true;">Comprar</button>
             <!-- <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button> -->
 
             <button id="modalTicket" data-toggle="modal" :data-target="`#${modal}`" style="display: none;">
@@ -159,10 +160,10 @@
                     <h3 class="text-center">No hay números disponibles</h3>
             </div>
             <div class="d-flex flex-column align-items-center w-100" v-else>
-                <div>
+                <div class="mb-2">
                     <span class="poppins-bold" style="font-size: 2em;">NÚMEROS DISPONIBLES</span>
                 </div>
-                <div class="button-grid w-80 grid-buttons-tickets scroll-container">
+                <div id="board-buy" class="button-grid w-80 grid-buttons-tickets scroll-container">
                         <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'"
                             v-for="(button, index) in filteredButtons" :key="index" class="grid-button"
                             @click="buyTicket(button, button)">
@@ -532,7 +533,8 @@ const generateRandomNumbers = () => {
     const activeButtonsArray = buttons.value;
     const randomNumbers = [];
     const count = Math.min(filters.value.number_random, activeButtonsArray.length);
-
+    const element = document.getElementById('buyNumbers');
+    element.scrollIntoView({ behavior: 'smooth' });
     while (randomNumbers.length < count) {
         const randomIndex = Math.floor(Math.random() * activeButtonsArray.length);
         const randomNumber = activeButtonsArray[randomIndex];
