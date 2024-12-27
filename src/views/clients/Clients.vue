@@ -1,6 +1,6 @@
 <template>
     <div class="w-100 d-flex justify-content-center mt-2 mb-5">
-        <img src="@/assets/customers/dr_denix_logo.png" alt="" style="width: 25%;">
+        <img class="main-logo-head" src="@/assets/customers/dr_denix_logo.png">
     </div>
     <div class="w-100 d-flex justify-content-center">
         <div class="container-main-head">

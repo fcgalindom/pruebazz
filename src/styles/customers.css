@@ -12,6 +12,10 @@
     padding-bottom: .5em;
 }
 
+.main-logo-head {
+    max-width: 20%;
+}
+
 .container-awards {
     width: 50%;
     display: flex;
@@ -312,6 +316,10 @@
         width: 75% !important;
         grid-template-columns: repeat(7, 1fr);
     }
+
+    .main-logo-head {
+        max-width: 50%;
+    }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */
@@ -365,6 +373,10 @@
 
     .size-lotery-image {
         max-width: 70%;
+    }
+
+    .main-logo-head {
+        max-width: 80%;
     }
     
 }
