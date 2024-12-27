@@ -146,7 +146,7 @@
             </div>
         </div>
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
-            <Button class="mt-3" @click="visiblefindcustomer = true;    ">Comprar</Button>
+            <button class="blinking-button-2 poppins-semibold mt-3" @click="visiblefindcustomer = true;">Comprar</button>
             <!-- <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button> -->
 
             <button id="modalTicket" data-toggle="modal" :data-target="`#${modal}`" style="display: none;">

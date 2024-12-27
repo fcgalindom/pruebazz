@@ -26,7 +26,7 @@
         </div>  
     </div>
     <div class="d-flex justify-content-center my-5 ">
-        <button class="blinking-button poppins-semibold">Compra tus números</button>
+        <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Compra tus números</button>
     </div>
     <div>
         <img src="@/assets/customers/background_raffle.jpeg" alt="" style="width: 100%; height: 30em;">
@@ -46,7 +46,7 @@
         <span class="poppins-regular">Todos los sorteos juegan con las 4 últimas cifras del premio mayor de la Lotería Boyacá, sin serie.</span>
     </div>
 
-    <div class=" mt-5">
+    <div id="buyNumbers" class="mt-5">
         <!-- <div class="text-center">
             <span>Todos los sorteos juegan con las últimas cuatro cifras de la lotería de Boyacá, sin serie</span>
         </div>
@@ -109,7 +109,10 @@ const groupedItems = computed(() => {
               });
         };
        
-    
+        const scrollToBuyNumbers = () => {
+            const element = document.getElementById('buyNumbers');
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
 
         onMounted(async() => {
             //$('#carouselExample').carousel({
