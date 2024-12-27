@@ -3,7 +3,7 @@
     <Drawer />
     <!-- <adminlte /> -->
   </div>
-<div class="container-fluid">
+<div :class="token ? 'container-fluid' : ''">
   <router-view></router-view>
 </div>
 </template>

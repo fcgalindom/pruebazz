@@ -4,6 +4,89 @@
     font-size: 6em;
 }
 
+.container-main-head {
+    width: 70%;
+    background-color: #D2D3D2; 
+    border-radius: 30px;
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+.container-awards {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3em .5em;
+    background-color: white; 
+    border-radius: 30px;
+    text-align: center;
+}
+
+.container-description {
+    width: 50%;
+    padding: 3em .5em;
+    background-color: #01B1EB;
+    text-align: center;
+}
+
+.size-lotery-image {
+    max-width: 25%;
+}
+
+.color-primary-raffle {
+    color: #01B1EB;
+}
+
+.bg-blue-dark {
+    background-color: #01B1EB;
+}
+
+.btn-buy-numbers {
+    background-color: #01B1EB;
+    color: white;
+    padding: 1em 1.5em;
+    border-radius: 15px;
+    min-width: 20%;
+    font-size: 1.5em;
+}
+
+@keyframes blink {
+    0%, 100% {
+      background-color: #01B1EB; /* Rojo */
+      color: white;
+      box-shadow: 1px 1px 1px 1px #01B1EB;
+    }
+    50% {
+      background-color: white; /* Verde */
+      color: black;
+      box-shadow: 1px 1px 1px 1px black;
+    }
+  }
+  
+  .blinking-button {
+    /* color: white; */
+    padding: 1em 1.5em;
+    border-radius: 15px;
+    min-width: 20%;
+    font-size: 1.5em;
+    animation: blink 1s infinite;
+  }
+
+  .input-customer {
+    border: 1px solid #000000;
+    opacity: .52;
+    border-radius: 12px;
+    background-color: #D2D3D2;
+    color: #0B0B0B;
+    padding: 1.3em;
+
+  }
+
+  .input-customer::placeholder {
+    color: black;
+  }
+
 .secondary-award {
     color: #d2b32f;
     margin-top: 0.4em;
@@ -69,6 +152,7 @@
     border-bottom-left-radius: 20px;
     padding: 0em 0.5em 0em 0.4em;
     font-size: 3em;
+    box-shadow: 1px 1px 1px 1px #021929;
 }
 
 .div-select-ticket {
@@ -127,15 +211,15 @@
 }
 
 .footer-customer {
-    background-color: #0b0b0b;
+    background-color: #021929;
     padding-top: 0.8em;
 }
 
 .buttons-social-networks button {
     background-color: transparent;
-    color: #d2b32f;
+    color: white;
     border: none;
-    font-size: 3.7em;
+    font-size: 3.25em;
     margin-right: 0.5em;
 }
 
@@ -252,6 +336,9 @@
 /* Large devices (desktops, 992px and up) */
 @media (max-width: 992px) { 
     /* Add your styles here */
+    .size-lotery-image {
+        max-width: 50%;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -263,6 +350,23 @@
     .main-award {
         font-size: 4em;
     }
+
+    .container-main-head {
+        width: 100%;
+    }
+
+    .container-awards {
+        width: 80%;
+    }
+
+    .container-description {
+        width: 80%;
+    }
+
+    .size-lotery-image {
+        max-width: 70%;
+    }
+    
 }
 
 

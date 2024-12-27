@@ -85,38 +85,40 @@
             <div class="d-flex justify-content-center w-100 mb-3">
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">NÚMEROS AL AZAR</label>
-                    <div class="input-group mb-3 input-customer">
-                        <input v-model="filters.number_random" type="text" class="form-control poppins-medium"
-                            placeholder="Cantidad de Números" aria-label="Cantidad de Números"
-                            aria-describedby="basic-addon2">
+                    <input v-model="filters.number_random" type="text" class="input-customer poppins-medium"
+                        placeholder="Cantidad de Números" aria-label="Cantidad de Números"
+                        aria-describedby="basic-addon2">
+                    <!-- <div class="input-group mb-3 input-customer">
                         <div class="input-group-append" @click="generateRandomNumbers" style="cursor: pointer;">
                             <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="d-flex justify-content-center w-100 mt-5">
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">BUSQUE SU NÚMERO</label>
-                    <div class="input-group mb-3 input-customer">
-                        <input v-model="filters.number" type="number" class="form-control poppins-medium"
+                    <div class="input-group mb-3">
+                        <input v-model="filters.number" type="number" class="input-customer poppins-medium"
                             placeholder="Ingrese el número a buscar" aria-label="Ingrese el número a buscar"
                             aria-describedby="basic-addon2">
-                        <div class="input-group-append">
+                        <!-- <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2"><i class="fas fa-search fa-lg"></i></span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-center w-100 mt-5">
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">&nbsp;</label>
-                    <div class="input-group mb-3 input-customer">
-                        <input v-model="ticket.number" type="text" class="form-control poppins-medium text-center"
+                    <!-- <div class="input-group mb-3 input-customer"> -->
+                        <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid placeholder="Números seleccionados"
+                            :maxSelectedLabels="15" class="w-full md:w-80" @change="deleteTicket" />
+                        <!-- <input v-model="ticket.number" type="text" class="poppins-medium text-center"
                             placeholder="Números seleccionados" readonly aria-label="Números seleccionados"
                             aria-describedby="basic-addon2"
-                            style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
-                    </div>
+                            style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;"> -->
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -144,7 +146,8 @@
             </div>
         </div>
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
-            <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button>
+            <Button class="mt-3" @click="visiblefindcustomer = true;    ">Comprar</Button>
+            <!-- <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button> -->
 
             <button id="modalTicket" data-toggle="modal" :data-target="`#${modal}`" style="display: none;">
                 prueba2</button>
@@ -155,12 +158,17 @@
             <div class="w-100 p-5" v-if="filteredButtons.length === 0" style="background-color: lightgray;">
                     <h3 class="text-center">No hay números disponibles</h3>
             </div>
-            <div class="button-grid w-80 grid-buttons-tickets scroll-container" v-else>
-                    <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'"
-                        v-for="(button, index) in filteredButtons" :key="index" class="grid-button"
-                        @click="buyTicket(button, button)">
-                        {{ button }}
-                    </button>
+            <div class="d-flex flex-column align-items-center w-100" v-else>
+                <div>
+                    <span class="poppins-bold" style="font-size: 2em;">NÚMEROS DISPONIBLES</span>
+                </div>
+                <div class="button-grid w-80 grid-buttons-tickets scroll-container">
+                        <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'"
+                            v-for="(button, index) in filteredButtons" :key="index" class="grid-button"
+                            @click="buyTicket(button, button)">
+                            {{ button }}
+                        </button>
+                </div>
             </div>
         </div>
         <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '80rem' }">
