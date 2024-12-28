@@ -294,9 +294,12 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const getcutomerevent = (data) => {
+    console.log('data ==> ', data);
+    
     if (data.validate) {
         ticket.value.customer = data.customer.id
         visiblefindcustomer.value = false
+        visibleCustomer.value = true
         getPromotionsByRaffle()
     } else {
         visiblefindcustomer.value = false
@@ -480,11 +483,14 @@ const getPromotionsByRaffle = async () => {
 
 
     if (props.typeScreen == 'client') {
-        ticket.value.raffle = props.raffle
+        ticket.value.raffle = props.raffle.id
     }
     else {
         ticket.value.raffle = raffle.value.id
     }
+
+    console.log('ticket.value.raffle ==> ', ticket.value.raffle);
+    
 
     promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
 
