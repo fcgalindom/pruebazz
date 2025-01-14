@@ -231,14 +231,14 @@ const dependencies = ref({
     customers: [],
     raffles: []
 })
-const wompiForm = ref(null);
-const visibleCustomer = ref(false);
-const cifrar = ref("")
+let wompiForm = ref(null);
+let visibleCustomer = ref(false);
+let cifrar = ref("")
 const costumerdata = ref("")
 const visiblefindcustomer = ref(false)
 
 const referencia = ref("");
-const monto = "200000";
+let monto = "200000";
 const moneda = "COP";
 const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
 const ticketsBooked = ref([])
@@ -305,6 +305,7 @@ const getcutomerevent = (data) => {
         visiblefindcustomer.value = false
         visibleCustomer.value = true
         documentcustomer.value = data.customer.document
+        getPromotionsByRaffle()
     }
 }
 onMounted(async () => {
@@ -326,37 +327,37 @@ onMounted(async () => {
 
     //referencia.value = await TicketServices.getTiketsRefferece()
 
-    const script = document.createElement('script');
-    script.src = 'https://checkout.wompi.co/widget.js';
-    script.setAttribute('data-render', 'button');
-    script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
-    script.setAttribute('data-currency', moneda);
-    script.setAttribute('data-amount-in-cents', monto);
-    script.setAttribute('data-reference', referencia.value);
-    //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
-    script.setAttribute(
-        'data-signature:integrity',
-        cifrar.value
-    );
+    // const script = document.createElement('script');
+    // script.src = 'https://checkout.wompi.co/widget.js';
+    // script.setAttribute('data-render', 'button');
+    // script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
+    // script.setAttribute('data-currency', moneda);
+    // script.setAttribute('data-amount-in-cents', monto);
+    // script.setAttribute('data-reference', referencia.value);
+    // //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
+    // script.setAttribute(
+    //     'data-signature:integrity',
+    //     cifrar.value
+    // );
 
     // Insertar el script en el formulario
-    wompiForm.value.appendChild(script);
+    // wompiForm.value.appendChild(script);
 
-    window.addEventListener('message', function (event) {
-        if (event.origin === 'https://checkout.wompi.co') {
-            const data = event.data;
+    // window.addEventListener('message', function (event) {
+    //     if (event.origin === 'https://checkout.wompi.co') {
+    //         const data = event.data;
 
-            if (data.event === 'transaction_approved') {
-                // Pago aprobado
-            } else if (data.event === 'unprocessabletransaction') {
+    //         if (data.event === 'transaction_approved') {
+    //             // Pago aprobado
+    //         } else if (data.event === 'unprocessabletransaction') {
 
-                saveEntity()
+    //             saveEntity()
 
-            } else if (data.event === 'transaction_error') {
-                // Error en el pago
-            }
-        }
-    });
+    //         } else if (data.event === 'transaction_error') {
+    //             // Error en el pago
+    //         }
+    //     }
+    // });
 })
 
 const isActive = (button) => {
@@ -495,7 +496,7 @@ const getPromotionsByRaffle = async () => {
     promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
 
 
-
+    let montoWompi = 0
     if (promotion.value[0]?.number_of_tickets <= ticket.value.number.length) {
         Swal.fire({
             title: '¡Felicitaciones!',
@@ -524,6 +525,48 @@ const getPromotionsByRaffle = async () => {
         }
     }
 
+    // monto.value = ticket.value.value_to_pay
+    console.log('ticket.value.value_to_pay ==> ', ticket.value.value_to_pay);
+    console.log('ticket.value.number.length ==> ', ticket.value.number.length);
+    
+    
+    monto = ticket.value.value_to_pay * ticket.value.number.length
+    monto += "00"
+    generateWompiPay(monto)
+    console.log('bere');
+
+}
+
+const generateWompiPay = (monto = "0") => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.wompi.co/widget.js';
+    script.setAttribute('data-render', 'button');
+    script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
+    script.setAttribute('data-currency', moneda);
+    script.setAttribute('data-amount-in-cents', monto);
+    script.setAttribute('data-reference', referencia.value);
+    //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
+    script.setAttribute(
+        'data-signature:integrity',
+        cifrar.value
+    );
+    wompiForm.value.appendChild(script);
+
+    window.addEventListener('message', function (event) {
+        if (event.origin === 'https://checkout.wompi.co') {
+            const data = event.data;
+
+            if (data.event === 'transaction_approved') {
+                // Pago aprobado
+            } else if (data.event === 'unprocessabletransaction') {
+
+                saveEntity()
+
+            } else if (data.event === 'transaction_error') {
+                // Error en el pago
+            }
+        }
+    });
 }
 
 const generateRandomNumbers = () => {
