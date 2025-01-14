@@ -15,7 +15,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch, toRefs } from "vue";
-import loteriaBoyaca from "@/assets/customers/recibo2.png";
+import loteriaBoyaca from "@/assets/customers/paymentmay.jpeg";
 import { jsPDF } from "jspdf";
 import Helper from '@/helpers/Helper';
 
