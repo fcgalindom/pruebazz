@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"  style="display: none;"  ></canvas>
+    <canvas ref="reciboCanvas" style="display: none;"  ></canvas>
     
     <div class="container">
         <div class="row">
@@ -17,7 +17,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch, toRefs } from "vue";
-import loteriaBoyaca from "@/assets/customers/boletaAbono.jpg";
+import loteriaBoyaca from "@/assets/customers/firstpaymentmayjun.jpeg";
 import drdentix from "@/assets/customers/dr_denix_logo.png";
 import { jsPDF } from "jspdf";
 import Helper from '@/helpers/Helper';
@@ -57,23 +57,23 @@ onMounted(() => {
 
         ctx.fillStyle = "black";
         ctx.textAlign = "left";
-        const startX = 120; // Coordenada X inicial para el texto
+        const startX = 120; // Coordenada X inicial pastyle="display: none;" ra el texto
         let currentY = 48; // Coordenada Y inicial para el texto, ajustada para que se vea bien
 
         // Posiciones de las columnas
-        const col1X = 10; // Primera columna
+        const col1X = 40; // Primera columna
         const col2X = 250; // Segunda columna
 
         ctx.font = "35px Arial";
         ctx.fillText(ticketData.value.customer.name, col1X + 390, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 55;
+        currentY += 60;
 
 
         // Campo: Documento
         ctx.fillText(ticketData.value.customer.document, col1X + 250, currentY); // Valor de ejemplo
         ctx.font = "35px Arial";
-        currentY += 57;
+        currentY += 60;
 
         // Campo: Celular
         ctx.fillText(ticketData.value.customer.phone, col1X + 160, currentY); // Valor de ejemplo
@@ -86,14 +86,14 @@ onMounted(() => {
         currentY += 57;
 
         //Campo: Seller 
-        ctx.fillText(ticketData.value.seller.name, col1X + 220, currentY); // Valor de ejemplo
+        ctx.fillText(ticketData.value.seller.name, col1X + 240, currentY); // Valor de ejemplo
 
         // Separador vertical entre columnas
         ctx.strokeStyle = "#ddd";
         ctx.beginPath();
         ctx.moveTo(350, 20);
         // Reiniciar Y para la segunda columna
-        currentY += 77;
+        currentY += 85;
         ctx.font = "bold 35px Arial";
 
         // Campo: Abono
@@ -105,7 +105,7 @@ onMounted(() => {
         //Numero de boleta
         ctx.font = "60px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("Nº " + ticketData.value.number, 370, 1570);
+        ctx.fillText("Nº " + ticketData.value.number, 370, 1300);
 
     };
 });
