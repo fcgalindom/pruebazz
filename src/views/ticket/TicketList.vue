@@ -487,6 +487,7 @@ const changeState = async (id, status) => {
 
         default:
             message = "¿Desea declinar esta boleta?"
+            newStatus = "Libre"
             break;
     }
 
