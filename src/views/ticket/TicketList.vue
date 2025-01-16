@@ -223,7 +223,10 @@
             :rows-per-page-options="[10, 20, 50]"
         />
 
-            <Dialog v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{ width: '75rem' }">
+            <Dialog class="table-responsive" v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{ width: '75rem' }">
+            
+
+                
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -248,6 +251,7 @@
                         </tr>
                     </tbody>
                 </table>
+            
             </Dialog>
         </div>
     </div>
