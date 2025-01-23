@@ -37,7 +37,7 @@
     </div>
     <div class="text-center mt-5">
         <span class="mt-4 poppins-semibold" style="color: #0B0B0B; font-size: 2.5em;">Valor unitario por número</span><br>
-        <span class="mt-4 poppins-bold" style="color: #01B1EB; font-size: 3em;">$80.000</span>
+        <span class="mt-4 poppins-bold" style="color: #01B1EB; font-size: 3em;">$125.000</span>
         <div class="w-100 d-flex justify-content-center">
             <img class="size-lotery-image" src="@/assets/customers/loteria_boyaca.png">
         </div>

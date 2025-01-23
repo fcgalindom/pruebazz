@@ -26,7 +26,7 @@
 
             <hr>
 
-            <div>
+            <div v-if="typeScreen == 'admin'">
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success" @click="add_payment()">+</button>
                 </div>
@@ -195,6 +195,7 @@ import CustomerFInd from '../customer/CustomerFInd.vue';
 import Helper from '@/helpers/Helper';
 import { SellerServices } from '@/services/seller.service';
 import Cookies from 'js-cookie';
+import { type } from 'jquery';
 
 
 
@@ -428,9 +429,23 @@ const getRangeForClients = async () => {
 const saveEntity = async () => {
 
     let value = 0
-    ticket.value.payments.forEach(element => {
-        value += parseInt(element.amount)
-    });
+    if(typeScreen == 'client'){
+        ticket.value.payments = []
+        ticket.value.ticket.forEach(element => {
+            ticket.value.payments.push({
+                ticket: element.number,
+                payment_method: element.payment_method,
+                amount: element.amount,
+                expiration_date: element.expiration_date,
+                value: ticket.value.value_to_pay
+            })
+            value += parseInt(element.value)
+        });
+    }else {
+        ticket.value.payments.forEach(element => {
+            value += parseInt(element.amount)
+        });
+    }
     if (!value) {
         value = 0
     }
