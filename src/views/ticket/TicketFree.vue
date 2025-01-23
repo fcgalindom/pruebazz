@@ -294,18 +294,16 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const getcutomerevent = (data) => {
-    console.log('data ==> ', data);
-    
     if (data.validate) {
         ticket.value.customer = data.customer.id
         visiblefindcustomer.value = false
-        visibleCustomer.value = true
+        // visibleCustomer.value = true
         getPromotionsByRaffle()
     } else {
         visiblefindcustomer.value = false
         visibleCustomer.value = true
         documentcustomer.value = data.customer.document
-        getPromotionsByRaffle()
+        // getPromotionsByRaffle()
     }
 }
 onMounted(async () => {
