@@ -31,19 +31,19 @@
                     <button class="btn btn-success" @click="add_payment()">+</button>
                 </div>
                 <div class="row border p-2 my-3" v-for="(i, index) in ticket.payments" :key="index">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <Label>Boleta</Label>
                         <Select v-model="i.ticket" :options="ticket.number" filter class="w-100"></Select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <Label>Método de pago</Label>
                         <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <Label>Valor</Label>
                         <InputNumber fluid v-model="i.amount" />
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <div class="row">
                             <div class="col-10">
                                 <Label>Fecha de expiración</Label>
@@ -55,7 +55,7 @@
                                 <button class="btn btn-danger mt-4" @click="remove_payment(index)">X</button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <hr class="my-3">
                 </div>
             </div>
@@ -388,7 +388,6 @@ const search = async () => {
     filters.value.raffle = 1
     filterJson.raffle = 1
     const response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
-    console.log('response ==> ', response);
 
     raffle.value = response.raffle
     ticketsBooked.value = response.tickets
@@ -429,15 +428,14 @@ const getRangeForClients = async () => {
 const saveEntity = async () => {
 
     let value = 0
-    if(typeScreen == 'client'){
+    if(props.typeScreen == 'client'){
         ticket.value.payments = []
         ticket.value.ticket.forEach(element => {
             ticket.value.payments.push({
                 ticket: element.number,
-                payment_method: element.payment_method,
-                amount: element.amount,
-                expiration_date: element.expiration_date,
-                value: ticket.value.value_to_pay
+                payment_method: "TRANSFERENCIA",
+                amount: ticket.value.value_to_pay,
+                expiration_date: "'2024-12-31'"
             })
             value += parseInt(element.value)
         });
@@ -489,7 +487,7 @@ const add_payment = () => {
         ticket: "",
         payment_method: "",
         amount: "",
-        expiration_date: ""
+        expiration_date: "2024-12-31"
     })
 }
 
@@ -503,7 +501,6 @@ const getPromotionsByRaffle = async () => {
         ticket.value.raffle = raffle.value.id
     }
 
-    console.log('ticket.value.raffle ==> ', ticket.value.raffle);
     
 
     promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
@@ -539,14 +536,9 @@ const getPromotionsByRaffle = async () => {
     }
 
     // monto.value = ticket.value.value_to_pay
-    console.log('ticket.value.value_to_pay ==> ', ticket.value.value_to_pay);
-    console.log('ticket.value.number.length ==> ', ticket.value.number.length);
-    
-    
     monto = ticket.value.value_to_pay * ticket.value.number.length
     monto += "00"
     generateWompiPay(monto)
-    console.log('bere');
 
 }
 
@@ -622,7 +614,7 @@ const limpiarFormulario = () => {
         payments: [{
             payment_method: "",
             amount: "",
-            expiration_date: ""
+            expiration_date: '2024-12-31'
         }]
     }
 }
@@ -640,7 +632,6 @@ const remove_payment = (index) => {
 }
 
 const filteredButtons = computed(() => {
-    console.log('raffle.value ==> ', raffle.value);
 
     // if (filters.value.number) {
         buttons.value = []
@@ -648,7 +639,6 @@ const filteredButtons = computed(() => {
         for (let index = raffle.value.start_number; index <= raffle.value.final_number && counter < 100; index++) {
             let formattedNumber = index.toString().padStart(4, '0');
             if (filters.value.number && formattedNumber.includes(filters.value.number)) {
-                console.log('filters.value.number ==> ', filters.value.number);
                 
                 if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
                     buttons.value.push(formattedNumber);
@@ -656,7 +646,6 @@ const filteredButtons = computed(() => {
                 }
             } 
             if (!filters.value.number) {
-                console.log('filters.value.number222 ==> ', ticketsBooked.value);
                 if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
                     buttons.value.push(formattedNumber);
                     counter++;
