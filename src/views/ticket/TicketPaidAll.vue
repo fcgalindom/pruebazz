@@ -17,7 +17,7 @@
     
     <script setup>
     import { ref, onMounted, computed, watch , toRefs  } from "vue";
-    import loteriaBoyaca from "@/assets/customers/firstpaymentmayjun.jpeg";
+    import loteriaBoyaca from "@/assets/customers/paymentallmay.jpeg";
     import drdentix from "@/assets/customers/dr_denix_logo.png";
     import { jsPDF } from "jspdf";
     import Helper from '@/helpers/Helper';
@@ -106,12 +106,12 @@
         //Numero de boleta
         ctx.fillStyle = "red";
         ctx.font = "55px Arial";
-        ctx.fillText( "Nº "+ticketData.value.number, 368,currentY);
+        ctx.fillText( "Nº "+ticketData.value.number, 392,currentY);
          //Numero de boleta
         ctx.fillStyle = "red";
         ctx.font = "normal 55px Arial";
         
-        ctx.fillText( "Nº "+ticketData.value.number, 368, 1350);
+        ctx.fillText( "Nº "+ticketData.value.number, 392, 1350);
        
       };
     });

@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas" style="display: none;"  ></canvas>
+    <canvas ref="reciboCanvas"   style="display: none;"  ></canvas>
     
     <div class="container">
         <div class="row">
@@ -105,7 +105,7 @@ onMounted(() => {
         //Numero de boleta
         ctx.font = "60px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("Nº " + ticketData.value.number, 370, 1300);
+        ctx.fillText("Nº " + ticketData.value.number, 382, 1305);
 
     };
 });
