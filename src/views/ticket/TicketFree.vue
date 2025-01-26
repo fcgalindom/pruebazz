@@ -435,7 +435,7 @@ const saveEntity = async () => {
                 ticket: element.number,
                 payment_method: "TRANSFERENCIA",
                 amount: ticket.value.value_to_pay,
-                expiration_date: "'2024-12-31'"
+                expiration_date: "2024-12-31"
             })
             value += parseInt(element.value)
         });
@@ -560,15 +560,14 @@ const generateWompiPay = (monto = "0") => {
     window.addEventListener('message', function (event) {
         if (event.origin === 'https://checkout.wompi.co') {
             const data = event.data;
-
             if (data.event === 'transaction_approved') {
                 // Pago aprobado
-            } else if (data.event === 'unprocessabletransaction') {
-
                 saveEntity()
-
+            } else if (data.event === 'unprocessabletransaction') {
+                alert('Transacción no procesable')
             } else if (data.event === 'transaction_error') {
                 // Error en el pago
+                alert('Error en el pago')
             }
         }
     });
