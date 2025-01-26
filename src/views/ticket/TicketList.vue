@@ -262,7 +262,7 @@ const ticketstatus = ref("")
 const seller = ref({})
 const firstpaymentmodal = ref('firstpayment_modal')
 const ticketsmodal = ref(false)
-const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
+const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
 const visible = ref(false)
 const dependencies = ref({
     sellers: [],
