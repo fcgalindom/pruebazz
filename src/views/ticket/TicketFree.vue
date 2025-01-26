@@ -61,7 +61,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" :data-target="`#${modalwompi}`"> Guardar</Button>
+                    <Button data-toggle="modal" :data-target="`#${modalwompi}`" @click="visible = false"> Guardar</Button>
                 </div>
 
             </div>
@@ -536,8 +536,9 @@ const getPromotionsByRaffle = async () => {
     }
 
     // monto.value = ticket.value.value_to_pay
-    monto = ticket.value.value_to_pay * ticket.value.number.length
-    monto += "00"
+    // monto = ticket.value.value_to_pay * ticket.value.number.length
+    // monto += "00"
+    monto = "200000"
     generateWompiPay(monto)
 
 }

@@ -9,7 +9,7 @@
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-awards">
-                    <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;"> NMAX CONNECTED - </span>
+                    <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;"> CASA MULTIFAMILIAR - </span>
                     <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;">XTZ 250 0 KILÓMETROS</span>
                 </div>
             </div>
@@ -33,7 +33,7 @@
     </div>
 
     <div class="mt-5">
-        <span class="color-primary-raffle text-center poppins-bold" style="font-size: 3em;">JUEGA ESTE 28 DE DICIEMBRE</span>
+        <span class="color-primary-raffle text-center poppins-bold" style="font-size: 3em;">JUEGA ESTE 28 DE JUNIO</span>
     </div>
     <div class="text-center mt-5">
         <span class="mt-4 poppins-semibold" style="color: #0B0B0B; font-size: 2.5em;">Valor unitario por número</span><br>
