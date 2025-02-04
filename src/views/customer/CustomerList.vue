@@ -139,6 +139,11 @@ const countries = ref([{
         flag: "https://flagcdn.com/cl.svg"
     },
     {
+        name: "España",
+        dialCode: "34",
+        flag: "https://flagcdn.com/es.svg"
+    },
+    {
         name: "Colombia",
         dialCode: "57",
         flag: "https://flagcdn.com/co.svg"
@@ -237,7 +242,7 @@ const limpiarData = () => {
     visible.value = true
     customer.value = {
         name: "",
-        country_code: countries.value[2],
+        country_code: countries.value[3],
         document: "",
         phone: "",
         city: ""

@@ -68,6 +68,11 @@ const countries = ref([{
     flag: "https://flagcdn.com/cl.svg"
 },
 {
+    name: "España",
+    dialCode: "34",
+    flag: "https://flagcdn.com/es.svg"
+},
+{
     name: "Colombia",
     dialCode: "57",
     flag: "https://flagcdn.com/co.svg"
@@ -126,7 +131,7 @@ const chargeForm = () => {
     customer.value = {
         name: "",
         document: "",
-        country_code: countries.value[2],
+        country_code: countries.value[3],
         phone: "",
         city: ""
     }
