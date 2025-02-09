@@ -259,6 +259,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch, createApp, reactive } from "vue";
+import { RaffleServices } from "@/services/raffle.service";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from 'vue-router';
 import Swal from 'sweetalert2'

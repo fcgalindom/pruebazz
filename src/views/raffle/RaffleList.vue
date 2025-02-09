@@ -38,6 +38,23 @@
                             <!-- <Editor v-model="raffle.description" editorStyle="height: 320px" /> -->
                             <Textarea v-model="raffle.description" class="w-100" rows="5" />
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <button class="btn btn-success" @click="vasibleinput = true">add files</button>
+                        </div>
+                       
+                        <div class="col-12">
+                            <Label>Archivo</Label>
+                            <Button @click="openpayment('all')">subir archivo total boleta</Button>
+                            </div>
+                        <div class="col-12">
+                                <Label>Archivo</Label>
+                                <Button @click="openpayment('first')">subir archivo primer pago</Button>
+                        </div>
+                        <div class="col-12">
+                            <Label>Archivo</Label>
+                            <Button @click="openpayment('ticket')">subir archivo  tickt</Button>
+                        </div>
+                      
                     </div>
     
                     <hr>
@@ -119,6 +136,7 @@ import Swal from 'sweetalert2'
 import Helper from '@/helpers/Helper';
 const selectedCountry = ref();
 const visible = ref(false)
+const vasibleinput = ref(false)
 const countries = ref([
     { name: 'Australia', code: 'AU' },
     { name: 'Brazil', code: 'BR' },
@@ -167,6 +185,40 @@ const openWidget = (i) => {
             if (!error && result && result.event === "success") {
                 i.image = result.info.url;
             }
+        }
+    );
+    myWidget.open();
+};
+const openpayment = (data) => {
+    console.log("entrover", data)
+    const myWidget = window.cloudinary.createUploadWidget({
+            cloudName: 'dsxpe54pz',
+            uploadPreset: 'demos1',
+        },
+
+        (error, result) => {
+
+            if(data == 'all'){
+                if (!error && result && result.event === "success") {
+                    raffle.value.paymentall = result.info.url;
+                    console.log("ver", raffle.value)
+                }
+            }
+            if(data == 'first'){
+                if (!error && result && result.event === "success") {
+                    raffle.value.paymentfirst = result.info.url;
+                    console.log("ver", raffle.value)
+                }
+            }
+            if(data == 'ticket'){
+                if (!error && result && result.event === "success") {
+                    raffle.value.paymentticket = result.info.url;
+                    console.log("ver", raffle.value)
+                }
+            }
+         
+                
+            
         }
     );
     myWidget.open();
