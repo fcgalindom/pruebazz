@@ -61,7 +61,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" :data-target="`#${modalwompi}`"> Guardar</Button>
+                    <Button data-toggle="modal" :data-target="`#${modalwompi}`" @click="visible = false"> Guardar</Button>
                 </div>
 
             </div>
@@ -134,7 +134,7 @@
             </div>
             <div class="col-md-10">
                 <div v-if="typeScreen == 'admin'">
-                    <Label>Número seleccionados</Label>
+                    <Label>Números seleccionados</Label>
                     <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid
                         :maxSelectedLabels="15" class="w-full md:w-80" @change="deleteTicket" />
                 </div>
@@ -426,19 +426,26 @@ const getRangeForClients = async () => {
 };
 
 const saveEntity = async () => {
-
+    console.log('saveEntity');
+    
     let value = 0
+    console.log('ticket.value.number', ticket.value.number);
+    
     if(props.typeScreen == 'client'){
         ticket.value.payments = []
-        ticket.value.ticket.forEach(element => {
+        ticket.value.number.forEach(element => {
+            console.log('element', element);
+            
             ticket.value.payments.push({
-                ticket: element.number,
+                ticket: element,
                 payment_method: "TRANSFERENCIA",
                 amount: ticket.value.value_to_pay,
-                expiration_date: "'2024-12-31'"
+                expiration_date: "2024-12-31"
             })
             value += parseInt(element.value)
         });
+        console.log('ticket.value.payments', ticket.value.payments);
+        // return
     }else {
         ticket.value.payments.forEach(element => {
             value += parseInt(element.amount)
@@ -536,8 +543,9 @@ const getPromotionsByRaffle = async () => {
     }
 
     // monto.value = ticket.value.value_to_pay
-    monto = ticket.value.value_to_pay * ticket.value.number.length
-    monto += "00"
+    // monto = ticket.value.value_to_pay * ticket.value.number.length
+    // monto += "00"
+    monto = "200000"
     generateWompiPay(monto)
 
 }
@@ -558,17 +566,19 @@ const generateWompiPay = (monto = "0") => {
     wompiForm.value.appendChild(script);
 
     window.addEventListener('message', function (event) {
+        console.log('event ==> ', event);
+        
         if (event.origin === 'https://checkout.wompi.co') {
             const data = event.data;
-
-            if (data.event === 'transaction_approved') {
+            console.log('data ==> ', data.data);
+            if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
                 // Pago aprobado
-            } else if (data.event === 'unprocessabletransaction') {
-
                 saveEntity()
-
+            } else if (data.event === 'unprocessabletransaction') {
+                alert('Transacción no procesable')
             } else if (data.event === 'transaction_error') {
                 // Error en el pago
+                alert('Error en el pago')
             }
         }
     });

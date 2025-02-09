@@ -81,18 +81,23 @@
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-success" @click="add_payment()">+</button>
                         </div>
-                        <div class="row" v-for="(i, index) in ticket.payments" :key="index">
-                            <div class="col-4">
+                        <div class="row pb-3 mb-3" v-for="(i, index) in ticket.payments" :key="index" style="border-bottom: 1px solid rgba(0, 0, 0, 0.19);">
+                            <div class="col-5">
                                 <Label>Método de pago</Label>
                                 <Select v-model="i.payment_method" :options="payment_methods" filter
                                     class="w-100"></Select>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <Label>Valor</Label>
                                 <InputNumber mode="currency" currency="USD" locale="en-US" fluid v-model="i.amount"
                                     type="text"></InputNumber>
                             </div>
-                            <div class="col-4">
+                            <div class="col-1">
+                                <button class="btn btn-danger mt-4 ml-3"
+                                    @click="remove_payment(index)">X</button>
+                            </div>
+                            <hr>
+                            <!-- <div class="col-4">
                                 <div class="row">
                                     <div class="col-10">
                                         <Label>Fecha de expiración</Label>
@@ -104,7 +109,7 @@
                                             @click="remove_payment(index)">X</button>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -114,24 +119,6 @@
                 </Dialog>
             </div>
             <div class="table-responsive">
-                <!-- <div class="card">
-                    <DataTable :value="tickets.results" :paginator="true" :rows="10" :rows-per-page-options="[10, 20, 50]"
-                        :loading="loading" sortField="created_at" sortOrder="-1" class="p-datatable-gridlines">
-                        <Column field="number" header="Boleta" sortable />
-                        <Column field="customer.name" header="Cliente" sortable />
-                        <Column field="customer.document" header="Documento" :body="documentTemplate" />
-                        <Column field="customer.phone" header="Teléfono" />
-                        <Column field="customer.city.name" header="Ciudad" />
-                        <Column field="created_at" header="Fecha Venta" sortable />
-                        <Column v-if="!sellerRouteId" field="seller.name" header="Vendedor" />
-                        <Column field="status" header="Estado" />
-                        <Column field="value" header="Abonado" :body="valueTemplate" />
-                        <Column field="value_to_pay" header="Saldo" :body="saldoTemplate" />
-                        <Column field="actions" header="Acciones" :body="actionsTemplate" />
-                        <Column header="Certif. Boleta" :body="certifTemplate" />
-                        <Column header="Whatsapp" :body="whatsappTemplate" />
-                    </DataTable>
-                </div> -->
                 <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -224,9 +211,6 @@
         />
 
             <Dialog class="table-responsive" v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{ width: '75rem' }">
-            
-
-                
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -279,7 +263,7 @@ const ticketstatus = ref("")
 const seller = ref({})
 const firstpaymentmodal = ref('firstpayment_modal')
 const ticketsmodal = ref(false)
-const payment_methods = ref(['Efectivo', 'Tarjeta de crédito', 'Tarjeta de débito', 'Transferencia', 'Consignación'])
+const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
 const visible = ref(false)
 const dependencies = ref({
     sellers: [],
@@ -449,7 +433,7 @@ const saveEntity = async () => {
 }
 
 const add_payment = () => {
-    ticket.value.payments.push({ award: "", date: "", type_award: "" })
+    ticket.value.payments.push({ payment_method: "", amount: "", expiration_date: "2024-12-31" })
 }
 
 const remove_payment = (index) => {
@@ -462,7 +446,7 @@ const showData = async (id) => {
         ticket.value.payments = [{
             payment_method: "",
             amount: "",
-            expiration_date: ""
+            expiration_date: "2024-12-31"
         }]
     }
 }
@@ -528,7 +512,7 @@ const limpiarFormulario = () => {
         payments: [{
             payment_method: "",
             amount: "",
-            expiration_date: ""
+            expiration_date: "2024-12-31"
         }]
     }
 }
