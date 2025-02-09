@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"   style="display: none;"  ></canvas>
+    <canvas ref="reciboCanvas"    ></canvas>
     
     <div class="container">
         <div class="row">
@@ -38,8 +38,6 @@ const listRaffles = async () => {
 
     raffle.value  = await RaffleServices.listlast();
 
-
-
 };
 
 
@@ -47,10 +45,6 @@ onMounted(async() => {
     const canvas = reciboCanvas.value;
     const ctx = canvas.getContext("2d");
     await listRaffles()
-    console.log("see",raffle.value.paymentfirst)
-    
-
-
     // Cargar la imagen de fondo
     const fondo = new Image();
     fondo.crossOrigin = "Anonymous";
