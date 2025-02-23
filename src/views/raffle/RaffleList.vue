@@ -38,21 +38,19 @@
                             <!-- <Editor v-model="raffle.description" editorStyle="height: 320px" /> -->
                             <Textarea v-model="raffle.description" class="w-100" rows="5" />
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <button class="btn btn-success" @click="vasibleinput = true">add files</button>
-                        </div>
                        
-                        <div class="col-12">
-                            <Label>Archivo</Label>
-                            <Button @click="openpayment('all')">subir archivo total boleta</Button>
+                       
+                        <div class="col-4">
+                            <Label>Pago total</Label>
+                            <Button @click="openpayment('all')"><i class="pi pi-upload"></i></Button>
                             </div>
-                        <div class="col-12">
-                                <Label>Archivo</Label>
-                                <Button @click="openpayment('first')">subir archivo primer pago</Button>
+                        <div class="col-4">
+                                <Label>Primer Pago</Label>
+                                <Button @click="openpayment('first')"><i class="pi pi-upload"></i></Button>
                         </div>
-                        <div class="col-12">
-                            <Label>Archivo</Label>
-                            <Button @click="openpayment('ticket')">subir archivo  tickt</Button>
+                        <div class="col-4">
+                            <Label>Recivo</Label>
+                            <Button @click="openpayment('ticket')"><i class="pi pi-upload"></i></Button>
                         </div>
                       
                     </div>
@@ -108,6 +106,9 @@
                             <th>Valor de boleta</th>
                             <th>Cant. de boletas vendidas</th>
                             <th>Acciones</th>
+                            <th>Pago total</th>
+                            <th>Primer pago</th>
+                            <th>Recivo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,6 +118,10 @@
                             <td>{{ Helper.formatNumber(i.value_ticket) }}</td>
                             <td>3</td>
                             <td class="text-center"><button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button></td>
+                            <td><button @click="openInNewTab(i.paymentall)"><i class="fas fa-download"></i></button></td>
+                            <td><button @click="openInNewTab(i.paymentfirst)"><i class="fas fa-download"></i></button></td>
+                            <td><button @click="openInNewTab(i.paymentticket)"><i class="fas fa-download"></i></button></td>
+                         
                         </tr>
                     </tbody>
                 </table>
@@ -157,6 +162,10 @@ const image = ref(null)
 const images = ref([])
 const imageUrl = ref('')
 
+const openInNewTab = (url) => {
+  window.open(url, "_blank");
+};
+
 onMounted(async () => {
     raffles.value = await RaffleServices.list()
     limpiarFormulario()
@@ -165,6 +174,7 @@ onMounted(async () => {
 const saveEntity = async () => {
     
     if (raffle.value.id) {
+        console.log("entro", raffle.value)
         await RaffleServices.updateCustomer(raffle.value, raffle.value.id)
     } else {
         await RaffleServices.createCustomer(raffle.value)
