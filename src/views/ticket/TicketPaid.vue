@@ -70,7 +70,7 @@ onMounted(async() => {
     // Cargar la imagen de fondo
     const fondo = new Image();
     fondo.crossOrigin = "Anonymous";
-    fondo.src = raffle.value.paymentfirst;// Cambia esta ruta a la imagen que subiste
+    fondo.src = raffle.value.paymentticket;// Cambia esta ruta a la imagen que subiste
     fondo.onload = () => {
         // Dibujar la imagen de fondo
         ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
