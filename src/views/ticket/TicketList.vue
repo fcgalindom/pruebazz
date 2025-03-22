@@ -3,11 +3,12 @@
         <div class="container-fluid pt-3">
             <div class="my-3">
                 <div class="d-flex justify-content-between">
-                    <h3>{{ getTitle() }}</h3>
-                    <!-- <div class="d-flex flex-column">
-                        <Button class="btn-sm mb-3">{{ tickets.length }} Boletas</Button>
+                    <!-- <h3 v-if="!status">{{ seller }}</h3> -->
+                    <h3>{{getTitle()}}</h3>
+                    <div class="d-flex flex-column">
+                        <Button class="btn-sm mb-3">{{ tickets.results?.length }} Boletas</Button>
                         <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value) }}</Button>
-                    </div> -->
+                    </div>
                 </div>
                 <hr>
                 <div class="row mb-3">
@@ -308,7 +309,7 @@ onMounted(async () => {
     customerf.value = filtroStore.filter;
     numberf.value = fitroticket.filter;
 
-    datatable()
+    await datatable()
     getTitle()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
@@ -344,7 +345,7 @@ const datatable = async () => {
 
     }
 
-    console.log('sellerRouteId.value', sellerRouteId.value);
+    // console.log('sellerRouteId.value', sellerRouteId.value);
     
     if (sellerRouteId.value) {
         if (numberf.value) {
@@ -354,8 +355,17 @@ const datatable = async () => {
             fitroticket.clearFilter()
         }
         filters.value.seller = sellerRouteId.value
+        seller.value = await SellerServices.show(sellerRouteId.value)
+        // seller.value = seller
         
         tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
+        console.log('tickets.value.results ==> ', tickets.value.results);
+        tickets.value.results.forEach(element => {
+            if(element.value) {
+                full_value.value += parseInt(element.value)
+            }
+        });
+        
     } else {
         if(filters.value.number || filters.value.raffle || filters.value.customer || filters.value.seller || filters.value.init_date || filters.value.final_date){
             filters.value.page = 1

@@ -387,7 +387,12 @@ const search = async () => {
     }
     filters.value.raffle = 1
     filterJson.raffle = 1
-    const response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
+    let response = ""
+    if(Cookies.get('type_user') == 'false') {
+        response = await SellerServices.tracking(Cookies.get('seller_id'), {})
+    }else {
+        response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
+    }
 
     raffle.value = response.raffle
     ticketsBooked.value = response.tickets
