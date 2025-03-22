@@ -38,6 +38,21 @@
                             <!-- <Editor v-model="raffle.description" editorStyle="height: 320px" /> -->
                             <Textarea v-model="raffle.description" class="w-100" rows="5" />
                         </div>
+                       
+                       
+                        <div class="col-4">
+                            <Label>Pago total</Label>
+                            <Button @click="openpayment('all')"><i class="pi pi-upload"></i></Button>
+                            </div>
+                        <div class="col-4">
+                                <Label>Primer Pago</Label>
+                                <Button @click="openpayment('first')"><i class="pi pi-upload"></i></Button>
+                        </div>
+                        <div class="col-4">
+                            <Label>Recivo</Label>
+                            <Button @click="openpayment('ticket')"><i class="pi pi-upload"></i></Button>
+                        </div>
+                      
                     </div>
     
                     <hr>
@@ -91,6 +106,9 @@
                             <th>Valor de boleta</th>
                             <th>Cant. de boletas vendidas</th>
                             <th>Acciones</th>
+                            <th>Pago total</th>
+                            <th>Primer pago</th>
+                            <th>Recivo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,6 +118,10 @@
                             <td>{{ Helper.formatNumber(i.value_ticket) }}</td>
                             <td>3</td>
                             <td class="text-center"><button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button></td>
+                            <td><button @click="openInNewTab(i.paymentall)"><i class="fas fa-download"></i></button></td>
+                            <td><button @click="openInNewTab(i.paymentfirst)"><i class="fas fa-download"></i></button></td>
+                            <td><button @click="openInNewTab(i.paymentticket)"><i class="fas fa-download"></i></button></td>
+                         
                         </tr>
                     </tbody>
                 </table>
@@ -119,6 +141,7 @@ import Swal from 'sweetalert2'
 import Helper from '@/helpers/Helper';
 const selectedCountry = ref();
 const visible = ref(false)
+const vasibleinput = ref(false)
 const countries = ref([
     { name: 'Australia', code: 'AU' },
     { name: 'Brazil', code: 'BR' },
@@ -139,6 +162,10 @@ const image = ref(null)
 const images = ref([])
 const imageUrl = ref('')
 
+const openInNewTab = (url) => {
+  window.open(url, "_blank");
+};
+
 onMounted(async () => {
     raffles.value = await RaffleServices.list()
     limpiarFormulario()
@@ -147,6 +174,7 @@ onMounted(async () => {
 const saveEntity = async () => {
     
     if (raffle.value.id) {
+        console.log("entro", raffle.value)
         await RaffleServices.updateCustomer(raffle.value, raffle.value.id)
     } else {
         await RaffleServices.createCustomer(raffle.value)
@@ -167,6 +195,40 @@ const openWidget = (i) => {
             if (!error && result && result.event === "success") {
                 i.image = result.info.url;
             }
+        }
+    );
+    myWidget.open();
+};
+const openpayment = (data) => {
+    console.log("entrover", data)
+    const myWidget = window.cloudinary.createUploadWidget({
+            cloudName: 'dsxpe54pz',
+            uploadPreset: 'demos1',
+        },
+
+        (error, result) => {
+
+            if(data == 'all'){
+                if (!error && result && result.event === "success") {
+                    raffle.value.paymentall = result.info.url;
+                    console.log("ver", raffle.value)
+                }
+            }
+            if(data == 'first'){
+                if (!error && result && result.event === "success") {
+                    raffle.value.paymentfirst = result.info.url;
+                    console.log("ver", raffle.value)
+                }
+            }
+            if(data == 'ticket'){
+                if (!error && result && result.event === "success") {
+                    raffle.value.paymentticket = result.info.url;
+                    console.log("ver", raffle.value)
+                }
+            }
+         
+                
+            
         }
     );
     myWidget.open();

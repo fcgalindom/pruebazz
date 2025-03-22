@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas" width="1000" height="600" style="display: none;"></canvas>
+    <canvas ref="reciboCanvas" width="1000" height="600" style="display: none;" ></canvas>
     
     <div class="container">
         <div class="row">
@@ -16,6 +16,7 @@
 <script setup>
 import { ref, onMounted, computed, watch, toRefs } from "vue";
 import loteriaBoyaca from "@/assets/customers/paymentmay.jpeg";
+import { RaffleServices } from "@/services/raffle.service";
 import { jsPDF } from "jspdf";
 import Helper from '@/helpers/Helper';
 
@@ -48,15 +49,28 @@ const getotalAmount = () => {
     return totalAmount;
 
 };
+const raffle = ref({});
 
-onMounted(() => {
+const listRaffles = async () => {
+
+    raffle.value  = await RaffleServices.listlast();
+
+
+
+};
+
+
+onMounted(async() => {
     const canvas = reciboCanvas.value;
     const ctx = canvas.getContext("2d");
+    await listRaffles()
+    console.log(raffle.value,"sdsa");
 
 
     // Cargar la imagen de fondo
     const fondo = new Image();
-    fondo.src = loteriaBoyaca; // Cambia esta ruta a la imagen que subiste
+    fondo.crossOrigin = "Anonymous";
+    fondo.src = raffle.value.paymentticket;// Cambia esta ruta a la imagen que subiste
     fondo.onload = () => {
         // Dibujar la imagen de fondo
         ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);

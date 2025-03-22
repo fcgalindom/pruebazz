@@ -19,6 +19,7 @@
     import { ref, onMounted, computed, watch , toRefs  } from "vue";
     import loteriaBoyaca from "@/assets/customers/paymentallmay.jpeg";
     import drdentix from "@/assets/customers/dr_denix_logo.png";
+    import { RaffleServices } from "@/services/raffle.service";
     import { jsPDF } from "jspdf";
     import Helper from '@/helpers/Helper';
     const reciboCanvas = ref(null);
@@ -29,18 +30,24 @@
       }
     });
      const { ticketData } = toRefs(props);
+     const raffle = ref({});
+
+     const listRaffles = async () => {
+
+        raffle.value  = await RaffleServices.listlast();
+
+     };
+
     
     
-     onMounted(() => {
+     onMounted(async() => {
       const canvas = reciboCanvas.value;
       const ctx = canvas.getContext("2d");
-      
-    
-    
-    
+      await listRaffles()
       // Cargar la imagen de fondo
       const fondo = new Image();
-      fondo.src = loteriaBoyaca; // Cambia esta ruta a la imagen que subiste
+      fondo.crossOrigin = "Anonymous";
+      fondo.src = raffle.value.paymentall; // Cambia esta ruta a la imagen que subiste
       fondo.onload = () => {
     
         const margenSuperior = 1000;
