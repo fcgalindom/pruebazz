@@ -58,14 +58,20 @@ const listRaffles = async () => {
 
 
 };
+function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Mes comienza desde 0
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
 
 
 onMounted(async() => {
     const canvas = reciboCanvas.value;
     const ctx = canvas.getContext("2d");
     await listRaffles()
-    console.log(raffle.value,"sdsa");
-
 
     // Cargar la imagen de fondo
     const fondo = new Image();
@@ -81,7 +87,7 @@ onMounted(async() => {
         ctx.textAlign = "left";
 
         ctx.fillText("Nº" + ticketData.value.number, 810, 130);
-        ctx.fillText(ticketData.value.raffle.raffle_date, 200, 295);
+        ctx.fillText(getCurrentDate(), 200, 295);
         ctx.fillText(Helper.formatNumber(paymentData.value[index.value].amount), 720, 235);
         ctx.fillText(ticketData.value.customer.name, 200, 360);
         ctx.fillText(formatNumber(ticketData.value.value_to_pay - getotalAmount()), 720, 295);
