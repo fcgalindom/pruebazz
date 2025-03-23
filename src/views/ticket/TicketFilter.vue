@@ -1,30 +1,31 @@
 <template #container="{ closeCallback }">
     <div class="row">
-        
+
         <div class="col-md-6 mb-3">
             <Label required="0">Cliente</Label>
-            <Select optionLabel="documentname" optionValue="id" filter v-model="filters.customer" :options="dependencies.customers" fluid >
+            <Select optionLabel="documentname" optionValue="id" filter v-model="filters.customer"
+                :options="dependencies.customers" fluid>
             </Select>
         </div>
-   
-       
+
+
         <div class="col-md-6 mb-3">
             <Label required="0">Número de Boleta</Label>
             <Input required="0" v-model="filters.number" />
         </div>
-       
+
     </div>
     <div class="d-flex justify-content-center my-3">
-        <Button @click="datatable" >Buscar</Button>
+        <Button @click="datatable">Buscar</Button>
     </div>
 
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { ref, onMounted, defineProps, defineEmits  , toRefs} from "vue";
+import { ref, onMounted, defineProps, defineEmits, toRefs } from "vue";
 import { CustomerServices } from '@/services/customer.service'
-import { useFilterStore , useFilterTicket , useFilterCustomer} from '@/stores/filterStore';
+import { useFilterStore, useFilterTicket, useFilterCustomer } from '@/stores/filterStore';
 import Swal from 'sweetalert2'
 import { TicketServices } from "@/services/ticket.service";
 import { inject } from "vue";
@@ -32,7 +33,7 @@ import { Button } from 'primevue';
 import { get } from 'jquery';
 const dialogRef = inject('dialogRef');
 const closeDialog = () => {
-dialogRef.value.close();
+    dialogRef.value.close();
 }
 
 const router = useRouter();
@@ -50,20 +51,20 @@ const full_value = ref(0)
 
 
 onMounted(async () => {
-cities.value = await CustomerServices.listCities()
-chargeForm()
+    cities.value = await CustomerServices.listCities()
+    chargeForm()
 })
 const dependencies = ref({
-sellers: [],
-customers: [],
-raffles: []
+    sellers: [],
+    customers: [],
+    raffles: []
 })
 onMounted(async () => {
-dependencies.value = await TicketServices.dependencies()
-dependencies.value.customers = dependencies.value.customers.map((customer) => ({
-  ...customer,
-  documentname: `${customer.name} - ${customer.document}`,
-}));
+    dependencies.value = await TicketServices.dependencies()
+    dependencies.value.customers = dependencies.value.customers.map((customer) => ({
+        ...customer,
+        documentname: `${customer.name} - ${customer.document}`,
+    }));
 })
 const filtroStore = useFilterStore();
 const fitroticket = useFilterTicket();
@@ -75,23 +76,23 @@ const filtrocustomer = useFilterCustomer();
 
 
 const chargeForm = () => {
-customer.value = {
-    first_name: "",
-    last_name: "",
-    document: "",
-    phone: "",
-    city: ""
-}
+    customer.value = {
+        first_name: "",
+        last_name: "",
+        document: "",
+        phone: "",
+        city: ""
+    }
 }
 
 
 const filters = ref({
-number: "",
-raffle: "",
-customer: "",
-seller: "",
-init_date: "",
-final_date: ""
+    number: "",
+    raffle: "",
+    customer: "",
+    seller: "",
+    init_date: "",
+    final_date: ""
 })
 const filtersticket = ref({})
 const getvalidate = ref({
@@ -100,50 +101,56 @@ const getvalidate = ref({
 })
 
 const datatable = async () => {
-  
-    const currentPath =  window.location.pathname
-    filtersticket.value = {number: filters.value.number , raffle : 1}
+
+    const currentPath = window.location.pathname
+    filtersticket.value = { number: filters.value.number, raffle: 1 }
     getvalidate.value = await TicketServices.getticketbyraffle(filtersticket.value)
     full_value.value = 0
     tickets.value.forEach(element => {
         full_value.value += parseInt(element.value)
     });
-    
-    if(getvalidate.value.exists){
+
+    if (getvalidate.value.exists) {
         fitroticket.setFilter(filters.value.number);
-        router.push({ name: 'SellerTracking' , params: { id: getvalidate.value.seller }})
+        router.push({ name: 'SellerTracking', params: { id: getvalidate.value.seller } })
     }
-    else if(filters.value.customer){
+    else if (filters.value.customer) {
         filtroStore.setFilter(filters.value.customer);
 
-        router.push({ name: 'PendingTickets'})
+        router.push({ name: 'PendingTickets' })
     }
-    else{
+    else {
+        // console.log('getvalidate.value.seller ==> ', );
         
-        sessionStorage.setItem('ticket',filters.value.number);
-        if(currentPath == '/tickets/Libre'){
-           window.location.reload();
-        } 
-        router.push({ name: 'TicketFree' })
-        
+        if(getvalidate.value.seller_range.seller) {
+            fitroticket.setFilter(filters.value.number);
+            router.push({ name: 'SellerTracking', params: { id: getvalidate.value.seller_range.seller } })
+        }else {
+            sessionStorage.setItem('ticket', filters.value.number);
+            if (currentPath == '/tickets/Libre') {
+                window.location.reload();
+            }
+            router.push({ name: 'TicketFree' })
+        }
+
     }
     emit('closeFilter', false)
-     /*router.push({ name: 'BookedTickets' });
-    const currentPath =  window.location.pathname
-    if(currentPath == '/tickets/Reservado'){
-        window.location.reload();
-    } */
+    /*router.push({ name: 'BookedTickets' });
+   const currentPath =  window.location.pathname
+   if(currentPath == '/tickets/Reservado'){
+       window.location.reload();
+   } */
 }
 
 
 
 const saveEntity = async () => {
-datatable()
-router.push({ name: 'BookedTickets', query: tickets.value });
-const currentPath = window.location.pathname; // Ruta después del dominio
-if(currentPath == '/tickets/Reservado'){
-    window.location.reload();
-}   
+    datatable()
+    router.push({ name: 'BookedTickets', query: tickets.value });
+    const currentPath = window.location.pathname; // Ruta después del dominio
+    if (currentPath == '/tickets/Reservado') {
+        window.location.reload();
+    }
 
 
 

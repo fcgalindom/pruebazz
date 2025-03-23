@@ -17,7 +17,7 @@
     "@primevue/themes": "^4.2.1",
     "@sweetalert2/theme-material-ui": "^5.0.18",
     "admin-lte": "^3.2.0",
-    "axios": "^1.7.7",
+    "axios": "^1.8.1",
     "bootstrap": "^4.6.2",
     "chart.js": "^4.4.6",
     "jquery": "^3.7.1",

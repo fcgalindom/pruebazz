@@ -107,20 +107,25 @@ const search = async (item) => {
     showKeyboard.value = true
     
     const response = await SellerTicketsServices.getTiketsFreeForSeller(item.raffle.id, route.params.id)
-    
     buttons.value = [];
     let counter = 0
     activeButtons.value = new Set();
     for (let index = response.raffle.start_number; index <= response.raffle.final_number; index++) {
-        if (!response.tickets_excluded.some(ticket => ticket === index)) {
-            buttons.value.push(index);
+        let formattedNumber = index.toString().padStart(4, '0');
+        if (!response.tickets_excluded.some(ticket => ticket.toString().padStart(4, '0') === formattedNumber)) {
+            buttons.value.push(formattedNumber);
         }
 
         response.seller_range.forEach(range => {
         range.numbers.forEach(number => {
             counter++
-            if (number == index) {
-                activeButtons.value.add(parseInt(number));
+
+            let formattedIndex = index.toString().padStart(4, '0');
+            let formattedNumber = number.toString().padStart(4, '0');
+            
+            if (formattedIndex == formattedNumber) {
+                console.log(formattedIndex, formattedNumber);
+                activeButtons.value.add(formattedNumber)    ;
             }
         });
   });
