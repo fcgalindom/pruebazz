@@ -5,6 +5,8 @@ import chartprincipal from '@/views/charts/chartprincipal.vue';
 
 
 import Cookies from 'js-cookie';
+import { name } from '@cloudinary/url-gen/actions/namedTransformation';
+import TicketLine from '@/views/ticket/TicketLine.vue';
 const ticketsRoutes = [
     {
 		path: '/tickets/Libre',
@@ -45,6 +47,18 @@ const ticketsRoutes = [
 	{
 		path: '/tickets/Pagado',
 		name: 'PaidTickets',
+		component: TicketList,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
+	},
+	{
+		path: '/tickets/Enlinea',
+		name_	: 'OnlineTickets',
 		component: TicketList,
 		befereEnter: (to, from, next) => {
 			if (Cookies.get('token')) {

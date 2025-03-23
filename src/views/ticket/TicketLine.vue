@@ -327,9 +327,6 @@ const getTitle = () => {
         case 'Pagado':
             ticketstatus.value = 'Pagado'
             return 'Boletas Pagadas'
-        case 'Enlinea':
-            ticketstatus.value = 'Pagado'
-            return 'Boletas en linea'
         default:
             return 'Seguimiento al vendedor ' + seller.value.name
     }
@@ -337,14 +334,7 @@ const getTitle = () => {
 
 const datatable = async () => {
     loading.value = true
-  
     filters.value.status = status.value
-    filters.value.origin = "admin"
-    if(status.value == "Enlinea"){
-        console.log('status.value', status.value);
-        filters.value.origin = "web"
-    }
-   
     filters.value.customer = ""
 
 

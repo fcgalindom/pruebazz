@@ -121,7 +121,8 @@ const drawMenu = () => {
                 { label: 'Boletas disponibles', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' },
                 { label: 'Boletas pendientes', link: '/tickets/Pendiente', icon: 'far fa-circle nav-icon' },
                 { label: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
-                { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' }
+                { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' },
+                {label:'Boletas en linea', link:'/tickets/Enlinea', icon:'far fa-circle nav-icon'}
             ]
         })
         items.value.push({
@@ -159,7 +160,9 @@ const drawMenu = () => {
                 { label: 'Boletas disponibles', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' },
                 // { label: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
                 { label: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
-                { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' }
+                { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' },
+                {label:'Boletas en linea', link:'/tickets/Enlinea', icon:'far fa-circle nav-icon'}
+    
             ]
         })
     }
