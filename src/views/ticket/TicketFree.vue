@@ -61,7 +61,8 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" :data-target="`#${modalwompi}`" @click="visible = false"> Guardar</Button>
+                    <Button data-toggle="modal" :data-target="`#${modalwompi}`" @click="visible = false">
+                        Guardar</Button>
                 </div>
 
             </div>
@@ -113,9 +114,10 @@
                 <div class="w-70 text-center">
                     <label class="poppins-bold fs-random-number" for="">&nbsp;</label>
                     <!-- <div class="input-group mb-3 input-customer"> -->
-                        <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid placeholder="Números seleccionados"
-                            :maxSelectedLabels="15" class="w-full md:w-80" @change="deleteTicket" />
-                        <!-- <input v-model="ticket.number" type="text" class="poppins-medium text-center"
+                    <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid
+                        placeholder="Números seleccionados" :maxSelectedLabels="15" class="w-full md:w-80"
+                        @change="deleteTicket" />
+                    <!-- <input v-model="ticket.number" type="text" class="poppins-medium text-center"
                             placeholder="Números seleccionados" readonly aria-label="Números seleccionados"
                             aria-describedby="basic-addon2"
                             style="border-top-right-radius: 12px; border-bottom-right-radius: 12px;"> -->
@@ -147,7 +149,8 @@
             </div>
         </div>
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
-            <button v-if="ticket.number.length > 0" class="blinking-button-2 poppins-semibold mt-3" @click="visiblefindcustomer = true;">Comprar</button>
+            <button v-if="ticket.number.length > 0" class="blinking-button-2 poppins-semibold mt-3"
+                @click="visiblefindcustomer = true;">Comprar</button>
             <!-- <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button> -->
 
             <button id="modalTicket" data-toggle="modal" :data-target="`#${modal}`" style="display: none;">
@@ -157,18 +160,18 @@
         <div class="container-fluid d-flex flex-column-reverse flex-md-row mt-3 pb-5"
             :class="typeScreen == 'admin' ? 'justify-content-between' : 'justify-content-center'">
             <div class="w-100 p-5" v-if="filteredButtons.length === 0" style="background-color: lightgray;">
-                    <h3 class="text-center">No hay números disponibles</h3>
+                <h3 class="text-center">No hay números disponibles</h3>
             </div>
             <div class="d-flex flex-column align-items-center w-100" v-else>
                 <div class="mb-2">
                     <span class="poppins-bold" style="font-size: 2em;">NÚMEROS DISPONIBLES</span>
                 </div>
                 <div id="board-buy" class="button-grid w-80 grid-buttons-tickets scroll-container">
-                        <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'"
-                            v-for="(button, index) in filteredButtons" :key="index" class="grid-button"
-                            @click="buyTicket(button, button)">
-                            {{ button }}
-                        </button>
+                    <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'"
+                        v-for="(button, index) in filteredButtons" :key="index" class="grid-button"
+                        @click="buyTicket(button, button)">
+                        {{ button }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -184,7 +187,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, defineProps } from 'vue';
+import { ref, onMounted, computed, defineProps, toRaw } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 // import { RaffleServices } from '@/services/raffle.service'
@@ -237,6 +240,7 @@ let visibleCustomer = ref(false);
 let cifrar = ref("")
 const costumerdata = ref("")
 const visiblefindcustomer = ref(false)
+const type_user = ref("")
 
 const referencia = ref("");
 let monto = "200000";
@@ -371,6 +375,7 @@ const customerEmit = async (customerData) => {
 }
 
 const search = async () => {
+
     let filterJson = {}
 
     if (props.typeScreen == 'client') {
@@ -387,15 +392,21 @@ const search = async () => {
     }
     filters.value.raffle = 1
     filterJson.raffle = 1
+    type_user.value = Cookies.get('type_user')
     let response = ""
-    if(Cookies.get('type_user') == 'false') {
-        response = await SellerServices.tracking(Cookies.get('seller_id'), {})
-    }else {
+    if (type_user.value == 'false') {
+        const seller = Cookies.get('seller_id')
+        response = await SellerServices.tracking(seller, { seller: seller, raffle: filterJson.raffle, free: true })
+    } else {
         response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
     }
 
     raffle.value = response.raffle
+    console.log('response.tickets ==> ', response.tickets);
     ticketsBooked.value = response.tickets
+    
+    console.log('ticketsBooked.value ==> ', ticketsBooked.value);
+    
 
     if (filters.value.number) {
 
@@ -411,12 +422,18 @@ const search = async () => {
         //     getRangeForClients()
         // }else {
         // }
-        let counter = 0;
-        for (let index = response.raffle.start_number; index <= response.raffle.final_number && counter < 100; index++) {
-            if (!response.tickets.some(ticket => ticket.number == index)) {
-                let formattedNumber = index.toString().padStart(4, '0');
-                buttons.value.push(formattedNumber);
-                counter++;
+        if (type_user.value == 'false') {
+            // if (response.some(ticket => ticket.number == filters.value.number)) {
+            //     buttons.value = [filters.value.number]
+            // }
+        } else {
+            let counter = 0;
+            for (let index = response.raffle.start_number; index <= response.raffle.final_number && counter < 100; index++) {
+                if (!response.tickets.some(ticket => ticket.number == index)) {
+                    let formattedNumber = index.toString().padStart(4, '0');
+                    buttons.value.push(formattedNumber);
+                    counter++;
+                }
             }
         }
     }
@@ -432,15 +449,15 @@ const getRangeForClients = async () => {
 
 const saveEntity = async () => {
     console.log('saveEntity');
-    
+
     let value = 0
     console.log('ticket.value.number', ticket.value.number);
-    
-    if(props.typeScreen == 'client'){
+
+    if (props.typeScreen == 'client') {
         ticket.value.payments = []
         ticket.value.number.forEach(element => {
             console.log('element', element);
-            
+
             ticket.value.payments.push({
                 ticket: element,
                 payment_method: "TRANSFERENCIA",
@@ -451,7 +468,7 @@ const saveEntity = async () => {
         });
         console.log('ticket.value.payments', ticket.value.payments);
         // return
-    }else {
+    } else {
         ticket.value.payments.forEach(element => {
             value += parseInt(element.amount)
         });
@@ -513,7 +530,7 @@ const getPromotionsByRaffle = async () => {
         ticket.value.raffle = raffle.value.id
     }
 
-    
+
 
     promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
 
@@ -572,7 +589,7 @@ const generateWompiPay = (monto = "0") => {
 
     window.addEventListener('message', function (event) {
         console.log('event ==> ', event);
-        
+
         if (event.origin === 'https://checkout.wompi.co') {
             const data = event.data;
             console.log('data ==> ', data.data);
@@ -649,17 +666,28 @@ const remove_payment = (index) => {
 const filteredButtons = computed(() => {
 
     // if (filters.value.number) {
-        buttons.value = []
-        let counter = 0;
+    buttons.value = []
+    let counter = 0;
+    if (type_user.value == 'false') {
+        
+        ticketsBooked.value.forEach(element => {
+            if (filters.value.number) {
+                
+            }
+            if(!element.status) {
+                buttons.value.push(element.number)
+            }
+        });
+    } else {
         for (let index = raffle.value.start_number; index <= raffle.value.final_number && counter < 100; index++) {
             let formattedNumber = index.toString().padStart(4, '0');
+
             if (filters.value.number && formattedNumber.includes(filters.value.number)) {
-                
                 if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
                     buttons.value.push(formattedNumber);
                     counter++;
                 }
-            } 
+            }
             if (!filters.value.number) {
                 if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
                     buttons.value.push(formattedNumber);
@@ -667,15 +695,16 @@ const filteredButtons = computed(() => {
                 }
             }
         }
+    }
 
-        // if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
-        //     buttons.value = [filters.value.number]
-        // } else {
-        //     buttons.value = [];
-        // }
-        // return buttons.value.filter(button => button.toString().includes(filters.value.number));
+    // if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
+    //     buttons.value = [filters.value.number]
+    // } else {
+    //     buttons.value = [];
     // }
-    
+    // return buttons.value.filter(button => button.toString().includes(filters.value.number));
+    // }
+
     return buttons.value;
     // return buttons.value;
 });

@@ -5,9 +5,9 @@
                 <div class="d-flex justify-content-between">
                     <!-- <h3 v-if="!status">{{ seller }}</h3> -->
                     <h3>{{getTitle()}}</h3>
-                    <div class="d-flex flex-column">
-                        <Button class="btn-sm mb-3">{{ tickets.results?.length }} Boletas</Button>
-                        <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value) }}</Button>
+                    <div class="d-flex flex-column" v-if="type_user != 'false'">
+                        <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
+                        <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
                 </div>
                 <hr>
@@ -266,6 +266,7 @@ const firstpaymentmodal = ref('firstpayment_modal')
 const ticketsmodal = ref(false)
 const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
 const visible = ref(false)
+const type_user = ref('')
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -309,6 +310,7 @@ onMounted(async () => {
 
     customerf.value = filtroStore.filter;
     numberf.value = fitroticket.filter;
+    type_user.value = Cookies.get('type_user')
 
     await datatable()
     getTitle()
@@ -360,12 +362,11 @@ const datatable = async () => {
         // seller.value = seller
         
         tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
-        console.log('tickets.value.results ==> ', tickets.value.results);
-        tickets.value.results.forEach(element => {
-            if(element.value) {
-                full_value.value += parseInt(element.value)
-            }
-        });
+        // tickets.value.results.forEach(element => {
+        //     if(element.value) {
+        //         full_value.value += parseInt(element.value)
+        //     }
+        // });
         
     } else {
         if(filters.value.number || filters.value.raffle || filters.value.customer || filters.value.seller || filters.value.init_date || filters.value.final_date){
@@ -375,6 +376,9 @@ const datatable = async () => {
         tickets.value = response
         pagination.totalRecords = response.count;
     }
+    console.log('tickets.value.results ==> ', filters.value);
+    full_value.value = await TicketServices.totalValue({seller: filters.value.seller, status: filters.value.status})
+    console.log('tickets.value.results ==> ', full_value.value.total);
     filtroStore.clearFilter()
     fitroticket.clearFilter()
 }

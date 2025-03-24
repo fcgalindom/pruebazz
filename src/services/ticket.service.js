@@ -87,4 +87,10 @@ export class TicketServices {
         const response = await axios.post(url, raffle)
         return response.data;
     }
+
+    static async totalValue(data) {
+        const url = `${enviroments.baseUrl}tickets/totalValue/`
+        const response = await axios.get(url, {params: data})
+        return response.data;
+    }
 }
