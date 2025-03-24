@@ -455,6 +455,7 @@ const saveEntity = async () => {
 
     if (props.typeScreen == 'client') {
         ticket.value.payments = []
+        ticket.value.origin = 'web'
         ticket.value.number.forEach(element => {
             console.log('element', element);
 
@@ -586,8 +587,8 @@ const generateWompiPay = (monto = "0") => {
         cifrar.value
     );
     wompiForm.value.appendChild(script);
-
-    window.addEventListener('message', function (event) {
+    
+        window.addEventListener('message', function (event) {
         console.log('event ==> ', event);
 
         if (event.origin === 'https://checkout.wompi.co') {
