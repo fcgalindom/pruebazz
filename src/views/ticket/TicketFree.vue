@@ -555,6 +555,8 @@ const getPromotionsByRaffle = async () => {
     generateWompiPay(monto)
 
 }
+const telefono = "573152532377"; // Número en formato internacional (sin "+")
+const mensajewa = encodeURIComponent("Hola, quiero más información.");
 
 const generateWompiPay = (monto = "0") => {
     const script = document.createElement('script');
@@ -570,7 +572,7 @@ const generateWompiPay = (monto = "0") => {
         cifrar.value
     );
     wompiForm.value.appendChild(script);
-    
+
         window.addEventListener('message', function (event) {
         console.log('event ==> ', event);
         
@@ -579,7 +581,9 @@ const generateWompiPay = (monto = "0") => {
             console.log('data ==> ', data.data);
             if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
                 // Pago aprobado
+                
                 saveEntity()
+                window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
             } else if (data.event === 'unprocessabletransaction') {
                 alert('Transacción no procesable')
             } else if (data.event === 'transaction_error') {
