@@ -27,6 +27,8 @@ import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';   // optional
 import Row from 'primevue/row';                   // optional
 
+import Carousel from 'primevue/carousel';
+
 import Paginator from 'primevue/paginator';
 
 
@@ -67,6 +69,7 @@ export default {
         app.component('Chart', Chart)
         app.component('ToggleSwitch', ToggleSwitch)
         app.component('AutoComplete', AutoComplete)
+        app.component('Carousel', Carousel)
      
       }
 }
