@@ -78,6 +78,7 @@ const VisibleFilterGeneral = ref(false);
 const customer = ref({})
 const cities = ref([])
 const items = ref([])
+const seller_id = ref(Cookies.get('seller_id'))
 
 const filters = ref({
     number: "",
@@ -158,20 +159,11 @@ const drawMenu = () => {
             icon: 'fas fa-cogs',
             items: [
                 { label: 'Boletas disponibles', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' },
-                // { label: 'Boletas con abono', link: '/tickets/', icon: 'far fa-circle nav-icon' },
-                { label: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
-                { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' },
-                {label:'Boletas en linea', link:'/tickets/Enlinea', icon:'far fa-circle nav-icon'}
+                { label: 'Mis boletas', link: `/sellers-tracking/${seller_id.value}`, icons: 'far fa-circle nav-icon' },
     
             ]
         })
     }
-    
-    // items.value.push({
-    //         label: 'Filtro general',
-    //         link: '/customers',
-    //         icon: 'fas fa-user-tag'
-    // })
 }
 
 

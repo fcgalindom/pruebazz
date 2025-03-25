@@ -4,45 +4,63 @@
     </div>
     <div class="w-100 d-flex justify-content-center">
         <div class="container-main-head">
-            <div class="mb-4">
-                <span class="color-primary-raffle poppins-bold text-center" style="font-size: 5em;">COMBO</span>
+            <div class="mb-4 text-center">
+                <span class="color-primary-raffle poppins-bold" style="font-size: 5em;">COMBO</span>
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-awards">
                     <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;"> CASA MULTIFAMILIAR -
-                    </span>
+                        </span>
                     <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;">XTZ 250 0
-                        KILÓMETROS</span>
+                            KILÓMETROS</span>
                 </div>
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-description" style="border-radius: 30px;">
                     <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">ESTE MARTES 4
-                        GANADORES 3 DE CADA UNO POR $500.000 Y 1 POR $1.000.000</span>
+                            GANADORES 3 DE CADA UNO POR $500.000 Y 1 POR $1.000.000</span>
                     <!-- <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;"> NMAX CONNECTED - </span>
-                    <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;">XTZ 250 0 KILÓMETROS</span> -->
+                        <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;">XTZ 250 0 KILÓMETROS</span> -->
                 </div>
             </div>
             <!-- <div class="text-white text-center py-2">
-                
-            </div> -->
+                    
+                </div> -->
         </div>
     </div>
     <div class="d-flex justify-content-center my-5 ">
         <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Compra tus números</button>
     </div>
+    <!-- <div>
+            <img src="@/assets/customers/background_raffle.jpeg" alt="" style="width: 100%; height: 30em;">
+        </div> -->
+    
+    
     <div>
-        <img src="@/assets/customers/background_raffle.jpeg" alt="" style="width: 100%; height: 30em;">
+        <div class="card">
+            <Carousel :value="awards" :numVisible="3" :numScroll="1" :responsiveOptions="responsiveOptions" :autoplayInterval="3000">
+                <template #item="slotProps">
+                    <div class="border border-surface-200 dark:border-surface-700 rounded m-2  p-4">
+                        <div class="mb-4">
+                            <div class="relative mx-auto d-flex justify-content-center">
+                                <img :src="slotProps.data.image" :alt="slotProps.data.name" class="w-full rounded carrouse-image-size" />
+                            </div>
+                        </div>
+                        <div class="mb-4 font-medium text-center">{{ slotProps.data.name }}</div>
+                    </div>
+                </template>
+        </Carousel>
     </div>
+</div>
 
-    <div class="mt-5">
-        <span class="color-primary-raffle text-center poppins-bold" style="font-size: 3em;">JUEGA ESTE 28 DE
-            JUNIO</span>
+    <div class="mt-5 text-center">
+        <span class="color-primary-raffle poppins-bold text-uppercase" style="font-size: 3em;">JUEGA ESTE {{ formatDate(raffle.raffle_date) }}</span>
     </div>
     <div class="text-center mt-5">
         <span class="mt-4 poppins-semibold" style="color: #0B0B0B; font-size: 2.5em;">Valor unitario por
             número</span><br>
-        <span class="mt-4 poppins-bold" style="color: #01B1EB; font-size: 3em;">$125.000</span>
+        <!-- <span class="mt-4 poppins-bold" style="color: #01B1EB; font-size: 3em;">{{$125.000}}</span> -->
+        <span class="mt-4 poppins-bold" style="color: #01B1EB; font-size: 3em;">${{Helper.thousandSeparator(raffle.value_ticket)}}</span>
         <div class="w-100 d-flex justify-content-center">
             <img class="size-lotery-image" src="@/assets/customers/loteria_boyaca.png">
         </div>
@@ -92,6 +110,45 @@ import TicketFree from '@views/ticket/TicketFree.vue';
 import Helper from '@/helpers/Helper';
 import Cookies from 'js-cookie';
 
+const awards = ref([]);
+const responsiveOptions = ref([{
+        breakpoint: '1400px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '1199px',
+        numVisible: 3,
+        numScroll: 1
+    },
+    {
+        breakpoint: '767px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '575px',
+        numVisible: 1,
+        numScroll: 1
+    }
+]);
+
+const getSeverity = (status) => {
+    switch (status) {
+        case 'INSTOCK':
+            return 'success';
+
+        case 'LOWSTOCK':
+            return 'warn';
+
+        case 'OUTOFSTOCK':
+            return 'danger';
+
+        default:
+            return null;
+    }
+};
+
 const raffle = ref({});
 const domLoaded = ref(false);
 
@@ -114,9 +171,9 @@ const formatNumber = (value) => {
 
 const listRaffles = async () => {
     raffle.value = await RaffleServices.listlast();
+    console.log('raffle.value ==> ', raffle.value)
     raffle.value.images_awards.forEach(element => {
-        items.value.push(
-            { img: element.image, title: element.award, text: 'todo lo que quieras podrá ser tuyo' })
+        awards.value.push({ image: element.image, name: element.award})
     });
 };
 
@@ -128,14 +185,14 @@ const scrollToBuyNumbers = () => {
 const cookiesClient = () => {
     Cookies.remove();
     Cookies.set('type_user', 'false', {
-        vsecure: true,    // Solo se enviará a través de HTTPS
-        sameSite: 'Strict',  // Para prevenir ataques CSRF
-        expires: 1       // Duración de 7 días
+        vsecure: true, // Solo se enviará a través de HTTPS
+        sameSite: 'Strict', // Para prevenir ataques CSRF
+        expires: 1 // Duración de 7 días
     });
     Cookies.set('seller_id', 3, {
-        vsecure: true,    // Solo se enviará a través de HTTPS
-        sameSite: 'Strict',  // Para prevenir ataques CSRF
-        expires: 1       // Duración de 7 días
+        vsecure: true, // Solo se enviará a través de HTTPS
+        sameSite: 'Strict', // Para prevenir ataques CSRF
+        expires: 1 // Duración de 7 días
     });
 }
 
@@ -148,6 +205,13 @@ onMounted(async () => {
     domLoaded.value = true;
     //loadWompiScript();
 });
+
+const formatDate = () => {
+    const date = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('es-ES', options);
+}
+
 function isVideo(url) {
     const videoExtensions = ['mp4', 'webm', 'ogg'];
     const extension = url.split('.').pop();
@@ -158,5 +222,4 @@ function isVideo(url) {
 const messageBuy = () => {
     window.open('https://wa.me/573152532377?text=Hola,%20quiero%20comprar%20la%20boleta%20por%20este%20medio.', '_blank');
 }
-
 </script>

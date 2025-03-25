@@ -17,11 +17,11 @@
                     <Select v-model="ticket.customer" :options="dependencies.customers" filter optionLabel="name"
                         optionValue="id" class="w-100"></Select>
                 </div>
-                <div class="col-md-6 mb-3">
+                <!-- <div class="col-md-6 mb-3">
                     <Label>Rifa</Label>
                     <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name"
                         optionValue="id" class="w-100"></Select>
-                </div>
+                </div> -->
             </div>
 
             <hr>

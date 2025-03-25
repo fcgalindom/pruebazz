@@ -120,7 +120,7 @@
                 </Dialog>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table ref="table" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Boleta</th>
@@ -129,7 +129,7 @@
                                 <th>Teléfono</th>
                                 <th>Ciudad</th>
                                 <th>Fecha venta</th>
-                                <th v-if="!sellerRouteId">Vendedor</th>
+                                <th v-show="!sellerRouteId">Vendedor</th>
                                 <th>Estado</th>
                                 <th>Abonado</th>
                                 <th>Saldo</th>
@@ -147,7 +147,7 @@
                                 <td>{{ i.customer?.phone ?? 'N/A' }}</td>
                                 <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
                                 <td>{{ i.created_at ?? 'N/A' }}</td>
-                                <td v-if="!sellerRouteId">{{i.seller?.name ?? 'Cliente'}}</td>
+                                <td v-show="!sellerRouteId">{{i.seller?.name ?? 'Cliente'}}</td>
                                 <td>{{ i.status ?? 'No vendida' }}</td>
                                 <td>{{ i.value ? Helper.formatNumber(i.value) : 'N/A' }}</td>
                                 <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
@@ -256,6 +256,9 @@ import Cookies from 'js-cookie';
 import Helper from '@/helpers/Helper';
 import { SellerServices } from "@/services/seller.service";
 import { useFilterStore, useModalStore, useFilterTicket } from '@/stores/filterStore';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 const tickets = ref([])
 const ticket_certif = ref({})
 const full_value = ref(0)
@@ -370,15 +373,8 @@ const datatable = async () => {
         }
         filters.value.seller = sellerRouteId.value
         seller.value = await SellerServices.show(sellerRouteId.value)
-        // seller.value = seller
-        
+        filters.value.status = ""
         tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
-        // tickets.value.results.forEach(element => {
-        //     if(element.value) {
-        //         full_value.value += parseInt(element.value)
-        //     }
-        // });
-        
     } else {
         if(filters.value.number || filters.value.raffle || filters.value.customer || filters.value.seller || filters.value.init_date || filters.value.final_date){
             filters.value.page = 1
@@ -387,9 +383,7 @@ const datatable = async () => {
         tickets.value = response
         pagination.totalRecords = response.count;
     }
-    console.log('tickets.value.results ==> ', filters.value);
     full_value.value = await TicketServices.totalValue({seller: filters.value.seller, status: filters.value.status})
-    console.log('tickets.value.results ==> ', full_value.value.total);
     filtroStore.clearFilter()
     fitroticket.clearFilter()
 }
@@ -571,10 +565,38 @@ const notifyCustomer = (customer) => {
     window.open(`https://wa.me/${customer.country_code}${customer.phone}`, '_blank');
 }
 
-const downloadExcel = () => {
-    console.log('downloadExcel');
 
-}
+const table = ref(null);
+const downloadExcel = () => {
+  // Mapea y filtra solo las columnas que quieres exportar
+  const filteredData = tickets.value.results.map(i => ({
+    Número: i.number,
+    Cliente: i.customer?.name || "N/A",
+    Documento: i.customer ? Helper.thousandSeparator(i.customer.document) : "N/A",
+    Teléfono: i.customer?.phone || "N/A",
+    Ciudad: i.customer?.city?.name || "N/A",
+    "Fecha Creación": i.created_at || "N/A",
+    Vendedor: !sellerRouteId ? i.seller?.name || "Cliente" : undefined,
+    Estado: i.status || "No vendida",
+  }));
+
+  // Remueve columnas undefined si sellerRouteId es true
+  const cleanedData = filteredData.map(row => {
+    const cleanedRow = { ...row };
+    if (sellerRouteId) delete cleanedRow.Vendedor;
+    return cleanedRow;
+  });
+
+  // Convierte el JSON a una hoja de Excel
+  const worksheet = XLSX.utils.json_to_sheet(cleanedData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Facturas");
+
+  // Convierte y descarga el archivo
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(data, "tickets_por_vendedor.xlsx");
+};
 
 function showTicketAlertAll(ticketData) {
     // Creamos un contenedor en el DOM donde renderizaremos el componente
