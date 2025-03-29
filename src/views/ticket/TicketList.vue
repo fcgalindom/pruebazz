@@ -7,7 +7,7 @@
                     <h3>{{getTitle()}}</h3>
                     <div class="d-flex flex-column" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
-                        <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value?.total) }}</Button>
+                        <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
                 </div>
                 <hr>
@@ -270,6 +270,7 @@ const ticketsmodal = ref(false)
 const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
 const visible = ref(false)
 const type_user = ref('')
+const is_admin = ref(false)
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -315,6 +316,9 @@ onMounted(async () => {
     customerf.value = filtroStore.filter;
     numberf.value = fitroticket.filter;
     type_user.value = Cookies.get('type_user')
+    is_admin.value = Cookies.get('is_admin')
+    console.log('is_admin.value ==> ', is_admin.value);
+    
 
     await datatable()
     getTitle()
