@@ -324,6 +324,8 @@ onMounted(async () => {
     getTitle()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
+    console.log('seller ==> ', seller.value);
+    
 })
 
 const getTitle = () => {
@@ -577,9 +579,12 @@ const downloadExcel = () => {
     Número: i.number,
     Cliente: i.customer?.name || "N/A",
     Documento: i.customer ? Helper.thousandSeparator(i.customer.document) : "N/A",
+    Vendedor: i.seller?.name || seller.value.name || "N/A",
     Teléfono: i.customer?.phone || "N/A",
     Ciudad: i.customer?.city?.name || "N/A",
     "Fecha Creación": i.created_at || "N/A",
+    "Abonado": i.value ? Helper.formatNumber(i.value) : "N/A",
+    "Saldo": i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
     Vendedor: !sellerRouteId ? i.seller?.name || "Cliente" : undefined,
     Estado: i.status || "No vendida",
   }));
@@ -599,7 +604,8 @@ const downloadExcel = () => {
   // Convierte y descarga el archivo
   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
   const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(data, "tickets_por_vendedor.xlsx");
+const name = `BOLETAS_${seller.value.name}_${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_').toUpperCase()}.xlsx`;
+  saveAs(data, name);
 };
 
 function showTicketAlertAll(ticketData) {
