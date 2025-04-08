@@ -5,7 +5,7 @@
     <div class="w-100 d-flex justify-content-center">
         <div class="container-main-head">
             <div class="mb-4 text-center">
-                <span class="color-primary-raffle poppins-bold" style="font-size: 5em;">COMBO</span>
+                <span class="color-primary-raffle poppins-bold" style="font-size: 5em;">GRAN SORTEO</span>
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-awards">
@@ -170,6 +170,12 @@ const listRaffles = async () => {
     raffle.value = await RaffleServices.listlast();
     console.log('raffle.value ==> ', raffle.value)
     raffle.value.images_awards.forEach(element => {
+        awards.value.push({ image: element.image, name: element.award})
+        awards.value.push({ image: element.image, name: element.award})
+        awards.value.push({ image: element.image, name: element.award})
+        awards.value.push({ image: element.image, name: element.award})
+        awards.value.push({ image: element.image, name: element.award})
+        awards.value.push({ image: element.image, name: element.award})
         awards.value.push({ image: element.image, name: element.award})
     });
 };

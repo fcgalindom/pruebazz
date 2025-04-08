@@ -7,7 +7,7 @@
                     <h3>{{getTitle()}}</h3>
                     <div class="d-flex flex-column" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
-                        <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value?.total) }}</Button>
+                        <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
                 </div>
                 <hr>
@@ -270,6 +270,7 @@ const ticketsmodal = ref(false)
 const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
 const visible = ref(false)
 const type_user = ref('')
+const is_admin = ref(false)
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -315,11 +316,16 @@ onMounted(async () => {
     customerf.value = filtroStore.filter;
     numberf.value = fitroticket.filter;
     type_user.value = Cookies.get('type_user')
+    is_admin.value = Cookies.get('is_admin')
+    console.log('is_admin.value ==> ', is_admin.value);
+    
 
     await datatable()
     getTitle()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
+    console.log('seller ==> ', seller.value);
+    
 })
 
 const getTitle = () => {
@@ -573,9 +579,12 @@ const downloadExcel = () => {
     Número: i.number,
     Cliente: i.customer?.name || "N/A",
     Documento: i.customer ? Helper.thousandSeparator(i.customer.document) : "N/A",
+    Vendedor: i.seller?.name || seller.value.name || "N/A",
     Teléfono: i.customer?.phone || "N/A",
     Ciudad: i.customer?.city?.name || "N/A",
     "Fecha Creación": i.created_at || "N/A",
+    "Abonado": i.value ? Helper.formatNumber(i.value) : "N/A",
+    "Saldo": i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
     Vendedor: !sellerRouteId ? i.seller?.name || "Cliente" : undefined,
     Estado: i.status || "No vendida",
   }));
@@ -595,7 +604,8 @@ const downloadExcel = () => {
   // Convierte y descarga el archivo
   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
   const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(data, "tickets_por_vendedor.xlsx");
+const name = `BOLETAS_${seller.value.name}_${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_').toUpperCase()}.xlsx`;
+  saveAs(data, name);
 };
 
 function showTicketAlertAll(ticketData) {
