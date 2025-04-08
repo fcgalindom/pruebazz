@@ -9,16 +9,13 @@
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-awards">
-                    <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;"> CASA MULTIFAMILIAR -
-                        </span>
-                    <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;">XTZ 250 0
-                            KILÓMETROS</span>
+                    <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;"> {{ raffle?.type_1_awards?.length ? raffle.type_1_awards[0].award : 'Sin premio' }} </span>
+                    
                 </div>
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-description" style="border-radius: 30px;">
-                    <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">ESTE MARTES 4
-                            GANADORES 3 DE CADA UNO POR $500.000 Y 1 POR $1.000.000</span>
+                    <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">{{ raffle?.type_2_awards?.length ? raffle.type_2_awards[0].award : 'Sin premio' }} </span>
                     <!-- <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;"> NMAX CONNECTED - </span>
                         <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;">XTZ 250 0 KILÓMETROS</span> -->
                 </div>
@@ -54,7 +51,7 @@
 </div>
 
     <div class="mt-5 text-center">
-        <span class="color-primary-raffle poppins-bold text-uppercase" style="font-size: 3em;">JUEGA ESTE {{ formatDate(raffle.raffle_date) }}</span>
+        <span class="color-primary-raffle poppins-bold text-uppercase" style="font-size: 3em;">JUEGA ESTE {{ formatDate() }}</span>
     </div>
     <div class="text-center mt-5">
         <span class="mt-4 poppins-semibold" style="color: #0B0B0B; font-size: 2.5em;">Valor unitario por
@@ -207,10 +204,11 @@ onMounted(async () => {
 });
 
 const formatDate = () => {
-    const date = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('es-ES', options);
-}
+  const date = new Date(raffle.value.raffle_date);
+  date.setDate(date.getDate() + 1); // sumar un día
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('es-ES', options);
+};
 
 function isVideo(url) {
     const videoExtensions = ['mp4', 'webm', 'ogg'];

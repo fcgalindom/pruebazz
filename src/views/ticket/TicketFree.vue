@@ -572,8 +572,8 @@ const getPromotionsByRaffle = async () => {
     generateWompiPay(monto)
 
 }
-const telefono = "573152532377"; // Número en formato internacional (sin "+")
-const mensajewa = encodeURIComponent("Hola, quiero más información.");
+const telefono = "573154862281"; // Número en formato internacional (sin "+")
+const mensajewa = encodeURIComponent("Hola, he realizado la compra en línea con los siguientes datos Datos en ingresados en el formulario Quedo atento(a) al envío de la boleta en formato digital.");
 
 const generateWompiPay = (monto = "0") => {
     const script = document.createElement('script');
