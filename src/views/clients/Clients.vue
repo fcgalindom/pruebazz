@@ -15,7 +15,8 @@
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-description" style="border-radius: 30px;">
-                    <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">{{ raffle?.type_2_awards?.length ? raffle.type_2_awards[0].award : 'Sin premio' }} </span>
+                    <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">{{ raffle?.description }} </span>
+                    <!-- <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">{{ raffle?.type_2_awards?.length ? raffle.type_2_awards[0].award : 'Sin premio' }} </span> -->
                     <!-- <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;"> NMAX CONNECTED - </span>
                         <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;">XTZ 250 0 KILÓMETROS</span> -->
                 </div>
