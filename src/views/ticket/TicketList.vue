@@ -230,7 +230,7 @@
                             <td>{{ Helper.formatNumber(f.amount) }}</td>
                             <td>{{ f.payment_method }}</td>
                             <td>
-                                <TicketPaid :ticketData="ticket_certif" :paymentData="ticket_certif.payments"
+                                <TicketPaid :ticketData="ticket_certif" :paymentData="ticket_certif.payments" :sellerData="seller.value"
                                     :index="index" />
                             </td>
                         </tr>

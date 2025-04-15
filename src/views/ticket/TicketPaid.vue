@@ -36,9 +36,10 @@ const props = defineProps({
     index: {
         type: Number,
         required: true
-    }
+    },
+    
 });
-const { ticketData, paymentData, index } = toRefs(props);
+const { ticketData, paymentData, index  } = toRefs(props);
 
 const getotalAmount = () => {
     let totalAmount = 0;
@@ -91,7 +92,7 @@ onMounted(async() => {
         ctx.fillText(Helper.formatNumber(paymentData.value[index.value].amount), 720, 235);
         ctx.fillText(ticketData.value.customer.name, 200, 360);
         ctx.fillText(formatNumber(ticketData.value.value_to_pay - getotalAmount()), 720, 295);
-        ctx.fillText(ticketData.value.seller.name, 200, 440);
+        ctx.fillText(ticketData?.value?.seller?.name ?? 'Cliente', 200, 440);
 
 
 
