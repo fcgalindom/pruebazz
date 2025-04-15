@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"  style="display: none;"  ></canvas>
+    <canvas ref="reciboCanvas" style="display: none;" ></canvas>
     
     <div class="container">
         <div class="row">
@@ -28,9 +28,9 @@ const props = defineProps({
     ticketData: {
         type: Object,
         required: true
-    }
+    },
 });
-const { ticketData } = toRefs(props);
+const { ticketData} = toRefs(props);
 
 const raffle = ref({});
 
@@ -50,7 +50,6 @@ onMounted(async() => {
     fondo.crossOrigin = "Anonymous";
     fondo.src = raffle.value.paymentfirst; // Cambia esta ruta a la imagen que subiste
     fondo.onload = () => {
-
         const margenSuperior = 700;
         canvas.width = fondo.width;
         canvas.height = fondo.height;
@@ -95,7 +94,7 @@ onMounted(async() => {
         currentY += 57;
 
         //Campo: Seller 
-        ctx.fillText(ticketData.value.seller.name, col1X + 240, currentY); // Valor de ejemplo
+        ctx.fillText(ticketData?.value?.seller?.name ?? 'Cliente', col1X + 240, currentY); // Valor de ejemplo
 
         // Separador vertical entre columnas
         ctx.strokeStyle = "#ddd";
