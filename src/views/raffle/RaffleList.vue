@@ -40,17 +40,22 @@
                         </div>
                        
                        
-                        <div class="col-4">
+                        <div class="col-3">
                             <Label>Pago total</Label>
                             <Button @click="openpayment('all')"><i class="pi pi-upload"></i></Button>
                             </div>
-                        <div class="col-4">
+                        <div class="col-3">
                                 <Label>Primer Pago</Label>
                                 <Button @click="openpayment('first')"><i class="pi pi-upload"></i></Button>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <Label>Recivo</Label>
                             <Button @click="openpayment('ticket')"><i class="pi pi-upload"></i></Button>
+                        </div>
+
+                        <div class="col-3">
+                            <Label>Logo</Label>
+                            <Button @click="openLogo()"><i class="pi pi-upload"></i></Button>
                         </div>
                       
                     </div>
@@ -233,6 +238,20 @@ const openpayment = (data) => {
     );
     myWidget.open();
 };
+const openLogo = () =>{
+    const myWidget = window.cloudinary.createUploadWidget({
+            cloudName: 'dsxpe54pz',
+            uploadPreset: 'demos1',
+        },
+
+        (error, result) => {
+            if (!error && result && result.event === "success") {
+                raffle.value.logo = result.info.url;
+            }
+        }
+    );
+    myWidget.open();
+}
 
 const add_award = () => {
     raffle.value.awards.push({ award: "", date: "", type_award: "", image: "" })

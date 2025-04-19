@@ -1,6 +1,6 @@
 <template>
     <div class="w-100 d-flex justify-content-center mt-2 mb-5">
-        <img class="main-logo-head" src="@/assets/customers/dr_denix_logo.png">
+        <img class="main-logo-head" :src="raffle?.logo || defaultLogo " />
     </div>
     <div class="w-100 d-flex justify-content-center">
         <div class="container-main-head">
@@ -107,6 +107,7 @@ import TicketFree from '@views/ticket/TicketFree.vue';
 // @ts-ignore
 import Helper from '@/helpers/Helper';
 import Cookies from 'js-cookie';
+import defaultLogo from '@/assets/customers/dr_denix_logo.png'
 
 const awards = ref([]);
 const responsiveOptions = ref([{
