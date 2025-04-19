@@ -32,6 +32,11 @@ import Carousel from 'primevue/carousel';
 import Paginator from 'primevue/paginator';
 
 
+import Accordion from 'primevue/accordion';
+import AccordionPanel from 'primevue/accordionpanel';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionContent from 'primevue/accordioncontent';
+
 
 export default {
     install(app) {
@@ -70,6 +75,10 @@ export default {
         app.component('ToggleSwitch', ToggleSwitch)
         app.component('AutoComplete', AutoComplete)
         app.component('Carousel', Carousel)
+        app.component('Accordion', Accordion)
+        app.component('AccordionPanel', AccordionPanel)
+        app.component('AccordionHeader', AccordionHeader)
+        app.component('AccordionContent', AccordionContent)
      
       }
 }
