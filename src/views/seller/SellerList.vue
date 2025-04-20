@@ -59,6 +59,7 @@
                   <th style="width: 30%;">Correo</th>
                   <th>Acciones</th>
                   <th>Habilitar</th>
+                  <th>Eliminar</th>
               </tr>
             </thead>
             <tbody>
@@ -76,6 +77,11 @@
                 <td>
                   <div class="d-flex justify-content-center">
                     <ToggleSwitch   :modelValue="item.state === 1" @update:modelValue="toggleState($event, item)"/>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex justify-content-center">
+                    <Button    :disabled="item.state === 0"  class="btn text-darkslategrey" @click="deleteEntity(item.id)" variant="text" ><i class="fas fa-trash"></i></Button>
                   </div>
                 </td>
             </tr>
@@ -166,6 +172,24 @@
     changeState(item.id, item.state)
     item.state = newValue ? 1 : 0;
    }
+   const deleteEntity = async(id) => {
+    const result = await Swal.fire({
+      title: '¿Está seguro?',
+      text: "No podrá revertir esta acción",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar'
+    })
+    const statusdelete = {
+      "status": 2
+    }
+    if (result.isConfirmed) {
+      await SellerServices.updateSellerStatus(id, statusdelete)
+      await datatable()
+    }
+    }
 
   
   </script>
