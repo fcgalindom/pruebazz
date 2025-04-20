@@ -48,12 +48,12 @@
     </Drawer>
 
     <!-- Crear Cliente -->
-    <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '80rem' }">
+    <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '30rem' }">
         <CustomerForm @closedialog="visibleCustomer = false" />
     </Dialog>
 
     <!-- Filtro General -->
-    <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '80rem' }">
+    <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '20rem' }">
         <TicketFilter @closeFilter="VisibleFilterGeneral = false" />
     </Dialog>
     <!-- <TicketFilter :visibleDialog="true" /> -->
@@ -119,6 +119,11 @@ const drawMenu = () => {
 
 const addAdminMenu = () => {
     addSuperSellerMenu()
+    items.value.splice(1, 0, {
+        label: 'Rifas',
+        link: '/raffles',
+        icon: 'fas fa-table'
+    })
     items.value.push({
         label: 'Reportes',
         link: '#',
@@ -139,20 +144,16 @@ const addSuperSellerMenu = () => {
         icon: 'fas fa-user-tag'
     })
     items.value.push({
-        label: 'Rifas',
-        link: '/raffles',
-        icon: 'fas fa-table'
-    })
-    items.value.push({
         label: 'Boletas',
         link: '#',
         icon: 'fas fa-cogs',
         items: [
             { label: 'Boletas disponibles', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' },
-            { label: 'Boletas pendientes', link: '/tickets/Pendiente', icon: 'far fa-circle nav-icon' },
+            { label: 'Boletas Sin Abono', link: '/tickets/Pendiente', icon: 'far fa-circle nav-icon' },
             { label: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
             { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' },
-            { label: 'Boletas en linea', link: '/tickets/Enlinea', icon: 'far fa-circle nav-icon' }
+            { label: 'Boletas en linea', link: '/tickets/Enlinea', icon: 'far fa-circle nav-icon' },
+            { label: 'Cargue de Boletas', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' }
         ]
     })
     items.value.push({
@@ -225,7 +226,7 @@ const listCustomers = async () => {
         })
         .catch(error => {
             // Manejar el error aquí
-            console.error(error);
+            console.error('error ==> ', error);
         });
 
 

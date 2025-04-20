@@ -1,14 +1,14 @@
 <template>
     <div class="row">
-        <div class="col-md-6 mb-3">
+        <div class="col-12 mb-3">
             <Label>Documento</Label>
             <Input class="form-control" v-model="customer.document" type="number" @blur="listCustomers"></Input>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-12 mb-3">
             <Label>Nombre</Label>
             <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-12 mb-3">
             <Label>Teléfono</Label>
             <div class="row">
                 <Select v-model="customer.country_code"  optionLabel="name"  :options="countries" class="col-6 col-md-3 mb-3 mb-md-0">
@@ -27,7 +27,7 @@
                 <Input class="col-md-9" v-model="customer.phone" :disabled="isDisabled" label="Teléfono"></Input>
             </div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-12 mb-3">
             <Label>Ciudad</Label>
             <Select filter optionValue="id" fluid optionLabel="name" ref="multiselect" v-model="customer.city"
                 :disabled="isDisabled" :options="cities" :multiple="false" :clear-on-select="true"

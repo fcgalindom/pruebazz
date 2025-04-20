@@ -2,12 +2,15 @@
     <div>
         <div class="container-fluid pt-3">
             <div class="my-3">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column flex-sm-row justify-content-between">
                     <!-- <h3 v-if="!status">{{ seller }}</h3> -->
-                    <h3>{{getTitle()}}</h3>
-                    <div class="d-flex flex-column" v-if="type_user != 'false'">
+                    <h3>{{ getTitle() }}</h3>
+                    <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
-                        <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{ Helper.formatNumber(full_value?.total) }}</Button>
+                        <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
+                        }}</Button>
+                        <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
+                            Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
                 </div>
                 <hr>
@@ -31,21 +34,23 @@
                         <Select v-model="filters.seller" :options="dependencies.sellers" filter optionLabel="name"
                             optionValue="id" class="w-100"></Select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3 mb-3">
                         <Label required="0">Fecha inicial</Label>
                         <DatePicker v-model="filters.init_date" showIcon fluid dateFormat="yy-mm-dd"
                             :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3 mb-3">
                         <Label required="0">Fecha final</Label>
                         <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd"
                             :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
                     </div>
                 </div>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mb-3">
                     <Button @click="datatable">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
+                    <Button class="mr-3" @click="goPayToSeller">Pagar</Button>
+                    <Button class="mr-3" @click="downloadPdf"><i class="far fa-file-pdf fa-lg"></i></Button>
                     <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
                     <Button @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
@@ -82,7 +87,8 @@
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-success" @click="add_payment()">+</button>
                         </div>
-                        <div class="row pb-3 mb-3" v-for="(i, index) in ticket.payments" :key="index" style="border-bottom: 1px solid rgba(0, 0, 0, 0.19);">
+                        <div class="row pb-3 mb-3" v-for="(i, index) in ticket.payments" :key="index"
+                            style="border-bottom: 1px solid rgba(0, 0, 0, 0.19);">
                             <div class="col-5">
                                 <Label>Método de pago</Label>
                                 <Select v-model="i.payment_method" :options="payment_methods" filter
@@ -94,8 +100,7 @@
                                     type="text"></InputNumber>
                             </div>
                             <div class="col-1">
-                                <button class="btn btn-danger mt-4 ml-3"
-                                    @click="remove_payment(index)">X</button>
+                                <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
                             </div>
                             <hr>
                             <!-- <div class="col-4">
@@ -119,99 +124,133 @@
                     </div>
                 </Dialog>
             </div>
+
+            <Accordion value="0" v-if="pay.percentage > 0">
+                <AccordionPanel value="0">
+                    <AccordionHeader>Desplegar tabla pagar a Vendedor</AccordionHeader>
+                    <AccordionContent>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Vendedor</th>
+                                        <th>Total de ventas</th>
+                                        <th>Porcentaje</th>
+                                        <th>Total a pagar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ getTitle() }}</td>
+                                        <td>{{ cant_tickets }}</td>
+                                        <td>{{ pay.percentage }} %</td>
+                                        <td>{{ Helper.formatNumber(pay.totalToPay) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </AccordionContent>
+                </AccordionPanel>
+            </Accordion>
+
             <div class="table-responsive">
                 <table ref="table" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Boleta</th>
-                                <th>Cliente</th>
-                                <th>Documento</th>
-                                <th>Teléfono</th>
-                                <th>Ciudad</th>
-                                <th>Fecha venta</th>
-                                <th v-show="!sellerRouteId">Vendedor</th>
-                                <th>Estado</th>
-                                <th>Abonado</th>
-                                <th>Saldo</th>
-                                <th>Facturas</th>
-                                <th>Acciones</th>
-                                <th>Certif. Boleta</th>
-                                <th>Whatsapp</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(i, index) in tickets.results" :key="index" v-bind:class="getLigthTracking(i.customer)">
-                                <td>#{{i.number}}</td>
-                                <td>{{ i.customer?.name ?? 'N/A' }}</td>
-                                <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
-                                <td>{{ i.customer?.phone ?? 'N/A' }}</td>
-                                <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
-                                <td>{{ i.created_at ?? 'N/A' }}</td>
-                                <td v-show="!sellerRouteId">{{i.seller?.name ?? 'Cliente'}}</td>
-                                <td>{{ i.status ?? 'No vendida' }}</td>
-                                <td>{{ i.value ? Helper.formatNumber(i.value) : 'N/A' }}</td>
-                                <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
-                                <td>
-                                    <div class="text-center">
-                                        <button @click="paymentdata(i)" class="btn"><i class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
+                    <thead>
+                        <tr>
+                            <th>Boleta</th>
+                            <th>Cliente</th>
+                            <th>Documento</th>
+                            <th>Teléfono</th>
+                            <th>Ciudad</th>
+                            <th>Fecha venta</th>
+                            <th v-show="!sellerRouteId">Vendedor</th>
+                            <th>Estado</th>
+                            <th>Abonado</th>
+                            <th>Saldo</th>
+                            <th>Facturas</th>
+                            <th>Acciones</th>
+                            <th>Certif. Boleta</th>
+                            <th>Whatsapp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(i, index) in tickets.results" :key="index"
+                            v-bind:class="getLigthTracking(i.customer)">
+                            <td>#{{ i.number }}</td>
+                            <td>{{ i.customer?.name ?? 'N/A' }}</td>
+                            <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
+                            <td>{{ i.customer?.phone ?? 'N/A' }}</td>
+                            <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
+                            <td>{{ i.created_at ?? 'N/A' }}</td>
+                            <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
+                            <td>{{ i.status ?? 'No vendida' }}</td>
+                            <td>{{ calculatePaid(i) }}</td>
+                            <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
+                            <td>
+                                <div class="text-center">
+                                    <button @click="paymentdata(i)" class="btn"><i
+                                            class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-between" v-if="i.customer">
+                                    <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i
+                                            class="fas fa-edit"></i></button>
+                                    <div class="d-flex"
+                                        v-if="i.status != 'Pagado' || Cookies.get('type_user') == 'true'">
+                                        <button class="btn btn-success btn-sm" style="border-radius: 50%;"
+                                            @click="changeState(i.id, i.status)"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
+                                            @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
                                     </div>
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex justify-content-between" v-if="i.customer">
-                                        <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
-                                        <div class="d-flex" v-if="i.status != 'Pagado' || Cookies.get('type_user') == 'true'">
-                                            <button class="btn btn-success btn-sm" style="border-radius: 50%;" @click="changeState(i.id, i.status)"><i class="fas fa-check"></i></button>
-                                            <button class="btn btn-danger btn-sm" style="border-radius: 50%;" @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
+                                </div>
+                                <div v-else>
+                                    <span>No vendida</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div v-if="i.customer">
+                                    <div class="row">
+                                        <div v-if="ticketstatus == 'Reservado' || ticketstatus == 'Pendiente'"
+                                            class="col-3">
+                                            <button class="btn" data-toggle="modal" @click="showTicketAlert(i)"><i
+                                                    class="fas fa-download"></i></button>
+                                        </div>
+                                        <div v-if="ticketstatus == 'Pagado'" class="col-3">
+                                            <button class="btn" data-toggle="modal" @click="showTicketAlertAll(i)"><i
+                                                    class="fas fa-download"></i></button>
+                                        </div>
+                                        <div class="w-100 text-center" v-else>
+                                            N/A
                                         </div>
                                     </div>
-                                    <div v-else>
-                                        <span>No vendida</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div v-if="i.customer">
-                                        <div class="row">
-                                          <div v-if="ticketstatus == 'Reservado' || ticketstatus == 'Pendiente'" class="col-3">
-                                           <button class="btn"  data-toggle="modal"  @click="showTicketAlert(i)"><i class="fas fa-download"></i></button>  
-                                          </div>
-                                          <div v-if="ticketstatus  == 'Pagado'" class="col-3">
-                                           <button class="btn"  data-toggle="modal"  @click="showTicketAlertAll(i)"><i class="fas fa-download"></i></button>  
-                                          </div>
-                                          <div class="w-100 text-center" v-else>
-                                            N/A
-                                          </div>
-                                       </div>
-                                        <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
-                                            <TikectFirstPaid :ticketData="i" />
-                                        </Modal>
-            
-    
-                                    </div>
-                                    <div v-else>
-                                        <span>No vendida</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="text-center">
-                                        <button class="btn" @click="notifyCustomer(i.customer)">
-                                            <i class="text-success fab fa-whatsapp fa-lg"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
+                                    <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
+                                        <TikectFirstPaid :ticketData="i" />
+                                    </Modal>
+
+
+                                </div>
+                                <div v-else>
+                                    <span>No vendida</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <button class="btn" @click="notifyCustomer(i.customer)">
+                                        <i class="text-success fab fa-whatsapp fa-lg"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
-                    <!-- Paginador -->
-        <Paginator v-if="!sellerRouteId"
-            :first="pagination.page * pagination.rows" 
-            :rows="pagination.rows" 
-            :total-records="pagination.totalRecords"
-            @page="onPageChange"
-            :rows-per-page-options="[10, 20, 50]"
-        />
+            <!-- Paginador -->
+            <Paginator v-if="!sellerRouteId" :first="pagination.page * pagination.rows" :rows="pagination.rows"
+                :total-records="pagination.totalRecords" @page="onPageChange" :rows-per-page-options="[10, 20, 50]" />
 
-            <Dialog class="table-responsive" v-model:visible="ticketsmodal" header="Descargar Boleta" :style="{ width: '75rem' }">
+            <Dialog class="table-responsive" v-model:visible="ticketsmodal" header="Descargar Boleta"
+                :style="{ width: '75rem' }">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -236,7 +275,11 @@
                         </tr>
                     </tbody>
                 </table>
-            
+
+            </Dialog>
+
+            <Dialog v-model:visible="visiblePayCustomer" modal header="Pagar a Vendedor" :style="{ width: '30rem' }">
+                <PayToSeller :totalProp="full_value" @pay="handlePay" />
             </Dialog>
         </div>
     </div>
@@ -251,6 +294,7 @@ import Swal from 'sweetalert2'
 import TicketPaid from "./TicketPaid.vue";
 import TikectFirstPaid from "./TikectFirstPaid.vue";
 import TicketPaidAll from "./TicketPaidAll.vue";
+import PayToSeller from "./PayToSeller.vue";
 import Cookies from 'js-cookie';
 // @ts-ignore
 import Helper from '@/helpers/Helper';
@@ -258,10 +302,12 @@ import { SellerServices } from "@/services/seller.service";
 import { useFilterStore, useModalStore, useFilterTicket } from '@/stores/filterStore';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { red } from "@cloudinary/url-gen/actions/adjust";
 
 const tickets = ref([])
 const ticket_certif = ref({})
 const full_value = ref(0)
+const cant_tickets = ref(0)
 const ticket = ref({})
 const ticketstatus = ref("")
 const seller = ref({})
@@ -271,6 +317,11 @@ const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQU
 const visible = ref(false)
 const type_user = ref('')
 const is_admin = ref(false)
+const visiblePayCustomer = ref(false)
+const pay = ref({
+    percentage: 0,
+    totalToPay: 0
+})
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -305,10 +356,10 @@ const numberf = ref(null)
 
 
 const pagination = reactive({
-            page: 0, // Página actual (empieza desde 0)
-            rows: 10, // Cantidad de registros por página
-            totalRecords: 200, // Total de registros
-        });
+    page: 0, // Página actual (empieza desde 0)
+    rows: 10, // Cantidad de registros por página
+    totalRecords: 200, // Total de registros
+});
 
 
 onMounted(async () => {
@@ -318,15 +369,20 @@ onMounted(async () => {
     type_user.value = Cookies.get('type_user')
     is_admin.value = Cookies.get('is_admin')
     console.log('is_admin.value ==> ', is_admin.value);
-    
+
 
     await datatable()
     getTitle()
     limpiarFormulario()
     dependencies.value = await TicketServices.dependencies()
     console.log('seller ==> ', seller.value);
-    
+
 })
+
+const handlePay = (payload) => {
+    pay.value = payload
+    visiblePayCustomer.value = false
+}
 
 const getTitle = () => {
     switch (status.value) {
@@ -349,14 +405,14 @@ const getTitle = () => {
 
 const datatable = async () => {
     loading.value = true
-  
+
     filters.value.status = status.value
     filters.value.origin = "admin"
-    if(status.value == "Enlinea"){
+    if (status.value == "Enlinea") {
         console.log('status.value', status.value);
         filters.value.origin = "web"
     }
-   
+
     filters.value.customer = ""
 
 
@@ -369,7 +425,7 @@ const datatable = async () => {
     }
 
     // console.log('sellerRouteId.value', sellerRouteId.value);
-    
+
     if (sellerRouteId.value) {
         if (numberf.value) {
             filters.value.number = numberf.value
@@ -381,26 +437,31 @@ const datatable = async () => {
         seller.value = await SellerServices.show(sellerRouteId.value)
         filters.value.status = ""
         tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
+        cant_tickets.value = tickets.value.results.length
+
     } else {
-        if(filters.value.number || filters.value.raffle || filters.value.customer || filters.value.seller || filters.value.init_date || filters.value.final_date){
+        if (filters.value.number || filters.value.raffle || filters.value.customer || filters.value.seller || filters.value.init_date || filters.value.final_date) {
             filters.value.page = 1
         }
         const response = await TicketServices.list(filters.value)
         tickets.value = response
         pagination.totalRecords = response.count;
     }
-    full_value.value = await TicketServices.totalValue({seller: filters.value.seller, status: filters.value.status})
+    full_value.value = await TicketServices.totalValue({ seller: filters.value.seller, status: filters.value.status, init_date: filters.value.init_date, final_date: filters.value.final_date })
+    if (pay.value.percentage > 0) {
+        pay.value.totalToPay = full_value.value.total * (pay.value.percentage / 100)
+    }
     filtroStore.clearFilter()
     fitroticket.clearFilter()
 }
 
 const onPageChange = (event) => {
-            pagination.page = event.page;
-            pagination.rows = event.rows;
-            filters.value.page = pagination.page + 1;
-            // filters.value.page_size = event.rows;
-            datatable();
-        };
+    pagination.page = event.page;
+    pagination.rows = event.rows;
+    filters.value.page = pagination.page + 1;
+    // filters.value.page_size = event.rows;
+    datatable();
+};
 
 watch(() => router.path, async () => {
     await datatable()
@@ -417,18 +478,18 @@ watch(
     }
 );
 watch(
-  () => fitroticket.filter,
-  (newValue) => {
-    if (newValue) {
-        numberf.value = fitroticket.filter;
-        datatable()
-      
-       
-    } else {
-       
-     
+    () => fitroticket.filter,
+    (newValue) => {
+        if (newValue) {
+            numberf.value = fitroticket.filter;
+            datatable()
+
+
+        } else {
+
+
+        }
     }
-}
 );
 
 
@@ -567,6 +628,18 @@ function showTicketAlert(ticketData) {
     });
 }
 
+const calculatePaid = (i) => {
+    if(!i.value) {
+        return 'N/A'
+    }
+
+    let total = 0
+    i.payments?.forEach(element => {
+        total += parseInt(element.amount)
+    });
+    return Helper.formatNumber(total)
+}
+
 const notifyCustomer = (customer) => {
     window.open(`https://wa.me/${customer.country_code}${customer.phone}`, '_blank');
 }
@@ -574,39 +647,48 @@ const notifyCustomer = (customer) => {
 
 const table = ref(null);
 const downloadExcel = () => {
-  // Mapea y filtra solo las columnas que quieres exportar
-  const filteredData = tickets.value.results.map(i => ({
-    Número: i.number,
-    Cliente: i.customer?.name || "N/A",
-    Documento: i.customer ? Helper.thousandSeparator(i.customer.document) : "N/A",
-    Vendedor: i.seller?.name || seller.value.name || "N/A",
-    Teléfono: i.customer?.phone || "N/A",
-    Ciudad: i.customer?.city?.name || "N/A",
-    "Fecha Creación": i.created_at || "N/A",
-    "Abonado": i.value ? Helper.formatNumber(i.value) : "N/A",
-    "Saldo": i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
-    Vendedor: !sellerRouteId ? i.seller?.name || "Cliente" : undefined,
-    Estado: i.status || "No vendida",
-  }));
+    // Mapea y filtra solo las columnas que quieres exportar
+    const filteredData = tickets.value.results.map(i => ({
+        Número: i.number,
+        Cliente: i.customer?.name || "N/A",
+        Documento: i.customer ? Helper.thousandSeparator(i.customer.document) : "N/A",
+        Vendedor: i.seller?.name || seller.value.name || "N/A",
+        Teléfono: i.customer?.phone || "N/A",
+        Ciudad: i.customer?.city?.name || "N/A",
+        "Fecha Creación": i.created_at || "N/A",
+        "Abonado": i.value ? Helper.formatNumber(i.value) : "N/A",
+        "Saldo": i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
+        Vendedor: !sellerRouteId ? i.seller?.name || "Cliente" : undefined,
+        Estado: i.status || "No vendida",
+    }));
 
-  // Remueve columnas undefined si sellerRouteId es true
-  const cleanedData = filteredData.map(row => {
-    const cleanedRow = { ...row };
-    if (sellerRouteId) delete cleanedRow.Vendedor;
-    return cleanedRow;
-  });
+    // Remueve columnas undefined si sellerRouteId es true
+    const cleanedData = filteredData.map(row => {
+        const cleanedRow = { ...row };
+        if (sellerRouteId) delete cleanedRow.Vendedor;
+        return cleanedRow;
+    });
 
-  // Convierte el JSON a una hoja de Excel
-  const worksheet = XLSX.utils.json_to_sheet(cleanedData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Facturas");
+    // Convierte el JSON a una hoja de Excel
+    const worksheet = XLSX.utils.json_to_sheet(cleanedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Facturas");
 
-  // Convierte y descarga el archivo
-  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  const data = new Blob([excelBuffer], { type: "application/octet-stream" });
-const name = `BOLETAS_${seller.value.name}_${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_').toUpperCase()}.xlsx`;
-  saveAs(data, name);
+    // Convierte y descarga el archivo
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+    const name = `BOLETAS_${seller.value.name}_${new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_').toUpperCase()}.xlsx`;
+    saveAs(data, name);
 };
+
+const downloadPdf = () => {
+    console.log('downloadPdf ==> ', tickets.value.results);
+
+}
+
+const goPayToSeller = () => {
+    visiblePayCustomer.value = true
+}
 
 function showTicketAlertAll(ticketData) {
     // Creamos un contenedor en el DOM donde renderizaremos el componente

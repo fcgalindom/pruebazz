@@ -1,7 +1,7 @@
 <template #container="{ closeCallback }">
     <div class="row">
 
-        <div class="col-md-6 mb-3">
+        <div class="col-12 mb-3">
             <Label required="0">Cliente</Label>
             <Select optionLabel="documentname" optionValue="id" filter v-model="filters.customer"
                 :options="dependencies.customers" fluid>
@@ -9,7 +9,7 @@
         </div>
 
 
-        <div class="col-md-6 mb-3">
+        <div class="col-12 mb-3">
             <Label required="0">Número de Boleta</Label>
             <Input required="0" v-model="filters.number" />
         </div>
@@ -122,7 +122,7 @@ const datatable = async () => {
     else {
         // console.log('getvalidate.value.seller ==> ', );
         
-        if(getvalidate.value.seller_range.seller) {
+        if(getvalidate.value?.seller_range?.seller) {
             fitroticket.setFilter(filters.value.number);
             router.push({ name: 'SellerTracking', params: { id: getvalidate.value.seller_range.seller } })
         }else {
