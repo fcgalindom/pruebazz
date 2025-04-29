@@ -15,7 +15,7 @@
                 <div class="col-md-6 mb-3">
                     <Label>Cliente (a quien se vende)</Label>
                     <Select v-model="ticket.customer" :options="dependencies.customers" filter optionLabel="name"
-                        optionValue="id" class="w-100"></Select>
+                        optionValue="id" disabled class="w-100"></Select>
                 </div>
                 <!-- <div class="col-md-6 mb-3">
                     <Label>Rifa</Label>
@@ -299,7 +299,13 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const getcutomerevent = (data) => {
+
+    if(props.typeScreen == 'client'){
+        ticket.value.seller = 3
+
+    }
     if (data.validate) {
+        
         ticket.value.customer = data.customer.id
         visiblefindcustomer.value = false
         // visibleCustomer.value = true
