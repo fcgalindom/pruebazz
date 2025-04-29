@@ -23,7 +23,12 @@ export class TicketServices {
 
     static async createCustomer(raffle) {
         const url = `${enviroments.baseUrl}tickets/create/`
-        const response = await axios.post(url, raffle)
+        const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1];
+        const response = await axios.post(url, raffle, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        });
         return response.data;
     }
 

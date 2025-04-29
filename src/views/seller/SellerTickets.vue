@@ -32,16 +32,19 @@
                             @select="search(item)" />
                         </div>
                         <div class="col-md-8">
+                            <Label required="0">Filtrar Números</Label>
+                            <Input v-model="filters.number"></Input>
+                        </div>
+                        <!-- <div class="col-md-8">
                             <Label required="0">Números seleccionados</Label>
                             <MultiSelect v-model="range_tickets[position].numbers" display="chip" :options="range_tickets[position].numbers" filter fluid
                                 :maxSelectedLabels="15" class="w-full md:w-80"  @change="deleteTicket($event, position)" />
-                            <!-- <Input disabled v-model="range_tickets[position].numbers" class="mb-3" label="Números seleccionados"></Input> -->
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="container-fluid d-flex justify-content-between mt-3 pb-5" v-if="showKeyboard">
                     <div class="button-grid w-80 grid-buttons-tickets scroll-container" style="grid-template-columns: repeat(10, 1fr);">
-                        <button :class="{ active: isActive(button) }" v-for="(button, index) in buttons" :key="index" class="grid-button" @click="buyTicket(index, button, position)">
+                        <button :class="{ active: isActive(button) }" v-for="(button, index) in filteredButtons" :key="index" class="grid-button" @click="buyTicket(index, button, position)">
                                   {{ button }}
                             </button>
                     </div>
@@ -55,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { SellerTicketsServices } from "@/services/seller_tickets.service";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from "vue-router";
@@ -96,6 +99,12 @@ const buyTicket = (index, button, position) => {
     }
     // ticket.value.raffle = filters.value.raffle
 }
+
+const filteredButtons = computed(() => {
+    return buttons.value.filter(button => {
+        return button.toString().includes(filters.value.number);
+    });
+});
 
 const search = async (item) => {
     
