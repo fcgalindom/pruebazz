@@ -79,7 +79,7 @@ const saveEntity = () => {
       });
     }
 
-    window.location.href = '/customers';
+    window.location.href = '/home';
 
 
 
