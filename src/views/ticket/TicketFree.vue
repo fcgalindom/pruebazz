@@ -39,6 +39,11 @@
                         <Label>Método de pago</Label>
                         <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
                     </div>
+                    <div class="col-md-4" v-if="i.payment_method !== '' && i.payment_method !== 'EFECTIVO'">
+                        <label>Referencia de pagos</label>
+                        <input type="text" v-model="i.reference" class="form-control"
+                            placeholder="Ingrese la referencia" />
+                    </div>
                     <div class="col-md-4">
                         <Label>Valor</Label>
                         <InputNumber fluid v-model="i.amount" />
@@ -657,7 +662,8 @@ const limpiarFormulario = () => {
         payments: [{
             payment_method: "",
             amount: "",
-            expiration_date: '2024-12-31'
+            expiration_date: '2024-12-31',
+            reference: "",
         }]
     }
 }
