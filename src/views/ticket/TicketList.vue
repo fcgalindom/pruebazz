@@ -8,7 +8,7 @@
                     <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
                         <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
-                            }}</Button>
+                        }}</Button>
                         <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
                             Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
@@ -52,7 +52,7 @@
                     <Button class="mr-3" @click="goPayToSeller">Pagar</Button>
                     <Button class="mr-3" @click="generatePDF"><i class="far fa-file-pdf fa-lg"></i></Button>
                     <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
-                    <Button @click="limpiarFormulario; visible = true">Registrar</Button>
+                    <Button v-if="!sellerRouteId" @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
                 <Dialog v-model:visible="visible" modal header="Gestionar Boleta" :style="{ width: '80rem' }">
                     <div class="row">
@@ -126,6 +126,14 @@
             </div>
             <div id="toPDF" ref="toPDF">
 
+                <div class="container-fluid d-flex justify-content-between mb-3 align-items-center" v-if="printting">
+                    <img class="mb-3" src="@/assets/customers/logo_casa_sorteos.png" width="150" alt="">
+                    <div>
+                        <span style="font-size: 1.5em; font-weight: 300;">Boletas vendidas por </span><br>
+                        <h1 style="font-size: 1.5em;">{{ getTitle() }} </h1>
+                    </div>
+                </div>
+
                 <Accordion value="0" v-if="pay.percentage > 0">
                     <AccordionPanel value="0">
                         <AccordionHeader>Desplegar tabla pagar a Vendedor</AccordionHeader>
@@ -167,7 +175,7 @@
                                 <th>Ciudad</th>
                                 <th>Fecha venta</th>
                                 <th v-show="!sellerRouteId">Vendedor</th>
-                                <th>Estado</th>
+                                <th v-show="!printting">Estado</th>
                                 <th>Abonado</th>
                                 <th>Saldo</th>
                                 <th v-show="!printting">Facturas</th>
@@ -186,7 +194,7 @@
                                 <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
                                 <td>{{ i.created_at ?? 'N/A' }}</td>
                                 <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
-                                <td>{{ i.status ?? 'No vendida' }}</td>
+                                <td v-show="!printting">{{ i.status ?? 'No vendida' }}</td>
                                 <td>{{ calculatePaid(i) }}</td>
                                 <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
                                 <td v-show="!printting">
@@ -532,27 +540,27 @@ const saveEntity = async () => {
 
 
 const generatePDF = async () => {
-  printting.value = true
-  setTimeout(async() => {
-    const element = toPDF.value
-  if (!element) return
+    printting.value = true
+    setTimeout(async () => {
+        const element = toPDF.value
+        if (!element) return
 
-  const canvas = await html2canvas(element, {
-    scale: 2, // Mejora la resolución
-    useCORS: true // Si usas imágenes con CORS
-  })
+        const canvas = await html2canvas(element, {
+            scale: 2, // Mejora la resolución
+            useCORS: true // Si usas imágenes con CORS
+        })
 
-  const imgData = canvas.toDataURL('image/png')
-  const pdf = new jsPDF('p', 'mm', 'a4')
-  
-  const imgProps = pdf.getImageProperties(imgData)
-  const pdfWidth = pdf.internal.pageSize.getWidth()
-  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
+        const imgData = canvas.toDataURL('image/png')
+        const pdf = new jsPDF('p', 'mm', 'a4')
 
-  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-  pdf.save('documento.pdf')
-  printting.value = false
-  }, 1000);
+        const imgProps = pdf.getImageProperties(imgData)
+        const pdfWidth = pdf.internal.pageSize.getWidth()
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+        pdf.save('documento.pdf')
+        printting.value = false
+    }, 1000);
 }
 
 const add_payment = () => {
@@ -614,6 +622,10 @@ const changeState = async (id, status) => {
 }
 
 const getLigthTracking = (customer) => {
+    if(printting.value) {
+        return ''
+    }
+
     if (!sellerRouteId.value) {
         return ''
     }
