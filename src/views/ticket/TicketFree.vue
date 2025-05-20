@@ -459,7 +459,6 @@ const getRangeForClients = async () => {
 };
 
 const saveEntity = async () => {
-    console.log('saveEntity');
 
     let value = 0
     console.log('ticket.value.number', ticket.value.number);
@@ -494,7 +493,8 @@ const saveEntity = async () => {
         await TicketServices.updateCustomer(ticket.value, ticket.value.id)
         message = 'Datos guardados con Éxito.'
     } else {
-        const response = await TicketServices.createCustomer(ticket.value)
+        
+        const response = await TicketServices.createticket(ticket.value)
         if (response.duplicated.length > 0)
             message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
         else
@@ -600,22 +600,30 @@ const generateWompiPay = (monto = "0") => {
         cifrar.value
     );
     wompiForm.value.appendChild(script);
-
         window.addEventListener('message', function (event) {
-        console.log('event ==> ', event);
-
+     
         if (event.origin === 'https://checkout.wompi.co') {
+            window.addEventListener('beforeunload', function (e) {
+            const mensaje = 'Estás a punto de salir de la página. Si estás en proceso de pago, podrías perder la transacción.';
+    
+            e.preventDefault(); 
+            e.returnValue = mensaje;
+            return mensaje; 
+        });
             const data = event.data;
-            console.log('data ==> ', data.data);
+            console.log("transactions ==> ", data.data);
+            if (data.data?.transaction?.status == 'transaction_created' || data.data?.transaction?.status == 'PENDING') {
+                 // alert('Transacción creada')
+                
+            }
             if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
-                // Pago aprobado
                 
                 saveEntity()
+                
                 window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
             } else if (data.event === 'unprocessabletransaction') {
                 alert('Transacción no procesable')
             } else if (data.event === 'transaction_error') {
-                // Error en el pago
                 alert('Error en el pago')
             }
         }
