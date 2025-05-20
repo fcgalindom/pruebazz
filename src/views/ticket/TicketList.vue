@@ -50,9 +50,9 @@
                 </div>
                 <div class="d-flex justify-content-end">
                     <Button class="mr-3" @click="goPayToSeller">Pagar</Button>
-                    <Button class="mr-3" @click="downloadPdf"><i class="far fa-file-pdf fa-lg"></i></Button>
+                    <Button class="mr-3" @click="generatePDF"><i class="far fa-file-pdf fa-lg"></i></Button>
                     <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
-                    <Button @click="limpiarFormulario; visible = true">Registrar</Button>
+                    <Button v-if="!sellerRouteId" @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
                 <Dialog v-model:visible="visible" modal header="Gestionar Boleta" :style="{ width: '80rem' }">
                     <div class="row">
@@ -124,126 +124,142 @@
                     </div>
                 </Dialog>
             </div>
+            <div id="toPDF" ref="toPDF">
 
-            <Accordion value="0" v-if="pay.percentage > 0">
-                <AccordionPanel value="0">
-                    <AccordionHeader>Desplegar tabla pagar a Vendedor</AccordionHeader>
-                    <AccordionContent>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Vendedor</th>
-                                        <th>Total de ventas</th>
-                                        <th>Porcentaje</th>
-                                        <th>Total a pagar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ getTitle() }}</td>
-                                        <td>{{ cant_tickets }}</td>
-                                        <td>{{ pay.percentage }} %</td>
-                                        <td>{{ Helper.formatNumber(pay.totalToPay) }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </AccordionContent>
-                </AccordionPanel>
-            </Accordion>
+                <div class="container-fluid d-flex justify-content-between mb-3 align-items-center" v-if="printting">
+                    <img class="mb-3" src="@/assets/customers/logo_casa_sorteos.png" width="150" alt="">
+                    <div>
+                        <span style="font-size: 1.5em; font-weight: 300;">Boletas vendidas por </span><br>
+                        <h1 style="font-size: 1.5em;">{{ getTitle() }} </h1>
+                    </div>
+                </div>
 
-            <div class="table-responsive">
-                <table ref="table" class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Boleta</th>
-                            <th>Cliente</th>
-                            <th>Documento</th>
-                            <th>Teléfono</th>
-                            <th>Ciudad</th>
-                            <th>Fecha venta</th>
-                            <th v-show="!sellerRouteId">Vendedor</th>
-                            <th>Estado</th>
-                            <th>Abonado</th>
-                            <th>Saldo</th>
-                            <th>Facturas</th>
-                            <th>Acciones</th>
-                            <th>Certif. Boleta</th>
-                            <th>Whatsapp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(i, index) in tickets.results" :key="index"
-                            v-bind:class="getLigthTracking(i.customer)">
-                            <td>#{{ i.number }}</td>
-                            <td>{{ i.customer?.name ?? 'N/A' }}</td>
-                            <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
-                            <td>{{ i.customer?.phone ?? 'N/A' }}</td>
-                            <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
-                            <td>{{ i.created_at ?? 'N/A' }}</td>
-                            <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
-                            <td>{{ i.status ?? 'No vendida' }}</td>
-                            <td>{{ calculatePaid(i) }}</td>
-                            <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
-                            <td>
-                                <div class="text-center">
-                                    <button @click="paymentdata(i)" class="btn"><i
-                                            class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="d-flex justify-content-between" v-if="i.customer">
-                                    <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i
-                                            class="fas fa-edit"></i></button>
-                                    <div class="d-flex"
-                                        v-if="i.status != 'Pagado' || Cookies.get('type_user') == 'true'">
-                                        <button class="btn btn-success btn-sm" style="border-radius: 50%;"
-                                            @click="changeState(i.id, i.status)"><i class="fas fa-check"></i></button>
-                                        <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
-                                            @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
+                <Accordion value="0" v-if="pay.percentage > 0">
+                    <AccordionPanel value="0">
+                        <AccordionHeader>Desplegar tabla pagar a Vendedor</AccordionHeader>
+                        <AccordionContent>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Vendedor</th>
+                                            <th>Total de ventas</th>
+                                            <th>Porcentaje</th>
+                                            <th>Total a pagar</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ getTitle() }}</td>
+                                            <td>{{ cant_tickets }}</td>
+                                            <td>{{ pay.percentage }} %</td>
+                                            <td>{{ Helper.formatNumber(pay.totalToPay) }}</td>
+                                            <td>{{ Helper.formatNumber(full_value?.total) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </AccordionContent>
+                    </AccordionPanel>
+                </Accordion>
+
+                <div class="table-responsive">
+                    <table ref="table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Boleta</th>
+                                <th>Cliente</th>
+                                <th>Documento</th>
+                                <th>Teléfono</th>
+                                <th>Ciudad</th>
+                                <th>Fecha venta</th>
+                                <th v-show="!sellerRouteId">Vendedor</th>
+                                <th v-show="!printting">Estado</th>
+                                <th>Abonado</th>
+                                <th>Saldo</th>
+                                <th v-show="!printting">Facturas</th>
+                                <th v-show="!printting">Acciones</th>
+                                <th v-show="!printting">Certif. Boleta</th>
+                                <th v-show="!printting">Whatsapp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(i, index) in tickets.results" :key="index"
+                                v-bind:class="getLigthTracking(i.customer)">
+                                <td>#{{ i.number }}</td>
+                                <td>{{ i.customer?.name ?? 'N/A' }}</td>
+                                <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
+                                <td>{{ i.customer?.phone ?? 'N/A' }}</td>
+                                <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
+                                <td>{{ i.created_at ?? 'N/A' }}</td>
+                                <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
+                                <td v-show="!printting">{{ i.status ?? 'No vendida' }}</td>
+                                <td>{{ calculatePaid(i) }}</td>
+                                <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
+                                <td v-show="!printting">
+                                    <div class="text-center">
+                                        <button @click="paymentdata(i)" class="btn"><i
+                                                class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
                                     </div>
-                                </div>
-                                <div v-else>
-                                    <span>No vendida</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div v-if="i.customer">
-                                    <div class="row">
-                                        <div v-if="ticketstatus == 'Reservado' || ticketstatus == 'Pendiente'"
-                                            class="col-3">
-                                            <button class="btn" data-toggle="modal" @click="showTicketAlert(i)"><i
-                                                    class="fas fa-download"></i></button>
-                                        </div>
-                                        <div v-if="ticketstatus == 'Pagado'" class="col-3">
-                                            <button class="btn" data-toggle="modal" @click="showTicketAlertAll(i)"><i
-                                                    class="fas fa-download"></i></button>
-                                        </div>
-                                        <div class="w-100 text-center" v-else>
-                                            N/A
+                                </td>
+                                <td v-show="!printting" class="text-center">
+                                    <div class="d-flex justify-content-between" v-if="i.customer">
+                                        <button class="btn text-darkslategrey"
+                                            @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
+                                        <div class="d-flex"
+                                            v-if="i.status != 'Pagado' || Cookies.get('type_user') == 'true'">
+                                            <button class="btn btn-success btn-sm" style="border-radius: 50%;"
+                                                @click="changeState(i.id, i.status)"><i
+                                                    class="fas fa-check"></i></button>
+                                            <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
+                                                @click="changeState(i.id, 'Libre')"><i
+                                                    class="fas fa-times"></i></button>
                                         </div>
                                     </div>
-                                    <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
-                                        <TikectFirstPaid :ticketData="i" />
-                                    </Modal>
+                                    <div v-else>
+                                        <span>No vendida</span>
+                                    </div>
+                                </td>
+                                <td v-show="!printting">
+                                    <div v-if="i.customer">
+                                        <div class="row">
+                                            <div v-if="ticketstatus == 'Reservado' || ticketstatus == 'Pendiente'"
+                                                class="col-3">
+                                                <button class="btn" data-toggle="modal" @click="showTicketAlert(i)"><i
+                                                        class="fas fa-download"></i></button>
+                                            </div>
+                                            <div v-if="ticketstatus == 'Pagado'" class="col-3">
+                                                <button class="btn" data-toggle="modal"
+                                                    @click="showTicketAlertAll(i)"><i
+                                                        class="fas fa-download"></i></button>
+                                            </div>
+                                            <div class="w-100 text-center" v-else>
+                                                N/A
+                                            </div>
+                                        </div>
+                                        <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta"
+                                            size="xl">
+                                            <TikectFirstPaid :ticketData="i" />
+                                        </Modal>
 
 
-                                </div>
-                                <div v-else>
-                                    <span>No vendida</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <button class="btn" @click="notifyCustomer(i.customer)">
-                                        <i class="text-success fab fa-whatsapp fa-lg"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    </div>
+                                    <div v-else>
+                                        <span>No vendida</span>
+                                    </div>
+                                </td>
+                                <td v-show="!printting">
+                                    <div class="text-center">
+                                        <button class="btn" @click="notifyCustomer(i.customer)">
+                                            <i class="text-success fab fa-whatsapp fa-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- Paginador -->
             <Paginator v-if="!sellerRouteId" :first="pagination.page * pagination.rows" :rows="pagination.rows"
@@ -303,6 +319,8 @@ import { useFilterStore, useModalStore, useFilterTicket } from '@/stores/filterS
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { red } from "@cloudinary/url-gen/actions/adjust";
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 const tickets = ref([])
 const ticket_certif = ref({})
@@ -318,6 +336,7 @@ const visible = ref(false)
 const type_user = ref('')
 const is_admin = ref(false)
 const visiblePayCustomer = ref(false)
+const printting = ref(false)
 const pay = ref({
     percentage: 0,
     totalToPay: 0
@@ -332,6 +351,7 @@ const filtroStore = useFilterStore();
 const fitroticket = useFilterTicket();
 const loading = ref(false)
 
+const toPDF = ref(null)
 
 const filters = ref({
     number: "",
@@ -518,6 +538,31 @@ const saveEntity = async () => {
     })
 }
 
+
+const generatePDF = async () => {
+    printting.value = true
+    setTimeout(async () => {
+        const element = toPDF.value
+        if (!element) return
+
+        const canvas = await html2canvas(element, {
+            scale: 2, // Mejora la resolución
+            useCORS: true // Si usas imágenes con CORS
+        })
+
+        const imgData = canvas.toDataURL('image/png')
+        const pdf = new jsPDF('p', 'mm', 'a4')
+
+        const imgProps = pdf.getImageProperties(imgData)
+        const pdfWidth = pdf.internal.pageSize.getWidth()
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+        pdf.save('documento.pdf')
+        printting.value = false
+    }, 1000);
+}
+
 const add_payment = () => {
     ticket.value.payments.push({ payment_method: "", amount: "", expiration_date: "2024-12-31" })
 }
@@ -577,6 +622,10 @@ const changeState = async (id, status) => {
 }
 
 const getLigthTracking = (customer) => {
+    if(printting.value) {
+        return ''
+    }
+
     if (!sellerRouteId.value) {
         return ''
     }
@@ -629,7 +678,7 @@ function showTicketAlert(ticketData) {
 }
 
 const calculatePaid = (i) => {
-    if(!i.value) {
+    if (!i.value) {
         return 'N/A'
     }
 
@@ -714,6 +763,7 @@ function showTicketAlertAll(ticketData) {
         },
     });
 }
+
 const sellerRouteId = computed(() => {
     return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
 });
