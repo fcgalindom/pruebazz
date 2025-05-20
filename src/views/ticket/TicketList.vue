@@ -126,13 +126,27 @@
             </div>
             <div id="toPDF" ref="toPDF">
 
-                <div class="container-fluid d-flex justify-content-between mb-3 align-items-center" v-if="printting">
-                    <img class="mb-3" src="@/assets/customers/logo_casa_sorteos.png" width="150" alt="">
+                <div v-if="printting">
+                    <div class="container-fluid d-flex justify-content-between mb-3 align-items-center mt-3">
+                        <img class="mb-3" src="@/assets/customers/logo_casa_sorteos.png" width="150" alt="">
+                        <!-- <div>
+                            <span style="font-size: 1.5em; font-weight: 300;">Boletas vendidas por </span><br>
+                            <h1 style="font-size: 1.5em;">{{ getTitle() }} </h1>
+                        </div> -->
+                    </div>
                     <div>
-                        <span style="font-size: 1.5em; font-weight: 300;">Boletas vendidas por </span><br>
-                        <h1 style="font-size: 1.5em;">{{ getTitle() }} </h1>
+                        VENDEDOR: {{ seller?.name }} <br>
+                        DOCUMENTO: {{ seller?.document_number }} <br>
+                        TELÉFONO: ({{ seller.country_code }}) {{ seller?.phone }} <br><br>
+                    </div>
+    
+                    <div>
+                        FECHA INICIAL: {{ Helper.formatDate(filters.init_date) }} <br>
+                        FECHA FINAL: {{ Helper.formatDate(filters.final_date) }} <br>
+                        TOTAL BOLETAS REPORTADAS: {{ cant_tickets }} <br>
                     </div>
                 </div>
+
 
                 <Accordion value="0" v-if="pay.percentage > 0">
                     <AccordionPanel value="0">
@@ -141,21 +155,21 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
-                                        <tr>
-                                            <th>Vendedor</th>
-                                            <th>Total de ventas</th>
-                                            <th>Porcentaje</th>
-                                            <th>Total a pagar</th>
-                                            <th>Total</th>
+                                        <tr colspan="12">
+                                            <th colspan="6">TOTAL DINERO RECAUDADO</th>
+                                            <th colspan="6">{{ Helper.formatNumber(full_value?.total) }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ getTitle() }}</td>
-                                            <td>{{ cant_tickets }}</td>
-                                            <td>{{ pay.percentage }} %</td>
-                                            <td>{{ Helper.formatNumber(pay.totalToPay) }}</td>
-                                            <td>{{ Helper.formatNumber(full_value?.total) }}</td>
+                                            <td colspan="6">ENTREGA A LA OFICINA</td>
+                                            <td colspan="6">{{ Helper.formatNumber(full_value?.total - pay.totalToPay)
+                                                }} </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">PAGADO AL VENDEDOR</td>
+                                            <td colspan="3">{{ pay.percentage }} %</td>
+                                            <td colspan="6">{{ Helper.formatNumber(pay.totalToPay) }} </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -164,7 +178,7 @@
                     </AccordionPanel>
                 </Accordion>
 
-                <div class="table-responsive">
+                <div class="table-responsive mt-3">
                     <table ref="table" class="table table-bordered">
                         <thead>
                             <tr>
@@ -260,6 +274,20 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div v-if="printting">
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <b> FIRMA VENDEDOR: </b> <span>___________________________________</span> <br>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mb-3">
+                        <div>
+                            <b>GENERACIÓN DEL REPORTE: </b> <span class="mr-2">{{ currentDate() }}</span>
+                            <b>HORA:</b> <span class="mr-2">{{ currentTime() }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Paginador -->
             <Paginator v-if="!sellerRouteId" :first="pagination.page * pagination.rows" :rows="pagination.rows"
@@ -337,6 +365,7 @@ const type_user = ref('')
 const is_admin = ref(false)
 const visiblePayCustomer = ref(false)
 const printting = ref(false)
+
 const pay = ref({
     percentage: 0,
     totalToPay: 0
@@ -558,7 +587,8 @@ const generatePDF = async () => {
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
 
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-        pdf.save('documento.pdf')
+        const name_file = 'BOLETAS_' + seller.value?.name + "_" + new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_').toUpperCase()
+        pdf.save(`${name_file}.pdf`)
         printting.value = false
     }, 1000);
 }
@@ -622,7 +652,7 @@ const changeState = async (id, status) => {
 }
 
 const getLigthTracking = (customer) => {
-    if(printting.value) {
+    if (printting.value) {
         return ''
     }
 
@@ -767,5 +797,18 @@ function showTicketAlertAll(ticketData) {
 const sellerRouteId = computed(() => {
     return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
 });
+
+const currentDate = () => {
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`; // Formato DD/MM/YYYY
+};
+
+const currentTime = () => {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato HH:MM
+};
 
 </script>

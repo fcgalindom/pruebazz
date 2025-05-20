@@ -5,7 +5,7 @@
     <div class="w-100 d-flex justify-content-center">
         <div class="container-main-head">
             <div class="mb-4 text-center">
-                <span class="color-primary-raffle poppins-bold" style="font-size: 5em;">Datos de compra</span>
+                <!-- <span class="color-primary-raffle poppins-bold" style="font-size: 5em;">Datos de compra</span> -->
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-awards">
