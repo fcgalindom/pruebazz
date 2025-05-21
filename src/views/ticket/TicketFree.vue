@@ -66,7 +66,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" :data-target="`#${modalwompi}`" @click="visible = false">
+                    <Button data-toggle="modal"  @click="generateWompiPay('2000000')">
                         Guardar</Button>
                 </div>
 
@@ -579,14 +579,13 @@ const getPromotionsByRaffle = async () => {
     // monto.value = ticket.value.value_to_pay
     // monto = ticket.value.value_to_pay * ticket.value.number.length
     // monto += "00"
-    monto = "200000"
-    generateWompiPay(monto)
 
 }
 const telefono = "573154862281"; // Número en formato internacional (sin "+")
 const mensajewa = encodeURIComponent("Hola, he realizado la compra en línea con los siguientes datos Datos en ingresados en el formulario Quedo atento(a) al envío de la boleta en formato digital.");
 
 const generateWompiPay = (monto = "0") => {
+
     const script = document.createElement('script');
     script.src = 'https://checkout.wompi.co/widget.js';
     script.setAttribute('data-render', 'button');
@@ -600,6 +599,11 @@ const generateWompiPay = (monto = "0") => {
         cifrar.value
     );
     wompiForm.value.appendChild(script);
+    setTimeout(() => {
+    const wompiButton = wompiForm.value.querySelector('button');
+    if (wompiButton) wompiButton.click();
+  }, 500); 
+  visible.value = false
         window.addEventListener('message', function (event) {
      
         if (event.origin === 'https://checkout.wompi.co') {
