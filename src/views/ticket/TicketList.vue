@@ -8,7 +8,7 @@
                     <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
                         <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
-                        }}</Button>
+                            }}</Button>
                         <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
                             Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
@@ -126,28 +126,6 @@
             </div>
             <div id="toPDF" ref="toPDF">
 
-                <div v-if="printting">
-                    <div class="container-fluid d-flex justify-content-between mb-3 align-items-center mt-3">
-                        <img class="mb-3" src="@/assets/customers/logo_casa_sorteos.png" width="150" alt="">
-                        <!-- <div>
-                            <span style="font-size: 1.5em; font-weight: 300;">Boletas vendidas por </span><br>
-                            <h1 style="font-size: 1.5em;">{{ getTitle() }} </h1>
-                        </div> -->
-                    </div>
-                    <div>
-                        VENDEDOR: {{ seller?.name }} <br>
-                        DOCUMENTO: {{ seller?.document_number }} <br>
-                        TELÉFONO: ({{ seller.country_code }}) {{ seller?.phone }} <br><br>
-                    </div>
-    
-                    <div>
-                        FECHA INICIAL: {{ Helper.formatDate(filters.init_date) }} <br>
-                        FECHA FINAL: {{ Helper.formatDate(filters.final_date) }} <br>
-                        TOTAL BOLETAS REPORTADAS: {{ cant_tickets }} <br>
-                    </div>
-                </div>
-
-
                 <Accordion value="0" v-if="pay.percentage > 0">
                     <AccordionPanel value="0">
                         <AccordionHeader>Desplegar tabla pagar a Vendedor</AccordionHeader>
@@ -164,7 +142,7 @@
                                         <tr>
                                             <td colspan="6">ENTREGA A LA OFICINA</td>
                                             <td colspan="6">{{ Helper.formatNumber(full_value?.total - pay.totalToPay)
-                                                }} </td>
+                                            }} </td>
                                         </tr>
                                         <tr>
                                             <td colspan="3">PAGADO AL VENDEDOR</td>
@@ -274,20 +252,6 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div v-if="printting">
-                    <div class="d-flex justify-content-end">
-                        <div>
-                            <b> FIRMA VENDEDOR: </b> <span>___________________________________</span> <br>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end mb-3">
-                        <div>
-                            <b>GENERACIÓN DEL REPORTE: </b> <span class="mr-2">{{ currentDate() }}</span>
-                            <b>HORA:</b> <span class="mr-2">{{ currentTime() }}</span>
-                        </div>
-                    </div>
-                </div>
             </div>
             <!-- Paginador -->
             <Paginator v-if="!sellerRouteId" :first="pagination.page * pagination.rows" :rows="pagination.rows"
@@ -330,7 +294,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, createApp, reactive } from "vue";
+import { ref, onMounted, computed, watch, createApp, reactive, nextTick } from "vue";
+import autoTable from 'jspdf-autotable'
 import { RaffleServices } from "@/services/raffle.service";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from 'vue-router';
@@ -349,6 +314,7 @@ import { saveAs } from "file-saver";
 import { red } from "@cloudinary/url-gen/actions/adjust";
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import logoImg from '@/assets/customers/logo_casa_sorteos.png'
 
 const tickets = ref([])
 const ticket_certif = ref({})
@@ -365,7 +331,7 @@ const type_user = ref('')
 const is_admin = ref(false)
 const visiblePayCustomer = ref(false)
 const printting = ref(false)
-
+const paginatedTickets = ref([])
 const pay = ref({
     percentage: 0,
     totalToPay: 0
@@ -486,6 +452,7 @@ const datatable = async () => {
         seller.value = await SellerServices.show(sellerRouteId.value)
         filters.value.status = ""
         tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
+        paginatedTickets.value = tickets.value.results
         cant_tickets.value = tickets.value.results.length
 
     } else {
@@ -569,28 +536,70 @@ const saveEntity = async () => {
 
 
 const generatePDF = async () => {
-    printting.value = true
-    setTimeout(async () => {
-        const element = toPDF.value
-        if (!element) return
+    const doc = new jsPDF()
+    const logo = new Image()
+    logo.src = logoImg
 
-        const canvas = await html2canvas(element, {
-            scale: 2, // Mejora la resolución
-            useCORS: true // Si usas imágenes con CORS
+    logo.onload = async () => {
+        // Imagen logo
+        const imageX = 10
+        const imageY = 10
+        const imageW = 39.7
+        const imageH = 38.6
+
+        doc.addImage(logo, 'PNG', imageX, imageY, imageW, imageH)
+
+        // Texto cabecera: después de la imagen
+        let y = imageY + imageH + 10 // margen de 10mm debajo de la imagen
+        doc.setFontSize(10)
+        doc.text(`VENDEDOR: ${seller.value?.name ?? 'N/A'}`, 10, y)
+        y += 8
+        doc.text(`DOCUMENTO: ${seller.value?.document_number ?? 'N/A'}`, 10, y)
+        y += 8
+        doc.text(`TELÉFONO: (${seller.value?.country_code ? seller.value.country_code : ''}) ${seller.value?.phone ? seller.value.phone : ''}`, 10, y)
+        y += 10
+        doc.text(`FECHA INICIAL: ${Helper.formatDate(filters.value?.init_date)}`, 10, y)
+        y += 8
+        doc.text(`FECHA FINAL: ${Helper.formatDate(filters.value?.final_date)}`, 10, y)
+        y += 8
+        doc.text(`TOTAL BOLETAS REPORTADAS: ${cant_tickets.value}`, 10, y)
+
+        // Tabla de tickets
+        const ticketData = tickets.value?.results || []
+        const tableBody = ticketData.map(i => ([
+            `#${i.number}`,
+            i.customer?.name ?? 'N/A',
+            i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A',
+            i.customer?.phone ?? 'N/A',
+            // i.customer?.city.name ?? 'N/A',
+            // Helper.formatDate(i.created_at) ?? 'N/A',
+            i.status ?? 'No vendida',
+            calculatePaid(i),
+            i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A'
+        ]))
+
+        autoTable(doc, {
+            head: [[
+                'Boleta', 'Cliente', 'Documento', 'Teléfono', 'Estado', 'Abonado', 'Saldo'
+            ]],
+            body: tableBody,
+            startY: y + 5,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [41, 76, 150] }
         })
 
-        const imgData = canvas.toDataURL('image/png')
-        const pdf = new jsPDF('p', 'mm', 'a4')
+        // Pie de página
+        let finalY = doc.lastAutoTable.finalY + 10
+        doc.text('FIRMA VENDEDOR: ___________________________', 120, finalY)
+        doc.text(`GENERACIÓN DEL REPORTE: ${currentDate()}`, 120, finalY + 7)
+        doc.text(`HORA: ${currentTime()}`, 160, finalY + 14)
 
-        const imgProps = pdf.getImageProperties(imgData)
-        const pdfWidth = pdf.internal.pageSize.getWidth()
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
-
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-        const name_file = 'BOLETAS_' + seller.value?.name + "_" + new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_').toUpperCase()
-        pdf.save(`${name_file}.pdf`)
-        printting.value = false
-    }, 1000);
+        // Guardar PDF
+        const name_file = `BOLETAS_${seller.value?.name}_${new Date().toLocaleDateString('es-ES', {
+            day: '2-digit', month: 'long', year: 'numeric'
+        }).replace(/ /g, '_').toUpperCase()}`
+        doc.save(`${name_file}.pdf`)
+    }
 }
 
 const add_payment = () => {

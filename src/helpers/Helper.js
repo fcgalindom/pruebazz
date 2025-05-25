@@ -15,9 +15,12 @@ export default class Helper {
 
     
     static formatDate(dateString) {
+      console.log('dateString', dateString);
+      if(!dateString) return '';
+
       const date = new Date(dateString);
       const day = String(date.getDate()).padStart(2, '0');
-      const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+      const monthNames = ["JAN", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DIC"];
       const month = monthNames[date.getMonth()];
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
@@ -30,7 +33,7 @@ export default class Helper {
     static formatDateTime(dateString) {
       const date = new Date(dateString);
       const day = String(date.getDate()).padStart(2, '0');
-      const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+      const monthNames = ["JAN", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DIC"];
       const month = monthNames[date.getMonth()];
       const year = date.getFullYear();
       const hours = date.getHours() % 12 || 12;
