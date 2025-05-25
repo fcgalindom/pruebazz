@@ -156,7 +156,6 @@
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
             <button v-if="ticket.number.length > 0" class="blinking-button-2 poppins-semibold mt-3"
                 @click="visiblefindcustomer = true;">Comprar</button>
-            <!-- <Button class="mt-3" @click="visibleCustomer = true;">Comprar</Button> -->
 
             <button id="modalTicket" data-toggle="modal" :data-target="`#${modal}`" style="display: none;">
                 prueba2</button>
@@ -726,16 +725,7 @@ const filteredButtons = computed(() => {
         }
     }
 
-    // if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
-    //     buttons.value = [filters.value.number]
-    // } else {
-    //     buttons.value = [];
-    // }
-    // return buttons.value.filter(button => button.toString().includes(filters.value.number));
-    // }
-
     return buttons.value;
-    // return buttons.value;
 });
 
 </script>

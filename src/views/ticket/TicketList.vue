@@ -579,6 +579,34 @@ const generatePDF = async () => {
         ]))
 
         autoTable(doc, {
+            startY: y + 10,
+            head: [[
+                { content: 'TOTAL DINERO RECAUDADO', colSpan: 6, styles: { halign: 'center', fontSize: 10, lineWidth: 0.2, lineColor: [180, 180, 180] } },
+                { content: Helper.formatNumber(full_value.value?.total), colSpan: 6, styles: { halign: 'center' } }
+            ]],
+            body: [
+                [
+                    { content: 'ENTREGA A LA OFICINA', colSpan: 6 },
+                    { content: Helper.formatNumber(full_value.value?.total - pay.value.totalToPay), colSpan: 6 }
+                ],
+                [
+                    { content: 'PAGADO AL VENDEDOR', colSpan: 4 },
+                    { content: `${pay.value.percentage} %`, colSpan: 2 },
+                    { content: Helper.formatNumber(pay.value.totalToPay), colSpan: 6 }
+                ]
+            ],
+            theme: 'grid',
+            styles: { fontSize: 10, lineWidth: 0.2, lineColor: [180, 180, 180] }, styles: { fontSize: 10 },
+            tableLineWidth: 0.2,
+            tableLineColor: [180, 180, 180],
+            headStyles: { fillColor: [41, 76, 150] },
+            didDrawPage: (data) => {
+                y = data.cursor.y + 10 // actualizar el valor de Y después de la tabla
+            }
+        })
+
+
+        autoTable(doc, {
             head: [[
                 'Boleta', 'Cliente', 'Documento', 'Teléfono', 'Estado', 'Abonado', 'Saldo'
             ]],
