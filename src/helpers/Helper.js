@@ -15,7 +15,6 @@ export default class Helper {
 
     
     static formatDate(dateString) {
-      console.log('dateString', dateString);
       if(!dateString) return '';
 
       const date = new Date(dateString);

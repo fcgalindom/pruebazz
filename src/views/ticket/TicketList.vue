@@ -584,7 +584,9 @@ const generatePDF = async () => {
             ]],
             body: tableBody,
             startY: y + 5,
-            styles: { fontSize: 10 },
+            styles: { fontSize: 10, lineWidth: 0.2, lineColor: [180, 180, 180] },
+            tableLineWidth: 0.2,
+            tableLineColor: [180, 180, 180],
             headStyles: { fillColor: [41, 76, 150] }
         })
 
