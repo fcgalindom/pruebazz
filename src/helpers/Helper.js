@@ -13,15 +13,14 @@ export default class Helper {
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     };
 
+    
     static formatDate(dateString) {
-      if(dateString === null || dateString === undefined || dateString === '') return '';
-      const date = new Date(dateString + 'T00:00:00');
-      return new Intl.DateTimeFormat('es-ES', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      }).format(date);
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
     }
 
     static formatDateForm(date) {

@@ -206,7 +206,7 @@
                                 <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
                                 <td>{{ i.customer?.phone ?? 'N/A' }}</td>
                                 <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
-                                <td>{{ i.created_at ?? 'N/A' }}</td>
+                                <td>{{ Helper.formatDate(i.created_at) ?? 'N/A' }}</td>
                                 <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
                                 <td v-show="!printting">{{ i.status ?? 'No vendida' }}</td>
                                 <td>{{ calculatePaid(i) }}</td>
