@@ -86,6 +86,16 @@ export class TicketServices {
         return response
 
     }
+    static gernumbertickerbyseller(id, initial_date, final_date){
+        const url = `${enviroments.baseUrl}tickets/getTicketsByseller`;
+        const params = {
+            raffle_id: id,
+            initial_date,
+            final_date
+        };
+        const response =  axios.get(url, { params });
+        return axios.get(url, { params });
+    }
     static  getnumberrafle(id){
 
         const url = `${enviroments.baseUrl}rafle/getnumber/${id}/`
