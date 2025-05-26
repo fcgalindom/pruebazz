@@ -32,8 +32,6 @@ const user = ref({})
 
 const saveEntity = () => {
   LoginServices.login(user.value).then(response => {
-    console.log('user.value ==> ', user.value);
-
     //sessionStorage.setItem('key', response.data.token);
     Cookies.set('token', response.token, {
       vsecure: true,    // Solo se enviará a través de HTTPS

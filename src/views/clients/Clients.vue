@@ -170,7 +170,7 @@ const formatNumber = (value) => {
 
 const listRaffles = async () => {
     raffle.value = await RaffleServices.listlast();
-    console.log('raffle.value ==> ', raffle.value)
+    
     raffle.value.images_awards.forEach(element => {
         awards.value.push({ image: element.image, name: element.award})
         awards.value.push({ image: element.image, name: element.award})
