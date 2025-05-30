@@ -525,7 +525,7 @@ const buyTicket = (index, button) => {
 const add_payment = () => {
     ticket.value.payments.push({
         ticket: "",
-        payment_method: "",
+        payment_method: "EFECTIVO",
         amount: "",
         expiration_date: "2024-12-31"
     })
@@ -671,7 +671,7 @@ const limpiarFormulario = () => {
         value_to_pay: "",
         status: "",
         payments: [{
-            payment_method: "",
+            payment_method: "EFECTIVO",
             amount: "",
             expiration_date: '2024-12-31',
             reference: "",
