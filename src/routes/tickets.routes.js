@@ -7,6 +7,7 @@ import chartprincipal from '@/views/charts/chartprincipal.vue';
 import Cookies from 'js-cookie';
 import { name } from '@cloudinary/url-gen/actions/namedTransformation';
 import TicketLine from '@/views/ticket/TicketLine.vue';
+import chartsellers from '@/views/charts/chartsellers.vue';
 const ticketsRoutes = [
     {
 		path: '/tickets/Libre',
@@ -85,6 +86,11 @@ const ticketsRoutes = [
 		name: 'chartprincipal',
 		component: chartprincipal,
 		
+	},
+	{
+		path:'/reports/users',
+		name: 'chartsellers',
+		component: chartsellers,
 	}
 ]
 
