@@ -31,7 +31,10 @@
                             <!-- <Label>Valor de boleta</Label>
                               <input class="form-control ileven-input font-light" v-model="raffle.value_ticket" label="Valor de boleta" @keyup="raffle.value_ticket = Helper.thousandSeparator(raffle.value_ticket)"></input> -->
                             <Label class="font-bold block mb-2"> Valor de boleta </Label>
-                            <InputNumber mode="currency" currency="USD" locale="en-US" v-model="raffle.value_ticket"  fluid />
+                            <InputGroup>
+                                <InputGroupAddon>$</InputGroupAddon>
+                                <InputNumber v-model="raffle.value_ticket"  fluid />
+                            </InputGroup>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Descripción</Label>

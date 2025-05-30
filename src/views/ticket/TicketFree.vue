@@ -46,7 +46,10 @@
                     </div>
                     <div class="col-md-4">
                         <Label>Valor</Label>
-                        <InputNumber fluid v-model="i.amount" />
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber fluid v-model="i.amount" />
+                        </InputGroup>
                     </div>
                     <!-- <div class="col-md-3">
                         <div class="row">

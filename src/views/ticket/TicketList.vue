@@ -46,11 +46,17 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Mínimo Abonado</Label>
-                        <InputNumber required="0" v-model="filters.min_amount" fluid />
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber required="0" v-model="filters.min_amount" fluid />
+                        </InputGroup>
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Máximo Abonado</Label>
-                        <InputNumber required="0" v-model="filters.max_amount" fluid />
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber required="0" v-model="filters.max_amount" fluid />
+                        </InputGroup>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
@@ -104,8 +110,10 @@
                             </div>
                             <div class="col-6">
                                 <Label>Valor</Label>
-                                <InputNumber mode="currency" currency="USD" locale="en-US" fluid v-model="i.amount"
-                                    type="text"></InputNumber>
+                                <InputGroup>
+                                    <InputGroupAddon>$</InputGroupAddon>
+                                    <InputNumber fluid v-model="i.amount" type="text"></InputNumber>
+                                </InputGroup>
                             </div>
                             <div class="col-1">
                                 <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
