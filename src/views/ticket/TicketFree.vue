@@ -66,7 +66,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal"  @click="generateWompiPay('2000000')">
+                    <Button data-toggle="modal"  @click="generateWompiPay('200000')">
                         Guardar</Button>
                 </div>
 
@@ -575,13 +575,13 @@ const getPromotionsByRaffle = async () => {
         }
     }
 
-    // monto.value = ticket.value.value_to_pay
-    // monto = ticket.value.value_to_pay * ticket.value.number.length
-    // monto += "00"
+     monto.value = ticket.value.value_to_pay
+     monto = ticket.value.value_to_pay * ticket.value.number.length
+     monto += "00"
 
 }
-const telefono = "573154862281"; // Número en formato internacional (sin "+")
-const mensajewa = encodeURIComponent("Hola, he realizado la compra en línea con los siguientes datos Datos en ingresados en el formulario Quedo atento(a) al envío de la boleta en formato digital.");
+const telefono = "573156113402"; // Número en formato internacional (sin "+")
+
 
 const generateWompiPay = (monto = "0") => {
 
@@ -604,7 +604,11 @@ const generateWompiPay = (monto = "0") => {
   }, 500); 
   visible.value = false
         window.addEventListener('message', function (event) {
-     
+            let boletasTexto = "*Números de Boleta:*\n";
+                       ticket.value.number.forEach((boleta) => {
+                       boletasTexto += `- ${boleta}\n`;
+                }); 
+
         if (event.origin === 'https://checkout.wompi.co') {
             window.addEventListener('beforeunload', function (e) {
             const mensaje = 'Estás a punto de salir de la página. Si estás en proceso de pago, podrías perder la transacción.';
@@ -620,10 +624,27 @@ const generateWompiPay = (monto = "0") => {
                 
             }
             if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
+                let boletasTexto = "*Números de Boleta:*\n";
+                       ticket.value.number.forEach((boleta) => {
+                       boletasTexto += `- ${boleta}\n`;
+                }); 
+
+                const transactionId = data.data.transaction.id;
+                const mensajef = `Hola, he realizado la compra en línea con los siguientes datos:\n\n` +
+                boletasTexto + `\n` +
+                `*Nombre y Apellidos:\n` +
+                `*Uber Mayorga\n` +
+                `*Documento:* 1.118.257.604\n` +
+                `*Teléfono:* +57 315 611 3402\n` +
+                `*Transacción #:* ${transactionId}\n` +
+                `——————————————-\n` +
+                `Quedo atento(a) al envío de la boleta en formato digital.`;
+                 const mensajewa = encodeURIComponent(mensajef);
+                 window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
+               
+                 saveEntity()
                 
-                saveEntity()
-                
-                window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
+                //window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
             } else if (data.event === 'unprocessabletransaction') {
                 alert('Transacción no procesable')
             } else if (data.event === 'transaction_error') {
