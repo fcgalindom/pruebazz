@@ -44,6 +44,20 @@
                         <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd"
                             :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
                     </div>
+                    <div class="col-md-3 mb-3">
+                        <Label required="0">Mínimo Abonado</Label>
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber required="0" v-model="filters.min_amount" fluid />
+                        </InputGroup>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <Label required="0">Máximo Abonado</Label>
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber required="0" v-model="filters.max_amount" fluid />
+                        </InputGroup>
+                    </div>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
                     <Button @click="datatable">Buscar</Button>
@@ -96,8 +110,10 @@
                             </div>
                             <div class="col-6">
                                 <Label>Valor</Label>
-                                <InputNumber mode="currency" currency="USD" locale="en-US" fluid v-model="i.amount"
-                                    type="text"></InputNumber>
+                                <InputGroup>
+                                    <InputGroupAddon>$</InputGroupAddon>
+                                    <InputNumber fluid v-model="i.amount" type="text"></InputNumber>
+                                </InputGroup>
                             </div>
                             <div class="col-1">
                                 <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
@@ -355,6 +371,8 @@ const filters = ref({
     seller: "",
     init_date: "",
     final_date: "",
+    min_amount: "0",
+    max_amount: "",
     origin: "",
     page: 1
 })
@@ -767,17 +785,11 @@ const table = ref(null);
 const downloadExcel = () => {
     // Mapea y filtra solo las columnas que quieres exportar
     const filteredData = tickets.value.results.map(i => ({
-        Número: i.number,
-        Cliente: i.customer?.name || "N/A",
-        Documento: i.customer ? Helper.thousandSeparator(i.customer.document) : "N/A",
-        Vendedor: i.seller?.name || seller.value.name || "N/A",
-        Teléfono: i.customer?.phone || "N/A",
-        Ciudad: i.customer?.city?.name || "N/A",
-        "Fecha Creación": i.created_at || "N/A",
-        "Abonado": i.value ? Helper.formatNumber(i.value) : "N/A",
-        "Saldo": i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
-        Vendedor: !sellerRouteId ? i.seller?.name || "Cliente" : undefined,
-        Estado: i.status || "No vendida",
+        CLIENTE: i.customer?.name || "N/A",
+        TELÉFONO: `+${i.customer?.country_code} ${i.customer?.phone}` || "N/A",
+        BOLETA: i.number,
+        ABONO: i.value ? Helper.formatNumber(i.value) : "N/A",
+        SALDO: i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
     }));
 
     // Remueve columnas undefined si sellerRouteId es true

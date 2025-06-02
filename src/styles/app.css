@@ -92,3 +92,7 @@ hr {
     max-width: 300px;
     max-height: 300px;
 }
+
+.p-inputgroupaddon {
+    padding: 0 !important;
+}

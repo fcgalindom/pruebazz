@@ -39,7 +39,10 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <Label>Nuevo Valor</Label>
-                        <InputNumber v-model="promotion.new_value" mode="currency" currency="USD" locale="en-US" fluid />
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber v-model="promotion.new_value" fluid />
+                        </InputGroup>
 
                     </div>
                     <div class="col-md-6 mb-3">

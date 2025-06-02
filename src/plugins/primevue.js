@@ -22,6 +22,10 @@ import Chart from 'primevue/chart';
 import ToggleSwitch from 'primevue/toggleswitch';
 import AutoComplete from 'primevue/autocomplete';
 
+import InputGroup from 'primevue/inputgroup';
+import InputGroupAddon from 'primevue/inputgroupaddon';
+
+
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';   // optional
@@ -79,6 +83,8 @@ export default {
         app.component('AccordionPanel', AccordionPanel)
         app.component('AccordionHeader', AccordionHeader)
         app.component('AccordionContent', AccordionContent)
+        app.component('InputGroup', InputGroup)
+        app.component('InputGroupAddon', InputGroupAddon)
      
       }
 }
