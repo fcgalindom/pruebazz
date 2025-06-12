@@ -1,22 +1,68 @@
 <template>
     <div>
 
-        <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }">
+        <!-- <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
+            
+            <CustomerFInd @customerData="getcutomerevent" />
+        </Dialog> -->
+        <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
+        <Dialog v-model:visible="visiblefindcustomer" modal header="Crear Boleta" :style="{ width: '50rem' }">
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-12 mb-3">
+                    <Label>Documento</Label>
+                    <Input class="form-control" v-model="customer.document" type="number" @blur="listCustomers"></Input>
+                </div>
+                <div class="col-12 mb-3">
+                    <Label>Nombre</Label>
+                    <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
+                </div>
+                <div class="col-12 mb-3">
+                    <Label>Teléfono</Label>
+                    <div class="row">
+                        <Select v-model="customer.country_code" optionLabel="name" :options="countries"
+                            class="col-6 col-md-3 mb-3 mb-md-0">
+                            <template #value="slotProps">
+                                <div v-if="slotProps.value" class="d-flex align-items-center justify-content-center">
+                                    <img :src="slotProps.value.flag" style="width: 20px" />
+                                </div>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="d-flex align-items-center">
+                                    <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
+                                    <div>{{ slotProps.option.name }}</div>
+                                </div>
+                            </template>
+                        </Select>
+                        <Input class="col-md-9" v-model="customer.phone" :disabled="isDisabled"
+                            label="Teléfono"></Input>
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <Label>Ciudad</Label>
+                    <Select filter optionValue="id" fluid optionLabel="name" ref="multiselect" v-model="customer.city"
+                        :disabled="isDisabled" :options="cities" :multiple="false" :clear-on-select="true"
+                        :customer-search="true" placeholder="Selecciona" label="name" track-by="id"
+                        @select="myChangeEvent"></Select>
+                </div>
+            </div>
+            <!-- <CustomerForm @customerData="handleUpdateData" :datadocument="documentcustomer"
+                @closedialog="visibleCustomer = false" /> -->
+            <hr>
+            <div class="row">
+                <div class="col-md-12 mb-3">
                     <Label>Número</Label>
                     <Input disabled v-model="ticket.number" type="text"></Input>
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-12 mb-3">
                     <Label>Vendedor</Label>
                     <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
                         optionValue="id" class="w-100"></Select>
                 </div>
-                <div class="col-md-6 mb-3">
+                <!-- <div class="col-md-12 mb-3">
                     <Label>Cliente (a quien se vende)</Label>
                     <Select v-model="ticket.customer" :options="dependencies.customers" filter optionLabel="name"
                         optionValue="id" disabled class="w-100"></Select>
-                </div>
+                </div> -->
                 <!-- <div class="col-md-6 mb-3">
                     <Label>Rifa</Label>
                     <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name"
@@ -69,7 +115,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal"  @click="generateWompiPay('2000000')">
+                    <Button data-toggle="modal" @click="generateWompiPay('2000000')">
                         Guardar</Button>
                 </div>
 
@@ -152,13 +198,13 @@
             <div class="col-12">
                 <div class="w-100 d-flex justify-content-center">
                     <Button class="mt-3" :disabled="ticket.number.length == 0"
-                        @click="visiblefindcustomer = true;">Comprar</Button>
+                        @click="mountedBuyTicket()">Comprar</Button>
                 </div>
             </div>
         </div>
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
             <button v-if="ticket.number.length > 0" class="blinking-button-2 poppins-semibold mt-3"
-                @click="visiblefindcustomer = true;">Comprar</button>
+                @click="visiblefindcustomer = true; getPromotionsByRaffle()">Comprar</button>
 
             <button id="modalTicket" data-toggle="modal" :data-target="`#${modal}`" style="display: none;">
                 prueba2</button>
@@ -182,13 +228,10 @@
                 </div>
             </div>
         </div>
+        <!-- <div>
+        </div>
         <Dialog v-model:visible="visibleCustomer" modal header="Crear Cliente" :style="{ width: '80rem' }">
-            <CustomerForm @customerData="handleUpdateData" :datadocument="documentcustomer"
-                @closedialog="visibleCustomer = false" />
-        </Dialog>
-        <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
-            <CustomerFInd @customerData="getcutomerevent" />
-        </Dialog>
+        </Dialog> -->
 
     </div>
 </template>
@@ -199,6 +242,7 @@ import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 // import { RaffleServices } from '@/services/raffle.service'
 import { SellerTicketsServices } from "@/services/seller_tickets.service";
+import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
 import CustomerForm from '@views/customer/CustomerForm.vue';
 import CustomerFInd from '../customer/CustomerFInd.vue';
@@ -225,6 +269,7 @@ const modal = ref('ticket_modal')
 const modalwompi = ref('wompi-modal')
 const raffle = ref({})
 const range_tickets = ref([])
+const customer = ref({})
 
 const buttons = ref(Array.from({ length: 10 }, (_, i) => `${i + 1}`));
 const visible = ref(false);
@@ -237,6 +282,7 @@ const filters = ref({
 })
 const activeButtons = ref(new Set());
 const promotion = ref({})
+const cities = ref([])
 const dependencies = ref({
     sellers: [],
     customers: [],
@@ -253,7 +299,69 @@ const referencia = ref("");
 let monto = "200000";
 const moneda = "COP";
 const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
+const isDisabled = ref(false)
 const ticketsBooked = ref([])
+const countries = ref([{
+    name: "Mexico",
+    dialCode: "52",
+    flag: "https://flagcdn.com/mx.svg"
+},
+{
+    name: "Chile",
+    dialCode: "56",
+    flag: "https://flagcdn.com/cl.svg"
+},
+{
+    name: "España",
+    dialCode: "34",
+    flag: "https://flagcdn.com/es.svg"
+},
+{
+    name: "Colombia",
+    dialCode: "57",
+    flag: "https://flagcdn.com/co.svg"
+},
+{
+    name: "Argentina",
+    dialCode: "54",
+    flag: "https://flagcdn.com/ar.svg"
+},
+{
+    name: "Bolivia",
+    dialCode: "591",
+    flag: "https://flagcdn.com/bo.svg"
+},
+{
+    name: "Brazil",
+    dialCode: "55",
+    flag: "https://flagcdn.com/br.svg"
+},
+{
+    name: "Ecuador",
+    dialCode: "593",
+    flag: "https://flagcdn.com/ec.svg"
+},
+{
+    name: "Paraguay",
+    dialCode: "595",
+    flag: "https://flagcdn.com/py.svg"
+},
+{
+    name: "Peru",
+    dialCode: "51",
+    flag: "https://flagcdn.com/pe.svg"
+},
+{
+    name: "Uruguay",
+    dialCode: "598",
+    flag: "https://flagcdn.com/uy.svg"
+},
+{
+    name: "Venezuela",
+    dialCode: "58",
+    flag: "https://flagcdn.com/ve.svg"
+}
+]);
 
 async function hashSHA256(message) {
     // Convertir la cadena a un array de bytes
@@ -269,6 +377,18 @@ async function hashSHA256(message) {
     cifrar.value = hashHex
 
     return hashHex;
+}
+
+const chargeForm = () => {
+    customer.value = {
+        name: "",
+        document: "",
+        country_code: countries.value[3],
+        phone: "",
+        city: ""
+    }
+
+    customer.value.document = props.datadocument
 }
 
 
@@ -307,12 +427,12 @@ hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const getcutomerevent = (data) => {
 
-    if(props.typeScreen == 'client'){
+    if (props.typeScreen == 'client') {
         ticket.value.seller = 3
 
     }
     if (data.validate) {
-        
+
         ticket.value.customer = data.customer.id
         visiblefindcustomer.value = false
         // visibleCustomer.value = true
@@ -328,6 +448,7 @@ onMounted(async () => {
 
     limpiarFormulario()
     search()
+    cities.value = await CustomerServices.listCities()
     dependencies.value = await TicketServices.dependencies()
     const selleridofice = await SellerServices.getsellerofice()
 
@@ -417,9 +538,9 @@ const search = async () => {
     raffle.value = response.raffle
     console.log('response.tickets ==> ', response.tickets);
     ticketsBooked.value = response.tickets
-    
+
     console.log('ticketsBooked.value ==> ', ticketsBooked.value);
-    
+
 
     if (filters.value.number) {
 
@@ -460,10 +581,23 @@ const getRangeForClients = async () => {
     });
 };
 
+const mountedBuyTicket = () => {
+    visiblefindcustomer.value = true; 
+    getPromotionsByRaffle()
+    if(ticket.value.payments.length == 0) {
+        
+    }
+    ticket.value.payments[0].ticket = ticket.value.number[0] || "";
+}
+
 const saveEntity = async () => {
 
     let value = 0
     console.log('ticket.value.number', ticket.value.number);
+
+    customer.value.country_code = customer.value.country_code.dialCode
+    const customerData = await CustomerServices.createCustomer(customer.value)
+    ticket.value.customer = customerData.customer.id
 
     if (props.typeScreen == 'client') {
         ticket.value.payments = []
@@ -495,7 +629,7 @@ const saveEntity = async () => {
         await TicketServices.updateCustomer(ticket.value, ticket.value.id)
         message = 'Datos guardados con Éxito.'
     } else {
-        
+
         const response = await TicketServices.createticket(ticket.value)
         if (response.duplicated.length > 0)
             message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
@@ -510,6 +644,8 @@ const saveEntity = async () => {
         icon: 'success',
         confirmButtonText: 'Continuar'
     })
+    visiblefindcustomer.value = false
+    chargeForm()
     await search()
     limpiarFormulario()
 }
@@ -535,6 +671,8 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async () => {
+    console.log('raffle');
+    
 
 
     if (props.typeScreen == 'client') {
@@ -602,31 +740,31 @@ const generateWompiPay = (monto = "0") => {
     );
     wompiForm.value.appendChild(script);
     setTimeout(() => {
-    const wompiButton = wompiForm.value.querySelector('button');
-    if (wompiButton) wompiButton.click();
-  }, 500); 
-  visible.value = false
-        window.addEventListener('message', function (event) {
-     
+        const wompiButton = wompiForm.value.querySelector('button');
+        if (wompiButton) wompiButton.click();
+    }, 500);
+    visible.value = false
+    window.addEventListener('message', function (event) {
+
         if (event.origin === 'https://checkout.wompi.co') {
             window.addEventListener('beforeunload', function (e) {
-            const mensaje = 'Estás a punto de salir de la página. Si estás en proceso de pago, podrías perder la transacción.';
-    
-            e.preventDefault(); 
-            e.returnValue = mensaje;
-            return mensaje; 
-        });
+                const mensaje = 'Estás a punto de salir de la página. Si estás en proceso de pago, podrías perder la transacción.';
+
+                e.preventDefault();
+                e.returnValue = mensaje;
+                return mensaje;
+            });
             const data = event.data;
             console.log("transactions ==> ", data.data);
             if (data.data?.transaction?.status == 'transaction_created' || data.data?.transaction?.status == 'PENDING') {
-                 // alert('Transacción creada')
-                
+                // alert('Transacción creada')
+
             }
             if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
-                
+
                 saveEntity()
-                
-                window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
+
+                window.open(`https://wa.me/${telefono}?text=${mensajewa}`, "_blank");
             } else if (data.event === 'unprocessabletransaction') {
                 alert('Transacción no procesable')
             } else if (data.event === 'transaction_error') {
@@ -680,6 +818,13 @@ const limpiarFormulario = () => {
             reference: "",
         }]
     }
+    customer.value = {
+        name: "",
+        document: "",
+        country_code: countries.value[3],
+        phone: "",
+        city: ""
+    }
 }
 
 const deleteTicket = (ticketEvent) => {
@@ -694,18 +839,54 @@ const remove_payment = (index) => {
     ticket.value.payments.splice(index, 1);
 }
 
+const listCustomers = async () => {
+    await CustomerServices.getByDocument(customer.value.document)
+        .then(response => {
+
+            if (response.length == 0) {
+                customer.value = {
+                    document: customer.value.document,
+                    name: "",
+                    phone: "",
+                    city: ""
+                }
+                isDisabled.value = false
+            } else {
+                console.log('response[0] ==> ', response[0].country_code);
+                console.log('countries.value[3] ==> ', countries.value[3]);
+                
+                customer.value = {
+                    name: response[0].name,
+                    document: response[0].document,
+                    country_code: response[0].country_code,
+                    phone: response[0].phone,
+                    city: response[0].city.id
+
+                }
+                isDisabled.value = true
+            }
+        })
+        .catch(error => {
+            // Manejar el error aquí
+            console.error(error);
+        });
+
+
+
+}
+
 const filteredButtons = computed(() => {
 
     // if (filters.value.number) {
     buttons.value = []
     let counter = 0;
     if (type_user.value == 'false') {
-        
+
         ticketsBooked.value.forEach(element => {
             if (filters.value.number) {
-                
+
             }
-            if(!element.status) {
+            if (!element.status) {
                 buttons.value.push(element.number)
             }
         });

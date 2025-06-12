@@ -11,7 +11,8 @@
         <div class="col-12 mb-3">
             <Label>Teléfono</Label>
             <div class="row">
-                <Select v-model="customer.country_code"  optionLabel="name"  :options="countries" class="col-6 col-md-3 mb-3 mb-md-0">
+                <Select v-model="customer.country_code" optionLabel="name" :options="countries"
+                    class="col-6 col-md-3 mb-3 mb-md-0">
                     <template #value="slotProps">
                         <div v-if="slotProps.value" class="d-flex align-items-center justify-content-center">
                             <img :src="slotProps.value.flag" style="width: 20px" />
@@ -35,9 +36,9 @@
                 @select="myChangeEvent"></Select>
         </div>
     </div>
-    <div class="d-flex justify-content-center my-3">
+    <!-- <div class="d-flex justify-content-center my-3">
         <Button @click="saveEntity">Guardar</Button>
-    </div>
+    </div> -->
 
 </template>
 
@@ -166,9 +167,6 @@ const listCustomers = async () => {
             // Manejar el error aquí
             console.error(error);
         });
-
-
-
 }
 
 

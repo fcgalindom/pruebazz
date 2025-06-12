@@ -96,3 +96,7 @@ hr {
 .p-inputgroupaddon {
     padding: 0 !important;
 }
+
+.p-dialog-mask {
+    z-index: 1000 !important;
+}
