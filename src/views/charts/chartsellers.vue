@@ -32,15 +32,15 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Vendedor</th>
+                    <th>Cliente</th>
                     <th>Cantidad</th>
                     <th>Total</th>
                 </tr>
             </thead>
             <tbody>
 
-                <tr v-for="ticket in tickets.data" :key="ticket.seller_id">
-                    <td>{{ ticket.seller__name }}</td>
+                <tr v-for="ticket in tickets.data" :key="ticket.customer_id">
+                    <td>{{ ticket.customer__name }}</td>
                     <td>{{ ticket.cantidad_boletos }}</td>
                     <td>{{ ticket.total_recaudado.toLocaleString('es-CO') }}</td>
                 </tr>
