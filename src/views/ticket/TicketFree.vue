@@ -115,7 +115,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" @click="generateWompiPay('2000000')">
+                    <Button data-toggle="modal" @click="generateWompiPay('2000000')" :disabled="validateForm">
                         Guardar</Button>
                 </div>
 
@@ -296,7 +296,7 @@ const visiblefindcustomer = ref(false)
 const type_user = ref("")
 
 const referencia = ref("");
-let monto = "200000";
+const monto = ref("200000");
 const moneda = "COP";
 const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
 const isDisabled = ref(false)
@@ -426,11 +426,13 @@ const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const getcutomerevent = (data) => {
-
+    console.log('get');
+    
     if (props.typeScreen == 'client') {
         ticket.value.seller = 3
-
     }
+    console.log('ticket.value', ticket.value);
+    
     if (data.validate) {
 
         ticket.value.customer = data.customer.id
@@ -536,11 +538,7 @@ const search = async () => {
     }
 
     raffle.value = response.raffle
-    console.log('response.tickets ==> ', response.tickets);
     ticketsBooked.value = response.tickets
-
-    console.log('ticketsBooked.value ==> ', ticketsBooked.value);
-
 
     if (filters.value.number) {
 
@@ -582,10 +580,11 @@ const getRangeForClients = async () => {
 };
 
 const mountedBuyTicket = () => {
-    visiblefindcustomer.value = true; 
+    visiblefindcustomer.value = true;
     getPromotionsByRaffle()
-    if(ticket.value.payments.length == 0) {
-        
+    
+    if (ticket.value.payments.length == 0) {
+
     }
     ticket.value.payments[0].ticket = ticket.value.number[0] || "";
 }
@@ -593,7 +592,6 @@ const mountedBuyTicket = () => {
 const saveEntity = async () => {
 
     let value = 0
-    console.log('ticket.value.number', ticket.value.number);
 
     customer.value.country_code = customer.value.country_code.dialCode
     const customerData = await CustomerServices.createCustomer(customer.value)
@@ -603,7 +601,6 @@ const saveEntity = async () => {
         ticket.value.payments = []
         ticket.value.origin = 'web'
         ticket.value.number.forEach(element => {
-            console.log('element', element);
 
             ticket.value.payments.push({
                 ticket: element,
@@ -613,8 +610,6 @@ const saveEntity = async () => {
             })
             value += parseInt(element.value)
         });
-        console.log('ticket.value.payments', ticket.value.payments);
-        // return
     } else {
         ticket.value.payments.forEach(element => {
             value += parseInt(element.amount)
@@ -671,12 +666,9 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async () => {
-    console.log('raffle');
-    
-
-
     if (props.typeScreen == 'client') {
         ticket.value.raffle = props.raffle.id
+        ticket.value.seller = 3 // Seleccionar el vendedor por defecto para clientes (Compra en Línea)
     }
     else {
         ticket.value.raffle = raffle.value.id
@@ -715,23 +707,23 @@ const getPromotionsByRaffle = async () => {
             ticket.value.promotion_id = null
         }
     }
+    //  monto.value = ticket.value.value_to_pay
+    monto.value = ticket.value.value_to_pay * ticket.value.number.length
+    monto.value += "00"
 
-     monto.value = ticket.value.value_to_pay
-     monto = ticket.value.value_to_pay * ticket.value.number.length
-     monto += "00"
 
 }
 const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
-const generateWompiPay = (monto = "0") => {
-
+const generateWompiPay = (monto_ = "0") => {
+    
     const script = document.createElement('script');
     script.src = 'https://checkout.wompi.co/widget.js';
     script.setAttribute('data-render', 'button');
     script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
     script.setAttribute('data-currency', moneda);
-    script.setAttribute('data-amount-in-cents', monto);
+    script.setAttribute('data-amount-in-cents', monto.value);
     script.setAttribute('data-reference', referencia.value);
     //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
     script.setAttribute(
@@ -740,15 +732,15 @@ const generateWompiPay = (monto = "0") => {
     );
     wompiForm.value.appendChild(script);
     setTimeout(() => {
-    const wompiButton = wompiForm.value.querySelector('button');
-    if (wompiButton) wompiButton.click();
-  }, 500); 
-  visible.value = false
-        window.addEventListener('message', function (event) {
-            let boletasTexto = "*Números de Boleta:*\n";
-                       ticket.value.number.forEach((boleta) => {
-                       boletasTexto += `- ${boleta}\n`;
-                }); 
+        const wompiButton = wompiForm.value.querySelector('button');
+        if (wompiButton) wompiButton.click();
+    }, 500);
+    visible.value = false
+    window.addEventListener('message', function (event) {
+        let boletasTexto = "*Números de Boleta:*\n";
+        ticket.value.number.forEach((boleta) => {
+            boletasTexto += `- ${boleta}\n`;
+        });
 
         if (event.origin === 'https://checkout.wompi.co') {
             window.addEventListener('beforeunload', function (e) {
@@ -759,32 +751,31 @@ const generateWompiPay = (monto = "0") => {
                 return mensaje;
             });
             const data = event.data;
-            console.log("transactions ==> ", data.data);
             if (data.data?.transaction?.status == 'transaction_created' || data.data?.transaction?.status == 'PENDING') {
                 // alert('Transacción creada')
 
             }
             if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
                 let boletasTexto = "*Números de Boleta:*\n";
-                       ticket.value.number.forEach((boleta) => {
-                       boletasTexto += `- ${boleta}\n`;
-                }); 
+                ticket.value.number.forEach((boleta) => {
+                    boletasTexto += `- ${boleta}\n`;
+                });
 
                 const transactionId = data.data.transaction.id;
                 const mensajef = `Hola, he realizado la compra en línea con los siguientes datos:\n\n` +
-                boletasTexto + `\n` +
-                `*Nombre y Apellidos:\n` +
-                `*Uber Mayorga\n` +
-                `*Documento:* 1.118.257.604\n` +
-                `*Teléfono:* +57 315 611 3402\n` +
-                `*Transacción #:* ${transactionId}\n` +
-                `——————————————-\n` +
-                `Quedo atento(a) al envío de la boleta en formato digital.`;
-                 const mensajewa = encodeURIComponent(mensajef);
-                 window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
-               
-                 saveEntity()
-                
+                    boletasTexto + `\n` +
+                    `*Nombre y Apellidos:\n` +
+                    `*Uber Mayorga\n` +
+                    `*Documento:* 1.118.257.604\n` +
+                    `*Teléfono:* +57 315 611 3402\n` +
+                    `*Transacción #:* ${transactionId}\n` +
+                    `——————————————-\n` +
+                    `Quedo atento(a) al envío de la boleta en formato digital.`;
+                const mensajewa = encodeURIComponent(mensajef);
+                window.open(`https://wa.me/${telefono}?text=${mensajewa}`, "_blank");
+
+                saveEntity()
+
                 //window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
             } else if (data.event === 'unprocessabletransaction') {
                 alert('Transacción no procesable')
@@ -873,9 +864,6 @@ const listCustomers = async () => {
                 }
                 isDisabled.value = false
             } else {
-                console.log('response[0] ==> ', response[0].country_code);
-                console.log('countries.value[3] ==> ', countries.value[3]);
-                
                 customer.value = {
                     name: response[0].name,
                     document: response[0].document,
@@ -931,6 +919,14 @@ const filteredButtons = computed(() => {
     }
 
     return buttons.value;
+});
+
+const validateForm = computed(() => {
+    if (!ticket.value.number.length > 0 || !ticket.value.seller || !customer.value.document || !customer.value.name || !customer.value.phone || !customer.value.city) {
+        return true
+    } else {
+        return false
+    }
 });
 
 </script>
