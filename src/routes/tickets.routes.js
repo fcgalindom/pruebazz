@@ -9,7 +9,7 @@ import { name } from '@cloudinary/url-gen/actions/namedTransformation';
 import TicketLine from '@/views/ticket/TicketLine.vue';
 import chartsellers from '@/views/charts/chartsellers.vue';
 const ticketsRoutes = [
-    {
+	{
 		path: '/tickets/Libre',
 		name: 'TicketFree',
 		component: TicketFree,
@@ -21,7 +21,7 @@ const ticketsRoutes = [
 			}
 		}
 	},
-    {
+	{
 		path: '/tickets/Reservado',
 		name: 'BookedTickets',
 		component: TicketList,
@@ -33,7 +33,7 @@ const ticketsRoutes = [
 			}
 		}
 	},
-    {
+	{
 		path: '/tickets/Pendiente',
 		name: 'PendingTickets',
 		component: TicketList,
@@ -59,7 +59,7 @@ const ticketsRoutes = [
 	},
 	{
 		path: '/tickets/Enlinea',
-		name_	: 'OnlineTickets',
+		name_: 'OnlineTickets',
 		component: TicketList,
 		befereEnter: (to, from, next) => {
 			if (Cookies.get('token')) {
@@ -82,15 +82,29 @@ const ticketsRoutes = [
 		}
 	},
 	{
-		path:'/reports/sales',
+		path: '/reports/sales',
 		name: 'chartprincipal',
 		component: chartprincipal,
-		
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
+
 	},
 	{
-		path:'/reports/users',
+		path: '/reports/users',
 		name: 'chartsellers',
 		component: chartsellers,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
 	}
 ]
 

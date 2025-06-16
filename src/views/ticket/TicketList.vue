@@ -68,7 +68,7 @@
                     <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
                     <Button v-if="!sellerRouteId" @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
-                <Dialog v-model:visible="visible" modal header="Gestionar Boleta" :style="{ width: '80rem' }">
+                <Dialog v-model:visible="visible" modal header="DATOS DE COMPRA" :style="{ width: '80rem' }">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <Label>Número</Label>
@@ -651,7 +651,7 @@ const generatePDF = async () => {
 }
 
 const add_payment = () => {
-    ticket.value.payments.push({ payment_method: "", amount: "", expiration_date: "2024-12-31" })
+    ticket.value.payments.push({ payment_method: "EFECTIVO", amount: "", expiration_date: "2024-12-31" })
 }
 
 const remove_payment = (index) => {

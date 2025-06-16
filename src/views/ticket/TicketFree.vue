@@ -6,7 +6,7 @@
             <CustomerFInd @customerData="getcutomerevent" />
         </Dialog> -->
         <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
-        <Dialog v-model:visible="visiblefindcustomer" modal header="Crear Boleta" :style="{ width: '50rem' }">
+        <Dialog v-model:visible="visiblefindcustomer" modal header="DATOS DE COMPRA" :style="{ width: '50rem' }">
             <div class="row">
                 <div class="col-12 mb-3">
                     <Label>Documento</Label>
@@ -299,7 +299,7 @@ const referencia = ref("");
 const monto = ref("200000");
 const moneda = "COP";
 const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
-const isDisabled = ref(false)
+const isDisabled = ref(true)
 const ticketsBooked = ref([])
 const countries = ref([{
     name: "Mexico",
@@ -858,6 +858,7 @@ const listCustomers = async () => {
             if (response.length == 0) {
                 customer.value = {
                     document: customer.value.document,
+                    country_code: countries.value[3],
                     name: "",
                     phone: "",
                     city: ""
@@ -867,7 +868,7 @@ const listCustomers = async () => {
                 customer.value = {
                     name: response[0].name,
                     document: response[0].document,
-                    country_code: response[0].country_code,
+                    country_code: countries.value[3],
                     phone: response[0].phone,
                     city: response[0].city.id
 
