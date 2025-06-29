@@ -115,7 +115,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" @click="generateWompiPay('2000000')" :disabled="validateForm">
+                    <Button data-toggle="modal" @click="generateWompiPay(monto)" :disabled="validateForm">
                         Guardar</Button>
                 </div>
 
@@ -296,7 +296,7 @@ const visiblefindcustomer = ref(false)
 const type_user = ref("")
 
 const referencia = ref("");
-const monto = ref("200000");
+const monto = ref("0");
 const moneda = "COP";
 const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
 const isDisabled = ref(false)
@@ -421,9 +421,7 @@ const handleUpdateData = async (data) => {
 }
 generarYValidarCodigo(16);
 
-const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 
-hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const getcutomerevent = (data) => {
     console.log('get');
@@ -711,13 +709,16 @@ const getPromotionsByRaffle = async () => {
     monto.value = ticket.value.value_to_pay * ticket.value.number.length
     monto.value += "00"
 
-
+  
 }
 const telefono = "573156113402"; // Número en formato internacional (sin "+")
+ 
 
+const generateWompiPay = async (monto_ = "0") => {
 
-const generateWompiPay = (monto_ = "0") => {
-    
+    const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
+    await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
+         
     const script = document.createElement('script');
     script.src = 'https://checkout.wompi.co/widget.js';
     script.setAttribute('data-render', 'button');
@@ -728,7 +729,7 @@ const generateWompiPay = (monto_ = "0") => {
     //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
     script.setAttribute(
         'data-signature:integrity',
-        cifrar.value
+         cifrar.value
     );
     wompiForm.value.appendChild(script);
     setTimeout(() => {
