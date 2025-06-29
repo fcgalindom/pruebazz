@@ -122,7 +122,7 @@
             </div>
             <div v-if="typeScreen == 'admin'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button @click="saveEntity">Guardar</Button>
+                    <Button @click="saveEntity" :disabled="validateForm">Guardar</Button>
                 </div>
 
             </div>
