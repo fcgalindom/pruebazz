@@ -115,7 +115,7 @@
             </div>
             <div v-if="typeScreen == 'client'">
                 <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" @click="generateWompiPay(monto)" :disabled="validateForm">
+                    <Button data-toggle="modal" @click="modalfinalpay = true;" :disabled="validateForm">
                         Guardar</Button>
                 </div>
 
@@ -127,6 +127,44 @@
 
             </div>
 
+
+        </Dialog>
+        <Dialog v-model:visible="modalfinalpay" modal :style="{ width: '50rem' }">
+
+
+           
+
+            <div class="modal-body text-center" style="padding-top: 0;">
+
+                <h3 class="mb-4 darkbluetext fw-bold">FINALIZAR PAGO</h3>
+
+                <!-- Botón Wompi -->
+                <button @click="generateWompiPay(monto)"
+                    class="btn darkblue btn-lg w-100 mb-3 d-flex align-items-center justify-content-center gap-2">
+                    PAGO EN LINEA
+
+                   <i class="fas fa-credit-card payment"></i>
+                </button>
+
+                <!-- Botón WhatsApp -->
+                <button @click="mesnajewa()"
+                    class="btn darkblue btn-lg  w-100 mb-4 d-flex align-items-center justify-content-center gap-2">
+                    PAGO VÍA WHATSAPP
+                    <i class="fab fa-whatsapp whatsapp"></i>
+                </button>
+
+                <!-- Información y contacto -->
+                <div class="darkblue text-white p-3 rounded">
+                    <p class="mb-1">Términos y condiciones políticas de privacidad</p>
+                    <p class="mb-1">
+                        <i class="bi bi-whatsapp"></i> (+57) 315 253 2377
+                    </p>
+                    <p class="mb-0">
+                        <i class="bi bi-envelope"></i> Rifasysorteos4@gmail.com
+                    </p>
+                </div>
+
+            </div>
 
         </Dialog>
 
@@ -293,6 +331,7 @@ let visibleCustomer = ref(false);
 let cifrar = ref("")
 const costumerdata = ref("")
 const visiblefindcustomer = ref(false)
+const modalfinalpay = ref(false)
 const type_user = ref("")
 
 const referencia = ref("");
@@ -425,12 +464,12 @@ generarYValidarCodigo(16);
 
 const getcutomerevent = (data) => {
     console.log('get');
-    
+
     if (props.typeScreen == 'client') {
         ticket.value.seller = 3
     }
     console.log('ticket.value', ticket.value);
-    
+
     if (data.validate) {
 
         ticket.value.customer = data.customer.id
@@ -580,7 +619,7 @@ const getRangeForClients = async () => {
 const mountedBuyTicket = () => {
     visiblefindcustomer.value = true;
     getPromotionsByRaffle()
-    
+
     if (ticket.value.payments.length == 0) {
 
     }
@@ -709,16 +748,16 @@ const getPromotionsByRaffle = async () => {
     monto.value = ticket.value.value_to_pay * ticket.value.number.length
     monto.value += "00"
 
-  
+
 }
 const telefono = "573156113402"; // Número en formato internacional (sin "+")
- 
+
 
 const generateWompiPay = async (monto_ = "0") => {
 
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
-         
+
     const script = document.createElement('script');
     script.src = 'https://checkout.wompi.co/widget.js';
     script.setAttribute('data-render', 'button');
@@ -729,7 +768,7 @@ const generateWompiPay = async (monto_ = "0") => {
     //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
     script.setAttribute(
         'data-signature:integrity',
-         cifrar.value
+        cifrar.value
     );
     wompiForm.value.appendChild(script);
     setTimeout(() => {
@@ -785,6 +824,50 @@ const generateWompiPay = async (monto_ = "0") => {
             }
         }
     });
+}
+
+const mesnajewa = () => {
+
+
+    let boletasTexto = "*Números de Boleta:*\n";
+    ticket.value.number.forEach((boleta) => {
+        boletasTexto += `- ${boleta}\n`;
+    });
+
+
+    const mensajef = `
+Hola, he separado boleta con la siguiente información:
+
+Boleta: ${boletasTexto} 
+Nombre:  ${customer.value.name}
+Documento: ${customer.value.document}
+Ciudad: ${customer.value.city}
+Valor a cancelar: ${monto.value}
+——————————————
+
+MEDIOS DE PAGO
+
+NEQUI: 3156549290
+DAVIPLATA: 3156549290
+TRANSFIYA: 3156549290
+BANCOLOMBIA (AHORROS): 91267627121  
+TITULAR: UBER MAYORGA
+
+DATÁFONO VIRTUAL:
+https://checkout.wompi.co/l/VPOS_KZxD3H
+
+* NOTA: LA BOLETA PERMANECERÁ SEPARADA SOLO POR 24 HORAS.  
+SI EN ESTE LAPSO DE TIEMPO NO REALIZAS EL PAGO,  
+VUELVE A QUEDAR DISPONIBLE AUTOMÁTICAMENTE.
+
+POR FAVOR REALIZA EL PAGO Y ME ENVÍAS EL COMPROBANTE 
+`;
+
+    // Codificamos para usarlo en un enlace de WhatsApp
+    const mensajewa = encodeURIComponent(mensajef);
+
+
+    window.open(`https://wa.me/${telefono}?text=${mensajewa}`, "_blank");
 }
 
 const generateRandomNumbers = () => {
