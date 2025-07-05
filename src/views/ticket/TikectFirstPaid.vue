@@ -113,7 +113,7 @@ onMounted(async() => {
         //Numero de boleta
         ctx.font = "60px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("Nº " + ticketData.value.number, 382, 1305);
+        ctx.fillText("Nº " + ticketData.value.number, 382, 1351);
 
     };
 });
