@@ -120,7 +120,7 @@
                                 <div class="d-flex justify-content-center">
                                     <Button :disabled="item.state === 0" class="btn text-darkslategrey"
                                         @click="redirectToWhatsApp(item.country_code+item.phone,'ysisis')" variant="text"><i
-                                            class="fab fa-whatsapp"></i></Button>
+                                            class="fab fa-whatsapp fa-lg"></i></Button>
                                 </div>
                             </td>
                         </tr>

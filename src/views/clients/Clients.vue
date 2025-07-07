@@ -1,24 +1,15 @@
 <template>
     <div class="w-100 d-flex justify-content-center mt-2 mb-5">
-        <img class="main-logo-head" :src="raffle?.logo || defaultLogo " />
+        <img class="main-logo-head" :src="raffle?.logo || defaultLogo" />
     </div>
     <div class="w-100 d-flex justify-content-center">
         <div class="container-main-head">
-            <div class="mb-4 text-center">
-                <!-- <span class="color-primary-raffle poppins-bold" style="font-size: 5em;">Datos de compra</span> -->
-            </div>
-            <div class="d-flex justify-content-center mb-5">
-                <div class="container-awards">
-                    <span class="color-primary-raffle poppins-semibold" style="font-size: 2em;"> {{ raffle?.type_1_awards?.length ? raffle.type_1_awards[0].award : 'Sin premio' }} </span>
-                    
-                </div>
-            </div>
+            <!-- <div class="mb-4 text-center">
+            </div> -->
             <div class="d-flex justify-content-center mb-5">
                 <div class="container-description" style="border-radius: 30px;">
-                    <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">{{ raffle?.description }} </span>
-                    <!-- <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;">{{ raffle?.type_2_awards?.length ? raffle.type_2_awards[0].award : 'Sin premio' }} </span> -->
-                    <!-- <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;"> NMAX CONNECTED - </span>
-                        <span class="color-primary-raffle poppins-semibold" style="font-size: 4em;">XTZ 250 0 KILÓMETROS</span> -->
+                    <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;"> {{
+                        raffle?.description ? raffle?.description : 'Sin premio' }} </span>
                 </div>
             </div>
             <!-- <div class="text-white text-center py-2">
@@ -32,49 +23,47 @@
     <!-- <div>
             <img src="@/assets/customers/background_raffle.jpeg" alt="" style="width: 100%; height: 30em;">
         </div> -->
-    
-    
+
+
     <div>
         <div class="card">
-            <Carousel :value="awards" :numVisible="3" :numScroll="1" :responsiveOptions="responsiveOptions" :autoplayInterval="3000">
+            <Carousel :value="awards" :numVisible="3" :numScroll="1" :responsiveOptions="responsiveOptions"
+                :autoplayInterval="3000">
                 <template #item="slotProps">
                     <div class="border border-surface-200 dark:border-surface-700 rounded m-2  p-4">
                         <div class="mb-4">
                             <div class="relative mx-auto d-flex justify-content-center">
-                                <img :src="slotProps.data.image" :alt="slotProps.data.name" class="w-full rounded carrouse-image-size" />
+                                <img :src="slotProps.data.image" :alt="slotProps.data.name"
+                                    class="w-full rounded carrouse-image-size" />
                             </div>
                         </div>
                         <div class="mb-4 font-medium text-center">{{ slotProps.data.name }}</div>
                     </div>
                 </template>
-        </Carousel>
+            </Carousel>
+        </div>
     </div>
-</div>
 
-    <div class="mt-5 text-center">
-        <span class="color-primary-raffle poppins-bold text-uppercase" style="font-size: 3em;">JUEGA ESTE {{ formatDate() }}</span>
-    </div>
-    <div class="text-center mt-5">
+    <!-- <div class="mt-5 text-center">
+        <span class="color-primary-raffle poppins-bold text-uppercase" style="font-size: 3em;">JUEGA ESTE {{
+            formatDate()
+            }}</span>
+    </div> -->
+    <!-- <div class="text-center mt-5">
         <span class="mt-4 poppins-semibold" style="color: #0B0B0B; font-size: 2.5em;">Valor unitario por
             número</span><br>
-        <!-- <span class="mt-4 poppins-bold" style="color: #01B1EB; font-size: 3em;">{{$125.000}}</span> -->
-        <span class="mt-4 poppins-bold" style="color: #01B1EB; font-size: 3em;">${{Helper.thousandSeparator(raffle.value_ticket)}}</span>
+        <span class="mt-4 poppins-bold"
+            style="color: #01B1EB; font-size: 3em;">${{ Helper.thousandSeparator(raffle.value_ticket) }}</span>
         <div class="w-100 d-flex justify-content-center">
             <img class="size-lotery-image" src="@/assets/customers/loteria_boyaca.png">
         </div>
-    </div>
-    <div class="mt-2 text-center">
+    </div> -->
+    <!-- <div class="mt-2 text-center">
         <span class="poppins-regular">Todos los sorteos juegan con las 4 últimas cifras del premio mayor de la Lotería
             Boyacá, sin serie.</span>
-    </div>
+    </div> -->
 
     <div id="buyNumbers" class="mt-5">
-        <!-- <div class="text-center">
-            <span>Todos los sorteos juegan con las últimas cuatro cifras de la lotería de Boyacá, sin serie</span>
-        </div>
-        <div class="d-flex justify-content-center">
-            <img src="@/assets/customers/loteria_boyaca.png" alt="" style="max-width: 80%;">
-        </div> -->
         <TicketFree v-if="domLoaded" typeScreen="client" :raffle="raffle" />
     </div>
 
@@ -111,25 +100,25 @@ import defaultLogo from '@/assets/customers/dr_denix_logo.png'
 
 const awards = ref([]);
 const responsiveOptions = ref([{
-        breakpoint: '1400px',
-        numVisible: 2,
-        numScroll: 1
-    },
-    {
-        breakpoint: '1199px',
-        numVisible: 3,
-        numScroll: 1
-    },
-    {
-        breakpoint: '767px',
-        numVisible: 2,
-        numScroll: 1
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1,
-        numScroll: 1
-    }
+    breakpoint: '1400px',
+    numVisible: 2,
+    numScroll: 1
+},
+{
+    breakpoint: '1199px',
+    numVisible: 3,
+    numScroll: 1
+},
+{
+    breakpoint: '767px',
+    numVisible: 2,
+    numScroll: 1
+},
+{
+    breakpoint: '575px',
+    numVisible: 1,
+    numScroll: 1
+}
 ]);
 
 const getSeverity = (status) => {
@@ -170,15 +159,15 @@ const formatNumber = (value) => {
 
 const listRaffles = async () => {
     raffle.value = await RaffleServices.listlast();
-    
+
     raffle.value.images_awards.forEach(element => {
-        awards.value.push({ image: element.image, name: element.award})
-        awards.value.push({ image: element.image, name: element.award})
-        awards.value.push({ image: element.image, name: element.award})
-        awards.value.push({ image: element.image, name: element.award})
-        awards.value.push({ image: element.image, name: element.award})
-        awards.value.push({ image: element.image, name: element.award})
-        awards.value.push({ image: element.image, name: element.award})
+        awards.value.push({ image: element.image, name: element.award })
+        awards.value.push({ image: element.image, name: element.award })
+        awards.value.push({ image: element.image, name: element.award })
+        awards.value.push({ image: element.image, name: element.award })
+        awards.value.push({ image: element.image, name: element.award })
+        awards.value.push({ image: element.image, name: element.award })
+        awards.value.push({ image: element.image, name: element.award })
     });
 };
 
@@ -212,10 +201,10 @@ onMounted(async () => {
 });
 
 const formatDate = () => {
-  const date = new Date(raffle.value.raffle_date);
-  date.setDate(date.getDate() + 1); // sumar un día
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('es-ES', options);
+    const date = new Date(raffle.value.raffle_date);
+    date.setDate(date.getDate() + 1); // sumar un día
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('es-ES', options);
 };
 
 function isVideo(url) {
