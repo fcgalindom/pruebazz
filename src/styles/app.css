@@ -100,3 +100,25 @@ hr {
 .p-dialog-mask {
     z-index: 1000 !important;
 }
+
+.darkblue {
+    background-color: #063970;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.2em;
+    padding: 0.5em 0;
+}
+.darkbluetext{
+    color: #063970;
+}
+.whatsapp{
+    background: green;
+    border-radius: 50em;
+    font-size: 1.5em;
+    margin-left: 1rem;
+}
+.payment{
+    margin-left: 1rem;
+    color: gold;
+    font-size: 1.2em;
+}
