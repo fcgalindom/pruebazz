@@ -13,7 +13,7 @@
         </div>
         <div class="col-md-2">
             <div class="d-flex flex-column">
-            <Button class="btn-sm mb-3">Total en boletas: {{ Helper.formatNumber(totalBoletos) }}</Button>
+            <Button class="btn-sm mb-3">Total en boletas: {{ Helper.thousandSeparator(totalBoletos) }}</Button>
             <Button class="btn-sm mb-3">Total en Recaudo: {{ Helper.formatNumber(totalRecaudado) }}</Button>
         </div>
             
@@ -32,7 +32,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Cliente</th>
+                    <th>Usuario</th>
                     <th>Cantidad</th>
                     <th>Total</th>
                 </tr>
@@ -40,7 +40,7 @@
             <tbody>
 
                 <tr v-for="ticket in tickets.data" :key="ticket.customer_id">
-                    <td>{{ ticket.customer__name }}</td>
+                    <td>{{ ticket.seller_name }}</td>
                     <td>{{ ticket.cantidad_boletos }}</td>
                     <td>{{ ticket.total_recaudado.toLocaleString('es-CO') }}</td>
                 </tr>
