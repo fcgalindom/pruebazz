@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{whereAmI.value}}
 
         <!-- <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
             
@@ -180,7 +181,8 @@
             </div>
         </div>
         <div v-if="typeScreen == 'admin'" class="my-3">
-            <h3>Boletas Disponibles</h3>
+            <h3 v-if="isLoadingTickets == false">Boletas Disponibles</h3>
+            <h3 v-else>Cargue de Boletas</h3>
         </div>
         <hr>
         <div class="row" v-if="typeScreen == 'admin'">
@@ -220,7 +222,7 @@
                     <span class="poppins-bold" style="font-size: 2em;">NÚMEROS DISPONIBLES</span>
                 </div>
                 <div id="board-buy" class="button-grid w-80 grid-buttons-tickets scroll-container">
-                    <button :class="{ active: isActive(button) }" :disabled="!filters.raffle && typeScreen == 'admin'"
+                    <button :class="{ active: isActive(button) }"
                         v-for="(button, index) in filteredButtons" :key="index" class="grid-button"
                         @click="buyTicket(button, button)">
                         {{ button }}
@@ -237,7 +239,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, defineProps, toRaw } from 'vue';
+import { ref, onMounted, computed, defineProps, toRaw, watch } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 // import { RaffleServices } from '@/services/raffle.service'
@@ -250,6 +252,7 @@ import Helper from '@/helpers/Helper';
 import { SellerServices } from '@/services/seller.service';
 import Cookies from 'js-cookie';
 import { type } from 'jquery';
+import { useRoute } from 'vue-router';
 
 
 
@@ -270,6 +273,7 @@ const modalwompi = ref('wompi-modal')
 const raffle = ref({})
 const range_tickets = ref([])
 const customer = ref({})
+const router = useRoute()
 
 const buttons = ref(Array.from({ length: 10 }, (_, i) => `${i + 1}`));
 const visible = ref(false);
@@ -301,6 +305,7 @@ const moneda = "COP";
 const secretoIntegridad = "prod_integrity_3FCZzpavOOU1wtUttCkAZLxLYthemogy";
 const isDisabled = ref(true)
 const ticketsBooked = ref([])
+const isLoadingTickets = ref(false)
 const countries = ref([{
     name: "Mexico",
     dialCode: "52",
@@ -391,6 +396,10 @@ const chargeForm = () => {
     customer.value.document = props.datadocument
 }
 
+watch(() => router.path, async () => {
+    await search()
+
+})
 
 function generarYValidarCodigo(longitud = 16) {
     // Definir el conjunto de caracteres que se utilizarán
@@ -423,15 +432,12 @@ generarYValidarCodigo(16);
 
 const mensaje = `${referencia.value}${monto}${moneda}${secretoIntegridad}`;
 
-hashSHA256(mensaje).then(hash => console.log("Hash SHA-256:", hash));
 
 const getcutomerevent = (data) => {
-    console.log('get');
     
     if (props.typeScreen == 'client') {
         ticket.value.seller = 3
     }
-    console.log('ticket.value', ticket.value);
     
     if (data.validate) {
 
@@ -447,7 +453,7 @@ const getcutomerevent = (data) => {
     }
 }
 onMounted(async () => {
-
+    
     limpiarFormulario()
     search()
     cities.value = await CustomerServices.listCities()
@@ -511,6 +517,35 @@ const customerEmit = async (customerData) => {
 }
 
 const search = async () => {
+    
+    
+    if(isLoadingTickets.value != true) {
+        var response = await SellerTicketsServices.getTiketsFreeForSeller(1, 99999)
+        buttons.value = [];
+        
+        let counter = 0
+        activeButtons.value = new Set();
+        for (let index = response.raffle.start_number; index <= response.raffle.final_number; index++) {
+            let formattedNumber = index.toString().padStart(4, '0');
+            if (!response.tickets_excluded.some(ticket => ticket.toString().padStart(4, '0') === formattedNumber)) {
+                buttons.value.push(formattedNumber);
+            }
+    
+            response.seller_range.forEach(range => {
+                range.numbers.forEach(number => {
+                    counter++
+    
+                    let formattedIndex = index.toString().padStart(4, '0');
+                    let formattedNumber = number.toString().padStart(4, '0');
+    
+                    if (formattedIndex == formattedNumber) {
+                        buttons.value.push(formattedNumber);
+                    }
+                });
+            });
+        }
+        return
+    }
 
     let filterJson = {}
 
@@ -518,18 +553,10 @@ const search = async () => {
         filterJson = {
             raffle: props.raffle?.id
         }
-    } else {
-        // if(!filters.value.raffle) {
-        //     return
-        // }
-        // filterJson = {
-        //     raffle: filters.value.raffle
-        // }
     }
-    filters.value.raffle = 1
+    // filters.value.raffle = 1
     filterJson.raffle = 1
     type_user.value = Cookies.get('type_user')
-    let response = ""
     if (type_user.value == 'false') {
         const seller = Cookies.get('seller_id')
         response = await SellerServices.tracking(seller, { seller: seller, raffle: filterJson.raffle, free: true })
@@ -888,22 +915,19 @@ const listCustomers = async () => {
 const filteredButtons = computed(() => {
 
     // if (filters.value.number) {
-    buttons.value = []
     let counter = 0;
     if (type_user.value == 'false') {
 
         ticketsBooked.value.forEach(element => {
-            if (filters.value.number) {
-
-            }
             if (!element.status) {
                 buttons.value.push(element.number)
             }
         });
     } else {
+        buttons.value = []
         for (let index = raffle.value.start_number; index <= raffle.value.final_number && counter < 100; index++) {
             let formattedNumber = index.toString().padStart(4, '0');
-
+            
             if (filters.value.number && formattedNumber.includes(filters.value.number)) {
                 if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
                     buttons.value.push(formattedNumber);
@@ -920,6 +944,19 @@ const filteredButtons = computed(() => {
     }
 
     return buttons.value;
+});
+
+const whereAmI = computed(() => {
+    const route = useRoute()
+    const path = route.path
+    
+    if (path == '/tickets/LoadingTickets') {
+        isLoadingTickets.value = true
+        return 'loading'
+    }else {
+        isLoadingTickets.value = false
+        return 'free'
+    }
 });
 
 const validateForm = computed(() => {

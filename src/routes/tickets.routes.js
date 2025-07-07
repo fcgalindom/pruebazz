@@ -22,6 +22,18 @@ const ticketsRoutes = [
 		}
 	},
 	{
+		path: '/tickets/LoadingTickets',
+		name: 'TicketLoadingTickets',
+		component: TicketFree,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
+	},
+	{
 		path: '/tickets/Reservado',
 		name: 'BookedTickets',
 		component: TicketList,

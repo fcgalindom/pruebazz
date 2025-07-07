@@ -92,7 +92,7 @@ import { SellerTicketsServices } from "@/services/seller_tickets.service";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from "vue-router";
 import Swal from 'sweetalert2'
-import Button from 'primevue/button'; 
+import Button from 'primevue/button';
 
 const route = useRoute()
 const range_tickets = ref([])
@@ -120,7 +120,7 @@ onMounted(async () => {
 })
 
 const buyTicket = (index, button, position) => {
-    
+
     if (activeButtons.value.has(button)) {
         range_tickets.value[position].numbers = range_tickets.value[position].numbers.filter(num => num !== (button))
         activeButtons.value.delete(button);
@@ -130,7 +130,7 @@ const buyTicket = (index, button, position) => {
         range_tickets.value[position].numbers.push(button)
         activeButtons.value.add(button);
         console.log("rango de ticketselse", range_tickets.value);
-        console.log("activeButtonselse", activeButtons.value);  
+        console.log("activeButtonselse", activeButtons.value);
     }
     // ticket.value.raffle = filters.value.raffle
 }
@@ -142,14 +142,14 @@ const filteredButtons = computed(() => {
 });
 
 const search = async (item) => {
-    
-    if(!item.raffle) {
+
+    if (!item.raffle) {
         showKeyboard.value = false
         return
     }
 
     showKeyboard.value = true
-    
+
     const response = await SellerTicketsServices.getTiketsFreeForSeller(item.raffle.id, route.params.id)
     buttons.value = [];
     let counter = 0
@@ -161,25 +161,25 @@ const search = async (item) => {
         }
 
         response.seller_range.forEach(range => {
-        range.numbers.forEach(number => {
-            counter++
+            range.numbers.forEach(number => {
+                counter++
 
-            let formattedIndex = index.toString().padStart(4, '0');
-            let formattedNumber = number.toString().padStart(4, '0');
-            
-            if (formattedIndex == formattedNumber) {
-                console.log(formattedIndex, formattedNumber);
-                activeButtons.value.add(formattedNumber)    ;
-            }
+                let formattedIndex = index.toString().padStart(4, '0');
+                let formattedNumber = number.toString().padStart(4, '0');
+
+                if (formattedIndex == formattedNumber) {
+                    console.log(formattedIndex, formattedNumber);
+                    activeButtons.value.add(formattedNumber);
+                }
+            });
         });
-  });
-  }
-  
+    }
+
 }
 
 const deleteTicket = (ticketEvent, position) => {
     activeButtons.value = new Set()
-    
+
     range_tickets.value[position].numbers.forEach(element => {
         activeButtons.value.add(element);
     });
@@ -211,7 +211,7 @@ const addRange = () => {
 
 const getRangeForClients = async () => {
     range_tickets.value = await SellerTicketsServices.show(route.params.id);
-    
+
     range_tickets.value.forEach((range, position) => {
         range.numbers.forEach(number => {
             activeButtons.value.add(`${number}`);
@@ -235,12 +235,9 @@ const limpiarFormulario = () => {
 </script>
 
 
-<style src="vue-multiselect/dist/vue-multiselect.css">
-
-</style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <style scoped>
-
 button.active {
     background-color: #28a745;
 }
