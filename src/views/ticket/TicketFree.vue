@@ -935,11 +935,12 @@ const generateWompiPay = async (monto_ = "0") => {
 
 const mesnajewa = () => {
 
-
-    let boletasTexto = "*Números de Boleta:*\n";
+    saveEntity()
+    let boletasTexto = "N°";
     ticket.value.number.forEach((boleta) => {
-        boletasTexto += `- ${boleta}\n`;
+        boletasTexto += ` ${boleta}`;
     });
+
 
 
     const mensajef = `
@@ -949,7 +950,7 @@ Boleta: ${boletasTexto}
 Nombre:  ${customer.value.name}
 Documento: ${customer.value.document}
 Ciudad: ${customer.value.city}
-Valor a cancelar: ${monto.value}
+Valor a cancelar:$${Helper.thousandSeparator(monto.value/100)}
 ——————————————
 
 MEDIOS DE PAGO
@@ -963,11 +964,10 @@ TITULAR: UBER MAYORGA
 DATÁFONO VIRTUAL:
 https://checkout.wompi.co/l/VPOS_KZxD3H
 
-* NOTA: LA BOLETA PERMANECERÁ SEPARADA SOLO POR 24 HORAS.  
-SI EN ESTE LAPSO DE TIEMPO NO REALIZAS EL PAGO,  
-VUELVE A QUEDAR DISPONIBLE AUTOMÁTICAMENTE.
+* Nota: la boleta permanecerá separada solo por 24 horas, 
+Si en este lapso de tiempo no realizas el pago o un abono mínimo de $35.000 pesos la boleta quedará automáticamente nuevamente disponible al público
 
-POR FAVOR REALIZA EL PAGO Y ME ENVÍAS EL COMPROBANTE 
+POR FAVOR REALIZA EL PAGO Y ME ENVÍAS EL COMPROBANTE…
 `;
 
     // Codificamos para usarlo en un enlace de WhatsApp
