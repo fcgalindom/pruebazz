@@ -563,7 +563,7 @@ onMounted(async () => {
     dependencies.value = await TicketServices.dependencies()
     const selleridofice = await SellerServices.getsellerofice()
 
-    ticket.value.seller = selleridofice[0].id
+    ticket.value.seller = selleridofice[0]?.id
 
     const ticketsee = sessionStorage.getItem('ticket');
     if (ticketsee) {
