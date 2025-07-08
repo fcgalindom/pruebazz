@@ -31,11 +31,25 @@ export class TicketServices {
         });
         return response.data;
     }
-    static async createticket(raffle) {
+    static async createticketClient(raffle) {
         const url = `${enviroments.baseUrl}tickets/create/client/`
         const response = await axios.post(url, raffle);
        return response.data;
 
+    }
+
+    static async createticket(raffle) {
+        const token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('token='))
+            ?.split('=')[1];
+        const url = `${enviroments.baseUrl}tickets/create/`;
+        const response = await axios.post(url, raffle, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        });
+        return response.data;
     }
 
     static async updateCustomer(raffle, id) {

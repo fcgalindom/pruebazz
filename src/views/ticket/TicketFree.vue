@@ -304,7 +304,7 @@
             </div>
             <div class="d-flex flex-column align-items-center w-100" :class="typeScreen == 'client' ? 'border-client' : ''" v-else>
                 <div class="mb-2">
-                    <span class="poppins-semibold" style="font-size: 2em;">NÚMEROS DISPONIBLES</span>
+                    <span class="poppins-semibold " style="font-size: 1.45em;">NÚMEROS DISPONIBLES</span>
                 </div>
                 <div id="board-buy" class="button-grid w-80 grid-buttons-tickets scroll-container">
                     <button :class="{ active: isActive(button) }" v-for="(button, index) in filteredButtons"
@@ -345,7 +345,7 @@
 import { ref, onMounted, computed, defineProps, toRaw, watch } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
-// import { RaffleServices } from '@/services/raffle.service'
+import { RaffleServices } from '@/services/raffle.service'
 import { SellerTicketsServices } from "@/services/seller_tickets.service";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
@@ -507,7 +507,7 @@ watch(() => router.path, async () => {
         console.log('here222');
         setTimeout(async() => {
             await search()
-        }, 2000);
+        }, 10000);
     }else {
         setTimeout(async() => {
             await search()
@@ -636,7 +636,7 @@ const search = async () => {
     console.log('search', isLoadingTickets.value);
     
     if (isLoadingTickets.value != true) { // Solo muestra boletas disponibles, que no están asignadas
-
+        buttons.value = [];
         var response = await SellerTicketsServices.getTiketsFreeForSeller(1, 99999)
 
         let counter = 0
@@ -768,8 +768,17 @@ const saveEntity = async () => {
         await TicketServices.updateCustomer(ticket.value, ticket.value.id)
         message = 'Datos guardados con Éxito.'
     } else {
-
-        const response = await TicketServices.createticket(ticket.value)
+        console.log('props.typeScreen', props.typeScreen);
+        
+        let response = "";
+        if(props.typeScreen == 'admin') {
+            ticket.value.raffle = await RaffleServices.listlast().id;
+            console.log('ticket.value.raffle ==> ', ticket.value.raffle);
+            
+            response = await TicketServices.createticket(ticket.value, ticket.value.raffle)
+        }else {
+            response = await TicketServices.createticketClient(ticket.value)
+        }
         if (response.duplicated.length > 0)
             message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
         else
@@ -820,7 +829,8 @@ const getPromotionsByRaffle = async () => {
 
 
 
-    promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
+    // promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
+    promotion.value = await PromotionServices.promotionsByRaffle(1) // Debe quedar como la línea anterior
 
 
     let montoWompi = 0
@@ -845,9 +855,10 @@ const getPromotionsByRaffle = async () => {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
 
-            // const raffle = await RaffleServices.show(filters.value.raffle)
-
-            ticket.value.value_to_pay = raffle.value.value_ticket
+            const raffle = await RaffleServices.listlast()
+            console.log('raffle ==> ', raffle);
+            
+            ticket.value.value_to_pay = raffle.value_ticket
             ticket.value.promotion_id = null
         }
     }
