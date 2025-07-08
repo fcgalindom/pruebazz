@@ -318,6 +318,12 @@
     background-color: #fbd8d8;
 }
 
+.border-client {
+    border: 2px solid;
+    border-radius: 20px;
+    padding: 0em .5em 2em .5em;
+}
+
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (max-width: 1400px) { 
     .button-grid {
@@ -354,6 +360,10 @@
     /* Add your styles here */
     .size-lotery-image {
         max-width: 50%;
+    }
+
+    .fs-random-number {
+        font-size: 1.5em;
     }
 }
 

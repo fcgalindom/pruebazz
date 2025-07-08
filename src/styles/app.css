@@ -102,14 +102,15 @@ hr {
 }
 
 .darkblue {
-    background-color: #063970;
+    background-color: #1f4aa2;
     color: white;
-    border-radius: 8px;
+    border-radius: 15px;
     font-size: 1.2em;
     padding: 0.5em 0;
 }
 .darkbluetext{
-    color: #063970;
+    color: #1f4aa2;
+    font-weight: 600;
 }
 .whatsapp{
     background: green;

@@ -159,7 +159,7 @@ const formatNumber = (value) => {
 
 const listRaffles = async () => {
     raffle.value = await RaffleServices.listlast();
-
+    
     raffle.value.images_awards.forEach(element => {
         awards.value.push({ image: element.image, name: element.award })
         awards.value.push({ image: element.image, name: element.award })
@@ -218,3 +218,13 @@ const messageBuy = () => {
     window.open('https://wa.me/573152532377?text=Hola,%20quiero%20comprar%20la%20boleta%20por%20este%20medio.', '_blank');
 }
 </script>
+
+<style>
+#modalfinalpay .p-dialog-header-actions {
+    display: none !important;
+}
+
+#modalfinalpay .p-dialog-header {
+    padding: .5em !important;
+}
+</style>
