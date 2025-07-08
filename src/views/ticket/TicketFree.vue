@@ -967,7 +967,7 @@ https://checkout.wompi.co/l/VPOS_KZxD3H
 * Nota: la boleta permanecerá separada solo por 24 horas, 
 Si en este lapso de tiempo no realizas el pago o un abono mínimo de $35.000 pesos la boleta quedará automáticamente nuevamente disponible al público
 
-POR FAVOR REALIZA EL PAGO Y ME ENVÍAS EL COMPROBANTE…
+POR FAVOR REALIZA EL PAGO Y ME ENVÍAS EL COMPROBANTE
 `;
 
     // Codificamos para usarlo en un enlace de WhatsApp
