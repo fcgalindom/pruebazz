@@ -771,8 +771,9 @@ const saveEntity = async () => {
         console.log('props.typeScreen', props.typeScreen);
         
         let response = "";
+        ticket.value.raffle = await RaffleServices.listlast();
+        ticket.value.raffle = ticket.value.raffle?.id
         if(props.typeScreen == 'admin') {
-            ticket.value.raffle = await RaffleServices.listlast().id;
             console.log('ticket.value.raffle ==> ', ticket.value.raffle);
             
             response = await TicketServices.createticket(ticket.value, ticket.value.raffle)
