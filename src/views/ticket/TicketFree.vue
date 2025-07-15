@@ -499,7 +499,6 @@ watch(() => router.path, async () => {
     
 
     if (router.path == '/tickets/Libre') {
-        console.log('here222');
         setTimeout(async () => {
             await search()
         }, 10000);
