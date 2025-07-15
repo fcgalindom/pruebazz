@@ -1152,7 +1152,10 @@ const whereAmI = computed(() => {
 });
 
 const validateForm = computed(() => {
-    const agree = ticket.value.agree ? ticket.value.agree[0] || false : false;
+    let agree = ticket.value.agree ? ticket.value.agree[0] || false : false;
+    if(props.typeScreen == 'admin') {
+        agree = true; // Sé asume que en la pantalla de administración siempre se acepta el acuerdo
+    }
     
     if (!ticket.value.number.length > 0 || !ticket.value.seller || !customer.value.document || !customer.value.name || !customer.value.phone || !customer.value.city || !agree) {
         return true
