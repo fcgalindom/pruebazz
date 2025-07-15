@@ -1,5 +1,5 @@
 <template>
-    <label class="form-label">
+    <label class="form-label" :class="bold === true ? 'text-bold' : ''" >
         <slot>
         </slot>
         <span v-if="required==true" class="text-danger"> (*)</span>
@@ -11,7 +11,15 @@
 
   const props = withDefaults(defineProps<{
     required?: boolean
+    bold?: boolean
   }>(), {
-    required: true
+    required: true,
+    bold: false
   })
 </script>
+
+<style>
+  .text-bold {
+    font-weight: bold;
+  }
+</style>

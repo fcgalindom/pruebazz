@@ -1,143 +1,136 @@
 <template>
     <div>
-       <div style="display: none;">
-        {{ whereAmI }}
-       </div>
+        <div style="display: none;">
+            {{ whereAmI }}
+        </div>
         <!-- <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
             
             <CustomerFInd @customerData="getcutomerevent" />
         </Dialog> -->
         <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
-        <Dialog v-model:visible="visiblefindcustomer" modal header="DATOS DE COMPRA" :style="{ width: '50rem' }">
-            <div class="row">
-                <div class="col-12 mb-3">
-                    <Label>Documento</Label>
-                    <Input class="form-control" v-model="customer.document" type="number" @blur="listCustomers"></Input>
-                </div>
-                <div class="col-12 mb-3">
-                    <Label>Nombres y apellidos</Label>
-                    <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
-                </div>
-                <div class="col-12 mb-3">
-                    <Label>Teléfono</Label>
-                    <div class="row">
-                        <Select v-model="customer.country_code" optionLabel="name" :options="countries"
-                            class="col-6 col-md-3 mb-3 mb-md-0">
-                            <template #value="slotProps">
-                                <div v-if="slotProps.value" class="d-flex align-items-center justify-content-center">
-                                    <img :src="slotProps.value.flag" style="width: 20px" />
-                                </div>
-                            </template>
-                            <template #option="slotProps">
-                                <div class="d-flex align-items-center">
-                                    <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
-                                    <div>{{ slotProps.option.name }}</div>
-                                </div>
-                            </template>
-                        </Select>
-                        <Input class="col-md-9" v-model="customer.phone" :disabled="isDisabled"
-                            label="Teléfono"></Input>
+        <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '40rem', height: '50rem' }"
+            style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
+            <div class="modal-body"
+                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px;">
+                <h1 class="mb-4 pt-4 text-center" style="font-weight: bold; font-size: 2em;">DATOS DE COMPRA</h1>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <Label :bold="true">Documento</Label>
+                        <Input class="form-control" v-model="customer.document" type="number"
+                            @blur="listCustomers"></Input>
                     </div>
-                </div>
-                <div class="col-12 mb-3">
-                    <Label>Ciudad</Label>
-                    <Select filter optionValue="id" fluid optionLabel="name" ref="multiselect" v-model="customer.city"
-                        :disabled="isDisabled" :options="cities" :multiple="false" :clear-on-select="true"
-                        :customer-search="true" placeholder="Selecciona" label="name" track-by="id"
-                        @select="myChangeEvent"></Select>
-                </div>
-            </div>
-            <!-- <CustomerForm @customerData="handleUpdateData" :datadocument="documentcustomer"
-                @closedialog="visibleCustomer = false" /> -->
-            <hr>
-            <div class="row">
-                <div class="col-md-12 mb-3">
-                    <Label>Número</Label>
-                    <Input disabled v-model="ticket.number" type="text"></Input>
-                </div>
-                <div class="col-md-12 mb-3">
-                    <Label>Vendedor</Label>
-                    <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
-                        optionValue="id" class="w-100"></Select>
-                </div>
-                <!-- <div class="col-md-12 mb-3">
-                    <Label>Cliente (a quien se vende)</Label>
-                    <Select v-model="ticket.customer" :options="dependencies.customers" filter optionLabel="name"
-                        optionValue="id" disabled class="w-100"></Select>
-                </div> -->
-                <!-- <div class="col-md-6 mb-3">
-                    <Label>Rifa</Label>
-                    <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name"
-                        optionValue="id" class="w-100"></Select>
-                </div> -->
-            </div>
-
-            <hr>
-
-            <div v-if="typeScreen == 'admin'">
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-success" @click="add_payment()">+</button>
-                </div>
-                <div class="row border p-2 my-3" v-for="(i, index) in ticket.payments" :key="index">
-                    <div class="col-md-4">
-                        <Label>Boleta</Label>
-                        <Select v-model="i.ticket" :options="ticket.number" filter class="w-100"></Select>
+                    <div class="col-12 mb-3">
+                        <Label :bold="true">Nombres y apellidos</Label>
+                        <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
                     </div>
-                    <div class="col-md-4">
-                        <Label>Método de pago</Label>
-                        <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
-                    </div>
-                    <div class="col-md-4" v-if="i.payment_method !== '' && i.payment_method !== 'EFECTIVO'">
-                        <label>Referencia de pagos</label>
-                        <input type="text" v-model="i.reference" class="form-control"
-                            placeholder="Ingrese la referencia" />
-                    </div>
-                    <div class="col-md-4">
-                        <Label>Valor</Label>
-                        <InputGroup>
-                            <InputGroupAddon>$</InputGroupAddon>
-                            <InputNumber fluid v-model="i.amount" />
-                        </InputGroup>
-                    </div>
-                    <!-- <div class="col-md-3">
+                    <div class="col-12 mb-3">
+                        <Label :bold="true">Teléfono</Label>
                         <div class="row">
-                            <div class="col-10">
-                                <Label>Fecha de expiración</Label>
-                                <DatePicker v-model="i.expiration_date" showIcon fluid dateFormat="yy-mm-dd"
-                                    :manualInput="false"
-                                    @date-select="i.expiration_date = Helper.formatDateForm($event)" />
-                            </div>
-                            <div class="col-2">
-                                <button class="btn btn-danger mt-4" @click="remove_payment(index)">X</button>
-                            </div>
+                            <Select v-model="customer.country_code" optionLabel="name" :options="countries"
+                                class="col-4 col-md-3">
+                                <template #value="slotProps">
+                                    <div v-if="slotProps.value"
+                                        class="d-flex align-items-center justify-content-center">
+                                        <img :src="slotProps.value.flag" style="width: 20px" />
+                                    </div>
+                                </template>
+                                <template #option="slotProps">
+                                    <div class="d-flex align-items-center">
+                                        <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
+                                        <div>{{ slotProps.option.name }}</div>
+                                    </div>
+                                </template>
+                            </Select>
+                            <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
+                                label="Teléfono"></Input>
                         </div>
-                    </div> -->
-                    <hr class="my-3">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <Label :bold="true">Ciudad</Label>
+                        <Select filter optionValue="id" fluid optionLabel="name" ref="multiselect"
+                            v-model="customer.city" :disabled="isDisabled" :options="cities" :multiple="false"
+                            :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name"
+                            track-by="id" @select="myChangeEvent"></Select>
+                    </div>
                 </div>
-            </div>
-            <div v-if="typeScreen == 'client'">
-                <div class="d-flex justify-content-center my-3">
-                    <Button data-toggle="modal" @click="modalfinalpay = true;" :disabled="validateForm">
-                        Guardar</Button>
+                <!-- <CustomerForm @customerData="handleUpdateData" :datadocument="documentcustomer"
+                @closedialog="visibleCustomer = false" /> -->
+                <hr>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <Label :bold="true">Boleta(s) a comprar</Label>
+                        <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid disabled
+                        :maxSelectedLabels="15" class="w-full md:w-80" />
+                        <!-- <Input disabled v-model="ticket.number" type="text"></Input> -->
+                    </div>
+                    <div class="col-md-12 mb-3" v-if="typeScreen == 'admin'">
+                        <Label :bold="true">Vendedor</Label>
+                        <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
+                            optionValue="id" class="w-100"></Select>
+                    </div>
+                    <div class="col-12" v-if="typeScreen == 'client'">
+                        <div class="d-flex justify-content-center">
+                            <Checkbox v-model="ticket.agree" class="mr-2 mt-1" inputId="ingredient1" :value="true" />
+                            <label class="poppins-medium" for="ingredient1"> He leído y estoy informado sobre la ley 1581 de 2012 - ley de protección de datos personales </label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div v-if="typeScreen == 'admin'">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-success" @click="add_payment()">+</button>
+                    </div>
+                    <div class="row border p-2 my-3" v-for="(i, index) in ticket.payments" :key="index">
+                        <div class="col-md-4">
+                            <Label>Boleta</Label>
+                            <Select v-model="i.ticket" :options="ticket.number" filter class="w-100"></Select>
+                        </div>
+                        <div class="col-md-4">
+                            <Label>Método de pago</Label>
+                            <Select v-model="i.payment_method" :options="payment_methods" filter class="w-100"></Select>
+                        </div>
+                        <div class="col-md-4" v-if="i.payment_method !== '' && i.payment_method !== 'EFECTIVO'">
+                            <label>Referencia de pagos</label>
+                            <input type="text" v-model="i.reference" class="form-control"
+                                placeholder="Ingrese la referencia" />
+                        </div>
+                        <div class="col-md-4">
+                            <Label>Valor</Label>
+                            <InputGroup>
+                                <InputGroupAddon>$</InputGroupAddon>
+                                <InputNumber fluid v-model="i.amount" />
+                            </InputGroup>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="typeScreen == 'client'">
+                    <div class="d-flex justify-content-center my-3">
+                        <button class="btn darkblue poppins-semibold" data-toggle="modal" @click="modalfinalpay = true;" :disabled="validateForm" style="padding: .35em 1em .35em 1em; font-size: 2em;">
+                            COMPRAR</button>
+                    </div>
+
+                </div>
+                <div v-if="typeScreen == 'admin'">
+                    <div class="d-flex justify-content-center my-3">
+                        <Button @click="saveEntity" :disabled="validateForm">Guardar</Button>
+                    </div>
+
                 </div>
 
             </div>
-            <div v-if="typeScreen == 'admin'">
-                <div class="d-flex justify-content-center my-3">
-                    <Button @click="saveEntity" :disabled="validateForm">Guardar</Button>
-                </div>
-
-            </div>
-
-
         </Dialog>
-        <Dialog v-model:visible="modalfinalpay" modal :style="{ width: '32rem' }" style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
-            <div class="modal-body text-center" style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px;">
+        <Dialog v-model:visible="modalfinalpay" modal :style="{ width: '32rem' }"
+            style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
+            <div class="modal-body text-center"
+                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px;">
                 <h2 class="mb-4 pt-4 darkbluetext" style="font-weight: bold; font-size: 1.75em;">FINALIZAR PAGO</h2>
 
                 <!-- Botón Wompi -->
                 <button @click="generateWompiPay(monto)"
-                    class="btn darkblue btn-lg w-100 mb-5 d-flex align-items-center justify-content-center gap-2" style="font-size: 1.75em; font-weight: bold;">
+                    class="btn darkblue btn-lg w-100 mb-5 d-flex align-items-center justify-content-center gap-2"
+                    style="font-size: 1.75em; font-weight: bold;">
                     PAGO EN LINEA
 
 
@@ -208,7 +201,8 @@
 
                 <!-- Botón WhatsApp -->
                 <button @click="mesnajewa()"
-                    class="btn darkblue btn-lg  w-100 d-flex align-items-center justify-content-center gap-2" style="margin-bottom: 4em; font-size: 1.75em; font-weight: bold">
+                    class="btn darkblue btn-lg  w-100 d-flex align-items-center justify-content-center gap-2"
+                    style="margin-bottom: 4em; font-size: 1.75em; font-weight: bold">
                     PAGO VÍA WHATSAPP
                     <i class="fab fa-whatsapp whatsapp"></i>
                 </button>
@@ -302,9 +296,10 @@
             <div class="w-100 p-5" v-if="filteredButtons.length === 0" style="background-color: lightgray;">
                 <h3 class="text-center">No hay números disponibles</h3>
             </div>
-            <div class="d-flex flex-column align-items-center w-100" :class="typeScreen == 'client' ? 'border-client' : ''" v-else>
+            <div class="d-flex flex-column align-items-center w-100"
+                :class="typeScreen == 'client' ? 'border-client' : ''" v-else>
                 <div class="mb-2">
-                    <span class="poppins-semibold" style="font-size: 2em;">NÚMEROS DISPONIBLES</span>
+                    <span class="poppins-semibold " style="font-size: 1.45em;">NÚMEROS DISPONIBLES</span>
                 </div>
                 <div id="board-buy" class="button-grid w-80 grid-buttons-tickets scroll-container">
                     <button :class="{ active: isActive(button) }" v-for="(button, index) in filteredButtons"
@@ -345,7 +340,7 @@
 import { ref, onMounted, computed, defineProps, toRaw, watch } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
-// import { RaffleServices } from '@/services/raffle.service'
+import { RaffleServices } from '@/services/raffle.service'
 import { SellerTicketsServices } from "@/services/seller_tickets.service";
 import { CustomerServices } from '@/services/customer.service'
 import Swal from 'sweetalert2'
@@ -500,14 +495,21 @@ const chargeForm = () => {
     customer.value.document = props.datadocument
 }
 
+<<<<<<< HEAD
 watch(() => router.path, async () => {    
     if(router.path == '/tickets/Libre') {
+=======
+watch(() => router.path, async () => {
+    console.log('router.path ==> ', router.path);
+
+    if (router.path == '/tickets/Libre') {
+>>>>>>> fa1fa164ccd66ca4aafa12d8c8cc6fb1d09a439d
         console.log('here222');
-        setTimeout(async() => {
+        setTimeout(async () => {
             await search()
-        }, 2000);
-    }else {
-        setTimeout(async() => {
+        }, 10000);
+    } else {
+        setTimeout(async () => {
             await search()
         }, 500);
     }
@@ -632,9 +634,9 @@ const search = async () => {
     buttons.value = [];
 
     console.log('search', isLoadingTickets.value);
-    
-    if (isLoadingTickets.value != true) { // Solo muestra boletas disponibles, que no están asignadas
 
+    if (isLoadingTickets.value != true) { // Solo muestra boletas disponibles, que no están asignadas
+        buttons.value = [];
         var response = await SellerTicketsServices.getTiketsFreeForSeller(1, 99999)
 
         let counter = 0
@@ -645,7 +647,7 @@ const search = async () => {
                 buttons.value.push(formattedNumber);
             }
             console.log('here');
-            
+
             response.seller_range.forEach(range => {
                 range.numbers.forEach(number => {
                     counter++
@@ -766,8 +768,18 @@ const saveEntity = async () => {
         await TicketServices.updateCustomer(ticket.value, ticket.value.id)
         message = 'Datos guardados con Éxito.'
     } else {
+        console.log('props.typeScreen', props.typeScreen);
 
-        const response = await TicketServices.createticket(ticket.value)
+        let response = "";
+        ticket.value.raffle = await RaffleServices.listlast();
+        ticket.value.raffle = ticket.value.raffle?.id
+        if (props.typeScreen == 'admin') {
+            console.log('ticket.value.raffle ==> ', ticket.value.raffle);
+
+            response = await TicketServices.createticket(ticket.value, ticket.value.raffle)
+        } else {
+            response = await TicketServices.createticketClient(ticket.value)
+        }
         if (response.duplicated.length > 0)
             message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
         else
@@ -818,7 +830,8 @@ const getPromotionsByRaffle = async () => {
 
 
 
-    promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
+    // promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
+    promotion.value = await PromotionServices.promotionsByRaffle(1) // Debe quedar como la línea anterior
 
 
     let montoWompi = 0
@@ -843,9 +856,10 @@ const getPromotionsByRaffle = async () => {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
 
-            // const raffle = await RaffleServices.show(filters.value.raffle)
+            const raffle = await RaffleServices.listlast()
+            console.log('raffle ==> ', raffle);
 
-            ticket.value.value_to_pay = raffle.value.value_ticket
+            ticket.value.value_to_pay = raffle.value_ticket
             ticket.value.promotion_id = null
         }
     }
@@ -1114,7 +1128,7 @@ const filteredButtons = computed(() => {
 const whereAmI = computed(() => {
     const route = useRoute()
     const path = route.path
-    
+
     // switch (path) {
     //     case '/tickets/LoadingTickets':
     //         isLoadingTickets.value = true
@@ -1134,10 +1148,10 @@ const whereAmI = computed(() => {
     if (path == '/tickets/LoadingTickets') {
         isLoadingTickets.value = true
         return 'loading'
-    }else if(path == '/tickets/Libre') {
+    } else if (path == '/tickets/Libre') {
         isLoadingTickets.value = false
         return 'free'
-    }else if(path == '/') {
+    } else if (path == '/') {
         isLoadingTickets.value = true
         return 'home'
 
@@ -1145,7 +1159,9 @@ const whereAmI = computed(() => {
 });
 
 const validateForm = computed(() => {
-    if (!ticket.value.number.length > 0 || !ticket.value.seller || !customer.value.document || !customer.value.name || !customer.value.phone || !customer.value.city) {
+    const agree = ticket.value.agree ? ticket.value.agree[0] || false : false;
+    
+    if (!ticket.value.number.length > 0 || !ticket.value.seller || !customer.value.document || !customer.value.name || !customer.value.phone || !customer.value.city || !agree) {
         return true
     } else {
         return false
@@ -1164,5 +1180,4 @@ button.active {
 button:hover {
     background-color: #0056b3;
 }
-
 </style>
