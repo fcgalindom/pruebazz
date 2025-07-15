@@ -495,15 +495,10 @@ const chargeForm = () => {
     customer.value.document = props.datadocument
 }
 
-<<<<<<< HEAD
-watch(() => router.path, async () => {    
-    if(router.path == '/tickets/Libre') {
-=======
 watch(() => router.path, async () => {
-    console.log('router.path ==> ', router.path);
+    
 
     if (router.path == '/tickets/Libre') {
->>>>>>> fa1fa164ccd66ca4aafa12d8c8cc6fb1d09a439d
         console.log('here222');
         setTimeout(async () => {
             await search()
