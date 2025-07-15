@@ -9,7 +9,7 @@
             <Button @click="logout" style="cursor: pointer;">Logout</Button>
             <button v-ripple
                 class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-                <Avatar image="/src/assets/customers/dr_denix_logo.png" class="mr-2" shape="circle" />
+                <Avatar image="/src/assets/customers/logo_casa_sorteos.png" class="mr-2" shape="circle" />
                 <span class="inline-flex flex-col items-start">
                     <span class="font-bold">{{ Cookies.get('name') }}</span>
                 </span>

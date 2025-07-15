@@ -21,6 +21,7 @@ import { useDialog } from 'primevue/usedialog';
 import Chart from 'primevue/chart';
 import ToggleSwitch from 'primevue/toggleswitch';
 import AutoComplete from 'primevue/autocomplete';
+import Checkbox from 'primevue/checkbox';
 
 import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
@@ -85,6 +86,6 @@ export default {
         app.component('AccordionContent', AccordionContent)
         app.component('InputGroup', InputGroup)
         app.component('InputGroupAddon', InputGroupAddon)
-     
+        app.component('Checkbox', Checkbox)
       }
 }
