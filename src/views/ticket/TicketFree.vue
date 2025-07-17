@@ -867,7 +867,7 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
-    const headerElement = document.getElementById('header-raffle');
+    const headerElement = document.getElementById('scrollableContentContainer');
     console.log('headerElement ==> ', headerElement);
     
     if (headerElement) {
