@@ -496,10 +496,9 @@ const chargeForm = () => {
 }
 
 watch(() => router.path, async () => {
-    console.log('router.path ==> ', router.path);
+    
 
     if (router.path == '/tickets/Libre') {
-        console.log('here222');
         setTimeout(async () => {
             await search()
         }, 10000);
@@ -963,8 +962,8 @@ Hola, he separado boleta con la siguiente información:
 Boleta: ${boletasTexto} 
 Nombre:  ${customer.value.name}
 Documento: ${customer.value.document}
-Ciudad: ${customer.value.city}
-Valor a cancelar:$${Helper.thousandSeparator(monto.value / 100)}
+Ciudad: ${customer.value.cityname}
+Valor a cancelar:$${Helper.thousandSeparator(monto.value/100)}
 ——————————————
 
 MEDIOS DE PAGO
@@ -1040,7 +1039,8 @@ const limpiarFormulario = () => {
         document: "",
         country_code: countries.value[3],
         phone: "",
-        city: ""
+        city: "",
+        cityname:""
     }
 }
 
@@ -1075,7 +1075,8 @@ const listCustomers = async () => {
                     document: response[0].document,
                     country_code: countries.value[3],
                     phone: response[0].phone,
-                    city: response[0].city.id
+                    city: response[0].city.id,
+                    cityname: response[0].city.name
 
                 }
                 isDisabled.value = true
