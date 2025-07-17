@@ -868,7 +868,14 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
-
+    const headerElement = document.getElementById('header-raffle');
+    console.log('headerElement ==> ', headerElement);
+    
+    if (headerElement) {
+        console.log('in');
+        
+        headerElement.scrollIntoView({ behavior: 'smooth' });
+    }
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
