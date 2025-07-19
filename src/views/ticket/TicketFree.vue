@@ -11,7 +11,7 @@
         <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '40rem', height: '50rem' }"
             style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
             <div class="modal-body"
-                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px;">
+                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
                 <h1 class="mb-4 pt-4 text-center" style="font-weight: bold; font-size: 2em;">DATOS DE COMPRA</h1>
                 <div class="row">
                     <div class="col-12 mb-3">
@@ -124,7 +124,7 @@
         <Dialog v-model:visible="modalfinalpay" modal :style="{ width: '32rem' }"
             style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
             <div class="modal-body text-center"
-                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px;">
+                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 2;">
                 <h2 class="mb-4 pt-4 darkbluetext" style="font-weight: bold; font-size: 1.75em;">FINALIZAR PAGO</h2>
 
                 <!-- Botón Wompi -->
@@ -873,14 +873,7 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 const generateWompiPay = async (monto_ = "0") => {
     document.body.style.overflow = 'auto'; 
      document.body.style.overflow = 'hidden';
-    const headerElement = document.getElementById('header-raffle');
-    console.log('headerElement ==> ', headerElement);
     
-    if (headerElement) {
-        console.log('in');
-        
-        headerElement.scrollIntoView({ behavior: 'smooth' });
-    }
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
@@ -950,6 +943,11 @@ const generateWompiPay = async (monto_ = "0") => {
             }
         }
     });
+    const headerElement = document.getElementById('header-raffle');
+    
+    if (headerElement) {
+        headerElement.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 
 const mesnajewa = () => {
