@@ -122,13 +122,13 @@
             style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
             <div class="modal-body text-center"
                 style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 2;">
-                <h2 class="mb-4 pt-4 darkbluetext" style="font-weight: bold; font-size: 1.75em;">FINALIZAR PAGO</h2>
+                <h2 class="mb-4 pt-4 darkbluetext" style="font-weight: bold; font-size: 1.75em;">FINALIZAR PAGO222</h2>
 
                 <!-- Botón Wompi -->
                 <button @click="generateWompiPay(monto)"
                     class="btn darkblue btn-lg w-100 mb-5 d-flex align-items-center justify-content-center gap-2"
                     style="font-size: 1.75em; font-weight: bold;">
-                    PAGO EN LINEA
+                    PAGO EN LINEA333
 
 
                     <!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
