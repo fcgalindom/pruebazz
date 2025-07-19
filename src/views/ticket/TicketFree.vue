@@ -660,7 +660,7 @@ const search = async () => {
 
     if (props.typeScreen == 'client') {
         filterJson = {
-            raffle: props.raffle ? .id
+            raffle: props.raffle?.id
         }
     }
     // filters.value.raffle = 1
@@ -768,7 +768,7 @@ const saveEntity = async () => {
 
         let response = "";
         ticket.value.raffle = await RaffleServices.listlast();
-        ticket.value.raffle = ticket.value.raffle ? .id
+        ticket.value.raffle = ticket.value.raffle?.id
         if (props.typeScreen == 'admin') {
             console.log('ticket.value.raffle ==> ', ticket.value.raffle);
 
@@ -830,7 +830,7 @@ const getPromotionsByRaffle = async () => {
 
 
     let montoWompi = 0
-    if (promotion.value[0] ? .number_of_tickets <= ticket.value.number.length) {
+    if (promotion.value[0]?.number_of_tickets <= ticket.value.number.length) {
         Swal.fire({
             title: '¡Felicitaciones!',
             text: `Genial se te aplicará la promoción ${promotion.value[0].name} con un valor de ${promotion.value[0].new_value} por boleta`,
@@ -914,11 +914,11 @@ const generateWompiPay = async (monto_ = "0") => {
                 return mensaje;
             });
             const data = event.data;
-            if (data.data ? .transaction ? .status == 'transaction_created' || data.data ? .transaction ? .status == 'PENDING') {
+            if (data.data?.transaction?.status == 'transaction_created' || data.data?.transaction?.status == 'PENDING') {
                 // alert('Transacción creada')
 
             }
-            if (data.data ? .transaction ? .status === 'transaction_approved' || data.data ? .transaction ? .status == 'APPROVED') {
+            if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
                 let boletasTexto = "*Números de Boleta:*\n";
                 ticket.value.number.forEach((boleta) => {
                     boletasTexto += `- ${boleta}\n`;
