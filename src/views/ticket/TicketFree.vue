@@ -66,7 +66,7 @@
                     <div class="col-md-12 mb-3" v-if="typeScreen == 'admin'">
                         <Label :bold="true">Vendedor</Label>
                         <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
-                            optionValue="id" class="w-100"></Select>
+                            optionValue="id" class="w-100" ></Select>
                     </div>
                     <div class="col-12" v-if="typeScreen == 'client'">
                         <div class="d-flex justify-content-center">
@@ -700,6 +700,7 @@ const search = async () => {
             let counter = 0;
             for (let index = response.raffle.start_number; index <= response.raffle.final_number && counter < 100; index++) {
                 if (!response.tickets.some(ticket => ticket.number == index)) {
+                    console.log("bueee")
                     let formattedNumber = index.toString().padStart(4, '0');
                     buttons.value.push(formattedNumber);
                     counter++;
@@ -724,7 +725,10 @@ const mountedBuyTicket = () => {
     if (ticket.value.payments.length == 0) {
 
     }
+    console.log("entro1")
+
     ticket.value.payments[0].ticket = ticket.value.number[0] || "";
+    ticket.value.seller = 34
 }
 
 const saveEntity = async () => {
@@ -867,6 +871,9 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
+    document.body.style.overflow = 'auto'; 
+     document.body.style.overflow = 'hidden';
+    
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
@@ -1088,6 +1095,10 @@ const listCustomers = async () => {
 
 }
 
+const getsellerbyticket = async () =>{
+   alert("entor");
+}
+
 const filteredButtons = computed(() => {
 
     // if (filters.value.number) {
@@ -1107,11 +1118,13 @@ const filteredButtons = computed(() => {
 
             if (filters.value.number && formattedNumber.includes(filters.value.number)) {
                 if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
+                    console.log("buee2")
                     buttons.value.push(formattedNumber);
                     counter++;
                 }
             }
             if (!filters.value.number) {
+                console.log("buee3")
                 if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
                     buttons.value.push(formattedNumber);
                     counter++;

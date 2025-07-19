@@ -66,6 +66,13 @@
                                     label="Teléfono"></Input>
                             </div>
                         </div>
+                        <div>
+                            <Label>SERÁ (usuario)</Label>
+                            <Checkbox 
+                              v-model="seller.user.is_superuser" 
+                              binary 
+                            />
+                        </div>
                     </div>
                     <div class="d-flex justify-content-center my-3">
                         <Button @click="saveEntity">Guardar</Button>
@@ -155,7 +162,8 @@
         country_code: "",
         user : {
             email: "",
-            password: ""
+            password: "",
+            is_superuser:""
         }})
   const usersatus = ref({"status": 0})
   
@@ -184,6 +192,8 @@
         password: seller.value.user.password,
         country_code: seller.value.country_code.dialCode,
         phone: seller.value.phone,
+        is_superuser: seller.value.user.is_superuser
+        
         
       }
       if (seller.value.id != null) {
@@ -199,6 +209,7 @@
   const showData = async(id) => {
 
     seller.value = await SellerServices.show(id)
+    console.log("see user", seller.value)
     seller.value.country_code = countries.find(item => item.dialCode == seller.value.country_code)
     seller.value.user.password = ""
 
@@ -209,7 +220,8 @@
         document: "",
         user : {
             email: "",
-            password: ""
+            password: "",
+            is_superuser:""
         }
     }
   }
