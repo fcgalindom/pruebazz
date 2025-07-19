@@ -4,9 +4,9 @@
             {{ whereAmI }}
         </div>
         <!-- <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
-                                
-                                <CustomerFInd @customerData="getcutomerevent" />
-                            </Dialog> -->
+                            
+                            <CustomerFInd @customerData="getcutomerevent" />
+                        </Dialog> -->
         <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
         <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '40rem', height: '50rem' }" style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
             <div class="modal-body" style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
@@ -24,11 +24,11 @@
                         <Label :bold="true">Teléfono</Label>
                         <div class="row">
                             <Select v-model="customer.country_code" optionLabel="name" :options="countries" class="col-4 col-md-3">
-                                                    <template #value="slotProps">
-                                                        <div v-if="slotProps.value"
-                                                            class="d-flex align-items-center justify-content-center">
-                                                            <img :src="slotProps.value.flag" style="width: 20px" />
-                                                        </div>
+                                                <template #value="slotProps">
+                                                    <div v-if="slotProps.value"
+                                                        class="d-flex align-items-center justify-content-center">
+                                                        <img :src="slotProps.value.flag" style="width: 20px" />
+                                                    </div>
 </template>
 
 <template #option="slotProps">
@@ -660,7 +660,7 @@ const search = async () => {
 
     if (props.typeScreen == 'client') {
         filterJson = {
-            raffle: props.raffle ? .id
+            raffle: props.raffle?.id
         }
     }
     // filters.value.raffle = 1
@@ -768,7 +768,7 @@ const saveEntity = async () => {
 
         let response = "";
         ticket.value.raffle = await RaffleServices.listlast();
-        ticket.value.raffle = ticket.value.raffle ? .id
+        ticket.value.raffle = ticket.value.raffle?.id
         if (props.typeScreen == 'admin') {
             console.log('ticket.value.raffle ==> ', ticket.value.raffle);
 
@@ -830,7 +830,7 @@ const getPromotionsByRaffle = async () => {
 
 
     let montoWompi = 0
-    if (promotion.value[0] ? .number_of_tickets <= ticket.value.number.length) {
+    if (promotion.value[0]?.number_of_tickets <= ticket.value.number.length) {
         Swal.fire({
             title: '¡Felicitaciones!',
             text: `Genial se te aplicará la promoción ${promotion.value[0].name} con un valor de ${promotion.value[0].new_value} por boleta`,
@@ -893,17 +893,17 @@ const generateWompiPay = async (monto_ = "0") => {
         );
         wompiForm.value.appendChild(script);
         const waitForButton = setInterval(() => {
-            const wompiButton = wompiForm.value.querySelector('button');
-            if (wompiButton) {
-                clearInterval(waitForButton);
-                wompiButton.click();
+        const wompiButton = wompiForm.value.querySelector('button');
+        if (wompiButton) {
+            clearInterval(waitForButton);
+            wompiButton.click();
 
-                // Restaurar scroll
-                setTimeout(() => {
-                    document.body.style.overflow = 'auto';
-                }, 2000);
-            }
-        }, 200);
+            // Restaurar scroll
+            setTimeout(() => {
+                document.body.style.overflow = 'auto';
+            }, 2000);
+        }
+        }, 200); 
     }, 200); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
 
     visible.value = false
@@ -922,11 +922,11 @@ const generateWompiPay = async (monto_ = "0") => {
                 return mensaje;
             });
             const data = event.data;
-            if (data.data ? .transaction ? .status == 'transaction_created' || data.data ? .transaction ? .status == 'PENDING') {
+            if (data.data?.transaction?.status == 'transaction_created' || data.data?.transaction?.status == 'PENDING') {
                 // alert('Transacción creada')
 
             }
-            if (data.data ? .transaction ? .status === 'transaction_approved' || data.data ? .transaction ? .status == 'APPROVED') {
+            if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
                 let boletasTexto = "*Números de Boleta:*\n";
                 ticket.value.number.forEach((boleta) => {
                     boletasTexto += `- ${boleta}\n`;
