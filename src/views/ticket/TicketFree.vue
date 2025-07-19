@@ -128,7 +128,7 @@
                 <button @click="generateWompiPay(monto)"
                     class="btn darkblue btn-lg w-100 mb-5 d-flex align-items-center justify-content-center gap-2"
                     style="font-size: 1.75em; font-weight: bold;">
-                    PAGO EN LINEA33345
+                    PAGO EN LINEA33347
 
 
                     <!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
