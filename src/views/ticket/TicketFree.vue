@@ -128,7 +128,7 @@
                 <button @click="generateWompiPay(monto)"
                     class="btn darkblue btn-lg w-100 mb-5 d-flex align-items-center justify-content-center gap-2"
                     style="font-size: 1.75em; font-weight: bold;">
-                    PAGO EN LINEA3334
+                    PAGO EN LINEA33345
 
 
                     <!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -870,6 +870,7 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 const generateWompiPay = async (monto_ = "0") => {
     document.body.style.overflow = 'auto';
     document.body.style.overflow = 'hidden';
+    document.body.style.width = '100%';
     window.scrollTo(0, 0); // Asegura que el scroll esté arriba
     document.activeElement.blur(); // Evita interferencia del teclado
 
