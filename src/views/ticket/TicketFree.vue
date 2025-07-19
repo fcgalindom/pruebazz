@@ -870,6 +870,7 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 const generateWompiPay = async (monto_ = "0") => {
     document.body.style.overflow = 'auto';
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
     document.body.style.width = '100%';
     window.scrollTo(0, 0); // Asegura que el scroll esté arriba
     document.activeElement.blur(); // Evita interferencia del teclado
@@ -908,6 +909,12 @@ const generateWompiPay = async (monto_ = "0") => {
     }, 200); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
 
     visible.value = false
+    document.body.style.overflow = 'auto';
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    window.scrollTo(0, 0); // Asegura que el scroll esté arriba
+    document.activeElement.blur(); // Evita interferencia del teclado
     window.addEventListener('message', function(event) {
         let boletasTexto = "*Números de Boleta:*\n";
         ticket.value.number.forEach((boleta) => {
