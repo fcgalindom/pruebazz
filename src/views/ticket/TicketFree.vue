@@ -4,20 +4,17 @@
             {{ whereAmI }}
         </div>
         <!-- <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
-            
-            <CustomerFInd @customerData="getcutomerevent" />
-        </Dialog> -->
+                            
+                            <CustomerFInd @customerData="getcutomerevent" />
+                        </Dialog> -->
         <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
-        <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '40rem', height: '50rem' }"
-            style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
-            <div class="modal-body"
-                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
+        <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '40rem', height: '50rem' }" style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
+            <div class="modal-body" style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
                 <h1 class="mb-4 pt-4 text-center" style="font-weight: bold; font-size: 2em;">DATOS DE COMPRA</h1>
                 <div class="row">
                     <div class="col-12 mb-3">
                         <Label :bold="true">Documento</Label>
-                        <Input class="form-control" v-model="customer.document" type="number"
-                            @blur="listCustomers"></Input>
+                        <Input class="form-control" v-model="customer.document" type="number" @blur="listCustomers"></Input>
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Nombres y apellidos</Label>
@@ -26,20 +23,20 @@
                     <div class="col-12 mb-3">
                         <Label :bold="true">Teléfono</Label>
                         <div class="row">
-                            <Select v-model="customer.country_code" optionLabel="name" :options="countries"
-                                class="col-4 col-md-3">
-                                <template #value="slotProps">
-                                    <div v-if="slotProps.value"
-                                        class="d-flex align-items-center justify-content-center">
-                                        <img :src="slotProps.value.flag" style="width: 20px" />
-                                    </div>
-                                </template>
-                                <template #option="slotProps">
-                                    <div class="d-flex align-items-center">
-                                        <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
-                                        <div>{{ slotProps.option.name }}</div>
-                                    </div>
-                                </template>
+                            <Select v-model="customer.country_code" optionLabel="name" :options="countries" class="col-4 col-md-3">
+                                                <template #value="slotProps">
+                                                    <div v-if="slotProps.value"
+                                                        class="d-flex align-items-center justify-content-center">
+                                                        <img :src="slotProps.value.flag" style="width: 20px" />
+                                                    </div>
+</template>
+
+<template #option="slotProps">
+    <div class="d-flex align-items-center">
+        <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
+        <div>{{ slotProps.option.name }}</div>
+    </div>
+</template>
                             </Select>
                             <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
                                 label="Teléfono"></Input>
@@ -316,6 +313,7 @@
 
     </div>
 </template>
+
 <style type="text/css">
 .st0 {
     fill: url(#Circle_2_);
@@ -406,65 +404,65 @@ const isDisabled = ref(true)
 const ticketsBooked = ref([])
 const isLoadingTickets = ref(false)
 const countries = ref([{
-    name: "Mexico",
-    dialCode: "52",
-    flag: "https://flagcdn.com/mx.svg"
-},
-{
-    name: "Chile",
-    dialCode: "56",
-    flag: "https://flagcdn.com/cl.svg"
-},
-{
-    name: "España",
-    dialCode: "34",
-    flag: "https://flagcdn.com/es.svg"
-},
-{
-    name: "Colombia",
-    dialCode: "57",
-    flag: "https://flagcdn.com/co.svg"
-},
-{
-    name: "Argentina",
-    dialCode: "54",
-    flag: "https://flagcdn.com/ar.svg"
-},
-{
-    name: "Bolivia",
-    dialCode: "591",
-    flag: "https://flagcdn.com/bo.svg"
-},
-{
-    name: "Brazil",
-    dialCode: "55",
-    flag: "https://flagcdn.com/br.svg"
-},
-{
-    name: "Ecuador",
-    dialCode: "593",
-    flag: "https://flagcdn.com/ec.svg"
-},
-{
-    name: "Paraguay",
-    dialCode: "595",
-    flag: "https://flagcdn.com/py.svg"
-},
-{
-    name: "Peru",
-    dialCode: "51",
-    flag: "https://flagcdn.com/pe.svg"
-},
-{
-    name: "Uruguay",
-    dialCode: "598",
-    flag: "https://flagcdn.com/uy.svg"
-},
-{
-    name: "Venezuela",
-    dialCode: "58",
-    flag: "https://flagcdn.com/ve.svg"
-}
+        name: "Mexico",
+        dialCode: "52",
+        flag: "https://flagcdn.com/mx.svg"
+    },
+    {
+        name: "Chile",
+        dialCode: "56",
+        flag: "https://flagcdn.com/cl.svg"
+    },
+    {
+        name: "España",
+        dialCode: "34",
+        flag: "https://flagcdn.com/es.svg"
+    },
+    {
+        name: "Colombia",
+        dialCode: "57",
+        flag: "https://flagcdn.com/co.svg"
+    },
+    {
+        name: "Argentina",
+        dialCode: "54",
+        flag: "https://flagcdn.com/ar.svg"
+    },
+    {
+        name: "Bolivia",
+        dialCode: "591",
+        flag: "https://flagcdn.com/bo.svg"
+    },
+    {
+        name: "Brazil",
+        dialCode: "55",
+        flag: "https://flagcdn.com/br.svg"
+    },
+    {
+        name: "Ecuador",
+        dialCode: "593",
+        flag: "https://flagcdn.com/ec.svg"
+    },
+    {
+        name: "Paraguay",
+        dialCode: "595",
+        flag: "https://flagcdn.com/py.svg"
+    },
+    {
+        name: "Peru",
+        dialCode: "51",
+        flag: "https://flagcdn.com/pe.svg"
+    },
+    {
+        name: "Uruguay",
+        dialCode: "598",
+        flag: "https://flagcdn.com/uy.svg"
+    },
+    {
+        name: "Venezuela",
+        dialCode: "58",
+        flag: "https://flagcdn.com/ve.svg"
+    }
 ]);
 
 async function hashSHA256(message) {
@@ -496,7 +494,7 @@ const chargeForm = () => {
 }
 
 watch(() => router.path, async () => {
-    
+
 
     if (router.path == '/tickets/Libre') {
         setTimeout(async () => {
@@ -662,7 +660,7 @@ const search = async () => {
 
     if (props.typeScreen == 'client') {
         filterJson = {
-            raffle: props.raffle?.id
+            raffle: props.raffle ? .id
         }
     }
     // filters.value.raffle = 1
@@ -770,7 +768,7 @@ const saveEntity = async () => {
 
         let response = "";
         ticket.value.raffle = await RaffleServices.listlast();
-        ticket.value.raffle = ticket.value.raffle?.id
+        ticket.value.raffle = ticket.value.raffle ? .id
         if (props.typeScreen == 'admin') {
             console.log('ticket.value.raffle ==> ', ticket.value.raffle);
 
@@ -821,8 +819,7 @@ const getPromotionsByRaffle = async () => {
     if (props.typeScreen == 'client') {
         ticket.value.raffle = props.raffle.id
         ticket.value.seller = 3 // Seleccionar el vendedor por defecto para clientes (Compra en Línea)
-    }
-    else {
+    } else {
         ticket.value.raffle = raffle.value.id
     }
 
@@ -833,7 +830,7 @@ const getPromotionsByRaffle = async () => {
 
 
     let montoWompi = 0
-    if (promotion.value[0]?.number_of_tickets <= ticket.value.number.length) {
+    if (promotion.value[0] ? .number_of_tickets <= ticket.value.number.length) {
         Swal.fire({
             title: '¡Felicitaciones!',
             text: `Genial se te aplicará la promoción ${promotion.value[0].name} con un valor de ${promotion.value[0].new_value} por boleta`,
@@ -871,38 +868,45 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
-    document.body.style.overflow = 'auto'; 
-     document.body.style.overflow = 'hidden';
-    
+    document.body.style.overflow = 'auto';
+    document.body.style.overflow = 'hidden';
+    window.scrollTo(0, 0); // Asegura que el scroll esté arriba
+    document.activeElement.blur(); // Evita interferencia del teclado
+
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
-    const script = document.createElement('script');
-    script.src = 'https://checkout.wompi.co/widget.js';
-    script.setAttribute('data-render', 'button');
-    script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
-    script.setAttribute('data-currency', moneda);
-    script.setAttribute('data-amount-in-cents', monto.value);
-    script.setAttribute('data-reference', referencia.value);
-    //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
-    script.setAttribute(
-        'data-signature:integrity',
-        cifrar.value
-    );
-    wompiForm.value.appendChild(script);
+
     setTimeout(() => {
-        const wompiButton = wompiForm.value.querySelector('button');
-        if (wompiButton) wompiButton.click();
-    }, 500);
+        const script = document.createElement('script');
+        script.src = 'https://checkout.wompi.co/widget.js';
+        script.setAttribute('data-render', 'button');
+        script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
+        script.setAttribute('data-currency', moneda);
+        script.setAttribute('data-amount-in-cents', monto.value);
+        script.setAttribute('data-reference', referencia.value);
+        script.setAttribute('data-reference', referencia.value);
+        //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
+        script.setAttribute(
+            'data-signature:integrity',
+            cifrar.value
+        );
+        wompiForm.value.appendChild(script);
+        setTimeout(() => {
+            const wompiButton = wompiForm.value.querySelector('button');
+            if (wompiButton) wompiButton.click();
+        }, 1000);
+    }, 100); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
+
     visible.value = false
-    window.addEventListener('message', function (event) {
+    window.addEventListener('message', function(event) {
         let boletasTexto = "*Números de Boleta:*\n";
         ticket.value.number.forEach((boleta) => {
             boletasTexto += `- ${boleta}\n`;
         });
 
         if (event.origin === 'https://checkout.wompi.co') {
-            window.addEventListener('beforeunload', function (e) {
+            window.addEventListener('beforeunload', function(e) {
                 const mensaje = 'Estás a punto de salir de la página. Si estás en proceso de pago, podrías perder la transacción.';
 
                 e.preventDefault();
@@ -910,11 +914,11 @@ const generateWompiPay = async (monto_ = "0") => {
                 return mensaje;
             });
             const data = event.data;
-            if (data.data?.transaction?.status == 'transaction_created' || data.data?.transaction?.status == 'PENDING') {
+            if (data.data ? .transaction ? .status == 'transaction_created' || data.data ? .transaction ? .status == 'PENDING') {
                 // alert('Transacción creada')
 
             }
-            if (data.data?.transaction?.status === 'transaction_approved' || data.data?.transaction?.status == 'APPROVED') {
+            if (data.data ? .transaction ? .status === 'transaction_approved' || data.data ? .transaction ? .status == 'APPROVED') {
                 let boletasTexto = "*Números de Boleta:*\n";
                 ticket.value.number.forEach((boleta) => {
                     boletasTexto += `- ${boleta}\n`;
@@ -944,7 +948,7 @@ const generateWompiPay = async (monto_ = "0") => {
         }
     });
     const headerElement = document.getElementById('header-raffle');
-    
+
     if (headerElement) {
         headerElement.scrollIntoView({ behavior: 'smooth' });
     }
@@ -1044,7 +1048,7 @@ const limpiarFormulario = () => {
         country_code: countries.value[3],
         phone: "",
         city: "",
-        cityname:""
+        cityname: ""
     }
 }
 
@@ -1095,8 +1099,8 @@ const listCustomers = async () => {
 
 }
 
-const getsellerbyticket = async () =>{
-   alert("entor");
+const getsellerbyticket = async () => {
+    alert("entor");
 }
 
 const filteredButtons = computed(() => {
@@ -1171,17 +1175,16 @@ const whereAmI = computed(() => {
 
 const validateForm = computed(() => {
     let agree = ticket.value.agree ? ticket.value.agree[0] || false : false;
-    if(props.typeScreen == 'admin') {
+    if (props.typeScreen == 'admin') {
         agree = true; // Sé asume que en la pantalla de administración siempre se acepta el acuerdo
     }
-    
+
     if (!ticket.value.number.length > 0 || !ticket.value.seller || !customer.value.document || !customer.value.name || !customer.value.phone || !customer.value.city || !agree) {
         return true
     } else {
         return false
     }
 });
-
 </script>
 
 <style scoped>
