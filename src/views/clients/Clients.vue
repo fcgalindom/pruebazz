@@ -1,5 +1,5 @@
 <template>
-    <div class="w-100 d-flex justify-content-center mt-2 mb-5">
+    <div class="w-100 d-flex justify-content-center mt-2 mb-5" id="header-raffle">
         <img class="main-logo-head" :src="raffle?.logo || defaultLogo" />
     </div>
     <div class="w-100 d-flex justify-content-center">

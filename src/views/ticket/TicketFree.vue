@@ -867,7 +867,14 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
-
+    const headerElement = document.getElementById('header-raffle');
+    console.log('headerElement ==> ', headerElement);
+    
+    if (headerElement) {
+        console.log('in');
+        
+        headerElement.scrollIntoView({ behavior: 'smooth' });
+    }
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
@@ -1153,7 +1160,10 @@ const whereAmI = computed(() => {
 });
 
 const validateForm = computed(() => {
-    const agree = ticket.value.agree ? ticket.value.agree[0] || false : false;
+    let agree = ticket.value.agree ? ticket.value.agree[0] || false : false;
+    if(props.typeScreen == 'admin') {
+        agree = true; // Sé asume que en la pantalla de administración siempre se acepta el acuerdo
+    }
     
     if (!ticket.value.number.length > 0 || !ticket.value.seller || !customer.value.document || !customer.value.name || !customer.value.phone || !customer.value.city || !agree) {
         return true
