@@ -4,14 +4,14 @@
             {{ whereAmI }}
         </div>
         <!-- <Dialog v-model:visible="visiblefindcustomer" modal header="Buscar Cliente" :style="{ width: '80rem' }">
-            
-            <CustomerFInd @customerData="getcutomerevent" />
-        </Dialog> -->
+                            
+                            <CustomerFInd @customerData="getcutomerevent" />
+                        </Dialog> -->
         <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
-        <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '40rem', height: '50rem' }"
+        <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '50rem' }"
             style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
             <div class="modal-body"
-                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px;">
+                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
                 <h1 class="mb-4 pt-4 text-center" style="font-weight: bold; font-size: 2em;">DATOS DE COMPRA</h1>
                 <div class="row">
                     <div class="col-12 mb-3">
@@ -34,6 +34,7 @@
                                         <img :src="slotProps.value.flag" style="width: 20px" />
                                     </div>
                                 </template>
+
                                 <template #option="slotProps">
                                     <div class="d-flex align-items-center">
                                         <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
@@ -319,6 +320,7 @@
 
     </div>
 </template>
+
 <style type="text/css">
 .st0 {
     fill: url(#Circle_2_);
@@ -500,7 +502,6 @@ const chargeForm = () => {
 }
 
 watch(() => router.path, async () => {
-    console.log('router.path ==> ', router.path);
 
     if (router.path == '/tickets/Libre') {
         console.log('here222');
@@ -828,8 +829,7 @@ const getPromotionsByRaffle = async () => {
     if (props.typeScreen == 'client') {
         ticket.value.raffle = props.raffle.id
         ticket.value.seller = 3 // Seleccionar el vendedor por defecto para clientes (Compra en Línea)
-    }
-    else {
+    } else {
         ticket.value.raffle = raffle.value.id
     }
 
@@ -882,24 +882,44 @@ const generateWompiPay = async (monto_ = "0") => {
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
-    const script = document.createElement('script');
-    script.src = 'https://checkout.wompi.co/widget.js';
-    script.setAttribute('data-render', 'button');
-    script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
-    script.setAttribute('data-currency', moneda);
-    script.setAttribute('data-amount-in-cents', monto.value);
-    script.setAttribute('data-reference', referencia.value);
-    //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
-    script.setAttribute(
-        'data-signature:integrity',
-        cifrar.value
-    );
-    wompiForm.value.appendChild(script);
+
     setTimeout(() => {
-        const wompiButton = wompiForm.value.querySelector('button');
-        if (wompiButton) wompiButton.click();
-    }, 500);
+        const script = document.createElement('script');
+        script.src = 'https://checkout.wompi.co/widget.js';
+        script.setAttribute('data-render', 'button');
+        script.setAttribute('data-public-key', 'pub_prod_KI6rFlfUF70XgHhKL1UcE4l5umZaE68v');
+        script.setAttribute('data-currency', moneda);
+        script.setAttribute('data-amount-in-cents', monto.value);
+        script.setAttribute('data-reference', referencia.value);
+        script.setAttribute('data-reference', referencia.value);
+        //script.setAttribute('data-reference', "c8d3fa5b7e99a21k");// de pruebas
+        script.setAttribute(
+            'data-signature:integrity',
+            cifrar.value
+        );
+        wompiForm.value.appendChild(script);
+        const waitForButton = setInterval(() => {
+            const wompiButton = wompiForm.value.querySelector('button');
+            if (wompiButton) {
+                clearInterval(waitForButton);
+                wompiButton.click();
+
+                // Restaurar scroll
+                setTimeout(() => {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.position = 'static';
+                }, 2000);
+            }
+        }, 200);
+    }, 200); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
+
     visible.value = false
+    // document.body.style.overflow = 'auto';
+    // document.body.style.overflow = 'hidden';
+    // document.body.style.position = 'fixed';
+    // document.body.style.width = '100%';
+    // window.scrollTo(0, 0); // Asegura que el scroll esté arriba
+    // document.activeElement.blur(); // Evita interferencia del teclado
     window.addEventListener('message', function (event) {
         let boletasTexto = "*Números de Boleta:*\n";
         ticket.value.number.forEach((boleta) => {
@@ -947,7 +967,17 @@ const generateWompiPay = async (monto_ = "0") => {
                 alert('Error en el pago')
             }
         }
+        // setTimeout(() => {
+        //     document.body.style.overflow = 'hidden';
+        //     document.body.style.position = 'fixed';
+        //     document.body.style.width = '100%';
+        // }, 2000);
     });
+    const headerElement = document.getElementById('header-raffle');
+
+    // if (headerElement) {
+    //     headerElement.scrollIntoView({ behavior: 'smooth' });
+    // }
 }
 
 const mesnajewa = () => {
@@ -1043,7 +1073,8 @@ const limpiarFormulario = () => {
         document: "",
         country_code: countries.value[3],
         phone: "",
-        city: ""
+        city: "",
+        cityname: ""
     }
 }
 
@@ -1232,7 +1263,6 @@ const validateForm = computed(() => {
         return false
     }
 });
-
 </script>
 
 <style scoped>
