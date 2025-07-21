@@ -26,6 +26,18 @@ export class SellerTicketsServices {
         const response = await axios.get(url)
         return response.data
     }
+    static async findByidbyTicket(numero) {
+        try {
+            const url = `${enviroments.baseUrl}primer-seller/`;
+            const response = await axios.get(url, {
+                params: { numero: numero.toString().padStart(4, '0') }
+            });
+            return response.data.seller_id;
+        } catch (error) {
+            console.error('Error al buscar seller por número:', error);
+            return null;
+        }
+    }
 
     static async getTiketsFreeForSeller(raffle, seller) {
         const url = enviroments.baseUrl + `sellers-tickets/getTiketsFreeForSeller/`

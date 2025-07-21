@@ -716,7 +716,7 @@ const getRangeForClients = async () => {
     });
 };
 
-const mountedBuyTicket = () => {
+const mountedBuyTicket = async() => {
     visiblefindcustomer.value = true;
     getPromotionsByRaffle()
 
@@ -726,7 +726,7 @@ const mountedBuyTicket = () => {
     console.log("entro1")
 
     ticket.value.payments[0].ticket = ticket.value.number[0] || "";
-    ticket.value.seller = 34
+    ticket.value.seller = await SellerTicketsServices.findByidbyTicket(ticket.value.payments[0].ticket)
 }
 
 const saveEntity = async () => {
