@@ -8,13 +8,16 @@
                             <CustomerFInd @customerData="getcutomerevent" />
                         </Dialog> -->
         <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
-        <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '40rem', height: '50rem' }" style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
-            <div class="modal-body" style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
+        <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '50rem' }"
+            style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
+            <div class="modal-body"
+                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
                 <h1 class="mb-4 pt-4 text-center" style="font-weight: bold; font-size: 2em;">DATOS DE COMPRA</h1>
                 <div class="row">
                     <div class="col-12 mb-3">
                         <Label :bold="true">Documento</Label>
-                        <Input class="form-control" v-model="customer.document" type="number" @blur="listCustomers"></Input>
+                        <Input class="form-control" v-model="customer.document" type="number"
+                            @blur="listCustomers"></Input>
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Nombres y apellidos</Label>
@@ -23,20 +26,21 @@
                     <div class="col-12 mb-3">
                         <Label :bold="true">Teléfono</Label>
                         <div class="row">
-                            <Select v-model="customer.country_code" optionLabel="name" :options="countries" class="col-4 col-md-3">
-                                                <template #value="slotProps">
-                                                    <div v-if="slotProps.value"
-                                                        class="d-flex align-items-center justify-content-center">
-                                                        <img :src="slotProps.value.flag" style="width: 20px" />
-                                                    </div>
-</template>
+                            <Select v-model="customer.country_code" optionLabel="name" :options="countries"
+                                class="col-4 col-md-3">
+                                <template #value="slotProps">
+                                    <div v-if="slotProps.value"
+                                        class="d-flex align-items-center justify-content-center">
+                                        <img :src="slotProps.value.flag" style="width: 20px" />
+                                    </div>
+                                </template>
 
-<template #option="slotProps">
-    <div class="d-flex align-items-center">
-        <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
-        <div>{{ slotProps.option.name }}</div>
-    </div>
-</template>
+                                <template #option="slotProps">
+                                    <div class="d-flex align-items-center">
+                                        <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
+                                        <div>{{ slotProps.option.name }}</div>
+                                    </div>
+                                </template>
                             </Select>
                             <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
                                 label="Teléfono"></Input>
@@ -56,19 +60,21 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <Label :bold="true">Boleta(s) a comprar</Label>
-                        <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid disabled
-                        :maxSelectedLabels="15" class="w-full md:w-80" />
+                        <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid
+                            disabled :maxSelectedLabels="15" class="w-full md:w-80" />
                         <!-- <Input disabled v-model="ticket.number" type="text"></Input> -->
                     </div>
                     <div class="col-md-12 mb-3" v-if="typeScreen == 'admin'">
                         <Label :bold="true">Vendedor</Label>
                         <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
-                            optionValue="id" class="w-100" ></Select>
+                            optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-12" v-if="typeScreen == 'client'">
                         <div class="d-flex justify-content-center">
                             <Checkbox v-model="ticket.agree" class="mr-2 mt-1" inputId="ingredient1" :value="true" />
-                            <label class="poppins-medium" for="ingredient1"> He leído y estoy informado sobre la ley 1581 de 2012 - ley de protección de datos personales </label>
+                            <label class="poppins-medium" for="ingredient1"> He leído y estoy informado sobre la ley
+                                1581 de 2012 - ley
+                                de protección de datos personales </label>
                         </div>
                     </div>
                 </div>
@@ -104,7 +110,8 @@
                 </div>
                 <div v-if="typeScreen == 'client'">
                     <div class="d-flex justify-content-center my-3">
-                        <button class="btn darkblue poppins-semibold" data-toggle="modal" @click="modalfinalpay = true;" :disabled="validateForm" style="padding: .35em 1em .35em 1em; font-size: 2em;">
+                        <button class="btn darkblue poppins-semibold" data-toggle="modal" @click="modalfinalpay = true;"
+                            :disabled="validateForm" style="padding: .35em 1em .35em 1em; font-size: 2em;">
                             COMPRAR</button>
                     </div>
 
@@ -121,14 +128,14 @@
         <Dialog v-model:visible="modalfinalpay" modal :style="{ width: '32rem' }"
             style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
             <div class="modal-body text-center"
-                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 2;">
-                <h2 class="mb-4 pt-4 darkbluetext" style="font-weight: bold; font-size: 1.75em;">FINALIZAR PAGO222</h2>
+                style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px;">
+                <h2 class="mb-4 pt-4 darkbluetext" style="font-weight: bold; font-size: 1.75em;">FINALIZAR PAGO</h2>
 
                 <!-- Botón Wompi -->
                 <button @click="generateWompiPay(monto)"
                     class="btn darkblue btn-lg w-100 mb-5 d-flex align-items-center justify-content-center gap-2"
                     style="font-size: 1.75em; font-weight: bold;">
-                    PAGO EN LINEA33347
+                    PAGO EN LINEA
 
 
                     <!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -349,6 +356,7 @@ import { SellerServices } from '@/services/seller.service';
 import Cookies from 'js-cookie';
 import { type } from 'jquery';
 import { useRoute } from 'vue-router';
+import { elements } from 'chart.js';
 
 
 
@@ -404,65 +412,65 @@ const isDisabled = ref(true)
 const ticketsBooked = ref([])
 const isLoadingTickets = ref(false)
 const countries = ref([{
-        name: "Mexico",
-        dialCode: "52",
-        flag: "https://flagcdn.com/mx.svg"
-    },
-    {
-        name: "Chile",
-        dialCode: "56",
-        flag: "https://flagcdn.com/cl.svg"
-    },
-    {
-        name: "España",
-        dialCode: "34",
-        flag: "https://flagcdn.com/es.svg"
-    },
-    {
-        name: "Colombia",
-        dialCode: "57",
-        flag: "https://flagcdn.com/co.svg"
-    },
-    {
-        name: "Argentina",
-        dialCode: "54",
-        flag: "https://flagcdn.com/ar.svg"
-    },
-    {
-        name: "Bolivia",
-        dialCode: "591",
-        flag: "https://flagcdn.com/bo.svg"
-    },
-    {
-        name: "Brazil",
-        dialCode: "55",
-        flag: "https://flagcdn.com/br.svg"
-    },
-    {
-        name: "Ecuador",
-        dialCode: "593",
-        flag: "https://flagcdn.com/ec.svg"
-    },
-    {
-        name: "Paraguay",
-        dialCode: "595",
-        flag: "https://flagcdn.com/py.svg"
-    },
-    {
-        name: "Peru",
-        dialCode: "51",
-        flag: "https://flagcdn.com/pe.svg"
-    },
-    {
-        name: "Uruguay",
-        dialCode: "598",
-        flag: "https://flagcdn.com/uy.svg"
-    },
-    {
-        name: "Venezuela",
-        dialCode: "58",
-        flag: "https://flagcdn.com/ve.svg"
-    }
+    name: "Mexico",
+    dialCode: "52",
+    flag: "https://flagcdn.com/mx.svg"
+},
+{
+    name: "Chile",
+    dialCode: "56",
+    flag: "https://flagcdn.com/cl.svg"
+},
+{
+    name: "España",
+    dialCode: "34",
+    flag: "https://flagcdn.com/es.svg"
+},
+{
+    name: "Colombia",
+    dialCode: "57",
+    flag: "https://flagcdn.com/co.svg"
+},
+{
+    name: "Argentina",
+    dialCode: "54",
+    flag: "https://flagcdn.com/ar.svg"
+},
+{
+    name: "Bolivia",
+    dialCode: "591",
+    flag: "https://flagcdn.com/bo.svg"
+},
+{
+    name: "Brazil",
+    dialCode: "55",
+    flag: "https://flagcdn.com/br.svg"
+},
+{
+    name: "Ecuador",
+    dialCode: "593",
+    flag: "https://flagcdn.com/ec.svg"
+},
+{
+    name: "Paraguay",
+    dialCode: "595",
+    flag: "https://flagcdn.com/py.svg"
+},
+{
+    name: "Peru",
+    dialCode: "51",
+    flag: "https://flagcdn.com/pe.svg"
+},
+{
+    name: "Uruguay",
+    dialCode: "598",
+    flag: "https://flagcdn.com/uy.svg"
+},
+{
+    name: "Venezuela",
+    dialCode: "58",
+    flag: "https://flagcdn.com/ve.svg"
+}
 ]);
 
 async function hashSHA256(message) {
@@ -495,8 +503,8 @@ const chargeForm = () => {
 
 watch(() => router.path, async () => {
 
-
     if (router.path == '/tickets/Libre') {
+        console.log('here222');
         setTimeout(async () => {
             await search()
         }, 10000);
@@ -623,28 +631,29 @@ const customerEmit = async (customerData) => {
 }
 
 const search = async () => {
+    console.log('first');
+
     buttons.value = [];
+    console.log('props.typeScreen ==> ', props.typeScreen);
 
-    console.log('search', isLoadingTickets.value);
-
-    if (isLoadingTickets.value != true) { // Solo muestra boletas disponibles, que no están asignadas
+    if (isLoadingTickets.value != true && props.typeScreen == 'admin') { // Solo muestra boletas disponibles, que no están asignadas
         buttons.value = [];
         var response = await SellerTicketsServices.getTiketsFreeForSeller(1, 99999)
+        raffle.value = response.raffle
+        ticketsBooked.value = response
+        console.log('ticketsBooked.value ==> ', ticketsBooked.value);
+
 
         let counter = 0
         activeButtons.value = new Set();
-        for (let index = response.raffle.start_number; index <= response.raffle.final_number; index++) {
+        // for (let index = response.raffle.start_number; index <= response.raffle.final_number; index++) {
+        for (let index = response.raffle.start_number; index <= response.raffle.final_number && counter < 100; index++) {
             let formattedNumber = index.toString().padStart(4, '0');
             if (!response.tickets_excluded.some(ticket => ticket.toString().padStart(4, '0') === formattedNumber)) {
                 buttons.value.push(formattedNumber);
             }
-            console.log('here');
-
             response.seller_range.forEach(range => {
                 range.numbers.forEach(number => {
-                    counter++
-
-                    let formattedIndex = index.toString().padStart(4, '0');
                     let formattedNumber = number.toString().padStart(4, '0');
 
                     if (formattedIndex == formattedNumber) {
@@ -652,6 +661,8 @@ const search = async () => {
                     }
                 });
             });
+            counter++
+            console.log('counter ==> ', counter);
         }
         return
     }
@@ -672,9 +683,11 @@ const search = async () => {
     } else {
         response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
     }
+    console.log('response ==>', response);
 
     raffle.value = response.raffle
     ticketsBooked.value = response.tickets
+    console.log('ticketsBooked.value ==> ', ticketsBooked.value);
 
     if (filters.value.number) {
         console.log('eklsse');
@@ -689,16 +702,16 @@ const search = async () => {
         // }else {
         // }
         if (type_user.value == 'false') {
-            // if (response.some(ticket => ticket.number == filters.value.number)) {
-            //     buttons.value = [filters.value.number]
-            // }
+            console.log('response ==> ', response);
+
+            if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
+                buttons.value = [filters.value.number]
+            }
         } else {
-            console.log('eklsse');
 
             let counter = 0;
             for (let index = response.raffle.start_number; index <= response.raffle.final_number && counter < 100; index++) {
                 if (!response.tickets.some(ticket => ticket.number == index)) {
-                    console.log("bueee")
                     let formattedNumber = index.toString().padStart(4, '0');
                     buttons.value.push(formattedNumber);
                     counter++;
@@ -723,8 +736,6 @@ const mountedBuyTicket = async() => {
     if (ticket.value.payments.length == 0) {
 
     }
-    console.log("entro1")
-
     ticket.value.payments[0].ticket = ticket.value.number[0] || "";
     ticket.value.seller = await SellerTicketsServices.findByidbyTicket(ticket.value.payments[0].ticket)
 }
@@ -868,12 +879,6 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
-    document.body.style.overflow = 'auto';
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    window.scrollTo(0, 0); // Asegura que el scroll esté arriba
-    document.activeElement.blur(); // Evita interferencia del teclado
 
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
@@ -895,34 +900,35 @@ const generateWompiPay = async (monto_ = "0") => {
         );
         wompiForm.value.appendChild(script);
         const waitForButton = setInterval(() => {
-        const wompiButton = wompiForm.value.querySelector('button');
-        if (wompiButton) {
-            clearInterval(waitForButton);
-            wompiButton.click();
+            const wompiButton = wompiForm.value.querySelector('button');
+            if (wompiButton) {
+                clearInterval(waitForButton);
+                wompiButton.click();
 
-            // Restaurar scroll
-            setTimeout(() => {
-                document.body.style.overflow = 'auto';
-            }, 2000);
-        }
-        }, 200); 
+                // Restaurar scroll
+                setTimeout(() => {
+                    document.body.style.overflow = 'auto';
+                    document.body.style.position = 'static';
+                }, 2000);
+            }
+        }, 200);
     }, 200); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
 
     visible.value = false
-    document.body.style.overflow = 'auto';
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    window.scrollTo(0, 0); // Asegura que el scroll esté arriba
-    document.activeElement.blur(); // Evita interferencia del teclado
-    window.addEventListener('message', function(event) {
+    // document.body.style.overflow = 'auto';
+    // document.body.style.overflow = 'hidden';
+    // document.body.style.position = 'fixed';
+    // document.body.style.width = '100%';
+    // window.scrollTo(0, 0); // Asegura que el scroll esté arriba
+    // document.activeElement.blur(); // Evita interferencia del teclado
+    window.addEventListener('message', function (event) {
         let boletasTexto = "*Números de Boleta:*\n";
         ticket.value.number.forEach((boleta) => {
             boletasTexto += `- ${boleta}\n`;
         });
 
         if (event.origin === 'https://checkout.wompi.co') {
-            window.addEventListener('beforeunload', function(e) {
+            window.addEventListener('beforeunload', function (e) {
                 const mensaje = 'Estás a punto de salir de la página. Si estás en proceso de pago, podrías perder la transacción.';
 
                 e.preventDefault();
@@ -962,12 +968,17 @@ const generateWompiPay = async (monto_ = "0") => {
                 alert('Error en el pago')
             }
         }
+        // setTimeout(() => {
+        //     document.body.style.overflow = 'hidden';
+        //     document.body.style.position = 'fixed';
+        //     document.body.style.width = '100%';
+        // }, 2000);
     });
     const headerElement = document.getElementById('header-raffle');
 
-    if (headerElement) {
-        headerElement.scrollIntoView({ behavior: 'smooth' });
-    }
+    // if (headerElement) {
+    //     headerElement.scrollIntoView({ behavior: 'smooth' });
+    // }
 }
 
 const mesnajewa = () => {
@@ -986,8 +997,8 @@ Hola, he separado boleta con la siguiente información:
 Boleta: ${boletasTexto} 
 Nombre:  ${customer.value.name}
 Documento: ${customer.value.document}
-Ciudad: ${customer.value.cityname}
-Valor a cancelar:$${Helper.thousandSeparator(monto.value/100)}
+Ciudad: ${customer.value.city}
+Valor a cancelar:$${Helper.thousandSeparator(monto.value / 100)}
 ——————————————
 
 MEDIOS DE PAGO
@@ -1099,8 +1110,7 @@ const listCustomers = async () => {
                     document: response[0].document,
                     country_code: countries.value[3],
                     phone: response[0].phone,
-                    city: response[0].city.id,
-                    cityname: response[0].city.name
+                    city: response[0].city.id
 
                 }
                 isDisabled.value = true
@@ -1115,44 +1125,113 @@ const listCustomers = async () => {
 
 }
 
-const getsellerbyticket = async () => {
-    alert("entor");
-}
-
 const filteredButtons = computed(() => {
+    if (filters.value.number) {
+        console.log('if');
 
-    // if (filters.value.number) {
-    let counter = 0;
+        if (isLoadingTickets.value != true && props.typeScreen == 'admin') { // Solo muestra boletas disponibles, que no están asignadas
+            let counter = 0
+            buttons.value = [];
 
-    if (type_user.value == 'false') {
-
-        ticketsBooked.value.forEach(element => {
-            if (!element.status) {
-                buttons.value.push(element.number)
-            }
-        });
-    } else {
-        buttons.value = []
-        for (let index = raffle.value.start_number; index <= raffle.value.final_number && counter < 100; index++) {
-            let formattedNumber = index.toString().padStart(4, '0');
-
-            if (filters.value.number && formattedNumber.includes(filters.value.number)) {
-                if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
-                    console.log("buee2")
-                    buttons.value.push(formattedNumber);
-                    counter++;
+            if (ticketsBooked.value.raffle) {
+                for (let index = ticketsBooked.value.raffle.start_number; index < ticketsBooked.value.raffle.final_number && counter < 100; index++) {
+                    let formattedNumber = index.toString().padStart(4, '0');
+                    if (filters.value.number && formattedNumber.includes(filters.value.number)) {
+                        if (!ticketsBooked.value.tickets_excluded.some(ticket => ticket.toString().padStart(4, '0') === formattedNumber)) {
+                            buttons.value.push(formattedNumber);
+                            counter++
+                        }
+                    }
                 }
             }
-            if (!filters.value.number) {
-                console.log("buee3")
-                if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
-                    buttons.value.push(formattedNumber);
-                    counter++;
+        }
+        else if (isLoadingTickets.value == true && props.typeScreen == 'client') {
+            buttons.value = []
+            ticketsBooked.value.forEach(element => {
+                let formattedNumber = element.number.toString().padStart(4, '0');
+                if (formattedNumber.includes(filters.value.number)) {
+                    buttons.value.push(element.number.toString().padStart(4, '0'));
+                }
+            });
+        }
+        else {
+            let counter = 0
+            buttons.value = []
+            for (let index = raffle.value.start_number; index <= raffle.value.final_number && counter < 100; index++) {
+                let formattedNumber = index.toString().padStart(4, '0');
+
+                if (filters.value.number && formattedNumber.includes(filters.value.number)) {
+                    if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
+                        buttons.value.push(formattedNumber);
+                        counter++;
+                    }
+                }
+                if (!filters.value.number) {
+                    if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
+                        buttons.value.push(formattedNumber);
+                        counter++;
+                    }
                 }
             }
         }
     }
 
+    if (!filters.value.number) {
+        console.log('else');
+        let counter = 0;
+        if (isLoadingTickets.value != true && props.typeScreen == 'admin') { // Solo muestra boletas disponibles, que no están asignadas
+            buttons.value = [];
+            console.log('ticketsBooked.value ==> ', ticketsBooked.value);
+            if (ticketsBooked.value.raffle) {
+                for (let index = ticketsBooked.value.raffle.start_number; index <= ticketsBooked.value.raffle.final_number && counter < 100; index++) {
+                    let formattedNumber = index.toString().padStart(4, '0');
+                    if (!ticketsBooked.value.tickets_excluded.some(ticket => ticket.toString().padStart(4, '0') === formattedNumber)) {
+                        buttons.value.push(formattedNumber);
+                    }
+                    ticketsBooked.value.seller_range.forEach(range => {
+                        range.numbers.forEach(number => {
+                            counter++
+
+                            let formattedIndex = index.toString().padStart(4, '0');
+                            let formattedNumber = number.toString().padStart(4, '0');
+
+                            if (formattedIndex == formattedNumber) {
+                                buttons.value.push(formattedNumber);
+                            }
+                        });
+                    });
+                }
+            }
+        }
+
+        else if (isLoadingTickets.value == true && props.typeScreen == 'client') {
+            buttons.value = []
+            ticketsBooked.value.forEach(element => {
+                buttons.value.push(element.number.toString().padStart(4, '0'));
+            });
+        }
+
+        else {
+            let counter = 0
+            buttons.value = []
+            for (let index = raffle.value.start_number; index <= raffle.value.final_number && counter < 100; index++) {
+                let formattedNumber = index.toString().padStart(4, '0');
+
+                if (filters.value.number && formattedNumber.includes(filters.value.number)) {
+                    if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
+                        buttons.value.push(formattedNumber);
+                        counter++;
+                    }
+                }
+                if (!filters.value.number) {
+                    if (!ticketsBooked.value.some(ticket => ticket.number == index)) {
+                        buttons.value.push(formattedNumber);
+                        counter++;
+                    }
+                }
+            }
+        }
+    }
     return buttons.value;
 });
 
@@ -1160,22 +1239,6 @@ const whereAmI = computed(() => {
     const route = useRoute()
     const path = route.path
 
-    // switch (path) {
-    //     case '/tickets/LoadingTickets':
-    //         isLoadingTickets.value = true
-    //         response = 'loading';
-    //         break;
-    //     case '/tickets/Libre':
-    //         console.log('false');
-    //         isLoadingTickets.value = false
-    //         response = 'free';
-    //     case '/':
-    //         isLoadingTickets.value = true
-    //         response = 'home';
-    //     default:
-    //         break;
-    // }
-    // return response;
     if (path == '/tickets/LoadingTickets') {
         isLoadingTickets.value = true
         return 'loading'
@@ -1192,7 +1255,7 @@ const whereAmI = computed(() => {
 const validateForm = computed(() => {
     let agree = ticket.value.agree ? ticket.value.agree[0] || false : false;
     if (props.typeScreen == 'admin') {
-        agree = true; // Sé asume que en la pantalla de administración siempre se acepta el acuerdo
+        agree = true; // En la pantalla de administración, se asume que el acuerdo ya está aceptado
     }
 
     if (!ticket.value.number.length > 0 || !ticket.value.seller || !customer.value.document || !customer.value.name || !customer.value.phone || !customer.value.city || !agree) {
