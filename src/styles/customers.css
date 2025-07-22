@@ -395,6 +395,11 @@
     .main-logo-head {
         max-width: 80%;
     }
+
+    .blinking-button {
+        min-width: auto;
+        width: 80%;
+    }
     
 }
 

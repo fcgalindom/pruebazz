@@ -17,8 +17,10 @@
                 </div> -->
         </div>
     </div>
-    <div class="d-flex justify-content-center my-5 ">
-        <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Compra tus números</button>
+    <div class="">
+        <div class="d-flex justify-content-center my-5">
+            <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Compra tus números</button>
+        </div>
     </div>
     <!-- <div>
             <img src="@/assets/customers/background_raffle.jpeg" alt="" style="width: 100%; height: 30em;">

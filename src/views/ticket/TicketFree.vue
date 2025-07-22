@@ -25,25 +25,25 @@
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Teléfono</Label>
-                        <div class="row">
-                            <Select v-model="customer.country_code" optionLabel="name" :options="countries"
-                                class="col-4 col-md-3">
-                                <template #value="slotProps">
-                                    <div v-if="slotProps.value"
-                                        class="d-flex align-items-center justify-content-center">
-                                        <img :src="slotProps.value.flag" style="width: 20px" />
-                                    </div>
-                                </template>
-
-                                <template #option="slotProps">
-                                    <div class="d-flex align-items-center">
-                                        <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
-                                        <div>{{ slotProps.option.name }}</div>
-                                    </div>
-                                </template>
-                            </Select>
-                            <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
-                                label="Teléfono"></Input>
+                        <div class="row" style="padding: 0 15px;">
+                                <Select v-model="customer.country_code" optionLabel="name" :options="countries"
+                                    class="col-4 col-md-3">
+                                    <template #value="slotProps">
+                                        <div v-if="slotProps.value"
+                                            class="d-flex align-items-center justify-content-center">
+                                            <img :src="slotProps.value.flag" style="width: 20px" />
+                                        </div>
+                                    </template>
+    
+                                    <template #option="slotProps">
+                                        <div class="d-flex align-items-center">
+                                            <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
+                                            <div>{{ slotProps.option.name }}</div>
+                                        </div>
+                                    </template>
+                                </Select>
+                                <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
+                                    label="Teléfono"></Input>
                         </div>
                     </div>
                     <div class="col-12 mb-3">
@@ -504,7 +504,6 @@ const chargeForm = () => {
 watch(() => router.path, async () => {
 
     if (router.path == '/tickets/Libre') {
-        console.log('here222');
         setTimeout(async () => {
             await search()
         }, 10000);
@@ -631,18 +630,13 @@ const customerEmit = async (customerData) => {
 }
 
 const search = async () => {
-    console.log('first');
-
     buttons.value = [];
-    console.log('props.typeScreen ==> ', props.typeScreen);
 
     if (isLoadingTickets.value != true && props.typeScreen == 'admin') { // Solo muestra boletas disponibles, que no están asignadas
         buttons.value = [];
         var response = await SellerTicketsServices.getTiketsFreeForSeller(1, 99999)
         raffle.value = response.raffle
         ticketsBooked.value = response
-        console.log('ticketsBooked.value ==> ', ticketsBooked.value);
-
 
         let counter = 0
         activeButtons.value = new Set();
@@ -662,7 +656,6 @@ const search = async () => {
                 });
             });
             counter++
-            console.log('counter ==> ', counter);
         }
         return
     }
@@ -683,14 +676,11 @@ const search = async () => {
     } else {
         response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
     }
-    console.log('response ==>', response);
 
     raffle.value = response.raffle
     ticketsBooked.value = response.tickets
-    console.log('ticketsBooked.value ==> ', ticketsBooked.value);
 
     if (filters.value.number) {
-        console.log('eklsse');
         if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
             buttons.value = [filters.value.number]
         } else {
@@ -702,8 +692,6 @@ const search = async () => {
         // }else {
         // }
         if (type_user.value == 'false') {
-            console.log('response ==> ', response);
-
             if (response.tickets.some(ticket => ticket.number == filters.value.number)) {
                 buttons.value = [filters.value.number]
             }
@@ -757,7 +745,8 @@ const saveEntity = async () => {
                 ticket: element,
                 payment_method: "TRANSFERENCIA",
                 amount: ticket.value.value_to_pay,
-                expiration_date: "2024-12-31"
+                expiration_date: "2024-12-31",
+                reference: referencia.value
             })
             value += parseInt(element.value)
         });
@@ -775,16 +764,13 @@ const saveEntity = async () => {
         await TicketServices.updateCustomer(ticket.value, ticket.value.id)
         message = 'Datos guardados con Éxito.'
     } else {
-        console.log('props.typeScreen', props.typeScreen);
-
         let response = "";
         ticket.value.raffle = await RaffleServices.listlast();
         ticket.value.raffle = ticket.value.raffle?.id
         if (props.typeScreen == 'admin') {
-            console.log('ticket.value.raffle ==> ', ticket.value.raffle);
-
             response = await TicketServices.createticket(ticket.value, ticket.value.raffle)
         } else {
+            ticket.value.value = ticket.value.value_to_pay * ticket.value.number.length
             response = await TicketServices.createticketClient(ticket.value)
         }
         if (response.duplicated.length > 0)
@@ -863,7 +849,6 @@ const getPromotionsByRaffle = async () => {
         } else {
 
             const raffle = await RaffleServices.listlast()
-            console.log('raffle ==> ', raffle);
 
             ticket.value.value_to_pay = raffle.value_ticket
             ticket.value.promotion_id = null
@@ -879,7 +864,6 @@ const telefono = "573156113402"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
-
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
@@ -1127,7 +1111,6 @@ const listCustomers = async () => {
 
 const filteredButtons = computed(() => {
     if (filters.value.number) {
-        console.log('if');
 
         if (isLoadingTickets.value != true && props.typeScreen == 'admin') { // Solo muestra boletas disponibles, que no están asignadas
             let counter = 0
@@ -1147,6 +1130,7 @@ const filteredButtons = computed(() => {
         }
         else if (isLoadingTickets.value == true && props.typeScreen == 'client') {
             buttons.value = []
+            ticketsBooked.value.filter(element => !element.created_at)
             ticketsBooked.value.forEach(element => {
                 let formattedNumber = element.number.toString().padStart(4, '0');
                 if (formattedNumber.includes(filters.value.number)) {
@@ -1177,11 +1161,9 @@ const filteredButtons = computed(() => {
     }
 
     if (!filters.value.number) {
-        console.log('else');
         let counter = 0;
         if (isLoadingTickets.value != true && props.typeScreen == 'admin') { // Solo muestra boletas disponibles, que no están asignadas
             buttons.value = [];
-            console.log('ticketsBooked.value ==> ', ticketsBooked.value);
             if (ticketsBooked.value.raffle) {
                 for (let index = ticketsBooked.value.raffle.start_number; index <= ticketsBooked.value.raffle.final_number && counter < 100; index++) {
                     let formattedNumber = index.toString().padStart(4, '0');
@@ -1206,6 +1188,8 @@ const filteredButtons = computed(() => {
 
         else if (isLoadingTickets.value == true && props.typeScreen == 'client') {
             buttons.value = []
+            ticketsBooked.value = ticketsBooked.value.filter(element => !element.created_at)
+            
             ticketsBooked.value.forEach(element => {
                 buttons.value.push(element.number.toString().padStart(4, '0'));
             });
