@@ -728,7 +728,7 @@ const mountedBuyTicket = async() => {
     ticket.value.seller = await SellerTicketsServices.findByidbyTicket(ticket.value.payments[0].ticket)
 }
 
-const saveEntity = async () => {
+const saveEntity = async (is_whatsapp = false) => {
 
     let value = 0
 
@@ -770,7 +770,11 @@ const saveEntity = async () => {
         if (props.typeScreen == 'admin') {
             response = await TicketServices.createticket(ticket.value, ticket.value.raffle)
         } else {
-            ticket.value.value = ticket.value.value_to_pay * ticket.value.number.length
+            if(is_whatsapp == false) ticket.value.value = ticket.value.value_to_pay * ticket.value.number.length
+            else {
+                ticket.value.value = 0
+                ticket.value.payments = []
+            }
             response = await TicketServices.createticketClient(ticket.value)
         }
         if (response.duplicated.length > 0)
@@ -967,7 +971,7 @@ const generateWompiPay = async (monto_ = "0") => {
 
 const mesnajewa = () => {
 
-    saveEntity()
+    saveEntity(true)
     let boletasTexto = "N°";
     ticket.value.number.forEach((boleta) => {
         boletasTexto += ` ${boleta}`;
