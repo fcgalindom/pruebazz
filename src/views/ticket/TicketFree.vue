@@ -26,24 +26,24 @@
                     <div class="col-12 mb-3">
                         <Label :bold="true">Teléfono</Label>
                         <div class="row" style="padding: 0 15px;">
-                                <Select v-model="customer.country_code" optionLabel="name" :options="countries"
-                                    class="col-4 col-md-3">
-                                    <template #value="slotProps">
-                                        <div v-if="slotProps.value"
-                                            class="d-flex align-items-center justify-content-center">
-                                            <img :src="slotProps.value.flag" style="width: 20px" />
-                                        </div>
-                                    </template>
-    
-                                    <template #option="slotProps">
-                                        <div class="d-flex align-items-center">
-                                            <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
-                                            <div>{{ slotProps.option.name }}</div>
-                                        </div>
-                                    </template>
-                                </Select>
-                                <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
-                                    label="Teléfono"></Input>
+                            <Select v-model="customer.country_code" optionLabel="name" :options="countries"
+                                class="col-4 col-md-3">
+                                <template #value="slotProps">
+                                    <div v-if="slotProps.value"
+                                        class="d-flex align-items-center justify-content-center">
+                                        <img :src="slotProps.value.flag" style="width: 20px" />
+                                    </div>
+                                </template>
+
+                                <template #option="slotProps">
+                                    <div class="d-flex align-items-center">
+                                        <img :src="slotProps.option.flag" class="mr-2" style="width: 20px" />
+                                        <div>{{ slotProps.option.name }}</div>
+                                    </div>
+                                </template>
+                            </Select>
+                            <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
+                                label="Teléfono"></Input>
                         </div>
                     </div>
                     <div class="col-12 mb-3">
@@ -244,7 +244,7 @@
                     <button class="blinking-button-2 mt-3" @click="generateRandomNumbers">Generar</button>
                 </div>
             </div>
-            <div class="d-flex justify-content-center w-100 mt-5">
+            <div class="d-flex justify-content-center w-100 mt-3">
                 <div class="w-70 text-center">
                     <label class="poppins-semibold fs-random-number" for="">BUSQUE SU NÚMERO</label>
                     <div class="input-group mb-3">
@@ -254,7 +254,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-center w-100 mt-5">
+            <div class="d-flex justify-content-center w-100">
                 <div class="w-70 text-center">
                     <label class="poppins-semibold fs-random-number" for="">&nbsp;</label>
                     <MultiSelect v-model="ticket.number" display="chip" :options="ticket.number" filter fluid
@@ -506,11 +506,11 @@ watch(() => router.path, async () => {
     if (router.path == '/tickets/Libre') {
         setTimeout(async () => {
             await search()
-        }, 10000);
+        }, 500);
     } else {
         setTimeout(async () => {
             await search()
-        }, 500);
+        }, 1000);
     }
 
 })
@@ -717,7 +717,7 @@ const getRangeForClients = async () => {
     });
 };
 
-const mountedBuyTicket = async() => {
+const mountedBuyTicket = async () => {
     visiblefindcustomer.value = true;
     getPromotionsByRaffle()
 
@@ -770,7 +770,7 @@ const saveEntity = async (is_whatsapp = false) => {
         if (props.typeScreen == 'admin') {
             response = await TicketServices.createticket(ticket.value, ticket.value.raffle)
         } else {
-            if(is_whatsapp == false) ticket.value.value = ticket.value.value_to_pay * ticket.value.number.length
+            if (is_whatsapp == false) ticket.value.value = ticket.value.value_to_pay * ticket.value.number.length
             else {
                 ticket.value.value = 0
                 ticket.value.payments = []
@@ -1193,7 +1193,7 @@ const filteredButtons = computed(() => {
         else if (isLoadingTickets.value == true && props.typeScreen == 'client') {
             buttons.value = []
             ticketsBooked.value = ticketsBooked.value.filter(element => !element.created_at)
-            
+
             ticketsBooked.value.forEach(element => {
                 buttons.value.push(element.number.toString().padStart(4, '0'));
             });

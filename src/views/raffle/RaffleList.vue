@@ -94,7 +94,7 @@
                             </div>
                             <div class="col-12">
                                 <Label>Archivo</Label>
-                                <Button @click="openWidget(i)">subir archivos</Button>
+                                <Button @click="openWidget(index)">subir archivos</Button>
                             </div>
                             <hr>
                         </div>
@@ -193,15 +193,19 @@ const saveEntity = async () => {
 }
 
 
-const openWidget = (i) => {
+const openWidget = (index) => {
     const myWidget = window.cloudinary.createUploadWidget({
             cloudName: 'dsxpe54pz',
             uploadPreset: 'demos1',
         },
 
         (error, result) => {
+            console.log('result.info.url ==> ', result.info.url);
+            console.log('raffle.awards ==> ', raffle.value.awards);
+            
             if (!error && result && result.event === "success") {
-                i.image = result.info.url;
+                raffle.value.awards[index].image = result.info.url;
+                // i.image = result.info.url;
             }
         }
     );

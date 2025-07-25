@@ -6,7 +6,7 @@
         <div class="container-main-head">
             <!-- <div class="mb-4 text-center">
             </div> -->
-            <div class="d-flex justify-content-center mb-5">
+            <div class="d-flex justify-content-center mb-4">
                 <div class="container-description" style="border-radius: 30px;">
                     <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;"> {{
                         raffle?.description ? raffle?.description : 'Sin premio' }} </span>
@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="">
-        <div class="d-flex justify-content-center my-5">
+        <div class="d-flex justify-content-center mb-4">
             <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Compra tus números</button>
         </div>
     </div>
@@ -161,16 +161,25 @@ const formatNumber = (value) => {
 
 const listRaffles = async () => {
     raffle.value = await RaffleServices.listlast();
-    
-    raffle.value.images_awards.forEach(element => {
-        awards.value.push({ image: element.image, name: element.award })
-        awards.value.push({ image: element.image, name: element.award })
-        awards.value.push({ image: element.image, name: element.award })
-        awards.value.push({ image: element.image, name: element.award })
-        awards.value.push({ image: element.image, name: element.award })
-        awards.value.push({ image: element.image, name: element.award })
-        awards.value.push({ image: element.image, name: element.award })
-    });
+    console.log('raffle.value ==> ', raffle.value);
+    if(raffle.value.images_awards.length == 1) {
+        raffle.value.images_awards.forEach(element => {
+                awards.value.push({ image: element.image, name: element.award })
+                awards.value.push({ image: element.image, name: element.award })
+                awards.value.push({ image: element.image, name: element.award })
+            });
+    }
+    if(raffle.value.images_awards.length == 2) {
+        raffle.value.images_awards.forEach(element => {
+                awards.value.push({ image: element.image, name: element.award })
+                awards.value.push({ image: element.image, name: element.award })
+            });
+    }
+    if(raffle.value.images_awards.length > 2) {
+        raffle.value.images_awards.forEach(element => {
+                awards.value.push({ image: element.image, name: element.award })
+            });
+    }
 };
 
 const scrollToBuyNumbers = () => {
