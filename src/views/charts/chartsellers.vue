@@ -92,9 +92,6 @@ const showData = async () => {
     totalBoletos.value = tickets.value.data.reduce((sum, item) => sum + item.cantidad_boletos, 0);
     totalRecaudado.value = tickets.value.data.reduce((sum, item) => sum + item.total_recaudado, 0);
     for (const ticket of tickets.value.data) {
-        if(ticket.user_id == null){
-            ticket.user_id = 2000
-        }
         
         const sellerData = await SellerServices.showseller(ticket.user_id)
         if(ticket.user_id == 1){
