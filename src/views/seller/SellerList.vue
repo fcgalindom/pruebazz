@@ -66,7 +66,7 @@
                                     label="Teléfono"></Input>
                             </div>
                         </div>
-                        <div>
+                        <div v-if="perrmisionadmin">
                             <Label>SERÁ (usuario)</Label>
                             <Checkbox 
                               v-model="seller.user.is_superuser" 
@@ -144,8 +144,10 @@
   import Swal from 'sweetalert2'
   import Helper from '@/helpers/Helper';
   import { countries } from "@/data/data";
+  import Cookies from 'js-cookie';
 
   const checked = ref(true);
+  const perrmisionadmin = ref(false);
   
   const sellers = ref([])
   const modal = ref('seller_list')
@@ -169,6 +171,11 @@
   
   onMounted(async () => {
       await datatable()
+      if(Cookies.get('name') == "drdentix1") {
+        perrmisionadmin.value = true
+      } else {
+        perrmisionadmin.value = false
+      }
   })
 
   const datatable = async () => {
