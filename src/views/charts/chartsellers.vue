@@ -93,9 +93,12 @@ const showData = async () => {
     totalRecaudado.value = tickets.value.data.reduce((sum, item) => sum + item.total_recaudado, 0);
     for (const ticket of tickets.value.data) {
         
-        const sellerData = await SellerServices.showseller(ticket.user_id)
+        const sellerData = await SellerServices.showseller(ticket.user_id ?? 1) ;
         if(ticket.user_id == 1){
             sellerData.name = "rifas y sorteos"
+        }
+        if(ticket.user_id == null){
+           sellerData.name = "otro"
         }
         console.log("see",sellerData.name)
         ticket.seller_name = sellerData?.name ?? 'Desconocido'
