@@ -98,7 +98,7 @@ const showData = async () => {
             sellerData.name = "rifas y sorteos"
         }
         if(ticket.user_id == null){
-           sellerData.name = "otro"
+           sellerData.name = "COMPRA EN LINEA"
         }
         console.log("see",sellerData.name)
         ticket.seller_name = sellerData?.name ?? 'Desconocido'
