@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="reciboCanvas"  style="display: none;" ></canvas>
+    <canvas ref="reciboCanvas" style="display: none;" ></canvas>
     <div class="container">
        <div class="row">
              <div class="col-2">
@@ -113,7 +113,7 @@
         //Numero de boleta
         ctx.fillStyle = "red";
         ctx.font = "55px Arial";
-        ctx.fillText( "Nº "+ticketData.value.number, 392,currentY);
+        ctx.fillText( "Nº "+ticketData.value.number, 405,currentY+130);
          //Numero de boleta
         ctx.fillStyle = "red";
         ctx.font = "normal 55px Arial";

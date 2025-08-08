@@ -31,7 +31,10 @@
                             <!-- <Label>Valor de boleta</Label>
                               <input class="form-control ileven-input font-light" v-model="raffle.value_ticket" label="Valor de boleta" @keyup="raffle.value_ticket = Helper.thousandSeparator(raffle.value_ticket)"></input> -->
                             <Label class="font-bold block mb-2"> Valor de boleta </Label>
-                            <InputNumber mode="currency" currency="USD" locale="en-US" v-model="raffle.value_ticket"  fluid />
+                            <InputGroup>
+                                <InputGroupAddon>$</InputGroupAddon>
+                                <InputNumber v-model="raffle.value_ticket"  fluid />
+                            </InputGroup>
                         </div>
                         <div class="col-md-6 mb-3">
                             <Label>Descripción</Label>
@@ -91,7 +94,7 @@
                             </div>
                             <div class="col-12">
                                 <Label>Archivo</Label>
-                                <Button @click="openWidget(i)">subir archivos</Button>
+                                <Button @click="openWidget(index)">subir archivos</Button>
                             </div>
                             <hr>
                         </div>
@@ -190,15 +193,19 @@ const saveEntity = async () => {
 }
 
 
-const openWidget = (i) => {
+const openWidget = (index) => {
     const myWidget = window.cloudinary.createUploadWidget({
             cloudName: 'dsxpe54pz',
             uploadPreset: 'demos1',
         },
 
         (error, result) => {
+            console.log('result.info.url ==> ', result.info.url);
+            console.log('raffle.awards ==> ', raffle.value.awards);
+            
             if (!error && result && result.event === "success") {
-                i.image = result.info.url;
+                raffle.value.awards[index].image = result.info.url;
+                // i.image = result.info.url;
             }
         }
     );

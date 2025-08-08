@@ -9,7 +9,7 @@
             <Button @click="logout" style="cursor: pointer;">Logout</Button>
             <button v-ripple
                 class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-                <Avatar image="/src/assets/customers/dr_denix_logo.png" class="mr-2" shape="circle" />
+                <Avatar image="/src/assets/customers/logo_casa_sorteos.png" class="mr-2" shape="circle" />
                 <span class="inline-flex flex-col items-start">
                     <span class="font-bold">{{ Cookies.get('name') }}</span>
                 </span>
@@ -130,8 +130,8 @@ const addAdminMenu = () => {
         icon: 'fas fa-chart-bar',
         items: [
             { label: 'Reporte de ventas', link: '/reports/sales', icon: 'far fa-circle nav-icon' },
-            { label: 'Reporte de boletas', link: '/reports/tickets', icon: 'far fa-circle nav-icon' },
-            { label: 'Reporte de vendedores', link: '/reports/sellers', icon: 'far fa-circle nav-icon' }
+            { label: 'Reporte de usuarios', link: '/reports/users', icon: 'far fa-circle nav-icon' },
+            // { label: 'Reporte de vendedores', link: '/reports/sellers', icon: 'far fa-circle nav-icon' }
         ]
     })
 
@@ -153,7 +153,7 @@ const addSuperSellerMenu = () => {
             { label: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
             { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' },
             { label: 'Boletas en linea', link: '/tickets/Enlinea', icon: 'far fa-circle nav-icon' },
-            { label: 'Cargue de Boletas', link: '/tickets/Libre', icon: 'far fa-circle nav-icon' }
+            { label: 'Cargue de Boletas', link: '/tickets/LoadingTickets', icon: 'far fa-circle nav-icon' }
         ]
     })
     items.value.push({
@@ -236,6 +236,7 @@ const listCustomers = async () => {
 const logout = () => {
     Cookies.remove('token');
     Cookies.remove('is_admin');
+    Cookies.remove('seller_id');
     Cookies.remove('name');
     Cookies.remove('type_user');
     window.location.href = '/admin';

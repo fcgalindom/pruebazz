@@ -92,3 +92,34 @@ hr {
     max-width: 300px;
     max-height: 300px;
 }
+
+.p-inputgroupaddon {
+    padding: 0 !important;
+}
+
+.p-dialog-mask {
+    z-index: 1000 !important;
+}
+
+.darkblue {
+    background-color: #1f4aa2;
+    color: white;
+    border-radius: 15px;
+    font-size: 1.2em;
+    padding: 0.5em 0;
+}
+.darkbluetext{
+    color: #1f4aa2;
+    font-weight: 600;
+}
+.whatsapp{
+    background: green;
+    border-radius: 50em;
+    font-size: 1.5em;
+    margin-left: 1rem;
+}
+.payment{
+    margin-left: 1rem;
+    color: gold;
+    font-size: 1.2em;
+}

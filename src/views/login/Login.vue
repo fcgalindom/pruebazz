@@ -1,8 +1,11 @@
 <template>
-  <div class="container">
+  <div class="d-flex justify-content-center mt-2">
+    <img style="width: 10em;" src="../../assets/customers/logo_casa_sorteos.png" alt="">
+  </div>
+  <div class="container border mt-5">
     <div class="row justify-content-center">
-      <div class="col-md-4">
-        <h2 class="text-center mt-5">Login</h2>
+      <div class="col-md-6">
+        <h2 class="text-center mt-5" style="font-weight: bold; font-size: 2em;">Login</h2>
         <div class="mb-3">
           <label for="email" class="form-label">Correo</label>
           <input v-model="user.email" type="email" class="form-control" id="username"
@@ -12,7 +15,9 @@
           <label for="password" class="form-label">contraseña</label>
           <input v-model="user.password" type="password" class="form-control" id="password" placeholder="Contraseña">
         </div>
-        <Button @click="saveEntity">Login</Button>
+        <div class="d-flex justify-content-center mb-5">
+          <Button class="btn-lg" @click="saveEntity">Login</Button>
+        </div>
       </div>
     </div>
   </div>
@@ -22,18 +27,13 @@
 import { ref, onMounted } from "vue";
 import { LoginServices } from "@/services/login.service";
 import Cookies from 'js-cookie';
-
-
-
-
+// import { Logo } from '@/assets/customers/logo_casa_sorteos.png';
 
 const user = ref({})
 
 
 const saveEntity = () => {
   LoginServices.login(user.value).then(response => {
-    console.log('user.value ==> ', user.value);
-
     //sessionStorage.setItem('key', response.data.token);
     Cookies.set('token', response.token, {
       vsecure: true,    // Solo se enviará a través de HTTPS
@@ -79,7 +79,7 @@ const saveEntity = () => {
       });
     }
 
-    window.location.href = '/customers';
+    window.location.href = '/home';
 
 
 

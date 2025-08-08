@@ -23,7 +23,32 @@ export class TicketServices {
 
     static async createCustomer(raffle) {
         const url = `${enviroments.baseUrl}tickets/create/`
-        const response = await axios.post(url, raffle)
+        const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+        const response = await axios.post(url, raffle, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        });
+        return response.data;
+    }
+    static async createticketClient(raffle) {
+        const url = `${enviroments.baseUrl}tickets/create/client/`
+        const response = await axios.post(url, raffle);
+       return response.data;
+
+    }
+
+    static async createticket(raffle) {
+        const token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('token='))
+            ?.split('=')[1];
+        const url = `${enviroments.baseUrl}tickets/create/`;
+        const response = await axios.post(url, raffle, {
+            headers: {
+                Authorization: `Token ${token}`
+            }
+        });
         return response.data;
     }
 
@@ -74,6 +99,16 @@ export class TicketServices {
         const response =  axios.get(url)
         return response
 
+    }
+    static gernumbertickerbyseller(id, initial_date, final_date){
+        const url = `${enviroments.baseUrl}tickets/getTicketsByseller`;
+        const params = {
+            raffle_id: id,
+            initial_date,
+            final_date
+        };
+        const response =  axios.get(url, { params });
+        return axios.get(url, { params });
     }
     static  getnumberrafle(id){
 

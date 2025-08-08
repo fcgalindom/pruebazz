@@ -6,7 +6,7 @@
 
 .container-main-head {
     width: 70%;
-    background-color: #D2D3D2; 
+    /* background-color: #D2D3D2;  */
     border-radius: 30px;
     padding-top: .5em;
     padding-bottom: .5em;
@@ -29,7 +29,7 @@
 
 .container-description {
     width: 50%;
-    padding: 3em .5em;
+    padding: 3em 1.5em;
     background-color: #01B1EB;
     text-align: center;
 }
@@ -69,10 +69,9 @@
   }
   
   .blinking-button {
-    /* color: white; */
     padding: 1em 1.5em;
     border-radius: 15px;
-    min-width: 20%;
+    min-width: 16em;
     font-size: 1.5em;
     animation: blink 1s infinite;
   }
@@ -318,6 +317,12 @@
     background-color: #fbd8d8;
 }
 
+.border-client {
+    border: 2px solid;
+    border-radius: 20px;
+    padding: 0em .5em 2em .5em;
+}
+
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (max-width: 1400px) { 
     .button-grid {
@@ -355,6 +360,10 @@
     .size-lotery-image {
         max-width: 50%;
     }
+
+    .fs-random-number {
+        font-size: 1.5em;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -385,6 +394,11 @@
 
     .main-logo-head {
         max-width: 80%;
+    }
+
+    .blinking-button {
+        min-width: auto;
+        width: 80%;
     }
     
 }

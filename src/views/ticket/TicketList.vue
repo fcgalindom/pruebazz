@@ -8,7 +8,7 @@
                     <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
                         <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
-                        }}</Button>
+                            }}</Button>
                         <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
                             Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
@@ -44,17 +44,31 @@
                         <DatePicker v-model="filters.final_date" showIcon fluid dateFormat="yy-mm-dd"
                             :manualInput="false" @date-select="filters.final_date = Helper.formatDateForm($event)" />
                     </div>
+                    <div class="col-md-3 mb-3">
+                        <Label required="0">Mínimo Abonado</Label>
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber required="0" v-model="filters.min_amount" fluid />
+                        </InputGroup>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <Label required="0">Máximo Abonado</Label>
+                        <InputGroup>
+                            <InputGroupAddon>$</InputGroupAddon>
+                            <InputNumber required="0" v-model="filters.max_amount" fluid />
+                        </InputGroup>
+                    </div>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
                     <Button @click="datatable">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
                     <Button class="mr-3" @click="goPayToSeller">Pagar</Button>
-                    <Button class="mr-3" @click="downloadPdf"><i class="far fa-file-pdf fa-lg"></i></Button>
+                    <Button class="mr-3" @click="generatePDF"><i class="far fa-file-pdf fa-lg"></i></Button>
                     <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
-                    <Button @click="limpiarFormulario; visible = true">Registrar</Button>
+                    <Button v-if="!sellerRouteId" @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
-                <Dialog v-model:visible="visible" modal header="Gestionar Boleta" :style="{ width: '80rem' }">
+                <Dialog v-model:visible="visible" modal header="DATOS DE COMPRA" :style="{ width: '80rem' }">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <Label>Número</Label>
@@ -96,8 +110,10 @@
                             </div>
                             <div class="col-6">
                                 <Label>Valor</Label>
-                                <InputNumber mode="currency" currency="USD" locale="en-US" fluid v-model="i.amount"
-                                    type="text"></InputNumber>
+                                <InputGroup>
+                                    <InputGroupAddon>$</InputGroupAddon>
+                                    <InputNumber fluid v-model="i.amount" type="text"></InputNumber>
+                                </InputGroup>
                             </div>
                             <div class="col-1">
                                 <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
@@ -124,126 +140,134 @@
                     </div>
                 </Dialog>
             </div>
+            <div id="toPDF" ref="toPDF">
 
-            <Accordion value="0" v-if="pay.percentage > 0">
-                <AccordionPanel value="0">
-                    <AccordionHeader>Desplegar tabla pagar a Vendedor</AccordionHeader>
-                    <AccordionContent>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Vendedor</th>
-                                        <th>Total de ventas</th>
-                                        <th>Porcentaje</th>
-                                        <th>Total a pagar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ getTitle() }}</td>
-                                        <td>{{ cant_tickets }}</td>
-                                        <td>{{ pay.percentage }} %</td>
-                                        <td>{{ Helper.formatNumber(pay.totalToPay) }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </AccordionContent>
-                </AccordionPanel>
-            </Accordion>
+                <Accordion value="0" v-if="pay.percentage > 0">
+                    <AccordionPanel value="0">
+                        <AccordionHeader>Desplegar tabla pagar a Vendedor</AccordionHeader>
+                        <AccordionContent>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr colspan="12">
+                                            <th colspan="6">TOTAL DINERO RECAUDADO</th>
+                                            <th colspan="6">{{ Helper.formatNumber(full_value?.total) }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6">ENTREGA A LA OFICINA</td>
+                                            <td colspan="6">{{ Helper.formatNumber(full_value?.total - pay.totalToPay)
+                                            }} </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">PAGADO AL VENDEDOR</td>
+                                            <td colspan="3">{{ pay.percentage }} %</td>
+                                            <td colspan="6">{{ Helper.formatNumber(pay.totalToPay) }} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </AccordionContent>
+                    </AccordionPanel>
+                </Accordion>
 
-            <div class="table-responsive">
-                <table ref="table" class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Boleta</th>
-                            <th>Cliente</th>
-                            <th>Documento</th>
-                            <th>Teléfono</th>
-                            <th>Ciudad</th>
-                            <th>Fecha venta</th>
-                            <th v-show="!sellerRouteId">Vendedor</th>
-                            <th>Estado</th>
-                            <th>Abonado</th>
-                            <th>Saldo</th>
-                            <th>Facturas</th>
-                            <th>Acciones</th>
-                            <th>Certif. Boleta</th>
-                            <th>Whatsapp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(i, index) in tickets.results" :key="index"
-                            v-bind:class="getLigthTracking(i.customer)">
-                            <td>#{{ i.number }}</td>
-                            <td>{{ i.customer?.name ?? 'N/A' }}</td>
-                            <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
-                            <td>{{ i.customer?.phone ?? 'N/A' }}</td>
-                            <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
-                            <td>{{ i.created_at ?? 'N/A' }}</td>
-                            <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
-                            <td>{{ i.status ?? 'No vendida' }}</td>
-                            <td>{{ calculatePaid(i) }}</td>
-                            <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
-                            <td>
-                                <div class="text-center">
-                                    <button @click="paymentdata(i)" class="btn"><i
-                                            class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="d-flex justify-content-between" v-if="i.customer">
-                                    <button class="btn text-darkslategrey" @click="showData(i.id); visible = true"><i
-                                            class="fas fa-edit"></i></button>
-                                    <div class="d-flex"
-                                        v-if="i.status != 'Pagado' || Cookies.get('type_user') == 'true'">
-                                        <button class="btn btn-success btn-sm" style="border-radius: 50%;"
-                                            @click="changeState(i.id, i.status)"><i class="fas fa-check"></i></button>
-                                        <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
-                                            @click="changeState(i.id, 'Libre')"><i class="fas fa-times"></i></button>
+                <div class="table-responsive mt-3">
+                    <table ref="table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Boleta</th>
+                                <th>Cliente</th>
+                                <th>Documento</th>
+                                <th>Teléfono</th>
+                                <th>Ciudad</th>
+                                <th>Fecha venta</th>
+                                <th v-show="!sellerRouteId">Vendedor</th>
+                                <th v-show="!printting">Estado</th>
+                                <th>Abonado</th>
+                                <th>Saldo</th>
+                                <th v-show="!printting">Facturas</th>
+                                <th v-show="!printting">Acciones</th>
+                                <th v-show="!printting">Certif. Boleta</th>
+                                <th v-show="!printting">Whatsapp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(i, index) in tickets.results" :key="index"
+                                v-bind:class="getLigthTracking(i.customer)">
+                                <td>#{{ i.number }}</td>
+                                <td>{{ i.customer?.name ?? 'N/A' }}</td>
+                                <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
+                                <td>{{ i.customer?.phone ?? 'N/A' }}</td>
+                                <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
+                                <td>{{ Helper.formatDate(i.created_at) ?? 'N/A' }}</td>
+                                <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
+                                <td v-show="!printting">{{ i.status ?? 'No vendida' }}</td>
+                                <td>{{ calculatePaid(i) }}</td>
+                                <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
+                                <td v-show="!printting">
+                                    <div class="text-center">
+                                        <button @click="paymentdata(i)" class="btn"><i
+                                                class="fas fa-file-invoice-dollar text-success fa-lg"></i></button>
                                     </div>
-                                </div>
-                                <div v-else>
-                                    <span>No vendida</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div v-if="i.customer">
-                                    <div class="row">
-                                        <div v-if="ticketstatus == 'Reservado' || ticketstatus == 'Pendiente'"
-                                            class="col-3">
-                                            <button class="btn" data-toggle="modal" @click="showTicketAlert(i)"><i
-                                                    class="fas fa-download"></i></button>
-                                        </div>
-                                        <div v-if="ticketstatus == 'Pagado'" class="col-3">
-                                            <button class="btn" data-toggle="modal" @click="showTicketAlertAll(i)"><i
-                                                    class="fas fa-download"></i></button>
-                                        </div>
-                                        <div class="w-100 text-center" v-else>
-                                            N/A
+                                </td>
+                                <td v-show="!printting" class="text-center">
+                                    <div class="d-flex justify-content-between" v-if="i.customer">
+                                        <button class="btn text-darkslategrey"
+                                            @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
+                                        <div class="d-flex"
+                                            v-if="i.status != 'Pagado' || Cookies.get('type_user') == 'true'">
+                                            <button class="btn btn-success btn-sm" style="border-radius: 50%;"
+                                                @click="changeState(i.id, i.status)"><i
+                                                    class="fas fa-check"></i></button>
+                                            <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
+                                                @click="changeState(i.id, 'Libre')"><i
+                                                    class="fas fa-times"></i></button>
                                         </div>
                                     </div>
-                                    <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta" size="xl">
-                                        <TikectFirstPaid :ticketData="i" />
-                                    </Modal>
+                                    <div v-else>
+                                        <span>No vendida</span>
+                                    </div>
+                                </td>
+                                <td v-show="!printting">
+                                    <div v-if="i.customer">
+                                        <div class="row">
+                                            <div v-if="ticketstatus == 'Reservado' || ticketstatus == 'Pendiente'"
+                                                class="col-3">
+                                                <button class="btn" data-toggle="modal" @click="showTicketAlert(i)"><i
+                                                        class="fas fa-download"></i></button>
+                                            </div>
+                                            <div v-if="ticketstatus == 'Pagado'" class="col-3">
+                                                <button class="btn" data-toggle="modal"
+                                                    @click="showTicketAlertAll(i)"><i
+                                                        class="fas fa-download"></i></button>
+                                            </div>
+                                            <div class="w-100 text-center" v-else>
+                                                N/A
+                                            </div>
+                                        </div>
+                                        <Modal :id="firstpaymentmodal" label="Descargar" title="Descarcar Boleta"
+                                            size="xl">
+                                            <TikectFirstPaid :ticketData="i" />
+                                        </Modal>
 
 
-                                </div>
-                                <div v-else>
-                                    <span>No vendida</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-center">
-                                    <button class="btn" @click="notifyCustomer(i.customer)">
-                                        <i class="text-success fab fa-whatsapp fa-lg"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    </div>
+                                    <div v-else>
+                                        <span>No vendida</span>
+                                    </div>
+                                </td>
+                                <td v-show="!printting">
+                                    <div class="text-center">
+                                        <button class="btn" @click="notifyCustomer(i.customer)">
+                                            <i class="text-success fab fa-whatsapp fa-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- Paginador -->
             <Paginator v-if="!sellerRouteId" :first="pagination.page * pagination.rows" :rows="pagination.rows"
@@ -286,7 +310,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, createApp, reactive } from "vue";
+import { ref, onMounted, computed, watch, createApp, reactive, nextTick } from "vue";
+import autoTable from 'jspdf-autotable'
 import { RaffleServices } from "@/services/raffle.service";
 import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from 'vue-router';
@@ -303,6 +328,9 @@ import { useFilterStore, useModalStore, useFilterTicket } from '@/stores/filterS
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { red } from "@cloudinary/url-gen/actions/adjust";
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+import logoImg from '@/assets/customers/logo_casa_sorteos.png'
 
 const tickets = ref([])
 const ticket_certif = ref({})
@@ -318,6 +346,8 @@ const visible = ref(false)
 const type_user = ref('')
 const is_admin = ref(false)
 const visiblePayCustomer = ref(false)
+const printting = ref(false)
+const paginatedTickets = ref([])
 const pay = ref({
     percentage: 0,
     totalToPay: 0
@@ -332,6 +362,7 @@ const filtroStore = useFilterStore();
 const fitroticket = useFilterTicket();
 const loading = ref(false)
 
+const toPDF = ref(null)
 
 const filters = ref({
     number: "",
@@ -340,6 +371,8 @@ const filters = ref({
     seller: "",
     init_date: "",
     final_date: "",
+    min_amount: "0",
+    max_amount: "",
     origin: "",
     page: 1
 })
@@ -437,6 +470,7 @@ const datatable = async () => {
         seller.value = await SellerServices.show(sellerRouteId.value)
         filters.value.status = ""
         tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
+        paginatedTickets.value = tickets.value.results
         cant_tickets.value = tickets.value.results.length
 
     } else {
@@ -518,8 +552,106 @@ const saveEntity = async () => {
     })
 }
 
+
+const generatePDF = async () => {
+    const doc = new jsPDF()
+    const logo = new Image()
+    logo.src = logoImg
+
+    logo.onload = async () => {
+        // Imagen logo
+        const imageX = 10
+        const imageY = 10
+        const imageW = 39.7
+        const imageH = 38.6
+
+        doc.addImage(logo, 'PNG', imageX, imageY, imageW, imageH)
+
+        // Texto cabecera: después de la imagen
+        let y = imageY + imageH + 10 // margen de 10mm debajo de la imagen
+        doc.setFontSize(10)
+        doc.text(`VENDEDOR: ${seller.value?.name ?? 'N/A'}`, 10, y)
+        y += 8
+        doc.text(`DOCUMENTO: ${seller.value?.document_number ?? 'N/A'}`, 10, y)
+        y += 8
+        doc.text(`TELÉFONO: (${seller.value?.country_code ? seller.value.country_code : ''}) ${seller.value?.phone ? seller.value.phone : ''}`, 10, y)
+        y += 10
+        doc.text(`FECHA INICIAL: ${Helper.formatDate(filters.value?.init_date)}`, 10, y)
+        y += 8
+        doc.text(`FECHA FINAL: ${Helper.formatDate(filters.value?.final_date)}`, 10, y)
+        y += 8
+        doc.text(`TOTAL BOLETAS REPORTADAS: ${cant_tickets.value}`, 10, y)
+
+        // Tabla de tickets
+        const ticketData = tickets.value?.results || []
+        const tableBody = ticketData.map(i => ([
+            `#${i.number}`,
+            i.customer?.name ?? 'N/A',
+            i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A',
+            i.customer?.phone ?? 'N/A',
+            // i.customer?.city.name ?? 'N/A',
+            // Helper.formatDate(i.created_at) ?? 'N/A',
+            i.status ?? 'No vendida',
+            calculatePaid(i),
+            i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A'
+        ]))
+
+        autoTable(doc, {
+            startY: y + 10,
+            head: [[
+                { content: 'TOTAL DINERO RECAUDADO', colSpan: 6, styles: { halign: 'center', fontSize: 10, lineWidth: 0.2, lineColor: [180, 180, 180] } },
+                { content: Helper.formatNumber(full_value.value?.total), colSpan: 6, styles: { halign: 'center' } }
+            ]],
+            body: [
+                [
+                    { content: 'ENTREGA A LA OFICINA', colSpan: 6 },
+                    { content: Helper.formatNumber(full_value.value?.total - pay.value.totalToPay), colSpan: 6 }
+                ],
+                [
+                    { content: 'PAGADO AL VENDEDOR', colSpan: 4 },
+                    { content: `${pay.value.percentage} %`, colSpan: 2 },
+                    { content: Helper.formatNumber(pay.value.totalToPay), colSpan: 6 }
+                ]
+            ],
+            theme: 'grid',
+            styles: { fontSize: 10, lineWidth: 0.2, lineColor: [180, 180, 180] }, styles: { fontSize: 10 },
+            tableLineWidth: 0.2,
+            tableLineColor: [180, 180, 180],
+            headStyles: { fillColor: [41, 76, 150] },
+            didDrawPage: (data) => {
+                y = data.cursor.y + 10 // actualizar el valor de Y después de la tabla
+            }
+        })
+
+
+        autoTable(doc, {
+            head: [[
+                'Boleta', 'Cliente', 'Documento', 'Teléfono', 'Estado', 'Abonado', 'Saldo'
+            ]],
+            body: tableBody,
+            startY: y + 5,
+            styles: { fontSize: 10, lineWidth: 0.2, lineColor: [180, 180, 180] },
+            tableLineWidth: 0.2,
+            tableLineColor: [180, 180, 180],
+            headStyles: { fillColor: [41, 76, 150] }
+        })
+
+        // Pie de página
+        let finalY = doc.lastAutoTable.finalY + 10
+        doc.text('FIRMA VENDEDOR: ___________________________', 120, finalY)
+        doc.text(`GENERACIÓN DEL REPORTE: ${currentDate()}`, 120, finalY + 7)
+        doc.text(`HORA: ${currentTime()}`, 160, finalY + 14)
+
+        // Guardar PDF
+        const name_file = `BOLETAS_${seller.value?.name}_${new Date().toLocaleDateString('es-ES', {
+            day: '2-digit', month: 'long', year: 'numeric'
+        }).replace(/ /g, '_').toUpperCase()}`
+        doc.save(`${name_file}.pdf`)
+    }
+}
+
 const add_payment = () => {
-    ticket.value.payments.push({ payment_method: "", amount: "", expiration_date: "2024-12-31" })
+    ticket.value.payments.push({ payment_method: "EFECTIVO", amount: "", expiration_date: "2024-12-31" })
 }
 
 const remove_payment = (index) => {
@@ -577,6 +709,10 @@ const changeState = async (id, status) => {
 }
 
 const getLigthTracking = (customer) => {
+    if (printting.value) {
+        return ''
+    }
+
     if (!sellerRouteId.value) {
         return ''
     }
@@ -629,7 +765,7 @@ function showTicketAlert(ticketData) {
 }
 
 const calculatePaid = (i) => {
-    if(!i.value) {
+    if (!i.value) {
         return 'N/A'
     }
 
@@ -649,17 +785,11 @@ const table = ref(null);
 const downloadExcel = () => {
     // Mapea y filtra solo las columnas que quieres exportar
     const filteredData = tickets.value.results.map(i => ({
-        Número: i.number,
-        Cliente: i.customer?.name || "N/A",
-        Documento: i.customer ? Helper.thousandSeparator(i.customer.document) : "N/A",
-        Vendedor: i.seller?.name || seller.value.name || "N/A",
-        Teléfono: i.customer?.phone || "N/A",
-        Ciudad: i.customer?.city?.name || "N/A",
-        "Fecha Creación": i.created_at || "N/A",
-        "Abonado": i.value ? Helper.formatNumber(i.value) : "N/A",
-        "Saldo": i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
-        Vendedor: !sellerRouteId ? i.seller?.name || "Cliente" : undefined,
-        Estado: i.status || "No vendida",
+        CLIENTE: i.customer?.name || "N/A",
+        TELÉFONO: `+${i.customer?.country_code} ${i.customer?.phone}` || "N/A",
+        BOLETA: i.number,
+        ABONO: i.value ? Helper.formatNumber(i.value) : "N/A",
+        SALDO: i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
     }));
 
     // Remueve columnas undefined si sellerRouteId es true
@@ -714,8 +844,22 @@ function showTicketAlertAll(ticketData) {
         },
     });
 }
+
 const sellerRouteId = computed(() => {
     return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
 });
+
+const currentDate = () => {
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`; // Formato DD/MM/YYYY
+};
+
+const currentTime = () => {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato HH:MM
+};
 
 </script>
