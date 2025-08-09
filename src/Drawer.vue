@@ -236,6 +236,7 @@ const listCustomers = async () => {
 const logout = () => {
     Cookies.remove('token');
     Cookies.remove('is_admin');
+    Cookies.remove('seller_id');
     Cookies.remove('name');
     Cookies.remove('type_user');
     window.location.href = '/admin';
