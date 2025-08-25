@@ -25,7 +25,7 @@ export class SellerTicketsServices {
         const url = enviroments.baseUrl + `sellers-tickets/show/${id}/`
         const response = await axios.get(url)
         return response.data
-    }
+    } 
     static async findByidbyTicket(numero) {
         try {
             const url = `${enviroments.baseUrl}primer-seller/`;

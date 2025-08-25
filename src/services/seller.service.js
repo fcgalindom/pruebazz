@@ -9,6 +9,11 @@ export class SellerServices {
         const response = await axios.get(url, { params: filters })
         return response.data
     }
+    static async showseller(id) {
+            const url = enviroments.baseUrl + `obter_sellerbyiduser/${id}/`
+            const response = await axios.get(url)
+            return response.data
+        }
 
     static async createSeller(seller) {
         const url = enviroments.baseUrl + 'sellers/register/';
