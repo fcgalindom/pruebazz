@@ -862,7 +862,7 @@ const getPromotionsByRaffle = async () => {
     // 85.000
     monto.value = ticket.value.value_to_pay * ticket.value.number.length
     //monto.value = "2000"
-    //monto.value += "00"
+    monto.value += "00"
 
 
 }
@@ -988,7 +988,7 @@ Boleta: ${boletasTexto}
 Nombre:  ${customer.value.name}
 Documento: ${customer.value.document}
 Ciudad: ${customer.value.cityname}
-Valor a cancelar:$${Helper.thousandSeparator(monto.value )}
+Valor a cancelar:$${Helper.thousandSeparator(monto.value / 100 )}
 ——————————————
 
 MEDIOS DE PAGO
