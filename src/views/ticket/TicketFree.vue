@@ -858,15 +858,15 @@ const getPromotionsByRaffle = async () => {
             ticket.value.promotion_id = null
         }
     }
-    //  monto.value = ticket.value.value_to_pay
+    monto.value = ticket.value.value_to_pay
     // 85.000
-    // monto.value = ticket.value.value_to_pay * ticket.value.number.length
-    monto.value = "2000"
-    monto.value += "00"
+    monto.value = ticket.value.value_to_pay * ticket.value.number.length
+    //monto.value = "2000"
+    //monto.value += "00"
 
 
 }
-const telefono = "573156113402"; // Número en formato internacional (sin "+")
+const telefono = "573154862281"; // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
@@ -987,8 +987,8 @@ Hola, he separado boleta con la siguiente información:
 Boleta: ${boletasTexto} 
 Nombre:  ${customer.value.name}
 Documento: ${customer.value.document}
-Ciudad: ${customer.value.city}
-Valor a cancelar:$${Helper.thousandSeparator(monto.value / 100)}
+Ciudad: ${customer.value.cityname}
+Valor a cancelar:$${Helper.thousandSeparator(monto.value )}
 ——————————————
 
 MEDIOS DE PAGO
@@ -1091,7 +1091,7 @@ const listCustomers = async () => {
                     country_code: countries.value[3],
                     name: "",
                     phone: "",
-                    city: ""
+                    city: "",
                 }
                 isDisabled.value = false
             } else {
@@ -1100,8 +1100,8 @@ const listCustomers = async () => {
                     document: response[0].document,
                     country_code: countries.value[3],
                     phone: response[0].phone,
-                    city: response[0].city.id
-
+                    city: response[0].city.id,
+                    cityname: response[0].city.name
                 }
                 isDisabled.value = true
             }
