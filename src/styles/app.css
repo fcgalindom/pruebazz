@@ -123,3 +123,13 @@ hr {
     color: gold;
     font-size: 1.2em;
 }
+
+.btn-close {
+    position: absolute;
+    right: -11px;
+    z-index: 2;
+    top: -10px;
+    background-color: lightgray;
+    padding: .5em 1.2em;
+    border-radius: 8px;
+}

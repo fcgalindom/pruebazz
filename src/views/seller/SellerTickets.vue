@@ -67,10 +67,16 @@
                         </div>
 
                         <div class="bg-light p-2 d-flex flex-wrap" style="width: 100%;">
-                            <div v-for="number in range_tickets[0].numbers" :key="number" class="p-1"
+                            <div v-for="number in range_tickets[position].numbers" :key="number" class="p-1"
                                 style="width: 50%;">
-                                <Button :label="number" class="p-button-sm p-button-rounded p-button-info w-100"
-                                    @click="selectedTicket = number" />
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <button class="btn btn-danger" 
+                                        style="position: absolute; top: -8px; right: -8px; z-index: 2; padding: 2px 6px; font-size: 12px;"
+                                        @click="removeTicket(number, position)">
+                                        X
+                                    </button>
+                                    <Button :label="number" class="p-button-sm p-button-rounded p-button-info w-100" @click="selectedTicket = number" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -93,6 +99,7 @@ import { TicketServices } from '@/services/ticket.service'
 import { useRoute } from "vue-router";
 import Swal from 'sweetalert2'
 import Button from 'primevue/button';
+import { RaffleServices } from '@/services/raffle.service';
 
 const route = useRoute()
 const range_tickets = ref([])
@@ -133,6 +140,18 @@ const buyTicket = (index, button, position) => {
         console.log("activeButtonselse", activeButtons.value);
     }
     // ticket.value.raffle = filters.value.raffle
+}
+
+const removeTicket = (number, position) => {
+    // Eliminar el número del array de números seleccionados
+    range_tickets.value[position].numbers = range_tickets.value[position].numbers.filter(num => num !== number)
+    
+    // Remover del conjunto de botones activos
+    activeButtons.value.delete(number);
+    
+    console.log("Ticket eliminado:", number);
+    console.log("rango de tickets actualizado", range_tickets.value[position].numbers);
+    console.log("activeButtons actualizado", activeButtons.value);
 }
 
 const filteredButtons = computed(() => {
@@ -202,11 +221,15 @@ const saveEntity = async () => {
 
 }
 
-const addRange = () => {
+const addRange = async () => {
+    const raffle = await RaffleServices.listlast();
+    console.log('raffle ==> ', raffle);
+    
     range_tickets.value.push({
-        raffles: "",
+        raffle: raffle,
         numbers: []
     })
+    search(range_tickets.value[0])
 }
 
 const getRangeForClients = async () => {

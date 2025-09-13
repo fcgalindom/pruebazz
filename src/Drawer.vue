@@ -16,7 +16,7 @@
             </button>
         </template>
     </Menubar>
-    <Drawer v-model:visible="visible" header="Dr. Dentix">
+    <Drawer v-model:visible="visible" header="Casa Sorteos">
         <div class="d-flex justify-content-center">
             <Menu :model="items" class="w-100 md:w-60">
                 <template #submenulabel="{ item }">
@@ -125,6 +125,11 @@ const addAdminMenu = () => {
         icon: 'fas fa-table'
     })
     items.value.push({
+        label: 'Promociones',
+        link: '/promotions',
+        icon: 'fas fa-tags'
+    })
+    items.value.push({
         label: 'Reportes',
         link: '#',
         icon: 'fas fa-chart-bar',
@@ -160,11 +165,6 @@ const addSuperSellerMenu = () => {
         label: 'Vendedores',
         link: '/sellers',
         icon: 'fas fa-user'
-    })
-    items.value.push({
-        label: 'Promociones',
-        link: '/promotions',
-        icon: 'fas fa-tags'
     })
 }
 

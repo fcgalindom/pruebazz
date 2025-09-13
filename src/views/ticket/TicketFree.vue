@@ -10,7 +10,10 @@
         <!-- <Dialog v-model:visible="visible" modal header="Crear Boleta" :style="{ width: '80rem' }"> -->
         <Dialog v-model:visible="visiblefindcustomer" modal :style="{ width: '50rem' }"
             style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
-            <div class="modal-body"
+            <!-- <div class="modal-header"> -->
+                <button class="btn btn-close" @click="visiblefindcustomer = false">X</button>
+            <!-- </div> -->
+            <form class="modal-body" @submit.prevent="saveEntity"
                 style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
                 <h1 class="mb-4 pt-4 text-center" style="font-weight: bold; font-size: 2em;">DATOS DE COMPRA</h1>
                 <div class="row">
@@ -83,7 +86,7 @@
 
                 <div v-if="typeScreen == 'admin'">
                     <div class="d-flex justify-content-end">
-                        <button class="btn btn-success" @click="add_payment()">+</button>
+                        <button type="button" class="btn btn-success" @click="add_payment()">+</button>
                     </div>
                     <div class="row border p-2 my-3" v-for="(i, index) in ticket.payments" :key="index">
                         <div class="col-md-4">
@@ -118,12 +121,12 @@
                 </div>
                 <div v-if="typeScreen == 'admin'">
                     <div class="d-flex justify-content-center my-3">
-                        <Button @click="saveEntity" :disabled="validateForm">Guardar</Button>
+                        <Button type="submit" :disabled="validateForm">Guardar</Button>
                     </div>
 
                 </div>
 
-            </div>
+            </form>
         </Dialog>
         <Dialog v-model:visible="modalfinalpay" modal :style="{ width: '32rem' }"
             style="background-color: #1f4aa2; border-color: #1f4aa2;" id="modalfinalpay">
