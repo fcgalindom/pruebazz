@@ -15,13 +15,25 @@ export default class Helper {
 
     
     static formatDate(dateString) {
-      if(!dateString) return '';
+      if (!dateString) return '';
 
-      const date = new Date(dateString);
-      const day = String(date.getDate()).padStart(2, '0');
+      // Handle both "yyyy-mm-dd" and ISO formats
+      let date;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      // "yyyy-mm-dd" format is parsed as UTC, so adjust for timezone
+      const [year, month, day] = dateString.split('-');
+      date = new Date(Date.UTC(year, month - 1, day));
+      } else {
+      date = new Date(dateString);
+      }
+      if (isNaN(date.getTime())) return '';
+
+      // Use UTC date parts for consistency
+      const day = String(date.getUTCDate()).padStart(2, '0');
       const monthNames = ["JAN", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DIC"];
-      const month = monthNames[date.getMonth()];
-      const year = date.getFullYear();
+      const month = monthNames[date.getUTCMonth()];
+      const year = date.getUTCFullYear();
+
       return `${day}-${month}-${year}`;
     }
 

@@ -570,6 +570,8 @@ const generatePDF = async () => {
         // Texto cabecera: después de la imagen
         let y = imageY + imageH + 10 // margen de 10mm debajo de la imagen
         doc.setFontSize(10)
+        doc.text(`USUARIO: ${(Cookies.get('name') ?? 'N/A').toUpperCase()}`, 10, y)
+        y += 8
         doc.text(`VENDEDOR: ${seller.value?.name ?? 'N/A'}`, 10, y)
         y += 8
         doc.text(`DOCUMENTO: ${seller.value?.document_number ?? 'N/A'}`, 10, y)
