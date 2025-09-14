@@ -196,15 +196,15 @@
                             <tr v-for="(i, index) in tickets.results" :key="index"
                                 v-bind:class="getLigthTracking(i.customer)">
                                 <td>#{{ i.number }}</td>
-                                <td>{{ i.customer?.name ?? 'N/A' }}</td>
-                                <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A' }}</td>
-                                <td>{{ i.customer?.phone ?? 'N/A' }}</td>
-                                <td>{{ i.customer?.city.name ?? 'N/A' }}</td>
-                                <td>{{ Helper.formatDate(i.created_at) ?? 'N/A' }}</td>
+                                <td>{{ i.customer?.name ?? '' }}</td>
+                                <td>{{ i.customer ? Helper.thousandSeparator(i.customer.document) : '' }}</td>
+                                <td>{{ i.customer?.phone ?? '' }}</td>
+                                <td>{{ i.customer?.city.name ?? '' }}</td>
+                                <td>{{ Helper.formatDate(i.created_at) ?? '' }}</td>
                                 <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
                                 <td v-show="!printting">{{ i.status ?? 'No vendida' }}</td>
                                 <td>{{ calculatePaid(i) }}</td>
-                                <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A' }}</td>
+                                <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : '' }}</td>
                                 <td v-show="!printting">
                                     <div class="text-center">
                                         <button @click="paymentdata(i)" class="btn"><i
@@ -570,33 +570,36 @@ const generatePDF = async () => {
         // Texto cabecera: después de la imagen
         let y = imageY + imageH + 10 // margen de 10mm debajo de la imagen
         doc.setFontSize(10)
-        doc.text(`USUARIO: ${(Cookies.get('name') ?? 'N/A').toUpperCase()}`, 10, y)
-        y += 8
-        doc.text(`VENDEDOR: ${seller.value?.name ?? 'N/A'}`, 10, y)
-        y += 8
-        doc.text(`DOCUMENTO: ${seller.value?.document_number ?? 'N/A'}`, 10, y)
-        y += 8
+        doc.text(`USUARIO: ${(Cookies.get('name') ?? '').toUpperCase()}`, 10, y)
+        y += 5
+        doc.text(`VENDEDOR: ${seller.value?.name ?? ''}`, 10, y)
+        y += 5
+        doc.text(`DOCUMENTO: ${seller.value?.document_number ?? ''}`, 10, y)
+        y += 5
         doc.text(`TELÉFONO: (${seller.value?.country_code ? seller.value.country_code : ''}) ${seller.value?.phone ? seller.value.phone : ''}`, 10, y)
-        y += 10
+        y += 5
         doc.text(`FECHA INICIAL: ${Helper.formatDate(filters.value?.init_date)}`, 10, y)
-        y += 8
+        y += 5
         doc.text(`FECHA FINAL: ${Helper.formatDate(filters.value?.final_date)}`, 10, y)
-        y += 8
+        y += 5
         doc.text(`TOTAL BOLETAS REPORTADAS: ${cant_tickets.value}`, 10, y)
 
         // Tabla de tickets
         const ticketData = tickets.value?.results || []
         const tableBody = ticketData.map(i => ([
             `#${i.number}`,
-            i.customer?.name ?? 'N/A',
-            i.customer ? Helper.thousandSeparator(i.customer.document) : 'N/A',
-            i.customer?.phone ?? 'N/A',
-            // i.customer?.city.name ?? 'N/A',
-            // Helper.formatDate(i.created_at) ?? 'N/A',
-            i.status ?? 'No vendida',
+            i.customer?.name ?? '',
+            i.customer ? Helper.thousandSeparator(i.customer.document) : '',
+            i.customer?.phone ?? '',
             calculatePaid(i),
-            i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : 'N/A'
+            i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : ''
         ]))
+
+        // Cambia el tamaño de fuente solo para los datos de tableBody
+        const tableBodyFontSize = 12;
+        const formattedTableBody = tableBody.map(row =>
+            row.map(cell => ({ content: cell, styles: { fontSize: tableBodyFontSize } }))
+        );
 
         autoTable(doc, {
             startY: y + 10,
@@ -628,9 +631,9 @@ const generatePDF = async () => {
 
         autoTable(doc, {
             head: [[
-                'Boleta', 'Cliente', 'Documento', 'Teléfono', 'Estado', 'Abonado', 'Saldo'
+                'Boleta', 'Cliente', 'Documento', 'Teléfono', 'Abonado', 'Saldo'
             ]],
-            body: tableBody,
+            body: formattedTableBody,
             startY: y + 5,
             styles: { fontSize: 10, lineWidth: 0.2, lineColor: [180, 180, 180] },
             tableLineWidth: 0.2,
@@ -768,7 +771,7 @@ function showTicketAlert(ticketData) {
 
 const calculatePaid = (i) => {
     if (!i.value) {
-        return 'N/A'
+        return ''
     }
 
     let total = 0
@@ -787,11 +790,12 @@ const table = ref(null);
 const downloadExcel = () => {
     // Mapea y filtra solo las columnas que quieres exportar
     const filteredData = tickets.value.results.map(i => ({
-        CLIENTE: i.customer?.name || "N/A",
-        TELÉFONO: `+${i.customer?.country_code} ${i.customer?.phone}` || "N/A",
         BOLETA: i.number,
-        ABONO: i.value ? Helper.formatNumber(i.value) : "N/A",
-        SALDO: i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "N/A",
+        CLIENTE: i.customer?.name || "",
+        DOCUMENTO: i.customer ? Helper.thousandSeparator(i.customer.document) : "",
+        TELÉFONO: i.customer?.phone ? `${i.customer.country_code ? '+' + i.customer.country_code + ' ' : ''}${i.customer.phone}` : "",
+        ABONO: i.value ? Helper.formatNumber(i.value) : "",
+        SALDO: i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : "",
     }));
 
     // Remueve columnas undefined si sellerRouteId es true
