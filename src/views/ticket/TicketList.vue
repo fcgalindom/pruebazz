@@ -63,6 +63,7 @@
                     <Button @click="datatable">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
+                    <Button class="mr-3" @click="syncWompiPayments"><i class="fas fa-sync"></i></Button>
                     <Button class="mr-3" @click="goPayToSeller">Pagar</Button>
                     <Button class="mr-3" @click="generatePDF"><i class="far fa-file-pdf fa-lg"></i></Button>
                     <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
@@ -558,6 +559,9 @@ const saveEntity = async () => {
     })
 }
 
+const syncWompiPayments = async () => {
+    console.log('llll');
+}
 
 const generatePDF = async () => {
     const doc = new jsPDF()
