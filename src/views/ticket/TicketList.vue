@@ -8,7 +8,7 @@
                     <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
                         <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
-                            }}</Button>
+                        }}</Button>
                         <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
                             Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
@@ -158,7 +158,7 @@
                                         <tr>
                                             <td colspan="6">ENTREGA A LA OFICINA</td>
                                             <td colspan="6">{{ Helper.formatNumber(full_value?.total - pay.totalToPay)
-                                            }} </td>
+                                                }} </td>
                                         </tr>
                                         <tr>
                                             <td colspan="3">PAGADO AL VENDEDOR</td>
@@ -216,9 +216,9 @@
                                         <button class="btn text-darkslategrey"
                                             @click="showData(i.id); visible = true"><i class="fas fa-edit"></i></button>
                                         <div class="d-flex"
-                                            v-if="i.status != 'Pagado' || Cookies.get('type_user') == 'true'">
+                                            v-if="(i.status != 'Pagado' || Cookies.get('type_user') == 'true')">
                                             <button class="btn btn-success btn-sm" style="border-radius: 50%;"
-                                                @click="changeState(i.id, i.status)"><i
+                                                v-if="i.status != 'Pendiente' && i.status != 'Reservado'" @click="changeState(i.id, i.status)"><i
                                                     class="fas fa-check"></i></button>
                                             <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
                                                 @click="changeState(i.id, 'Libre')"><i
@@ -345,6 +345,7 @@ const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQU
 const visible = ref(false)
 const type_user = ref('')
 const is_admin = ref(false)
+const perrmisionadmin = ref(false);
 const visiblePayCustomer = ref(false)
 const printting = ref(false)
 const paginatedTickets = ref([])
@@ -402,6 +403,11 @@ onMounted(async () => {
     type_user.value = Cookies.get('type_user')
     is_admin.value = Cookies.get('is_admin')
     console.log('is_admin.value ==> ', is_admin.value);
+    if (Cookies.get('name') == "drdentix1") {
+        perrmisionadmin.value = true
+    } else {
+        perrmisionadmin.value = false
+    }
 
 
     await datatable()

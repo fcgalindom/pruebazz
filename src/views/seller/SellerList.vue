@@ -24,7 +24,7 @@
                     <Button @click="datatable">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <Button @click="limpiarData; visible = true">Registrar</Button>
+                    <Button v-if="perrmisionadmin == true" @click="limpiarData; visible = true">Registrar</Button>
                 </div>
                 <Dialog v-model:visible="visible" modal header="Gestionar vendedores" :style="{ width: '80rem'  }">
                     <div class="row">
@@ -88,7 +88,7 @@
                             <th style="width: 30%;">Correo</th>
                             <th>Acciones</th>
                             <th>Habilitar</th>
-                            <th>Eliminar</th>
+                            <th v-if="perrmisionadmin == true">Eliminar</th>
                             <th>Whatsapp</th>
                         </tr>
                     </thead>
@@ -99,7 +99,7 @@
                             <td>{{item.user.email}}</td>
                             <td>
                                 <div class="d-flex justify-content-center">
-                                    <Button :disabled="item.state === 0" class="btn text-darkslategrey"
+                                    <Button v-if="perrmisionadmin == true" :disabled="item.state === 0" class="btn text-darkslategrey"
                                         @click="showData(item.id); visible = true" variant="text"><i
                                             class="fas fa-edit"></i></Button>
                                     <router-link :to="`sellers-tracking/${item.id}/`"> <Button
@@ -116,7 +116,7 @@
                                         @update:modelValue="toggleState($event, item)" />
                                 </div>
                             </td>
-                            <td>
+                            <td v-if="perrmisionadmin == true">
                                 <div class="d-flex justify-content-center">
                                     <Button :disabled="item.state === 0" class="btn text-darkslategrey"
                                         @click="deleteEntity(item.id)" variant="text"><i
