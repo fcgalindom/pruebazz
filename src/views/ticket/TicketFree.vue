@@ -13,7 +13,9 @@
             <!-- <div class="modal-header"> -->
                 <button class="btn btn-close" @click="visiblefindcustomer = false">X</button>
             <!-- </div> -->
-            <form class="modal-body" @submit.prevent="saveEntity"
+            <form
+                class="modal-body"
+                @submit.prevent="typeScreen == 'client' ? getPromotionsByRaffle() : saveEntity()"
                 style="padding-top: 0; background-color: white; border-radius: 12px; padding-bottom: 3px; z-index: 1;">
                 <h1 class="mb-4 pt-4 text-center" style="font-weight: bold; font-size: 2em;">DATOS DE COMPRA</h1>
                 <div class="row">
@@ -113,7 +115,7 @@
                 </div>
                 <div v-if="typeScreen == 'client'">
                     <div class="d-flex justify-content-center my-3">
-                        <button class="btn darkblue poppins-semibold" data-toggle="modal" @click="modalfinalpay = true;"
+                        <button type="submit" class="btn darkblue poppins-semibold" data-toggle="modal" @click="modalfinalpay = true;"
                             :disabled="validateForm" style="padding: .35em 1em .35em 1em; font-size: 2em;">
                             COMPRAR</button>
                     </div>
@@ -864,7 +866,7 @@ const getPromotionsByRaffle = async () => {
     monto.value = ticket.value.value_to_pay
     // 85.000
     monto.value = ticket.value.value_to_pay * ticket.value.number.length
-    //monto.value = "2000"
+    monto.value = "2000"
     monto.value += "00"
 
 
