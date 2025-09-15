@@ -128,4 +128,10 @@ export class TicketServices {
         const response = await axios.get(url, {params: data})
         return response.data;
     }
+
+    static async syncWompiPayments() {
+        const url = `${enviroments.baseUrl}tickets/pending-and-verify-wompi/`
+        const response = await axios.post(url)
+        return response.data;
+    }
 }

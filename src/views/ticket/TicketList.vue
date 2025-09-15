@@ -560,7 +560,8 @@ const saveEntity = async () => {
 }
 
 const syncWompiPayments = async () => {
-    console.log('llll');
+    await TicketServices.syncWompiPayments()
+    await datatable()
 }
 
 const generatePDF = async () => {
