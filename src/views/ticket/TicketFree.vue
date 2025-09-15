@@ -868,7 +868,9 @@ const getPromotionsByRaffle = async () => {
     monto.value = ticket.value.value_to_pay * ticket.value.number.length
     monto.value = "2000"
     monto.value += "00"
-
+    if(props.typeScreen == 'client'){
+        saveEntity()
+    }
 
 }
 const telefono = "573154862281"; // Número en formato internacional (sin "+")
@@ -954,7 +956,7 @@ const generateWompiPay = async (monto_ = "0") => {
                 const mensajewa = encodeURIComponent(mensajef);
                 window.open(`https://wa.me/${telefono}?text=${mensajewa}`, "_blank");
 
-                saveEntity()
+                
 
                 //window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
             } else if (data.event === 'unprocessabletransaction') {
