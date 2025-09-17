@@ -786,7 +786,7 @@ const saveEntity = async (is_whatsapp = false) => {
             response = await TicketServices.createticketClient(ticket.value)
         }
         if (props.typeScreen == 'client') {
-            message = `Tickets creados con éxito. ${response.success}. Por favor realizar el pago por el valor de ${total} COP.`
+            message = `Tickets creados con éxito. ${response.success}. A continuación por favor realizar el pago.`
         }else {
             if (response.duplicated.length > 0)
                 message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
