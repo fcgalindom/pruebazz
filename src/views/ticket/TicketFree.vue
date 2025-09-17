@@ -736,6 +736,7 @@ const mountedBuyTicket = async () => {
 const saveEntity = async (is_whatsapp = false) => {
 
     let value = 0
+    let total = 0
 
     customer.value.country_code = customer.value.country_code.dialCode
     const customerData = await CustomerServices.createCustomer(customer.value)
@@ -749,11 +750,12 @@ const saveEntity = async (is_whatsapp = false) => {
             ticket.value.payments.push({
                 ticket: element,
                 payment_method: "TRANSFERENCIA",
-                amount: ticket.value.value_to_pay,
+                amount: 0,
                 expiration_date: "2024-12-31",
                 reference: referencia.value
             })
-            value += parseInt(element.value)
+            total += parseInt(element.value)
+            value = 0
         });
     } else {
         ticket.value.payments.forEach(element => {
@@ -775,17 +777,22 @@ const saveEntity = async (is_whatsapp = false) => {
         if (props.typeScreen == 'admin') {
             response = await TicketServices.createticket(ticket.value, ticket.value.raffle)
         } else {
-            if (is_whatsapp == false) ticket.value.value = ticket.value.value_to_pay * ticket.value.number.length
+            // if (is_whatsapp == false) ticket.value.value = ticket.value.value_to_pay * ticket.value.number.length
+            if (is_whatsapp == false) ticket.value.value = 0
             else {
                 ticket.value.value = 0
                 ticket.value.payments = []
             }
             response = await TicketServices.createticketClient(ticket.value)
         }
-        if (response.duplicated.length > 0)
-            message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
-        else
-            message = `Tickets creados con éxito. ${response.success}`
+        if (props.typeScreen == 'client') {
+            message = `Tickets creados con éxito. ${response.success}. Por favor realizar el pago por el valor de ${total} COP.`
+        }else {
+            if (response.duplicated.length > 0)
+                message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
+            else
+                message = `Tickets creados con éxito. ${response.success}`
+        }
     }
     visible.value = false
     visibleCustomer.value = false

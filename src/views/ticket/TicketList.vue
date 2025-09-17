@@ -63,7 +63,13 @@
                     <Button @click="datatable">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <Button class="mr-3" @click="syncWompiPayments"><i class="fas fa-sync"></i></Button>
+                    <Button class="mr-3" @click="syncWompiPayments" :disabled="loading">
+                        <i v-if="!loading" class="fas fa-sync"></i>
+                        <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        {{ loading ? 'Sincronizando...' : '' }}
+                    </Button>
                     <Button class="mr-3" @click="goPayToSeller">Pagar</Button>
                     <Button class="mr-3" @click="generatePDF"><i class="far fa-file-pdf fa-lg"></i></Button>
                     <Button class="mr-3" @click="downloadExcel"><i class="far fa-file-excel fa-lg"></i></Button>
@@ -141,7 +147,19 @@
                     </div>
                 </Dialog>
             </div>
-            <div id="toPDF" ref="toPDF">
+            <div id="toPDF" ref="toPDF" style="position: relative;">
+                <!-- Loading Overlay -->
+                <div v-if="loading" class="d-flex justify-content-center align-items-center" 
+                     style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.8); z-index: 1000; min-height: 200px;">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="mt-2">
+                            <strong>Sincronizando pagos de Wompi...</strong>
+                        </div>
+                    </div>
+                </div>
 
                 <Accordion value="0" v-if="pay.percentage > 0">
                     <AccordionPanel value="0">
@@ -204,7 +222,7 @@
                                 <td>{{ Helper.formatDate(i.created_at) ?? '' }}</td>
                                 <td v-show="!sellerRouteId">{{ i.seller?.name ?? 'Cliente' }}</td>
                                 <td v-show="!printting">{{ i.status ?? 'No vendida' }}</td>
-                                <td>{{ calculatePaid(i) }}</td>
+                                <td>{{ calculatePaid(i, true) }}</td>
                                 <td>{{ i.value_to_pay ? Helper.formatNumber(i.value_to_pay - i.value) : '' }}</td>
                                 <td v-show="!printting">
                                     <div class="text-center">
@@ -219,7 +237,7 @@
                                         <div class="d-flex"
                                             v-if="(i.status != 'Pagado' || Cookies.get('type_user') == 'true')">
                                             <button class="btn btn-success btn-sm" style="border-radius: 50%;"
-                                                v-if="i.status != 'Pendiente' && i.status != 'Reservado'" @click="changeState(i.id, i.status)"><i
+                                                v-if="i.status != 'Pendiente' && i.status != 'Reservado' && i.status != 'Pagado'" @click="changeState(i.id, i.status)"><i
                                                     class="fas fa-check"></i></button>
                                             <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
                                                 @click="changeState(i.id, 'Libre')"><i
@@ -444,8 +462,6 @@ const getTitle = () => {
 }
 
 const datatable = async () => {
-    loading.value = true
-
     filters.value.status = status.value
     filters.value.origin = "admin"
     if (status.value == "Enlinea") {
@@ -560,8 +576,27 @@ const saveEntity = async () => {
 }
 
 const syncWompiPayments = async () => {
-    await TicketServices.syncWompiPayments()
-    await datatable()
+    loading.value = true
+    try {
+        await TicketServices.syncWompiPayments()
+        Swal.fire({
+            title: '¡Éxito!',
+            text: 'Pagos de Wompi sincronizados correctamente',
+            icon: 'success',
+            confirmButtonText: 'Continuar'
+        })
+        await datatable()
+    } catch (error) {
+        console.error('Error sincronizando pagos de Wompi:', error)
+        Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al sincronizar los pagos de Wompi',
+            icon: 'error',
+            confirmButtonText: 'Continuar'
+        })
+    } finally {
+        loading.value = false
+    }
 }
 
 const generatePDF = async () => {
@@ -780,8 +815,11 @@ function showTicketAlert(ticketData) {
     });
 }
 
-const calculatePaid = (i) => {
-    if (!i.value) {
+const calculatePaid = (i, showNa = false) => {
+    // if(!i.value && showNa){
+    //     return 'N/A'
+    // }
+    if (!i.value && i.value === "0") {
         return ''
     }
 
