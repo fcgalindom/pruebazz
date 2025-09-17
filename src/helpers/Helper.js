@@ -20,19 +20,20 @@ export default class Helper {
       // Handle both "yyyy-mm-dd" and ISO formats
       let date;
       if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-      // "yyyy-mm-dd" format is parsed as UTC, so adjust for timezone
       const [year, month, day] = dateString.split('-');
-      date = new Date(Date.UTC(year, month - 1, day));
+      date = new Date(year, month - 1, day);
       } else {
       date = new Date(dateString);
       }
       if (isNaN(date.getTime())) return '';
 
-      // Use UTC date parts for consistency
-      const day = String(date.getUTCDate()).padStart(2, '0');
+      // Ajustar a la zona horaria GMT-5 (Colombia)
+      const offsetDate = new Date(date.getTime() - (date.getTimezoneOffset() + 300) * 60000);
+
+      const day = String(offsetDate.getDate()).padStart(2, '0');
       const monthNames = ["JAN", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DIC"];
-      const month = monthNames[date.getUTCMonth()];
-      const year = date.getUTCFullYear();
+      const month = monthNames[offsetDate.getMonth()];
+      const year = offsetDate.getFullYear();
 
       return `${day}-${month}-${year}`;
     }
