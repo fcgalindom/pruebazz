@@ -87,7 +87,7 @@
                             <th style="width: 20%;">Documento</th>
                             <th style="width: 30%;">Correo</th>
                             <th>Acciones</th>
-                            <th>Habilitar</th>
+                            <th v-if="perrmisionadmin == true">Habilitar</th>
                             <th v-if="perrmisionadmin == true">Eliminar</th>
                             <th>Whatsapp</th>
                         </tr>
@@ -110,7 +110,7 @@
                                     </router-link>
                                 </div>
                             </td>
-                            <td>
+                            <td v-if="perrmisionadmin == true">
                                 <div class="d-flex justify-content-center">
                                     <ToggleSwitch :modelValue="item.state === 1"
                                         @update:modelValue="toggleState($event, item)" />

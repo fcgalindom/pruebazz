@@ -133,3 +133,12 @@ hr {
     padding: .5em 1.2em;
     border-radius: 8px;
 }
+
+:root {
+    --p-button-primary-background: #1f4aa2 !important;
+    --p-primary-hover-color: #1f4aa2 !important;
+    --p-button-primary-border-color: #1f4aa2 !important;
+    --p-button-primary-hover-border-color: #1f4aa2 !important;
+    --p-toggleswitch-checked-background: #1f4aa2 !important;
+    --p-button-text-primary-color: #1f4aa2 !important;
+}

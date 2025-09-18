@@ -88,7 +88,7 @@
 
                 <div v-if="typeScreen == 'admin'">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-success" @click="add_payment()">+</button>
+                        <button type="button" class="btn btn-primary" @click="add_payment()">+</button>
                     </div>
                     <div class="row border p-2 my-3" v-for="(i, index) in ticket.payments" :key="index">
                         <div class="col-md-4">
@@ -249,7 +249,7 @@
                     <button class="blinking-button-2 mt-3" @click="generateRandomNumbers">Generar</button>
                 </div>
             </div>
-            <div class="d-flex justify-content-center w-100 mt-3">
+            <!-- <div class="d-flex justify-content-center w-100 mt-3">
                 <div class="w-70 text-center">
                     <label class="poppins-semibold fs-random-number" for="">BUSQUE SU NÚMERO</label>
                     <div class="input-group mb-3">
@@ -258,7 +258,7 @@
                             aria-describedby="basic-addon2">
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="d-flex justify-content-center w-100">
                 <div class="w-70 text-center">
                     <label class="poppins-semibold fs-random-number" for="">&nbsp;</label>
@@ -817,6 +817,9 @@ const buyTicket = (index, button) => {
         activeButtons.value.add(button);
     }
     ticket.value.raffle = filters.value.raffle
+    console.log('filters.value.number ==> ', filters.value.number);
+
+    filters.value.number = ""
 }
 
 const add_payment = () => {

@@ -616,8 +616,6 @@ const generatePDF = async () => {
         // Texto cabecera: después de la imagen
         let y = imageY + imageH + 10 // margen de 10mm debajo de la imagen
         doc.setFontSize(10)
-        doc.text(`USUARIO: ${(Cookies.get('name') ?? '').toUpperCase()}`, 10, y)
-        y += 5
         doc.text(`VENDEDOR: ${seller.value?.name ?? ''}`, 10, y)
         y += 5
         doc.text(`DOCUMENTO: ${seller.value?.document_number ?? ''}`, 10, y)
@@ -629,6 +627,8 @@ const generatePDF = async () => {
         doc.text(`FECHA FINAL: ${Helper.formatDate(filters.value?.final_date)}`, 10, y)
         y += 5
         doc.text(`TOTAL BOLETAS REPORTADAS: ${cant_tickets.value}`, 10, y)
+        y += 5
+        doc.text(`USUARIO: ${(Cookies.get('name') ?? '').toUpperCase()}`, 10, y)
 
         // Tabla de tickets
         const ticketData = tickets.value?.results || []

@@ -6,7 +6,7 @@
             <div class="col-2">
             </div>
             <div class="col-4">
-                <button class="btn btn-primary" @click="downloadImage"><i class="fas fa-images"></i></button>
+                <button class="btn btn-success" @click="downloadImage"><i class="fas fa-images"></i></button>
             </div>
             <div class="col-4">
                 <button class="btn btn-danger" @click="downloadPDF"><i class="fas fa-file-pdf"></i></button>

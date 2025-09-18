@@ -4,7 +4,7 @@
         <div class="d-flex justify-content-between mb-3">
             <h2>Rangos por vendedor</h2>
             <div>
-                <button class="btn btn-success" @click="addRange">+</button>
+                <button class="btn btn-primary" @click="addRange">+</button>
             </div>
         </div>
         <div>
@@ -70,12 +70,12 @@
                             <div v-for="number in range_tickets[position].numbers" :key="number" class="p-1"
                                 style="width: 50%;">
                                 <div style="position: relative; display: flex; align-items: center;">
-                                    <button class="btn btn-danger" 
-                                        style="position: absolute; top: -8px; right: -8px; z-index: 2; padding: 2px 6px; font-size: 12px;"
-                                        @click="removeTicket(number, position)">
-                                        X
-                                    </button>
-                                    <Button :label="number" class="p-button-sm p-button-rounded p-button-info w-100" @click="selectedTicket = number" />
+                                    <div class="ticket-number-container" @click="selectedTicket = number">
+                                        <span class="ticket-number">{{ number }}</span>
+                                        <button class="close-button" @click.stop="removeTicket(number, position)">
+                                            <span class="close-icon">×</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -124,6 +124,9 @@ onMounted(async () => {
     limpiarFormulario()
     getRangeForClients()
     dependencies.value = await SellerTicketsServices.dependencies()
+    setTimeout(() => {
+        document.getElementById('nav-0-tab').click();
+    }, 1500);
 })
 
 const buyTicket = (index, button, position) => {
@@ -139,6 +142,7 @@ const buyTicket = (index, button, position) => {
         console.log("rango de ticketselse", range_tickets.value);
         console.log("activeButtonselse", activeButtons.value);
     }
+    filters.value.number = ""
     // ticket.value.raffle = filters.value.raffle
 }
 
@@ -161,7 +165,8 @@ const filteredButtons = computed(() => {
 });
 
 const search = async (item) => {
-
+    console.log('item ==> ', item);
+    
     if (!item.raffle) {
         showKeyboard.value = false
         return
@@ -182,7 +187,6 @@ const search = async (item) => {
         response.seller_range.forEach(range => {
             range.numbers.forEach(number => {
                 counter++
-
                 let formattedIndex = index.toString().padStart(4, '0');
                 let formattedNumber = number.toString().padStart(4, '0');
 
@@ -193,7 +197,8 @@ const search = async (item) => {
             });
         });
     }
-
+    console.log('buttons.value ==> ', buttons.value);
+    
 }
 
 const deleteTicket = (ticketEvent, position) => {
@@ -234,7 +239,7 @@ const addRange = async () => {
 
 const getRangeForClients = async () => {
     range_tickets.value = await SellerTicketsServices.show(route.params.id);
-
+    
     range_tickets.value.forEach((range, position) => {
         range.numbers.forEach(number => {
             activeButtons.value.add(`${number}`);
@@ -267,5 +272,62 @@ button.active {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.ticket-number-container {
+    background-color: #5DADE2;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 80px;
+    position: relative;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.ticket-number-container:hover {
+    background-color: #3498DB;
+}
+
+.ticket-number {
+    flex: 1;
+    text-align: center;
+}
+
+.close-button {
+    background-color: transparent;
+    border: 2px solid #333;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.close-button:hover {
+    background-color: transparent;
+    border-color: #000;
+}
+
+.close-button:focus {
+    outline: none;
+}
+
+.close-icon {
+    line-height: 1;
 }
 </style>
