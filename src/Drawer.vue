@@ -2,6 +2,9 @@
     <Menubar>
         <template #start>
             <Button class="mr-3" icon="pi pi-bars" @click="visible = true"></Button>
+            <div class="header-logo-container">
+                <img src="/src/assets/customers/logo_casa_sorteos.png" alt="Casa Sorteos" class="header-logo" />
+            </div>
         </template>
         <template #end>
             <Button @click="VisibleFilterGeneral = true" class="mr-3" style="cursor: pointer;">Filtro general</Button>
@@ -57,6 +60,13 @@
         <TicketFilter @closeFilter="VisibleFilterGeneral = false" />
     </Dialog>
     <!-- <TicketFilter :visibleDialog="true" /> -->
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p class="footer-text">Copyright © 2025 casasorteos. Todos los derechos reservados</p>
+        </div>
+    </footer>
 </template>
 
 <script setup>
@@ -260,3 +270,61 @@ const saveEntity = async () => {
 }
 
 </script>
+
+<style scoped>
+/* Header Logo */
+.header-logo-container {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.header-logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Footer */
+.app-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #1e3a8a; /* Color azul similar al de la imagen */
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+}
+
+.footer-text {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header-logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .footer-text {
+        font-size: 12px;
+    }
+    
+    .footer-content {
+        padding: 10px 15px;
+    }
+}
+</style>

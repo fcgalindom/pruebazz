@@ -237,7 +237,7 @@
                                         <div class="d-flex"
                                             v-if="(i.status != 'Pagado' || Cookies.get('type_user') == 'true')">
                                             <button class="btn btn-success btn-sm" style="border-radius: 50%;"
-                                                v-if="i.status != 'Pendiente' && i.status != 'Reservado' && i.status != 'Pagado'" @click="changeState(i.id, i.status)"><i
+                                                v-if="i.status != 'Pendiente' && i.status != 'Reservado' && (i.status != 'Pagado' || i.origin == 'web')" @click="changeState(i.id, i.status)"><i
                                                     class="fas fa-check"></i></button>
                                             <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
                                                 @click="changeState(i.id, 'Libre')"><i
@@ -726,6 +726,7 @@ const paymentdata = async (ticket) => {
 
 
 const changeState = async (id, status) => {
+    
     let message = ""
     let newStatus = ""
     switch (status) {
@@ -743,6 +744,11 @@ const changeState = async (id, status) => {
             message = "¿Desea declinar esta boleta?"
             newStatus = "Libre"
             break;
+    }
+
+    if(status == "Pagado" || status == "Reservado") {
+        message = "¿Desea pasar esta boleta a boletas pagadas?"
+        newStatus = "Pagado"
     }
 
     Swal.fire({

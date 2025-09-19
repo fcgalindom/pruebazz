@@ -7,6 +7,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Footer spacing */
+body {
+    padding-bottom: 60px; /* Espacio para el footer fijo */
+}
+
+#app {
+    min-height: 100vh;
+    position: relative;
+}
+
 .main-background {
     background-color: #111111;
 }
