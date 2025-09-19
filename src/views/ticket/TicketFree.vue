@@ -137,7 +137,7 @@
                 <h2 class="mb-4 pt-4 darkbluetext" style="font-weight: bold; font-size: 1.75em;">FINALIZAR PAGO</h2>
 
                 <!-- Botón Wompi -->
-                <button @click="generateWompiPay(monto)"
+                <button @click="saveEntity()"
                     class="btn darkblue btn-lg w-100 mb-5 d-flex align-items-center justify-content-center gap-2"
                     style="font-size: 1.75em; font-weight: bold;">
                     PAGO EN LINEA
@@ -767,6 +767,7 @@ const saveEntity = async (is_whatsapp = false) => {
     }
     ticket.value.value = value
     let message = ''
+    let isWompiPay = false
     if (ticket.value.id) {
         await TicketServices.updateCustomer(ticket.value, ticket.value.id)
         message = 'Datos guardados con Éxito.'
@@ -786,7 +787,8 @@ const saveEntity = async (is_whatsapp = false) => {
             response = await TicketServices.createticketClient(ticket.value)
         }
         if (props.typeScreen == 'client') {
-            message = `Tickets creados con éxito. ${response.success}. A continuación por favor realizar el pago.`
+            message = `Boletas reservadas con éxito. A continuación por favor realizar el pago.`
+            isWompiPay = true
         }else {
             if (response.duplicated.length > 0)
                 message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
@@ -801,6 +803,10 @@ const saveEntity = async (is_whatsapp = false) => {
         text: message,
         icon: 'success',
         confirmButtonText: 'Continuar'
+    }).then((result) => {
+        if (result.isConfirmed && isWompiPay) {
+            generateWompiPay(total.toString() + "00")
+        }
     })
     visiblefindcustomer.value = false
     chargeForm()
@@ -877,9 +883,9 @@ const getPromotionsByRaffle = async () => {
     // 85.000
     monto.value = ticket.value.value_to_pay * ticket.value.number.length
     monto.value += "00"
-    if(props.typeScreen == 'client'){
-        saveEntity()
-    }
+    // if(props.typeScreen == 'client'){
+    //     saveEntity()
+    // }
 
 }
 const telefono = "573154862281"; // Número en formato internacional (sin "+")
@@ -889,6 +895,9 @@ const generateWompiPay = async (monto_ = "0") => {
     const mensajedado = `${referencia.value}${monto.value}${moneda}${secretoIntegridad}`;
     await hashSHA256(mensajedado).then(hash => cifrar.value = hash);
 
+    if (props.typeScreen == 'client') {
+        saveEntity()
+    }
 
     setTimeout(() => {
         const script = document.createElement('script');
@@ -918,7 +927,7 @@ const generateWompiPay = async (monto_ = "0") => {
                 }, 2000);
             }
         }, 200);
-    }, 200); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
+    }, 2000); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
 
     visible.value = false
     // document.body.style.overflow = 'auto';

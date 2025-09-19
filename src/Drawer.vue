@@ -146,7 +146,7 @@ const addAdminMenu = () => {
         items: [
             { label: 'Reporte de ventas', link: '/reports/sales', icon: 'far fa-circle nav-icon' },
             { label: 'Reporte de usuarios', link: '/reports/users', icon: 'far fa-circle nav-icon' },
-            // { label: 'Reporte de vendedores', link: '/reports/sellers', icon: 'far fa-circle nav-icon' }
+            { label: 'Reporte de vendedores', link: '/reports/sellers', icon: 'far fa-circle nav-icon' }
         ]
     })
 

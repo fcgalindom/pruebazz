@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import { name } from '@cloudinary/url-gen/actions/namedTransformation';
 import TicketLine from '@/views/ticket/TicketLine.vue';
 import chartsellers from '@/views/charts/chartsellers.vue';
+import SellerInform from '@/views/charts/SellerInform.vue';
 const ticketsRoutes = [
 	{
 		path: '/tickets/Libre',
@@ -110,6 +111,18 @@ const ticketsRoutes = [
 		path: '/reports/users',
 		name: 'chartsellers',
 		component: chartsellers,
+		befereEnter: (to, from, next) => {
+			if (Cookies.get('token')) {
+				next()
+			} else {
+				next('/admin')
+			}
+		}
+	},
+	{
+		path: '/reports/sellers',
+		name: 'chartsellers2',
+		component: SellerInform,
 		befereEnter: (to, from, next) => {
 			if (Cookies.get('token')) {
 				next()
