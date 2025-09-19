@@ -8,7 +8,7 @@
                     <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
                         <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
-                        }}</Button>
+                            }}</Button>
                         <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
                             Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
@@ -110,35 +110,24 @@
                         </div>
                         <div class="row pb-3 mb-3" v-for="(i, index) in ticket.payments" :key="index"
                             style="border-bottom: 1px solid rgba(0, 0, 0, 0.19);">
-                            <div class="col-5">
+                            <div class="col-md-6">
                                 <Label>Método de pago</Label>
                                 <Select v-model="i.payment_method" :options="payment_methods" filter
                                     class="w-100"></Select>
                             </div>
-                            <div class="col-6">
+                            <div class="col-md-6" v-if="i.payment_method !== '' && i.payment_method !== 'EFECTIVO'">
+                                <label>Referencia de pagos</label>
+                                <input type="text" v-model="i.reference" class="form-control"
+                                    placeholder="Ingrese la referencia" />
+                            </div>
+                            <div class="col-md-6">
                                 <Label>Valor</Label>
                                 <InputGroup>
                                     <InputGroupAddon>$</InputGroupAddon>
                                     <InputNumber fluid v-model="i.amount" type="text"></InputNumber>
                                 </InputGroup>
                             </div>
-                            <div class="col-1">
-                                <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">X</button>
-                            </div>
                             <hr>
-                            <!-- <div class="col-4">
-                                <div class="row">
-                                    <div class="col-10">
-                                        <Label>Fecha de expiración</Label>
-                                        <DatePicker v-model="i.expiration_date" showIcon fluid :showOnFocus="false"
-                                            @date-select="i.expiration_date = Helper.formatDateForm($event)" />
-                                    </div>
-                                    <div class="col-2">
-                                        <button class="btn btn-danger mt-4 ml-3"
-                                            @click="remove_payment(index)">X</button>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
 
@@ -149,8 +138,8 @@
             </div>
             <div id="toPDF" ref="toPDF" style="position: relative;">
                 <!-- Loading Overlay -->
-                <div v-if="loading" class="d-flex justify-content-center align-items-center" 
-                     style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.8); z-index: 1000; min-height: 200px;">
+                <div v-if="loading" class="d-flex justify-content-center align-items-center"
+                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.8); z-index: 1000; min-height: 200px;">
                     <div class="text-center">
                         <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
                             <span class="sr-only">Loading...</span>
@@ -177,7 +166,7 @@
                                         <tr>
                                             <td colspan="6">ENTREGA A LA OFICINA</td>
                                             <td colspan="6">{{ Helper.formatNumber(full_value?.total - pay.totalToPay)
-                                                }} </td>
+                                            }} </td>
                                         </tr>
                                         <tr>
                                             <td colspan="3">PAGADO AL VENDEDOR</td>
@@ -237,7 +226,8 @@
                                         <div class="d-flex"
                                             v-if="(i.status != 'Pagado' || Cookies.get('type_user') == 'true')">
                                             <button class="btn btn-success btn-sm" style="border-radius: 50%;"
-                                                v-if="i.status != 'Pendiente' && i.status != 'Reservado' && (i.status != 'Pagado' || i.origin == 'web')" @click="changeState(i.id, i.status)"><i
+                                                v-if="i.status != 'Pendiente' && i.status != 'Reservado' && (i.status != 'Pagado' || i.origin == 'web')"
+                                                @click="changeState(i.id, i.status)"><i
                                                     class="fas fa-check"></i></button>
                                             <button class="btn btn-danger btn-sm" style="border-radius: 50%;"
                                                 @click="changeState(i.id, 'Libre')"><i
@@ -702,7 +692,7 @@ const generatePDF = async () => {
 }
 
 const add_payment = () => {
-    ticket.value.payments.push({ payment_method: "EFECTIVO", amount: "", expiration_date: "2024-12-31" })
+    ticket.value.payments.push({ payment_method: "EFECTIVO", amount: "", expiration_date: "2024-12-31", reference: "" })
 }
 
 const remove_payment = (index) => {
@@ -726,7 +716,7 @@ const paymentdata = async (ticket) => {
 
 
 const changeState = async (id, status) => {
-    
+
     let message = ""
     let newStatus = ""
     switch (status) {
@@ -746,7 +736,7 @@ const changeState = async (id, status) => {
             break;
     }
 
-    if(status == "Pagado" || status == "Reservado") {
+    if (status == "Pagado" || status == "Reservado") {
         message = "¿Desea pasar esta boleta a boletas pagadas?"
         newStatus = "Pagado"
     }
