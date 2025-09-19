@@ -927,7 +927,7 @@ const generateWompiPay = async (monto_ = "0") => {
                 }, 2000);
             }
         }, 200);
-    }, 2000); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
+    }, 200); // <-- Puedes aumentar este valor si sigue fallando (ej: 1500ms)
 
     visible.value = false
     // document.body.style.overflow = 'auto';
