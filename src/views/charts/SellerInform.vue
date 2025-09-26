@@ -16,7 +16,13 @@
     
         </div>
         <div class=" col-md-12 d-flex justify-content-center">
-            <Button @click="showData">Buscar</Button>
+            <Button @click="showData" :disabled="loading">
+                <i v-if="!loading" class="fas fa-search mr-2"></i>
+                <div v-if="loading" class="spinner-border spinner-border-sm mr-2" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                {{ loading ? 'Cargando...' : 'Buscar' }}
+            </Button>
         </div>
     
     </div>
@@ -25,7 +31,20 @@
         <h3>Reporte de Vendedores</h3>
     
     </div>
-    <div class="card flex justify-center">
+    <div class="card flex justify-center" style="position: relative;">
+        <!-- Loading Overlay -->
+        <div v-if="loading" class="d-flex justify-content-center align-items-center" 
+             style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.8); z-index: 1000; min-height: 200px;">
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="mt-2">
+                    <strong>Cargando reporte de vendedores...</strong>
+                </div>
+            </div>
+        </div>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -35,14 +54,14 @@
                 </tr>
             </thead>
             <tbody>
-    
+
                 <tr v-for="ticket in tickets.data" :key="ticket.customer_id">
                     <td>{{ getSellerNameById(ticket.seller_id) }}</td>
                     <td>{{ ticket.cantidad_boletos }}</td>
                     <td>{{ ticket.total_recaudado.toLocaleString('es-CO') }}</td>
                 </tr>
-    
-    
+
+
             </tbody>
         </table>
     </div>
@@ -64,12 +83,21 @@ const totalBoletos = ref(0);
 const totalRecaudado = ref(0);
 const dependencies = ref({});
 const free = ref(0);
+const loading = ref(false);
 
 onMounted(async () => {
-    showData();
-    dependencies.value = await TicketServices.dependencies()
-    chartData.value = setChartData();
-    chartOptions.value = setChartOptions();
+    loading.value = true;
+    
+    try {
+        await showData();
+        dependencies.value = await TicketServices.dependencies();
+        chartData.value = setChartData();
+        chartOptions.value = setChartOptions();
+    } catch (error) {
+        console.error('Error en la inicialización:', error);
+    } finally {
+        loading.value = false;
+    }
 });
 
 const getSellerNameById = (id) => {
@@ -83,33 +111,27 @@ const chartOptions = ref();
 
 
 const showData = async () => {
-    raffles.value = await RaffleServices.listlast();
+    loading.value = true;
+    
+    try {
+        raffles.value = await RaffleServices.listlast();
 
-    tickets.value = await TicketServices.getnumberRaflessbysellerInform(
-        raffles.value.id,
-        initialDate.value,
-        finalDate.value
-    );
+        tickets.value = await TicketServices.getnumberRaflessbysellerInform(
+            raffles.value.id,
+            initialDate.value,
+            finalDate.value
+        );
 
-    const totalTickets = (raffles.value.final_number - raffles.value.start_number) + 1;
-    free.value = totalTickets - tickets.value.data.total;
+        const totalTickets = (raffles.value.final_number - raffles.value.start_number) + 1;
+        free.value = totalTickets - tickets.value.data.total;
 
-    // Suma total de boletos y recaudado
-    totalBoletos.value = tickets.value.data.reduce((sum, item) => sum + item.cantidad_boletos, 0);
-    totalRecaudado.value = tickets.value.data.reduce((sum, item) => sum + item.total_recaudado, 0);
-    // for (const ticket of tickets.value.data) {
-    //     console.log('ticket' , ticket);
-        
-    //     const sellerData = await SellerServices.showseller(ticket.seller_id ?? 3)
-    //     if(ticket.user_id == 1){
-    //         sellerData.name = "rifas y sorteos"
-    //     }
-    //     if(ticket.user_id == null){
-    //         sellerData.name = "Compra en línea"
-    //     }
-    //     console.log("see",sellerData.name)
-    //     ticket.seller_name = sellerData?.name ?? 'Desconocido'
-    // }
+        totalBoletos.value = tickets.value.data.reduce((sum, item) => sum + item.cantidad_boletos, 0);
+        totalRecaudado.value = tickets.value.data.reduce((sum, item) => sum + item.total_recaudado, 0);
+    } catch (error) {
+        console.error('Error cargando datos:', error);
+    } finally {
+        loading.value = false;
+    }
 }
 
 const setChartData = () => {
