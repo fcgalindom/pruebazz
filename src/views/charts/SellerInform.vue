@@ -15,21 +15,21 @@
             </div>
     
         </div>
-        <div class=" col-md-12 d-flex">
+        <div class=" col-md-12 d-flex justify-content-center">
             <Button @click="showData">Buscar</Button>
         </div>
     
     </div>
     
     <div class="d-flex justify-content-between mt-5">
-        <h3>Reporte de boletas</h3>
+        <h3>Reporte de Vendedores</h3>
     
     </div>
     <div class="card flex justify-center">
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Usuario</th>
+                    <th>Vendedor</th>
                     <th>Cantidad</th>
                     <th>Total</th>
                 </tr>
@@ -37,7 +37,7 @@
             <tbody>
     
                 <tr v-for="ticket in tickets.data" :key="ticket.customer_id">
-                    <td>{{ ticket.seller_name }}</td>
+                    <td>{{ getSellerNameById(ticket.seller_id) }}</td>
                     <td>{{ ticket.cantidad_boletos }}</td>
                     <td>{{ ticket.total_recaudado.toLocaleString('es-CO') }}</td>
                 </tr>
@@ -62,13 +62,20 @@ const initialDate = ref('');
 const finalDate = ref('');
 const totalBoletos = ref(0);
 const totalRecaudado = ref(0);
+const dependencies = ref({});
 const free = ref(0);
 
 onMounted(async () => {
     showData();
+    dependencies.value = await TicketServices.dependencies()
     chartData.value = setChartData();
     chartOptions.value = setChartOptions();
 });
+
+const getSellerNameById = (id) => {
+    const seller = dependencies.value.sellers.find(seller => seller.id == id);
+    return seller ? seller.name : 'Desconocido';
+}
 
 
 const chartData = ref();
@@ -78,7 +85,7 @@ const chartOptions = ref();
 const showData = async () => {
     raffles.value = await RaffleServices.listlast();
 
-    tickets.value = await TicketServices.gernumbertickerbyseller(
+    tickets.value = await TicketServices.getnumberRaflessbysellerInform(
         raffles.value.id,
         initialDate.value,
         finalDate.value
@@ -90,18 +97,19 @@ const showData = async () => {
     // Suma total de boletos y recaudado
     totalBoletos.value = tickets.value.data.reduce((sum, item) => sum + item.cantidad_boletos, 0);
     totalRecaudado.value = tickets.value.data.reduce((sum, item) => sum + item.total_recaudado, 0);
-    for (const ticket of tickets.value.data) {
-
-        const sellerData = await SellerServices.showseller(ticket.user_id ?? 3)
-        if(ticket.user_id == 1){
-            sellerData.name = "rifas y sorteos"
-        }
-        if(ticket.user_id == null){
-            sellerData.name = "Compra en línea"
-        }
-        console.log("see",sellerData.name)
-        ticket.seller_name = sellerData?.name ?? 'Desconocido'
-    }
+    // for (const ticket of tickets.value.data) {
+    //     console.log('ticket' , ticket);
+        
+    //     const sellerData = await SellerServices.showseller(ticket.seller_id ?? 3)
+    //     if(ticket.user_id == 1){
+    //         sellerData.name = "rifas y sorteos"
+    //     }
+    //     if(ticket.user_id == null){
+    //         sellerData.name = "Compra en línea"
+    //     }
+    //     console.log("see",sellerData.name)
+    //     ticket.seller_name = sellerData?.name ?? 'Desconocido'
+    // }
 }
 
 const setChartData = () => {
