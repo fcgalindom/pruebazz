@@ -881,8 +881,8 @@ const getPromotionsByRaffle = async () => {
     }
     monto.value = ticket.value.value_to_pay
     // 85.000
-    // monto.value = ticket.value.value_to_pay * ticket.value.number.length
-    monto.value = "2000"
+    monto.value = ticket.value.value_to_pay * ticket.value.number.length
+    // monto.value = "2000"
     monto.value += "00"
     // if(props.typeScreen == 'client'){
     //     saveEntity()
