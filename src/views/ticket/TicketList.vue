@@ -108,6 +108,7 @@
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-success" @click="add_payment()">+</button>
                         </div>
+                        <hr>
                         <div class="row pb-3 mb-3" v-for="(i, index) in ticket.payments" :key="index"
                             style="border-bottom: 1px solid rgba(0, 0, 0, 0.19);">
                             <div class="col-md-6">
@@ -120,12 +121,17 @@
                                 <input type="text" v-model="i.reference" class="form-control"
                                     placeholder="Ingrese la referencia" />
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <Label>Valor</Label>
                                 <InputGroup>
                                     <InputGroupAddon>$</InputGroupAddon>
                                     <InputNumber fluid v-model="i.amount" type="text"></InputNumber>
                                 </InputGroup>
+                            </div>
+                            <div :class="i.payment_method !== '' && i.payment_method !== 'EFECTIVO' ? 'col-7 d-flex justify-content-end align-items-start' : 'col-1'">
+                                <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                             <hr>
                         </div>
