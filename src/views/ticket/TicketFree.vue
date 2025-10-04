@@ -273,7 +273,7 @@
             <h3 v-else>Cargue de Boletas</h3>
         </div>
         <hr>
-        <div class="row" v-if="typeScreen == 'admin'">
+        <form @submit.prevent="mountedBuyTicket()" class="row" v-if="typeScreen == 'admin'">
             <div class="col-md-2">
                 <Label required="0">Filtrar Números</Label>
                 <Input v-model="filters.number"></Input>
@@ -287,11 +287,10 @@
             </div>
             <div class="col-12">
                 <div class="w-100 d-flex justify-content-center">
-                    <Button class="mt-3" :disabled="ticket.number.length == 0"
-                        @click="mountedBuyTicket()">Comprar</Button>
+                    <Button type="submit" class="mt-3" :disabled="ticket.number.length == 0">Comprar</Button>
                 </div>
             </div>
-        </div>
+        </form>
         <div class="w-100 d-flex justify-content-center" v-if="typeScreen == 'client' && ticket.number">
             <button v-if="ticket.number.length > 0" class="blinking-button-2 poppins-semibold mt-3"
                 @click="visiblefindcustomer = true; getPromotionsByRaffle()">Comprar</button>

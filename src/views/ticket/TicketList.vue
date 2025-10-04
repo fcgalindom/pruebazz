@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container-fluid pt-3">
-            <div class="my-3">
+            <form @submit.prevent="datatable()" class="my-3">
                 <div class="d-flex flex-column flex-sm-row justify-content-between">
                     <!-- <h3 v-if="!status">{{ seller }}</h3> -->
                     <h3>{{ getTitle() }}</h3>
@@ -17,7 +17,7 @@
                 <div class="row mb-3">
                     <div class="col-md-3 mb-3">
                         <Label required="0">Número</Label>
-                        <Input required="0" v-model="filters.number" />
+                        <BaseInput required="0" v-model="filters.number" />
                     </div>
                     <div class="col-md-3 mb-3">
                         <Label required="0">Rifa</Label>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <Button @click="datatable">Buscar</Button>
+                    <Button type="submit">Buscar</Button>
                 </div>
                 <div class="d-flex justify-content-end">
                     <Button class="mr-3" @click="syncWompiPayments" :disabled="loading">
@@ -135,7 +135,7 @@
                         <Button @click="saveEntity">Guardar</Button>
                     </div>
                 </Dialog>
-            </div>
+            </form>
             <div id="toPDF" ref="toPDF" style="position: relative;">
                 <!-- Loading Overlay -->
                 <div v-if="loading" class="d-flex justify-content-center align-items-center"
@@ -330,6 +330,7 @@ import TikectFirstPaid from "./TikectFirstPaid.vue";
 import TicketPaidAll from "./TicketPaidAll.vue";
 import PayToSeller from "./PayToSeller.vue";
 import Cookies from 'js-cookie';
+import BaseInput from '@/components/base/BaseInput.vue'
 // @ts-ignore
 import Helper from '@/helpers/Helper';
 import { SellerServices } from "@/services/seller.service";

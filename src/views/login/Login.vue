@@ -3,7 +3,7 @@
     <img style="width: 10em;" src="../../assets/customers/logo_casa_sorteos.png" alt="">
   </div>
   <div class="container border mt-5">
-    <div class="row justify-content-center">
+    <form @submit.prevent="saveEntity" class="row justify-content-center">
       <div class="col-md-6">
         <h2 class="text-center mt-5" style="font-weight: bold; font-size: 2em;">Login</h2>
         <div class="mb-3">
@@ -16,10 +16,10 @@
           <input v-model="user.password" type="password" class="form-control" id="password" placeholder="Contraseña">
         </div>
         <div class="d-flex justify-content-center mb-5">
-          <Button class="btn-lg" @click="saveEntity">Login</Button>
+          <Button type="submit" class="btn-lg">Login</Button>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 
 </template>

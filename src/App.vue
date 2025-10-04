@@ -26,7 +26,7 @@ const token = Cookies.get('token');
 <style>
 /* Footer */
 .app-footer {
-  /* position: absolute; */
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;

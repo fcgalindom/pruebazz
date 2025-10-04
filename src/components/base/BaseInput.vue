@@ -1,8 +1,21 @@
 <template>
   <label :for="id"> {{ label }} <span v-if="required == '1'" class="text-danger">(*)</span> </label>
-  <input :disabled="disabled" :type="type" :id="id" maxlength="255" v-on:keyup="clearError" autocomplete="off"
-    class="form-control ileven-input font-light" :class="[error.length === 0 ? ' ileven-input ' : ' ileven-input-error ']"
-    :value="modelValue" :placeholder="placeholder" @input="updateValue" @blur="$emit('blur')" ref="input" v-on="$attrs" />
+  <input 
+    :disabled="disabled" 
+    :type="type" 
+    :id="id" 
+    maxlength="255" 
+    v-on:keyup="clearError" 
+    autocomplete="on"
+    v-bind="required == '1' ? { required: true } : {}"
+    class="form-control ileven-input font-light" 
+    :class="[error.length === 0 ? ' ileven-input ' : ' ileven-input-error ']"
+    :value="modelValue" 
+    :placeholder="placeholder" 
+    @input="updateValue" 
+    @blur="$emit('blur')" 
+    ref="input" 
+    v-on="$attrs" />
   <template v-if="error.length">
     <Error class="d-block mt-1" v-for="(item, index) in error" :key="index">{{ item }}</Error>
   </template>
@@ -19,8 +32,7 @@ const props = withDefaults(defineProps<{
   placeholder?: string
   id?: string
   label?: string
-  required?: string,
-  emits: ['blur'],
+  required?: string
 }>(), {
   modelValue: '',
   // @ts-ignore
@@ -35,6 +47,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void
+  (event: 'blur'): void
 }>()
 
 const input = ref<HTMLInputElement | null>(null)
