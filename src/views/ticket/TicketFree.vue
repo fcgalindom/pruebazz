@@ -209,12 +209,12 @@
                 </button>
 
                 <!-- Botón WhatsApp -->
-                <button @click="mesnajewa()"
+                <Button @click="mesnajewa()"
                     class="btn darkblue btn-lg  w-100 d-flex align-items-center justify-content-center gap-2"
                     style="margin-bottom: 4em; font-size: 1.75em; font-weight: bold">
                     PAGO VÍA WHATSAPP
                     <i class="fab fa-whatsapp whatsapp"></i>
-                </button>
+                </Button>
 
                 <!-- Información y contacto -->
                 <div class="darkblue text-white p-3 rounded" style="border-radius: 12px !important;">
@@ -788,6 +788,9 @@ const saveEntity = async (is_whatsapp = false) => {
         if (props.typeScreen == 'client') {
             message = `Boletas reservadas con éxito. A continuación por favor realizar el pago.`
             isWompiPay = true
+            if(is_whatsapp) {
+                isWompiPay = false
+            }
         }else {
             if (response.duplicated.length > 0)
                 message = `Tickets creados con éxito. ${response.success} y estas boletas ya estaban creadas con anterioridad ${response.duplicated} y no se realizaron cambios ni en creación ni agregando pagos`
