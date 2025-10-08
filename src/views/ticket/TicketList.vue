@@ -422,7 +422,7 @@ onMounted(async () => {
     type_user.value = Cookies.get('type_user')
     is_admin.value = Cookies.get('is_admin')
     console.log('is_admin.value ==> ', is_admin.value);
-    if (Cookies.get('name') == "drdentix1") {
+    if (Cookies.get('name') == "drdentix1" || Cookies.get('name') == 'Uber Mayorga') {
         perrmisionadmin.value = true
     } else {
         perrmisionadmin.value = false
@@ -833,6 +833,7 @@ const calculatePaid = (i, showNa = false) => {
     i.payments?.forEach(element => {
         total += parseInt(element.amount)
     });
+    if(total == 0) return ""
     return Helper.formatNumber(total)
 }
 
