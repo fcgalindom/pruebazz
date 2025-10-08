@@ -38,6 +38,27 @@ export default class Helper {
       return `${day}-${month}-${year}`;
     }
 
+    static formatDatePDF(dateString) {
+      if (!dateString) return '';
+      
+      // Handle both "yyyy-mm-dd" and ISO formats
+      let date;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        const [year, month, day] = dateString.split('-');
+        date = new Date(year, month - 1, day);
+      } else {
+        date = new Date(dateString);
+      }
+      if (isNaN(date.getTime())) return '';
+
+      const dayStr = String(date.getDate()).padStart(2, '0');
+      const monthNames = ["JAN", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DIC"];
+      const monthStr = monthNames[date.getMonth()];
+      const yearStr = date.getFullYear();
+
+      return `${dayStr}-${monthStr}-${yearStr}`;
+    }
+
     static formatDateForm(date) {
         return date.toISOString().split('T')[0]
     }

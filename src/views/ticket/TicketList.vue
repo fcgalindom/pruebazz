@@ -622,9 +622,9 @@ const generatePDF = async () => {
         y += 5
         doc.text(`TELÉFONO: (${seller.value?.country_code ? seller.value.country_code : ''}) ${seller.value?.phone ? seller.value.phone : ''}`, 10, y)
         y += 5
-        doc.text(`FECHA INICIAL: ${Helper.formatDate(filters.value?.init_date)}`, 10, y)
+        doc.text(`FECHA INICIAL: ${Helper.formatDatePDF(filters.value?.init_date)}`, 10, y)
         y += 5
-        doc.text(`FECHA FINAL: ${Helper.formatDate(filters.value?.final_date)}`, 10, y)
+        doc.text(`FECHA FINAL: ${Helper.formatDatePDF(filters.value?.final_date)}`, 10, y)
         y += 5
         doc.text(`TOTAL BOLETAS REPORTADAS: ${cant_tickets.value}`, 10, y)
         y += 5
