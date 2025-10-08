@@ -6,23 +6,25 @@
                     <h3>Vendedores</h3>
                 </div>
                 <hr>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <Label required="0">Nombre</Label>
-                        <Input v-model="filters.name" label="Nombre" />
+                <form @submit.prevent="datatable">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <Label required="0">Nombre</Label>
+                            <Input v-model="filters.name" label="Nombre" />
+                        </div>
+                        <div class="col-md-4">
+                            <Label required="0">Documento</Label>
+                            <Input v-model="filters.document_number" label="Documento" />
+                        </div>
+                        <div class="col-md-4">
+                            <Label required="0">Correo</Label>
+                            <Input v-model="filters.email" label="Correo" />
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <Label required="0">Documento</Label>
-                        <Input v-model="filters.document_number" label="Documento" />
+                    <div class="d-flex justify-content-center">
+                        <Button type="submit">Buscar</Button>
                     </div>
-                    <div class="col-md-4">
-                        <Label required="0">Correo</Label>
-                        <Input v-model="filters.email" label="Correo" />
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <Button @click="datatable">Buscar</Button>
-                </div>
+                </form>
                 <div class="d-flex justify-content-end">
                     <Button v-if="perrmisionadmin == true" @click="limpiarData; visible = true">Registrar</Button>
                 </div>
@@ -171,7 +173,7 @@
   
   onMounted(async () => {
       await datatable()
-      if(Cookies.get('name') == "drdentix1") {
+      if(Cookies.get('name') == "drdentix1" || Cookies.get('name') == 'Uber Mayorga') {
         perrmisionadmin.value = true
       } else {
         perrmisionadmin.value = false
