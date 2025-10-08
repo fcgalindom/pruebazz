@@ -3,7 +3,7 @@
         <template #start>
             <Button class="mr-3" icon="pi pi-bars" @click="visible = true"></Button>
             <div class="header-logo-container">
-                <img src="/src/assets/customers/logo_casa_sorteos.png" alt="Casa Sorteos" class="header-logo" />
+                <img src="/src/assets/customers/logo_casa_sorteos.png" alt="CASASORTEOS" class="header-logo" />
             </div>
         </template>
         <template #end>
@@ -19,7 +19,7 @@
             </button>
         </template>
     </Menubar>
-    <Drawer v-model:visible="visible" header="Casa Sorteos">
+    <Drawer v-model:visible="visible" header="CASASORTEOS">
         <div class="d-flex justify-content-center">
             <Menu :model="items" class="w-100 md:w-60">
                 <template #submenulabel="{ item }">

@@ -8,7 +8,7 @@
                     <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
                         <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
-                            }}</Button>
+                        }}</Button>
                         <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
                             Helper.formatNumber(full_value?.total) }}</Button>
                     </div>
@@ -76,70 +76,73 @@
                     <Button v-if="!sellerRouteId" @click="limpiarFormulario; visible = true">Registrar</Button>
                 </div>
                 <Dialog v-model:visible="visible" modal header="DATOS DE COMPRA" :style="{ width: '80rem' }">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <Label>Número</Label>
-                            <Input v-model="ticket.number" type="number"></Input>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <Label>Vendedor</Label>
-                            <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
-                                optionValue="id" class="w-100"></Select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <Label>Cliente (a quien se vende)</Label>
-                            <Select v-model="ticket.customer" :options="dependencies.customers" filter
-                                optionLabel="name" optionValue="id" class="w-100"></Select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <Label>Rifa</Label>
-                            <Select v-model="ticket.raffle" :options="dependencies.raffles" filter optionLabel="name"
-                                optionValue="id" class="w-100"></Select>
-                        </div>
-                        <!-- <div class="col-md-6 mb-3">
+                    <form @submit.prevent="saveEntity">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <Label>Número</Label>
+                                <Input v-model="ticket.number" type="number"></Input>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <Label>Vendedor</Label>
+                                <Select v-model="ticket.seller" :options="dependencies.sellers" filter
+                                    optionLabel="name" optionValue="id" class="w-100"></Select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <Label>Cliente (a quien se vende)</Label>
+                                <Select v-model="ticket.customer" :options="dependencies.customers" filter
+                                    optionLabel="name" optionValue="id" class="w-100"></Select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <Label>Rifa</Label>
+                                <Select v-model="ticket.raffle" :options="dependencies.raffles" filter
+                                    optionLabel="name" optionValue="id" class="w-100"></Select>
+                            </div>
+                            <!-- <div class="col-md-6 mb-3">
                                 <Label>Estado de la boleta</Label>
                                 <Select v-model="ticket.status" :options="payment_methods" filter class="w-100"></Select>
                             </div> -->
-                    </div>
-
-                    <hr>
-
-                    <div>
-                        <div class="d-flex justify-content-end">
-                            <button class="btn btn-success" @click="add_payment()">+</button>
                         </div>
+
                         <hr>
-                        <div class="row pb-3 mb-3" v-for="(i, index) in ticket.payments" :key="index"
-                            style="border-bottom: 1px solid rgba(0, 0, 0, 0.19);">
-                            <div class="col-md-6">
-                                <Label>Método de pago</Label>
-                                <Select v-model="i.payment_method" :options="payment_methods" filter
-                                    class="w-100"></Select>
-                            </div>
-                            <div class="col-md-6" v-if="i.payment_method !== '' && i.payment_method !== 'EFECTIVO'">
-                                <label>Referencia de pagos</label>
-                                <input type="text" v-model="i.reference" class="form-control"
-                                    placeholder="Ingrese la referencia" />
-                            </div>
-                            <div class="col-md-5">
-                                <Label>Valor</Label>
-                                <InputGroup>
-                                    <InputGroupAddon>$</InputGroupAddon>
-                                    <InputNumber fluid v-model="i.amount" type="text"></InputNumber>
-                                </InputGroup>
-                            </div>
-                            <div :class="i.payment_method !== '' && i.payment_method !== 'EFECTIVO' ? 'col-7 d-flex justify-content-end align-items-start' : 'col-1'">
-                                <button class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+
+                        <div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-success" @click="add_payment()">+</button>
                             </div>
                             <hr>
+                            <div class="row pb-3 mb-3" v-for="(i, index) in ticket.payments" :key="index"
+                                style="border-bottom: 1px solid rgba(0, 0, 0, 0.19);">
+                                <div class="col-md-6">
+                                    <Label>Método de pago</Label>
+                                    <Select v-model="i.payment_method" :options="payment_methods" filter
+                                        class="w-100"></Select>
+                                </div>
+                                <div class="col-md-6" v-if="i.payment_method !== '' && i.payment_method !== 'EFECTIVO'">
+                                    <label>Referencia de pagos</label>
+                                    <input type="text" v-model="i.reference" class="form-control"
+                                        placeholder="Ingrese la referencia" />
+                                </div>
+                                <div class="col-md-5">
+                                    <Label>Valor</Label>
+                                    <InputGroup>
+                                        <InputGroupAddon>$</InputGroupAddon>
+                                        <InputNumber fluid v-model="i.amount" type="text"></InputNumber>
+                                    </InputGroup>
+                                </div>
+                                <div
+                                    :class="i.payment_method !== '' && i.payment_method !== 'EFECTIVO' ? 'col-7 d-flex justify-content-end align-items-start' : 'col-1'">
+                                    <button type="button" class="btn btn-danger mt-4 ml-3" @click="remove_payment(index)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <hr>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="d-flex justify-content-center my-3">
-                        <Button @click="saveEntity">Guardar</Button>
-                    </div>
+                        <div class="d-flex justify-content-center my-3">
+                            <Button type="submit">Guardar</Button>
+                        </div>
+                    </form>
                 </Dialog>
             </form>
             <div id="toPDF" ref="toPDF" style="position: relative;">
@@ -172,7 +175,7 @@
                                         <tr>
                                             <td colspan="6">ENTREGA A LA OFICINA</td>
                                             <td colspan="6">{{ Helper.formatNumber(full_value?.total - pay.totalToPay)
-                                            }} </td>
+                                                }} </td>
                                         </tr>
                                         <tr>
                                             <td colspan="3">PAGADO AL VENDEDOR</td>

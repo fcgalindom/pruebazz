@@ -1,23 +1,25 @@
 <template #container="{ closeCallback }">
-    <div class="row">
-
-        <div class="col-12 mb-3">
-            <Label required="0">Cliente</Label>
-            <Select optionLabel="documentname" optionValue="id" filter v-model="filters.customer"
-                :options="dependencies.customers" fluid>
-            </Select>
+    <form @submit.prevent="datatable">
+        <div class="row">
+    
+            <div class="col-12 mb-3">
+                <Label required="0">Cliente</Label>
+                <Select optionLabel="documentname" optionValue="id" filter v-model="filters.customer"
+                    :options="dependencies.customers" fluid>
+                </Select>
+            </div>
+    
+    
+            <div class="col-12 mb-3">
+                <Label required="0">Número de Boleta</Label>
+                <Input required="0" v-model="filters.number" />
+            </div>
+    
         </div>
-
-
-        <div class="col-12 mb-3">
-            <Label required="0">Número de Boleta</Label>
-            <Input required="0" v-model="filters.number" />
+        <div class="d-flex justify-content-center my-3">
+            <Button type="submit">Buscar</Button>
         </div>
-
-    </div>
-    <div class="d-flex justify-content-center my-3">
-        <Button @click="datatable">Buscar</Button>
-    </div>
+    </form>
 
 </template>
 
