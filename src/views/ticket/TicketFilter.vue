@@ -12,7 +12,7 @@
     
             <div class="col-12 mb-3">
                 <Label required="0">Número de Boleta</Label>
-                <Input required="0" v-model="filters.number" />
+                <BaseInput required="0" v-model="filters.number" />
             </div>
     
         </div>
@@ -33,6 +33,7 @@ import { TicketServices } from "@/services/ticket.service";
 import { inject } from "vue";
 import { Button } from 'primevue';
 import { get } from 'jquery';
+import BaseInput from '@/components/base/BaseInput.vue'
 const dialogRef = inject('dialogRef');
 const closeDialog = () => {
     dialogRef.value.close();
