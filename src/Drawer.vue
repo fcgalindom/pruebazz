@@ -133,6 +133,11 @@ const addAdminMenu = () => {
         icon: 'fas fa-tags'
     })
     items.value.push({
+        label: 'Chasi',
+        link: '/chasi',
+        icon: 'fas fa-star'
+    })
+    items.value.push({
         label: 'Reportes',
         link: '#',
         icon: 'fas fa-chart-bar',
