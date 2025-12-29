@@ -17,10 +17,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 onMounted(() => {
-    console.log('Chasi component mounted')
+    // Component initialization
 })
 </script>
 
