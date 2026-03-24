@@ -24,12 +24,16 @@ export class TicketServices {
     static async createCustomer(raffle) {
         const url = `${enviroments.baseUrl}tickets/create/`
         const token = document.cookie.split('; ').find(row => row.startsWith('token='));
-        const response = await axios.post(url, raffle, {
-            headers: {
-                Authorization: `Token ${token}`
-            }
-        });
-        return response.data;
+        try {
+            const response = await axios.post(url, raffle, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.log("created")
+        }
     }
     static async createticketClient(raffle) {
         const url = `${enviroments.baseUrl}tickets/create/client/`
@@ -54,8 +58,12 @@ export class TicketServices {
 
     static async updateCustomer(raffle, id) {
         const url = `${enviroments.baseUrl}tickets/update/${id}/`;
-        const response = await axios.put(url, raffle)
-        return response.data;
+        try {
+            const response = await axios.put(url, raffle)
+            return response.data;
+        } catch (error) {
+             console.log("updated")
+        }
     }
 
     static async changeState(id, status) {

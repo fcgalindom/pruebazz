@@ -410,27 +410,35 @@ watch(
 
 
 const saveEntity = async () => {
+    try {
+        let value = 0
+        ticket.value.payments.forEach(element => {
+            value += parseInt(element.amount)
+        });
+        if (!value) value = 0
 
-    let value = 0
-    ticket.value.payments.forEach(element => {
-        value += parseInt(element.amount)
-    });
-    if (!value) value = 0
-
-    ticket.value.value = value
-    if (ticket.value.id) {
-        await TicketServices.updateCustomer(ticket.value, ticket.value.id)
-    } else {
-        await TicketServices.createCustomer(ticket.value)
+        ticket.value.value = value
+        if (ticket.value.id) {
+            await TicketServices.updateCustomer(ticket.value, ticket.value.id)
+        } else {
+            await TicketServices.createCustomer(ticket.value)
+        }
+        visible.value = false
+        await datatable()
+        Swal.fire({
+            title: '¡Éxito!',
+            text: 'Datos guardados con Éxito.',
+            icon: 'success',
+            confirmButtonText: 'Continuar'
+        })
+    } catch (error) {
+        Swal.fire({
+            title: 'Error',
+            text: error.message,
+            icon: 'error',
+            confirmButtonText: 'Cerrar'
+        })
     }
-    visible.value = false
-    await datatable()
-    Swal.fire({
-        title: '¡Éxito!',
-        text: 'Datos guardados con Éxito.',
-        icon: 'success',
-        confirmButtonText: 'Continuar'
-    })
 }
 
 const add_payment = () => {
