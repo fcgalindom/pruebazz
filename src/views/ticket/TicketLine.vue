@@ -432,6 +432,7 @@ const saveEntity = async () => {
             confirmButtonText: 'Continuar'
         })
     } catch (error) {
+        console.error('Error capturado:', error)
         Swal.fire({
             title: 'Error',
             text: error.message,

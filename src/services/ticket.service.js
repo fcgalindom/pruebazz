@@ -22,6 +22,7 @@ export class TicketServices {
     }
 
     static async createCustomer(raffle) {
+        console.log("entro")
         const url = `${enviroments.baseUrl}tickets/create/`
         const token = document.cookie.split('; ').find(row => row.startsWith('token='));
         try {
@@ -32,7 +33,8 @@ export class TicketServices {
             });
             return response.data;
         } catch (error) {
-            console.log("created")
+            const message = error.response?.data?.error || 'Error al crear el ticket'
+            throw new Error(message)
         }
     }
     static async createticketClient(raffle) {
@@ -48,12 +50,17 @@ export class TicketServices {
             .find(row => row.startsWith('token='))
             ?.split('=')[1];
         const url = `${enviroments.baseUrl}tickets/create/`;
-        const response = await axios.post(url, raffle, {
-            headers: {
-                Authorization: `Token ${token}`
-            }
-        });
-        return response.data;
+        try {
+            const response = await axios.post(url, raffle, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            const message = error.response?.data?.error || 'Error al crear el ticket'
+            throw new Error(message)
+        }
     }
 
     static async updateCustomer(raffle, id) {
@@ -62,7 +69,8 @@ export class TicketServices {
             const response = await axios.put(url, raffle)
             return response.data;
         } catch (error) {
-             console.log("updated")
+            const message = error.response?.data?.error || 'Error al actualizar el ticket'
+            throw new Error(message)
         }
     }
 

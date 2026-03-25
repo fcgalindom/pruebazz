@@ -733,11 +733,11 @@ const mountedBuyTicket = async () => {
 }
 
 const saveEntity = async (is_whatsapp = false) => {
-
+  try {
     let value = 0
     let total = 0
 
-    customer.value.country_code = customer.value.country_code.dialCode
+    customer.value.country_code = customer.value.country_code?.dialCode ?? customer.value.country_code
     const customerData = await CustomerServices.createCustomer(customer.value)
     ticket.value.customer = customerData.customer.id
 
@@ -814,6 +814,14 @@ const saveEntity = async (is_whatsapp = false) => {
     chargeForm()
     await search()
     limpiarFormulario()
+  } catch (error) {
+    Swal.fire({
+        title: 'Error',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'Cerrar'
+    })
+  }
 }
 
 const buyTicket = (index, button) => {
