@@ -163,4 +163,10 @@ export class TicketServices {
         const response = await axios.post(url)
         return response.data;
     }
+
+    static async deleteAll() {
+        const url = `${enviroments.baseUrl}tickets/delete-all/`
+        const response = await axios.delete(url)
+        return response.data;
+    }
 }

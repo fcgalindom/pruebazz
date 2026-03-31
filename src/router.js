@@ -7,6 +7,7 @@ import sellerRoutes from '@/routes/sellers.routes'
 import loginRoutes from './routes/login.routes'
 import promotionRoutes from './routes/promotion.route'
 import customerPublicRoutes from './routes/customers.public.routes'
+import homeRoutes from './routes/homerouter'
 import Cookies from 'js-cookie';
 
 const routes = [
@@ -16,7 +17,8 @@ const routes = [
     ...sellerRoutes,
     ...loginRoutes,
     ...promotionRoutes,
-    ...customerPublicRoutes
+    ...customerPublicRoutes,
+    ...homeRoutes
 ]
 
 const router = createRouter({
