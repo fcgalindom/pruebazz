@@ -41,6 +41,10 @@
                             <!-- <Editor v-model="raffle.description" editorStyle="height: 320px" /> -->
                             <Textarea v-model="raffle.description" class="w-100" rows="5" />
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <Label>Teléfono</Label>
+                            <Input v-model="raffle.phone" placeholder="Ej: 3001234567"></Input>
+                        </div>
                        
                        
                         <div class="col-3">
@@ -285,6 +289,7 @@ const limpiarFormulario = () => {
         final_number: "",
         value_ticket: "",
         description: "",
+        phone: "",
         awards: [{
             award: "",
             date: "",

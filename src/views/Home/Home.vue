@@ -1,7 +1,6 @@
 
 <template>
   <div>
-    <h1>entro</h1>
     <button class="btn btn-danger" @click="confirmarEliminar">
       Eliminar datos de rifa
     </button>
