@@ -35,6 +35,11 @@
                             optionValue="id" class="w-100"></Select>
                     </div>
                     <div class="col-md-3 mb-3">
+                        <Label required="0">Boletas</Label>
+                        <Select v-model="filters.ticket_type" :options="ticket_type_options" optionLabel="label"
+                            optionValue="value" showClear class="w-100"></Select>
+                    </div>
+                    <div class="col-md-3 mb-3">
                         <Label required="0">Fecha inicial</Label>
                         <DatePicker v-model="filters.init_date" showIcon fluid dateFormat="yy-mm-dd"
                             :manualInput="false" @date-select="filters.init_date = Helper.formatDateForm($event)" />
@@ -361,6 +366,10 @@ const seller = ref({})
 const firstpaymentmodal = ref('firstpayment_modal')
 const ticketsmodal = ref(false)
 const payment_methods = ref(['EFECTIVO', 'TRANSFERENCIA', 'CONSIGNACIÓN', 'NEQUI', 'DAVIPLATA', 'BANCOLOMBIA', 'AHORRO A LA MANO', 'WOMPI'])
+const ticket_type_options = ref([
+    { label: 'Boletas facturas generadas', value: 'facturas_generadas' },
+    { label: 'Boletas generadas', value: 'generadas' },
+])
 const visible = ref(false)
 const type_user = ref('')
 const is_admin = ref(false)
@@ -394,6 +403,7 @@ const filters = ref({
     min_amount: "0",
     max_amount: "",
     origin: "",
+    ticket_type: "",
     page: 1
 })
 
