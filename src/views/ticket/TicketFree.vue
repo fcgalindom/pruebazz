@@ -899,7 +899,7 @@ const getPromotionsByRaffle = async () => {
     // }
 
 }
-const telefono = "573154862281"; // Número en formato internacional (sin "+")
+const telefono = computed(() => raffle.value?.phone ? `57${raffle.value.phone}` : "573154862281"); // Número en formato internacional (sin "+")
 
 
 const generateWompiPay = async (monto_ = "0") => {
@@ -983,11 +983,11 @@ const generateWompiPay = async (monto_ = "0") => {
                     `——————————————-\n` +
                     `Quedo atento(a) al envío de la boleta en formato digital.`;
                 const mensajewa = encodeURIComponent(mensajef);
-                window.open(`https://wa.me/${telefono}?text=${mensajewa}`, "_blank");
+                window.open(`https://wa.me/${telefono.value}?text=${mensajewa}`, "_blank");
 
-                
 
-                //window.open( `https://wa.me/${telefono}?text=${mensajewa}`,"_blank");
+
+                //window.open( `https://wa.me/${telefono.value}?text=${mensajewa}`,"_blank");
             } else if (data.event === 'unprocessabletransaction') {
                 alert('Transacción no procesable')
             } else if (data.event === 'transaction_error') {
@@ -1008,23 +1008,29 @@ const generateWompiPay = async (monto_ = "0") => {
 }
 
 const mesnajewa = () => {
+    // Capturar datos antes de que saveEntity limpie el formulario
+    const nombre = customer.value.name
+    const documento = customer.value.document
+    const ciudad = customer.value.cityname
+        || cities.value.find(c => c.id === customer.value.city)?.name
+        || ''
+    const montoActual = monto.value
 
-    saveEntity(true)
     let boletasTexto = "N°";
     ticket.value.number.forEach((boleta) => {
         boletasTexto += ` ${boleta}`;
     });
 
-
+    saveEntity(true)
 
     const mensajef = `
 Hola, he separado boleta con la siguiente información:
 
-Boleta: ${boletasTexto} 
-Nombre:  ${customer.value.name}
-Documento: ${customer.value.document}
-Ciudad: ${customer.value.cityname}
-Valor a cancelar:$${Helper.thousandSeparator(monto.value / 100 )}
+Boleta: ${boletasTexto}
+Nombre:  ${nombre}
+Documento: ${documento}
+Ciudad: ${ciudad}
+Valor a cancelar:$${Helper.thousandSeparator(montoActual / 100)}
 ——————————————
 
 MEDIOS DE PAGO
@@ -1048,7 +1054,7 @@ POR FAVOR REALIZA EL PAGO Y ME ENVÍAS EL COMPROBANTE
     const mensajewa = encodeURIComponent(mensajef);
 
 
-    window.open(`https://wa.me/${telefono}?text=${mensajewa}`, "_blank");
+    window.open(`https://wa.me/${telefono.value}?text=${mensajewa}`, "_blank");
 }
 
 const generateRandomNumbers = () => {
