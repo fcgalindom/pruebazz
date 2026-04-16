@@ -1,10 +1,10 @@
 
 <template>
-  <div>
+ <!-- <div>
     <button class="btn btn-danger" @click="confirmarEliminar">
       Eliminar datos de rifa
     </button>
-  </div>
+  </div>-->
 </template>
 
 <script>
