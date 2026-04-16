@@ -16,8 +16,7 @@ Frontend del sistema de rifas para Dentix. Proyecto Vue 3 con Vite.
 - **Test:** Vitest + @vue/test-utils
 
 ## Estructura src/
-- `views/` - Paginas/vistas principales
-- `components/` - Componentes reutilizables
+- `views/` 
 - `router.js` / `routes/` - Configuracion de rutas
 - `stores/` - Stores de Pinia
 - `services/` - Llamadas a la API (axios)

@@ -7,7 +7,9 @@
                     <h3>{{ getTitle() }}</h3>
                     <div class="d-flex" v-if="type_user != 'false'">
                         <!-- <Button class="btn-sm mb-3">{{ tickets.count }} Boletas</Button> -->
-                        <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Cant: {{ cant_tickets
+                        <Button v-if="is_admin == 'true' && cant_tickets" class="btn-sm mb-3 mr-3">Boletas asignadas: {{ cant_tickets
+                        }}</Button>
+                        <Button v-if="is_admin == 'true' && bolestas_reportadas" class="btn-sm mb-3 mr-3">Boletas reportadas: {{ bolestas_reportadas
                         }}</Button>
                         <Button v-if="is_admin == 'true'" class="btn-sm mb-3">Total: {{
                             Helper.formatNumber(full_value?.total) }}</Button>
@@ -360,6 +362,7 @@ const tickets = ref([])
 const ticket_certif = ref({})
 const full_value = ref(0)
 const cant_tickets = ref(0)
+const bolestas_reportadas = ref(0)
 const ticket = ref({})
 const ticketstatus = ref("")
 const seller = ref({})
@@ -505,7 +508,7 @@ const datatable = async () => {
         tickets.value.results = await SellerServices.tracking(sellerRouteId.value, filters.value)
         paginatedTickets.value = tickets.value.results
         cant_tickets.value = tickets.value.results.length
-
+        bolestas_reportadas.value = tickets.value.results.filter(t => t.customer != null).length
     } else {
         if (filters.value.number || filters.value.raffle || filters.value.customer || filters.value.seller || filters.value.init_date || filters.value.final_date) {
             filters.value.page = 1

@@ -22,7 +22,7 @@
     </div>
     
     <div class="d-flex justify-content-between mt-5">
-        <h3>Reporte de boletas</h3>
+        <h3>Reporte de usuarios</h3>
     
     </div>
     <div class="card flex justify-center">

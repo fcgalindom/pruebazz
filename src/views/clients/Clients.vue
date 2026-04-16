@@ -19,7 +19,7 @@
     </div>
     <div class="">
         <div class="d-flex justify-content-center mb-4">
-            <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Compra tus números</button>
+            <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Comprar boleta</button>
         </div>
     </div>
     <!-- <div>

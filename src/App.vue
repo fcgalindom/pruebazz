@@ -8,7 +8,7 @@
     <!-- Footer -->
     <footer v-if="token" class="app-footer">
       <div class="footer-content">
-        <p class="footer-text">Copyright © 2025 casasorteos. Todos los derechos reservados</p>
+        <p class="footer-text">Copyright © 2026 casasorteos. Todos los derechos reservados</p>
       </div>
     </footer>
   </div>

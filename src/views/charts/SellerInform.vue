@@ -87,10 +87,10 @@ const loading = ref(false);
 
 onMounted(async () => {
     loading.value = true;
-    
+
     try {
-        await showData();
         dependencies.value = await TicketServices.dependencies();
+        await showData();
         chartData.value = setChartData();
         chartOptions.value = setChartOptions();
     } catch (error) {
@@ -101,6 +101,7 @@ onMounted(async () => {
 });
 
 const getSellerNameById = (id) => {
+    if (!dependencies.value.sellers) return 'Desconocido';
     const seller = dependencies.value.sellers.find(seller => seller.id == id);
     return seller ? seller.name : 'Desconocido';
 }

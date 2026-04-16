@@ -56,7 +56,9 @@
     </Dialog>
 
     <!-- Filtro General -->
-    <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '20rem' }">
+    <Dialog v-model:visible="VisibleFilterGeneral" modal header="Filtro General" :style="{ width: '20rem' }" :pt="{ header: { style: 'background-color: #314b91 ; color: white ; padding: 0.75em !important; margin-bottom:1rem'  } }">
+
+       
         <TicketFilter @closeFilter="VisibleFilterGeneral = false" />
     </Dialog>
     <!-- <TicketFilter :visibleDialog="true" /> -->
@@ -123,7 +125,7 @@ const drawMenu = () => {
 const addAdminMenu = () => {
     addSuperSellerMenu()
     items.value.splice(1, 0, {
-        label: 'Rifas',
+        label: 'Configuraciones',
         link: '/raffles',
         icon: 'fas fa-table'
     })
@@ -293,5 +295,6 @@ const saveEntity = async () => {
     .footer-content {
         padding: 10px 15px;
     }
+    
 }
 </style>

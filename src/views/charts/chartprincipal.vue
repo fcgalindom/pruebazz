@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex justify-content-between mt-5">
-        <h3>Reporte de boletas</h3>
+        <h3>Reporte de ventas</h3>
         <div class="d-flex flex-column">
             <Button class="btn-sm mb-3">{{tickets.data?.total}} Boletas En proceso o terminadas</Button>
             <Button class="btn-sm mb-3">Total: {{ Helper.formatNumber(tickets.data?.totalSum) }}</Button>

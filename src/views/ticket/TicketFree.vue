@@ -21,18 +21,18 @@
                 <div class="row">
                     <div class="col-12 mb-3">
                         <Label :bold="true">Documento</Label>
-                        <Input class="form-control" v-model="customer.document" type="number"
+                        <Input class="form-control" v-model="customer.document" type="number" placeholder = "Documento" 
                             @blur="listCustomers"></Input>
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Nombres y apellidos</Label>
-                        <Input v-model="customer.name" :disabled="isDisabled" label="Nombre"></Input>
+                        <Input v-model="customer.name" :disabled="isDisabled" label="Nombre" placeholder = "Nombres y apellidos" ></Input>
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Teléfono</Label>
                         <div class="row" style="padding: 0 15px;">
                             <Select v-model="customer.country_code" optionLabel="name" :options="countries"
-                                class="col-4 col-md-3">
+                                class="col-4 col-md-3" >
                                 <template #value="slotProps">
                                     <div v-if="slotProps.value"
                                         class="d-flex align-items-center justify-content-center">
@@ -48,14 +48,15 @@
                                 </template>
                             </Select>
                             <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
-                                label="Teléfono"></Input>
+                                label="Teléfono" placeholder = "Teléfono"></Input>
                         </div>
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Ciudad</Label>
                         <Select filter optionValue="id" fluid optionLabel="name" ref="multiselect"
+                             
                             v-model="customer.city" :disabled="isDisabled" :options="cities" :multiple="false"
-                            :clear-on-select="true" :customer-search="true" placeholder="Selecciona" label="name"
+                            :clear-on-select="true" :customer-search="true" placeholder="Ciudad" label="name"
                             track-by="id" @select="myChangeEvent"></Select>
                     </div>
                 </div>
@@ -72,7 +73,7 @@
                     <div class="col-md-12 mb-3" v-if="typeScreen == 'admin'">
                         <Label :bold="true">Vendedor</Label>
                         <Select v-model="ticket.seller" :options="dependencies.sellers" filter optionLabel="name"
-                            optionValue="id" class="w-100"></Select>
+                            optionValue="id" class="w-100" placeholder="Vendedor"></Select>
                     </div>
                     <div class="col-12" v-if="typeScreen == 'client'">
                         <div class="d-flex justify-content-center">
@@ -346,7 +347,7 @@
 </style>
 
 <script setup>
-import { ref, onMounted, computed, defineProps, toRaw, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, defineProps, toRaw, watch } from 'vue';
 import { TicketServices } from '@/services/ticket.service'
 import { PromotionServices } from '@/services/promotion.service'
 import { RaffleServices } from '@/services/raffle.service'
@@ -569,8 +570,19 @@ const getcutomerevent = (data) => {
         // getPromotionsByRaffle()
     }
 }
-onMounted(async () => {
+const handleEnterKey = (event) => {
+    if (event.key === 'Enter' && ticket.value.number.length > 0 && !visiblefindcustomer.value) {
+        visiblefindcustomer.value = true;
+        getPromotionsByRaffle();
+    }
+}
 
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleEnterKey);
+})
+
+onMounted(async () => {
+    window.addEventListener('keydown', handleEnterKey);
     limpiarFormulario()
     search()
     cities.value = await CustomerServices.listCities()
