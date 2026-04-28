@@ -310,11 +310,16 @@
                 <div class="mb-2">
                     <span class="poppins-semibold " style="font-size: 1.45em;">NÚMEROS DISPONIBLES</span>
                 </div>
-                <div id="board-buy" class="button-grid w-80 grid-buttons-tickets scroll-container">
-                    <button :class="{ active: isActive(button) }" v-for="(button, index) in filteredButtons"
-                        :key="index" class="grid-button" @click="buyTicket(button, button)">
-                        {{ button }}
-                    </button>
+                <div class="w-80">
+                    <div class="text-white text-center py-2 poppins-semibold w-100" style="background-color: #1f4aa2; font-size: 0.95em; letter-spacing: 0.03em;">
+                        SELECCIONE EL NÚMERO A COMPRAR
+                    </div>
+                    <div id="board-buy" class="button-grid grid-buttons-tickets scroll-container" style="width: 100% !important;">
+                        <button :class="{ active: isActive(button) }" v-for="(button, index) in filteredButtons"
+                            :key="index" class="grid-button" @click="buyTicket(button, button)">
+                            {{ button }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,12 @@
                 </div>
                 <hr>
                 <Button @click="limpiarFormulario; visible = true" label="Registrar" />
+    
+                <div>
+                    <button class="btn btn-danger" @click="confirmarEliminar">
+                       Eliminar datos de rifa
+                      </button>
+                </div>
                 <!-- <Button :id="`${modal}_button`" data-toggle="modal" :data-target="`#${modal}`" @click="limpiarFormulario">Registrar</Button> -->
                 <Dialog v-model:visible="visible" modal header="Edit Profile" :style="{ width: '80rem' }">
                     <div class="row">
@@ -29,11 +35,11 @@
                         <div class="col-md-6 mb-3">
                             <!-- <InputNumber v-model="value1" inputId="integeronly" fluid /> -->
                             <!-- <Label>Valor de boleta</Label>
-                              <input class="form-control ileven-input font-light" v-model="raffle.value_ticket" label="Valor de boleta" @keyup="raffle.value_ticket = Helper.thousandSeparator(raffle.value_ticket)"></input> -->
+                                  <input class="form-control ileven-input font-light" v-model="raffle.value_ticket" label="Valor de boleta" @keyup="raffle.value_ticket = Helper.thousandSeparator(raffle.value_ticket)"></input> -->
                             <Label class="font-bold block mb-2"> Valor de boleta </Label>
                             <InputGroup>
                                 <InputGroupAddon>$</InputGroupAddon>
-                                <InputNumber v-model="raffle.value_ticket"  fluid />
+                                <InputNumber v-model="raffle.value_ticket" fluid />
                             </InputGroup>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -45,26 +51,26 @@
                             <Label>Teléfono</Label>
                             <Input v-model="raffle.phone" placeholder="Ej: 3001234567"></Input>
                         </div>
-                       
-                       
+    
+    
                         <div class="col-3">
                             <Label>Pago total</Label>
                             <Button @click="openpayment('all')"><i class="pi pi-upload"></i></Button>
-                            </div>
+                        </div>
                         <div class="col-3">
-                                <Label>Primer Pago</Label>
-                                <Button @click="openpayment('first')"><i class="pi pi-upload"></i></Button>
+                            <Label>Primer Pago</Label>
+                            <Button @click="openpayment('first')"><i class="pi pi-upload"></i></Button>
                         </div>
                         <div class="col-3">
                             <Label>Recivo</Label>
                             <Button @click="openpayment('ticket')"><i class="pi pi-upload"></i></Button>
                         </div>
-
+    
                         <div class="col-3">
                             <Label>Logo</Label>
                             <Button @click="openLogo()"><i class="pi pi-upload"></i></Button>
                         </div>
-                      
+    
                     </div>
     
                     <hr>
@@ -87,9 +93,9 @@
                                     <div class="col-10">
                                         <Label>Tipo de premio</Label>
                                         <Select v-model="i.type_award" :options="[
-                                          {name: 'Principal', id: 1}, 
-                                          {name: 'Secundario', id: 2}
-                                        ]" filter optionLabel="name" optionValue="id" class="w-100"></Select>
+                                              {name: 'Principal', id: 1}, 
+                                              {name: 'Secundario', id: 2}
+                                            ]" filter optionLabel="name" optionValue="id" class="w-100"></Select>
                                     </div>
                                     <div class="col-2">
                                         <button class="btn btn-danger mt-4 ml-3" @click="remove_award(index)">X</button>
@@ -107,6 +113,7 @@
                     <div class="d-flex justify-content-center my-3">
                         <Button @click="saveEntity">Guardar</Button>
                     </div>
+    
                 </Dialog>
             </div>
             <div class="table-responsive">
@@ -133,7 +140,7 @@
                             <td><button @click="openInNewTab(i.paymentall)"><i class="fas fa-download"></i></button></td>
                             <td><button @click="openInNewTab(i.paymentfirst)"><i class="fas fa-download"></i></button></td>
                             <td><button @click="openInNewTab(i.paymentticket)"><i class="fas fa-download"></i></button></td>
-                         
+    
                         </tr>
                     </tbody>
                 </table>
@@ -142,7 +149,7 @@
     </div>
     <h1>{{ selectedCountry }}</h1>
     <!-- <Select v-model="selectedCountry" :options="countries" filter optionLabel="name" placeholder="Select a Country" class="form-control"></Select>
-        <DatePicker v-model="raffle.raffle_date" showIcon fluid :showOnFocus="false" /> -->
+            <DatePicker v-model="raffle.raffle_date" showIcon fluid :showOnFocus="false" /> -->
 </template>
 
 <script setup>
@@ -175,7 +182,7 @@ const images = ref([])
 const imageUrl = ref('')
 
 const openInNewTab = (url) => {
-  window.open(url, "_blank");
+    window.open(url, "_blank");
 };
 
 onMounted(async () => {
@@ -184,7 +191,7 @@ onMounted(async () => {
 })
 
 const saveEntity = async () => {
-    
+
     if (raffle.value.id) {
         console.log("entro", raffle.value)
         await RaffleServices.updateCustomer(raffle.value, raffle.value.id)
@@ -194,6 +201,28 @@ const saveEntity = async () => {
     visible.value = false
     Swal.fire("¡Guardado!", "Datos guardados con éxito", "success");
     raffles.value = await RaffleServices.list()
+}
+
+const confirmarEliminar= async() => {
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Se eliminarán todos los tickets y pagos. Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            })
+
+            if (!result.isConfirmed) return
+
+            try {
+                await TicketServices.deleteAll()
+                Swal.fire('Eliminado', 'Todos los tickets y pagos fueron eliminados.', 'success')
+            } catch (error) {
+                Swal.fire('Error', 'No se pudo eliminar los datos.', 'error')
+            }
 }
 
 
@@ -206,7 +235,7 @@ const openWidget = (index) => {
         (error, result) => {
             console.log('result.info.url ==> ', result.info.url);
             console.log('raffle.awards ==> ', raffle.value.awards);
-            
+
             if (!error && result && result.event === "success") {
                 raffle.value.awards[index].image = result.info.url;
                 // i.image = result.info.url;
@@ -224,32 +253,32 @@ const openpayment = (data) => {
 
         (error, result) => {
 
-            if(data == 'all'){
+            if (data == 'all') {
                 if (!error && result && result.event === "success") {
                     raffle.value.paymentall = result.info.url;
                     console.log("ver", raffle.value)
                 }
             }
-            if(data == 'first'){
+            if (data == 'first') {
                 if (!error && result && result.event === "success") {
                     raffle.value.paymentfirst = result.info.url;
                     console.log("ver", raffle.value)
                 }
             }
-            if(data == 'ticket'){
+            if (data == 'ticket') {
                 if (!error && result && result.event === "success") {
                     raffle.value.paymentticket = result.info.url;
                     console.log("ver", raffle.value)
                 }
             }
-         
-                
-            
+
+
+
         }
     );
     myWidget.open();
 };
-const openLogo = () =>{
+const openLogo = () => {
     const myWidget = window.cloudinary.createUploadWidget({
             cloudName: 'dsxpe54pz',
             uploadPreset: 'demos1',
@@ -277,8 +306,8 @@ const showData = async (id) => {
 }
 
 const formatDateForm = (date) => {
-        return date.toISOString().split('T')[0]
-    }
+    return date.toISOString().split('T')[0]
+}
 
 
 const limpiarFormulario = () => {
