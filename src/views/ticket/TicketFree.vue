@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Nombres y apellidos</Label>
-                        <Input v-model="customer.name" :disabled="isDisabled" label="Nombre" placeholder = "Nombres y apellidos" ></Input>
+                        <Input :modelValue="isDisabled ? maskedName : customer.name" @update:modelValue="val => { if (!isDisabled) customer.name = val }" :disabled="isDisabled" label="Nombre" placeholder = "Nombres y apellidos" ></Input>
                     </div>
                     <div class="col-12 mb-3">
                         <Label :bold="true">Teléfono</Label>
@@ -47,7 +47,7 @@
                                     </div>
                                 </template>
                             </Select>
-                            <Input class="col-8 col-md-9" v-model="customer.phone" :disabled="isDisabled"
+                            <Input class="col-8 col-md-9" :modelValue="isDisabled ? maskedPhone : customer.phone" @update:modelValue="val => { if (!isDisabled) customer.phone = val }" :disabled="isDisabled"
                                 label="Teléfono" placeholder = "Teléfono"></Input>
                         </div>
                     </div>
@@ -315,13 +315,19 @@
                         SELECCIONE EL NÚMERO A COMPRAR
                     </div>
                     <div id="board-buy" class="button-grid grid-buttons-tickets scroll-container" style="width: 100% !important;">
-                        <button :class="{ active: isActive(button) }" v-for="(button, index) in filteredButtons"
-                            :key="index" class="grid-button" @click="buyTicket(button, button)">
+                        <div v-for="(button, index) in filteredButtons"
+                            :key="index" class="d-flex flex-column">
+                            <div class="text-white text-center px-2 poppins-semibold" style="background-color: #1f4aa2; font-size: 0.95em; letter-spacing: 0.03em; grid-column: 1 / -1;">
+                            COMPRAR
+                           </div>
+                            <button :class="{ active: isActive(button) }"  class="grid-button" @click="buyTicket(button, button)">
                             {{ button }}
-                        </button>
+                           </button>
+                        </div>
+                        
                     </div>
                 </div>
-            </div>
+            </div> 
         </div>
         <!-- <div>
         </div>
@@ -413,6 +419,18 @@ const costumerdata = ref("")
 const visiblefindcustomer = ref(false)
 const modalfinalpay = ref(false)
 const type_user = ref("")
+
+const maskedName = computed(() => {
+    const val = customer.value.name || ''
+    if (val.length <= 3) return val
+    return val.slice(0, 3) + '*'.repeat(val.length - 3)
+})
+
+const maskedPhone = computed(() => {
+    const val = customer.value.phone || ''
+    if (val.length <= 3) return val
+    return val.slice(0, 3) + '*'.repeat(val.length - 3)
+})
 
 const referencia = ref("");
 const monto = ref("0");

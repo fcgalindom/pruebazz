@@ -89,6 +89,10 @@
     </footer>
 
     <button @click="messageBuy" class="btn-float-whatsapp"><i class="fab fa-whatsapp"></i></button>
+
+    <div class="text-white text-center py-2 poppins-semibold" style="background-color: #1f4aa2; font-size: 0.85em;">
+        Copyright &copy; 2026 casasorteos. Todos los derechos reservados
+    </div>
 </template>
 
 <script setup>
