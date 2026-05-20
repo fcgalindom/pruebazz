@@ -23,7 +23,7 @@ export class SellerTicketsServices {
 
     static async show(id, is_tracking) {
         const url = enviroments.baseUrl + `sellers-tickets/show/${id}/`
-        const response = await axios.get(url)
+        const response = await axios.post(url, {params : is_tracking})
         return response.data
     } 
     static async findByidbyTicket(numero) {

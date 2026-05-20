@@ -92,6 +92,7 @@
                             <th v-if="perrmisionadmin == true">Habilitar</th>
                             <th v-if="perrmisionadmin == true">Eliminar</th>
                             <th>Whatsapp</th>
+                            <th> Carge de boletas </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,6 +131,14 @@
                                     <Button :disabled="item.state === 0" class="btn text-darkslategrey"
                                         @click="redirectToWhatsApp(item.country_code+item.phone,'ysisis')" variant="text"><i
                                             class="fab fa-whatsapp fa-lg"></i></Button>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <router-link :to="`tickets/Libre/${item.id}/`"> <Button
+                                            :disabled="item.state === 0" class="btn btn-info mr-3"> Cargue de boletas
+                                        </Button> </router-link>
                                 </div>
                             </td>
                         </tr>

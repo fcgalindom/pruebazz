@@ -671,7 +671,7 @@ const customerEmit = async (customerData) => {
 const search = async () => {
     buttons.value = [];
 
-    if (isLoadingTickets.value != true && props.typeScreen == 'admin') { // Solo muestra boletas disponibles, que no están asignadas
+    if (isLoadingTickets.value != true && props.typeScreen == 'admin' && !router.params.id) { // Solo muestra boletas disponibles, que no están asignadas
         buttons.value = [];
         var response = await SellerTicketsServices.getTiketsFreeForSeller(1, 99999)
         raffle.value = response.raffle
@@ -715,7 +715,6 @@ const search = async () => {
     } else {
         response = await TicketServices.getTiketsByRaffle(filterJson.raffle)
     }
-
     raffle.value = response.raffle
     ticketsBooked.value = response.tickets
 
@@ -727,7 +726,7 @@ const search = async () => {
         }
     } else {
         // if(Cookies.get('seller_id')){
-        //     getRangeForClients()
+             getRangeForClients()
         // }else {
         // }
         if (type_user.value == 'false') {
@@ -749,12 +748,12 @@ const search = async () => {
 }
 
 const getRangeForClients = async () => {
-    range_tickets.value = await SellerTicketsServices.show(Cookies.get('seller_id'), false);
+    range_tickets.value = await SellerTicketsServices.show(router.params.id, false);
     range_tickets.value[0].numbers.forEach((index) => {
         let formattedNumber = index.toString().padStart(4, '0');
         buttons.value.push(formattedNumber);
     });
-};
+}; 
 
 const mountedBuyTicket = async () => {
     visiblefindcustomer.value = true;
@@ -883,6 +882,8 @@ const add_payment = () => {
 }
 
 const getPromotionsByRaffle = async () => {
+    console.log("buee889")
+    
     if (props.typeScreen == 'client') {
         ticket.value.raffle = props.raffle.id
         ticket.value.seller = 3 // Seleccionar el vendedor por defecto para clientes (Compra en Línea)
@@ -891,7 +892,7 @@ const getPromotionsByRaffle = async () => {
     }
 
 
-
+     
     // promotion.value = await PromotionServices.promotionsByRaffle(ticket.value.raffle)
     promotion.value = await PromotionServices.promotionsByRaffle(1) // Debe quedar como la línea anterior
 
@@ -913,11 +914,9 @@ const getPromotionsByRaffle = async () => {
         ticket.value.value_to_pay = promotion.value[0].new_value
     } else {
         visible.value = true
-
         if (props.typeScreen == 'client') {
             ticket.value.value_to_pay = props.raffle.value_ticket
         } else {
-
             const raffle = await RaffleServices.listlast()
 
             ticket.value.value_to_pay = raffle.value_ticket
@@ -927,7 +926,7 @@ const getPromotionsByRaffle = async () => {
     monto.value = ticket.value.value_to_pay
     // 85.000
     monto.value = ticket.value.value_to_pay * ticket.value.number.length
-    // monto.value = "2000"
+    //monto.value = "2000"
     monto.value += "00"
     // if(props.typeScreen == 'client'){
     //     saveEntity()
@@ -1157,7 +1156,6 @@ const deleteTicket = (ticketEvent) => {
 const remove_payment = (index) => {
     ticket.value.payments.splice(index, 1);
 }
-
 const listCustomers = async () => {
     await CustomerServices.getByDocument(customer.value.document)
         .then(response => {
