@@ -317,9 +317,9 @@
                     <div id="board-buy" class="button-grid grid-buttons-tickets scroll-container" style="width: 100% !important;">
                         <div v-for="(button, index) in filteredButtons"
                             :key="index" class="d-flex flex-column">
-                            <div class="text-white text-center px-2 poppins-semibold" style="background-color: #1f4aa2; font-size: 0.95em; letter-spacing: 0.03em; grid-column: 1 / -1;">
+                           <!-- <div class="text-white text-center px-2 poppins-semibold" style="background-color: #1f4aa2; font-size: 0.95em; letter-spacing: 0.03em; grid-column: 1 / -1;">
                             COMPRAR
-                           </div>
+                           </div> -->
                             <button :class="{ active: isActive(button) }"  class="grid-button" @click="buyTicket(button, button)">
                             {{ button }}
                            </button>

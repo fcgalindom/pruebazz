@@ -162,8 +162,7 @@ const addSuperSellerMenu = () => {
             { label: 'Boletas Sin Abono', link: '/tickets/Pendiente', icon: 'far fa-circle nav-icon' },
             { label: 'Boletas con abono', link: '/tickets/Reservado', icon: 'far fa-circle nav-icon' },
             { label: 'Boletas pagadas', link: '/tickets/Pagado', icon: 'far fa-circle nav-icon' },
-            { label: 'Boletas en linea', link: '/tickets/Enlinea', icon: 'far fa-circle nav-icon' },
-            { label: 'Cargue de Boletas', link: '/tickets/LoadingTickets', icon: 'far fa-circle nav-icon' }
+            { label: 'Boletas en linea', link: '/tickets/Enlinea', icon: 'far fa-circle nav-icon' }
         ]
     })
     items.value.push({
