@@ -1197,7 +1197,18 @@ const filteredButtons = computed(() => {
             let counter = 0
             buttons.value = [];
 
-            if (ticketsBooked.value.raffle) {
+            if (router.params.id) {   //Solucion de filtro por id
+                if (range_tickets.value.length > 0) {
+                    range_tickets.value[0].numbers.forEach(number => {
+                        let formattedNumber = number.toString().padStart(4, '0');
+                        if (formattedNumber.includes(filters.value.number)) {
+                            if (!ticketsBooked.value.some(ticket => ticket.number == number)) {
+                                buttons.value.push(formattedNumber);
+                            }
+                        }
+                    });
+                }
+            } else if (ticketsBooked.value.raffle) {
                 for (let index = ticketsBooked.value.raffle.start_number; index < ticketsBooked.value.raffle.final_number && counter < 100; index++) {
                     let formattedNumber = index.toString().padStart(4, '0');
                     if (filters.value.number && formattedNumber.includes(filters.value.number)) {
