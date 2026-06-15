@@ -647,7 +647,9 @@ const generatePDF = async () => {
         y += 5
         doc.text(`FECHA FINAL: ${Helper.formatDatePDF(filters.value?.final_date)}`, 10, y)
         y += 5
-        doc.text(`TOTAL BOLETAS REPORTADAS: ${cant_tickets.value}`, 10, y)
+        doc.text(`TOTAL BOLETAS REPORTADAS: ${bolestas_reportadas.value}`, 10, y)
+        y += 5
+        doc.text(`TOTAL BOLETAS ASIGNADAS: ${cant_tickets.value}`, 10, y)
         y += 5
         doc.text(`USUARIO: ${(Cookies.get('name') ?? '').toUpperCase()}`, 10, y)
 

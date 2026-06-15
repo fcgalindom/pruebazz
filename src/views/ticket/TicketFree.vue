@@ -270,7 +270,7 @@
             </div>
         </div>
         <div v-if="typeScreen == 'admin'" class="my-3">
-            <h3 v-if="isLoadingTickets == false">Boletas Disponibles</h3>
+            <h3 v-if="isLoadingTickets == false">Boletas Disponibles {{ seller  ? seller.name : '' }}</h3>
             <h3 v-else>Cargue de Boletas</h3>
         </div>
         <hr>
@@ -431,7 +431,7 @@ const maskedPhone = computed(() => {
     if (val.length <= 3) return val
     return val.slice(0, 3) + '*'.repeat(val.length - 3)
 })
-
+const seller = ref({});
 const referencia = ref("");
 const monto = ref("0");
 const moneda = "COP";
@@ -603,6 +603,11 @@ const handleEnterKey = (event) => {
 onUnmounted(() => {
     window.removeEventListener('keydown', handleEnterKey);
 })
+const sellerRouteId = computed(() => {
+    console.log("route",router.params)
+    return router.params.id; // Asumiendo que el parámetro de la ruta se llama 'id'
+    
+});
 
 onMounted(async () => {
     window.addEventListener('keydown', handleEnterKey);
@@ -611,6 +616,13 @@ onMounted(async () => {
     cities.value = await CustomerServices.listCities()
     dependencies.value = await TicketServices.dependencies()
     const selleridofice = await SellerServices.getsellerofice()
+    if (sellerRouteId.value) {
+     seller.value = await SellerServices.show(sellerRouteId.value)
+
+      console.log("haf ", seller.value)
+    }
+
+    
 
     // ticket.value.seller = selleridofice[0].id
 

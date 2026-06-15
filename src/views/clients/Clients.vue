@@ -2,21 +2,7 @@
     <div class="w-100 d-flex justify-content-center mt-2 mb-5" id="header-raffle">
         <img class="main-logo-head" :src="raffle?.logo || defaultLogo" />
     </div>
-    <div class="w-100 d-flex justify-content-center">
-        <div class="container-main-head">
-            <!-- <div class="mb-4 text-center">
-            </div> -->
-            <div class="d-flex justify-content-center mb-4">
-                <div class="container-description" style="border-radius: 30px;">
-                    <span class="text-white poppins-semibold text-center" style="font-size: 1.45em;"> {{
-                        raffle?.description ? raffle?.description : 'Sin premio' }} </span>
-                </div>
-            </div>
-            <!-- <div class="text-white text-center py-2">
-                    
-                </div> -->
-        </div>
-    </div>
+    
     <div class="">
         <div class="d-flex justify-content-center mb-4">
             <button class="blinking-button poppins-semibold" @click="scrollToBuyNumbers">Comprar boleta</button>
